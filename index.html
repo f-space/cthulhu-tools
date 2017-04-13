@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>クトゥルフTRPG ツール</title>
+	<meta charset="utf-8">
+	<meta name="description" content="クトゥルフTRPGのためのツール。ダイスやステータス管理など。">
+	<meta name="author" content="F_">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="main.css">
+	<link rel="icon" type="image/png" href="image/icon.png">
+	<script src="main.js"></script>
+</head>
+<body>
+	<div id="container">
+		<div id="header">
+			<h1 id="title">Cthulhu Tools</h1>
+		</div>
+		<div id="main">
+			<!-- Home -->
+			<div id="home">
+				<div class="description">
+					<h2>クトゥルフTRPGのための</br>Webアプリ</h2>
+				</div>
+				<figure>
+					<table id="info">
+						<tbody>
+							<tr class="info-row">
+								<td>Author</td>
+								<td>F_</td>
+							</tr>
+							<tr class="info-row">
+								<td>License</td>
+								<td>MIT</td>
+							</tr>
+							<tr class="info-row">
+								<td>Assets</td>
+								<td>
+									<table class="assets">
+										<tr>
+											<td>Icon:</td>
+											<td><a href="https://commons.nicovideo.jp/material/nc67333">エルダーサイン</a></td>
+											<td>©ペペロンチーノ☆鈴木</td>
+										</tr>
+										<tr>
+											<td>Dice Image:</td>
+											<td><a href="https://commons.nicovideo.jp/material/nc116805">クトゥルフ用10面、6面ダイス</a></td>
+											<td>©うににゃん</td>
+										</tr>
+										<tr>
+											<td>Dice Sound:</td>
+											<td><a href="http://commons.nicovideo.jp/material/nc42340">ダイス音・2（2D10）</a></td>
+											<td>©ウッドダイスP</td>
+										</tr>
+										<tr>
+											<td>Font:</td>
+											<td><a href="http://inatsuka.com/extra/nekomezame/">Neko_no_Mezame</a></td>
+											<td>©稲塚 春</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tbody>
+					</table>
+				</figure>
+			</div>
+
+			<!-- Dice -->
+			<div id="dice">
+				<div class="page-title">
+					<h2>ダイスロール</h2>
+				</div>
+				<div class="result">
+					<div class="dice-view" data-dice-class="dice-image"></div>
+					<div class="number-view"></div>
+				</div>
+				<div class="mode-list">
+					<div class="mode" data-dice="1D10">1D10</div>
+					<div class="mode" data-dice="1D20">1D20</div>
+					<div class="mode" data-dice="1D100">1D100</div>
+					<div class="mode" data-dice="1D6">1D6</div>
+					<div class="mode" data-dice="2D6">2D6</div>
+					<div class="mode" data-dice="3D6">3D6</div>
+					<div class="mode" data-dice="1D3">1D3</div>
+					<div class="mode" data-dice="2D3">2D3</div>
+					<div class="mode" data-dice="custom">custom</div>
+				</div>
+				<button class="roll-button" type="button">Roll</button>
+				<audio src="audio/dice.wav" preload="auto"></audio>
+			</div>
+
+			<!-- Status -->
+			<div id="status">
+				ステータス画面（未製作）
+			</div>
+		</div>
+		<div id="menu">
+			<div id="menu-dice" class="menu-item">
+				<p>Dice</p>
+			</div>
+			<div id="menu-status" class="menu-item">
+				<p>Status</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

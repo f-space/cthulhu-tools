@@ -1,0 +1,25 @@
+#menu {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: stretch;
+	flex: 0 0 50px;
+}
+
+.menu-item {
+	@extend %design-font;
+
+	flex: 1 1 0;
+	font-size: 3rem;
+	text-align: center;
+	cursor: pointer;
+
+	&.selected {
+		background: linear-gradient(transparent 50%, green);
+		opacity: 1;
+	}
+
+	&:not(.selected) {
+		background: linear-gradient(transparent 80%, red);
+		opacity: 0.5;
+	}
+}

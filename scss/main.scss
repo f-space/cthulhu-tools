@@ -1,0 +1,67 @@
+@import "_font.scss";
+
+body * {
+	margin: unset;
+	padding: unset;
+}
+
+:root {
+	background: dimgray;
+}
+
+body{
+	position: fixed;
+	left:  0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: 0 auto;
+	padding: 0;
+	max-width: 800px;
+	background: black;
+	color: white;
+	line-height: 1.6;
+	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
+
+	a {
+		color: red;
+	}
+}
+
+#container{
+	display:  flex;
+	flex-flow: column nowrap;
+	align-items: stretch;
+	width:100%;
+	max-width: 800px;
+	height: 100%;
+}
+
+#main{
+	flex: 1 1 0;
+	padding-top: 20px;
+	height: 0;
+	min-height: 0;
+	overflow: auto;
+	background: linear-gradient(rgba(255,0,0,0.5), transparent 20px);
+
+	& > :not(.selected) {
+		display: none;
+	}
+}
+
+%design-font {
+	color: white;
+	font-family: "Cthulhu";
+	text-shadow:
+		-2px -2px 5px red,
+		-2px  2px 5px red,
+		 2px -2px 5px red,
+		 2px  2px 5px red;
+}
+
+@import "_header.scss";
+@import "_menu.scss";
+@import "_home.scss";
+@import "_dice.scss";
+@import "_status.scss";

@@ -1,0 +1,16 @@
+{
+	"name": "cthulhu-tools",
+	"version": "1.0.0",
+	"description": "",
+	"main": "",
+	"scripts": {
+		"css": "node-sass scss/main.scss main.css --output-style compressed",
+		"js": "tsc -p tsconfig.json",
+		"build": "npm run css & npm run js"
+	},
+	"keywords": [
+		"Cthulhu"
+	],
+	"author": "F_",
+	"license": "MIT"
+}

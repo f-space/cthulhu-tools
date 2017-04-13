@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"outFile": "main.js",
+		"noImplicitAny": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"strictNullChecks": true
+	},
+	"include": [
+		"script/**/*"
+	]
+}
