@@ -2,14 +2,14 @@
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: stretch;
-	flex: 0 0 50px;
+	flex: 0 0 30px;
 }
 
 .menu-item {
 	@extend %design-font;
 
 	flex: 1 1 0;
-	font-size: 3rem;
+	font-size: 2rem;
 	text-align: center;
 	cursor: pointer;
 

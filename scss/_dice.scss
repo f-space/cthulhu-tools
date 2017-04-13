@@ -9,7 +9,7 @@
 	
 	.page-title {
 		flex: 0 0 auto;
-		font-size: 1.5em;
+		font-size: 120%;
 	}
 
 	.result {
@@ -67,12 +67,11 @@
 
 		& > .mode {
 			flex: 1 1 auto;
-			margin: 10px 10px;
+			margin: 10px 5px;
 			box-sizing: border-box;
-			width: calc(30% - 10px);
+			width: calc(30% - 5px);
 			border: solid 1px red;
 			border-radius: 2ex/50%;
-			font-size: 1.25em;
 			text-align: center;
 			cursor: pointer;
 
@@ -86,11 +85,11 @@
 		@extend %design-font;
 
 		flex: 0 0 auto;
-		margin: 10px 0;
+		margin: 5px 0;
 		padding: 10px 50px;
 		border: none;
 		background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255,0,0,0.5), transparent);
-		font-size: 5rem;
+		font-size: 3rem;
 		cursor: pointer;
 
 		&:active {
