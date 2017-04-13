@@ -3,7 +3,7 @@
 	flex-flow: column nowrap;
 	align-items: center;
 	box-sizing: border-box;
-	padding: 10px 20px;
+	padding: 1ex 1em;
 	width: 100%;
 	height: 100%;
 	
@@ -29,7 +29,7 @@
 			bottom: 0;
 			
 			.dice-image{
-				margin: 0 20px;
+				margin: 0 1em;
 			}
 		}
 
@@ -44,7 +44,7 @@
 			right: 0;
 			top: 0;
 			bottom: 0;
-			font-size: 200px;
+			font-size: 30vh;
 			opacity: 0.5;
 			color: white;
 			text-shadow:
@@ -61,15 +61,15 @@
 		justify-content: space-between;
 		flex: 0 0 auto;
 		box-sizing: border-box;
-		margin: 10px 0;
-		padding: 0 30px;
+		margin: 1ex 0;
+		padding: 0 1em;
 		width: 100%;
 
 		& > .mode {
 			flex: 1 1 auto;
-			margin: 10px 5px;
+			margin: 1ex .25em;
 			box-sizing: border-box;
-			width: calc(30% - 5px);
+			width: calc(30% - .25em);
 			border: solid 1px red;
 			border-radius: 2ex/50%;
 			text-align: center;
@@ -85,11 +85,11 @@
 		@extend %design-font;
 
 		flex: 0 0 auto;
-		margin: 5px 0;
-		padding: 10px 50px;
+		margin: 0 0;
+		padding: 0 .5em;
 		border: none;
 		background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255,0,0,0.5), transparent);
-		font-size: 3rem;
+		font-size: 5rem;
 		cursor: pointer;
 
 		&:active {

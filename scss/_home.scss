@@ -1,5 +1,5 @@
 #home {
-	padding: 10px 20px;
+	padding: 1ex 1em;
 	text-align: center;
 
 	.description {
@@ -10,12 +10,12 @@
 
 
 #info {
-	$margin-side: 20px;
+	$margin-side: 1em;
 
 	display: table;
 	box-sizing: border-box;
 	width: calc(100% - #{$margin-side * 2});
-	margin: 10px $margin-side;
+	margin: 1ex $margin-side;
 	border-collapse: collapse;
 
 	tr.info-row {
@@ -23,7 +23,7 @@
 
 		& > td {
 			display: table-cell;
-			padding: 5px 10px;
+			padding: .5ex .5em;
 			border: solid 1px red;
 
 			&:first-child {
@@ -34,7 +34,7 @@
 
 	.assets {
 		td {
-			padding: 0 10px;
+			padding: 0 .5em;
 			font-size: 80%;
 			text-align: left;
 		}

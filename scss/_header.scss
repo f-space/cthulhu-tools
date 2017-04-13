@@ -1,5 +1,5 @@
 #header{
-	flex: 0 0 30px;
+	flex: 0 0 3rem;
 	text-align: center;
 }
 
@@ -7,6 +7,6 @@
 	@extend %design-font;
 
 	display: inline;
-	font-size: 2rem;
+	font-size: 3rem;
 	cursor: pointer;
 }
