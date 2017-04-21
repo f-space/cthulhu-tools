@@ -5,51 +5,49 @@ namespace Cthulhu {
 		Status,
 	}
 
+	export interface PageListener {
+		onEnter?(page: Page): void;
+		onExit?(page: Page): void;
+	}
+
 	export class PageManager {
-		private constructor() { }
-
-		public static readonly SELECTED_CLASS = "selected";
-
-		private static elements: Map<Page, HTMLElement[]> = new Map();
-
-		public static register(page: Page, element: HTMLElement): void {
-			let list = this.elements.get(page);
-			if (list == null) {
-				this.elements.set(page, list = []);
-			}
-
-			list.push(element);
+		public constructor(page: Page) {
+			this._page = page;
 		}
 
-		public static unregister(page: Page, element: HTMLElement): void {
-			const list = this.elements.get(page);
-			if (list != null) {
-				const index = list.indexOf(element);
-				if (index >= 0) list.splice(index, 1);
+		private _page: Page;
+		private _listeners: PageListener[] = [];
+
+		public get page(): Page { return this._page; }
+
+		public addListener(listener: PageListener): void {
+			const index = this._listeners.indexOf(listener);
+			if (index === -1) {
+				this._listeners.push(listener);
+
+				if (listener.onEnter) listener.onEnter(this.page);
 			}
 		}
 
-		public static toPage(next: Page): void {
-			const className = this.SELECTED_CLASS;
-			for (const [page, elementList] of this.elements) {
-				if (page === next) {
-					elementList.forEach(element => element.classList.add(className))
-				} else {
-					elementList.forEach(element => element.classList.remove(className))
-				}
+		public removeListener(listener: PageListener): void {
+			const index = this._listeners.indexOf(listener);
+			if (index !== -1) {
+				this._listeners.splice(index, 1);
+
+				if (listener.onExit) listener.onExit(this.page);
 			}
 		}
 
-		public static toHomePage(): void {
-			this.toPage(Page.Home);
-		}
+		public toPage(next: Page): void {
+			for (const listener of this._listeners) {
+				if (listener.onExit) listener.onExit(this.page);
+			}
 
-		public static toDicePage(): void {
-			this.toPage(Page.Dice);
-		}
+			this._page = next;
 
-		public static toStatusPage(): void {
-			this.toPage(Page.Status);
+			for (const listener of this._listeners) {
+				if (listener.onEnter) listener.onEnter(this.page);
+			}
 		}
 	}
 }
