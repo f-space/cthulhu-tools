@@ -4,7 +4,7 @@ namespace Cthulhu {
 		for (const mode of modes) {
 			const diceExpr = mode.dataset["dice"];
 			if (diceExpr != null) {
-				const diceSet = DiceSet.create(diceExpr);
+				const diceSet = DiceSet.parse(diceExpr);
 
 				DiceManager.register(diceExpr, diceSet);
 				mode.addEventListener("click", () => { DiceManager.select(diceExpr); });
@@ -45,12 +45,12 @@ namespace Cthulhu {
 
 				public onStart(): void { }
 
-				public onUpdate(values: number[]): void {
-					renderer.setValues(values);
+				public onUpdate(diceSet: DiceSet, values: number[]): void {
+					renderer.setValues(diceSet, values);
 				}
 
-				public onStop(results: number[]): void {
-					renderer.setValues(results);
+				public onStop(diceSet: DiceSet, results: number[]): void {
+					renderer.setValues(diceSet, results);
 				}
 			});
 		}
@@ -62,11 +62,11 @@ namespace Cthulhu {
 					numberView.textContent = null;
 				}
 
-				public onUpdate(values: number[]): void {
+				public onUpdate(diceSet: DiceSet, values: number[]): void {
 					numberView.textContent = String(values.reduce((sum, x) => sum + x, 0));
 				}
 
-				public onStop(results: number[]): void {
+				public onStop(diceSet: DiceSet, results: number[]): void {
 					numberView.textContent = String(results.reduce((sum, x) => sum + x, 0));
 				}
 			});

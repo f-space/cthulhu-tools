@@ -1,24 +1,8 @@
 namespace Cthulhu {
-	export class DiceSet {
-		private static readonly DICE_REGEX = /[1-9]\d*D[1-9]\d*/.compile();
-
-		public constructor(readonly count: number, readonly max: number) { }
-
-		public static create(expression: string): DiceSet {
-			if (!this.DICE_REGEX.test(expression)) throw new Error("Invalid expression.");
-
-			const [first, second] = expression.split("D");
-			const count = parseInt(first, 10);
-			const max = parseInt(second, 10);
-
-			return new DiceSet(count, max);
-		}
-	}
-
 	export interface DiceListener {
 		onStart?(): void;
-		onStop?(results: number[]): void;
-		onUpdate?(values: number[]): void;
+		onStop?(diceSet: DiceSet, results: number[]): void;
+		onUpdate?(diceSet: DiceSet, values: number[]): void;
 		onSelectionChanged?(id: string, diceSet: DiceSet): void;
 	}
 
@@ -92,19 +76,19 @@ namespace Cthulhu {
 
 				if (this.current != null) {
 					const values = this.randomValues(diceSet);
-					this.raiseEvent("onUpdate", values);
+					this.raiseEvent("onUpdate", diceSet, values);
 				}
 			}
 
 			const results = this.randomValues(diceSet);
-			this.raiseEvent("onStop", results);
+			this.raiseEvent("onStop", diceSet, results);
 			this.rolling = false;
 		}
 
 		private static randomValues(diceSet: DiceSet): number[] {
 			const results = [];
-			for (let i = 0; i < diceSet.count; i++) {
-				results.push(Math.floor(Math.random() * diceSet.max) + 1);
+			for (const group of diceSet.groups) {
+				results.push(Math.floor(Math.random() * group.max) + 1);
 			}
 
 			return results;

@@ -148,14 +148,14 @@
 		height: $height;
 
 		&[data-dice-value="0"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="10"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="20"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="30"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="40"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="50"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="60"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="70"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="80"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="90"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 1)}; }
+		&[data-dice-value="1"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 0)}; }
+		&[data-dice-value="2"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 0)}; }
+		&[data-dice-value="3"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 0)}; }
+		&[data-dice-value="4"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 0)}; }
+		&[data-dice-value="5"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 1)}; }
+		&[data-dice-value="6"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 1)}; }
+		&[data-dice-value="7"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 1)}; }
+		&[data-dice-value="8"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 1)}; }
+		&[data-dice-value="9"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 1)}; }
 	}
 }
