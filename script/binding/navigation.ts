@@ -1,4 +1,4 @@
-///<reference path="ViewManager.ts"/>
+///<reference path="../view/__index__.ts"/>
 
 namespace Cthulhu {
 	const SELETED_CLASS = "selected";
