@@ -50,16 +50,16 @@
 			font-size: 30vh;
 			opacity: 0.5;
 			color: white;
-			@include blur-text(2px, 5px, red);
+			@include blur-text-double(.1ex, .25ex, red);
 
 			&.critical {
 				color: white;
-				@include blur-text(2px, 5px, green);
+				@include blur-text-double(.1ex, .25ex, green);
 			}
 
 			&.fumble {
 				color: white;
-				@include blur-text(2px, 5px, blue);
+				@include blur-text-double(.1ex, .25ex, blue);
 			}
 		}
 	}

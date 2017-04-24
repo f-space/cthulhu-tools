@@ -6,8 +6,20 @@
 		 #{$offset}  #{$offset} $radius $color;
 }
 
+@mixin blur-text-double($offset, $radius, $color) {
+	text-shadow: 
+		-#{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
+		-#{$offset / 4}  #{$offset / 4} #{$radius / 4} $color,
+		 #{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
+		 #{$offset / 4}  #{$offset / 4} #{$radius / 4} $color,
+		-#{$offset} -#{$offset} $radius $color,
+		-#{$offset}  #{$offset} $radius $color,
+		 #{$offset} -#{$offset} $radius $color,
+		 #{$offset}  #{$offset} $radius $color;
+}
+
 %design-font {
-	@include blur-text(2px, 5px, red);
+	@include blur-text(.1ex, .25ex, red);
 	color: white;
 	font-family: "Cthulhu";
 }
