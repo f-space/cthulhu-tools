@@ -43,6 +43,8 @@ namespace Cthulhu {
 			public constructor(max: number) {
 				this._max = clamp(max, 1, 6);
 				this._dice = new Dice(DiceType.D6, 1);
+
+				this.value = 1;
 			}
 		}
 
@@ -58,6 +60,8 @@ namespace Cthulhu {
 			public constructor(max: number) {
 				this._max = clamp(max, 1, 10);
 				this._dice = new Dice(DiceType.D10, 0);
+
+				this.value = this.max;
 			}
 		}
 
@@ -76,6 +80,8 @@ namespace Cthulhu {
 					new Dice(DiceType.D100, 0),
 					new Dice(DiceType.D10, 0),
 				];
+
+				this.value = this.max;
 			}
 		}
 	}
