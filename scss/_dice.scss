@@ -30,6 +30,9 @@
 			
 			.dice-image{
 				margin: 0 1em;
+				width: 100px;
+				height: 100px;
+				object-fit: contain;
 			}
 		}
 
@@ -95,67 +98,5 @@
 		&:active {
 			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0,255,0,0.5), transparent);
 		}
-	}
-}
-
-.dice-image {
-	$width: 86px;
-	$offsetX: 78px + $width;
-	
-	background-image: url(image/dice.png);
-	background-repeat: no-repeat;
-	background-origin: border-box;
-	
-	&.dice6 {
-		$height: 88px;
-		$offsetY: 85px;
-
-		width: $width;
-		height: $height;
-
-		&[data-dice-value="1"] { background-position: #{-($offsetX + $width * 0)} #{-$offsetY}; }
-		&[data-dice-value="2"] { background-position: #{-($offsetX + $width * 1)} #{-$offsetY}; }
-		&[data-dice-value="3"] { background-position: #{-($offsetX + $width * 2)} #{-$offsetY}; }
-		&[data-dice-value="4"] { background-position: #{-($offsetX + $width * 3)} #{-$offsetY}; }
-		&[data-dice-value="5"] { background-position: #{-($offsetX + $width * 4)} #{-$offsetY}; }
-		&[data-dice-value="6"] { background-position: #{-($offsetX + $width * 5)} #{-$offsetY}; }
-	}
-
-	&.dice10 {
-		$height: 88px;
-		$offsetY: 173px;
-
-		width: $width;
-		height: $height;
-
-		&[data-dice-value="0"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="1"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="2"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="3"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="4"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="5"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="6"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="7"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="8"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="9"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 1)}; }
-	}
-
-	&.dice100 {
-		$height: 88px;
-		$offsetY: 349px;
-
-		width: $width;
-		height: $height;
-
-		&[data-dice-value="0"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="1"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="2"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="3"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="4"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="5"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="6"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="7"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="8"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="9"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 1)}; }
 	}
 }

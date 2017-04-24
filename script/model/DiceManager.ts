@@ -1,104 +1,130 @@
 namespace Cthulhu {
+	type DiceSetMap = { [id: string]: DiceSet | undefined };
+
+	export enum DiceRollEventType {
+		Start,
+		Stop,
+		Update,
+	}
+
 	export interface DiceListener {
-		onStart?(): void;
-		onStop?(diceSet: DiceSet, results: number[]): void;
-		onUpdate?(diceSet: DiceSet, values: number[]): void;
-		onSelectionChanged?(id: string, diceSet: DiceSet): void;
+		onAttached?(manager: DiceManager): void;
+		onDetached?(manager: DiceManager): void;
+		onRoll?(manager: DiceManager, type: DiceRollEventType): void;
+		onDiceSetChanged?(manager: DiceManager): void;
 	}
 
 	export class DiceManager {
-		private constructor() { }
+		public interval: number = 100;
+		public duration: number = 1000;
 
-		public static interval: number = 100;
-		public static duration: number = 1000;
+		private _current: string | null = null;
+		private _diceSets: DiceSetMap = Object.create(null);
+		private _listeners: DiceListener[] = [];
+		private _rolling: boolean = false;
 
-		private static current: string | null = null;
-		private static rolling: boolean = false;
+		public get current(): string | null { return this._current; }
+		public get diceSet(): DiceSet | null | undefined { return (this._current !== null ? this._diceSets[this._current] : null); }
 
-		private static diceSets: Map<string, DiceSet> = new Map<string, DiceSet>();
-		private static listeners: DiceListener[] = [];
-
-		public static get selection(): string | null { return this.current; }
-
-		public static register(id: string, diceSet: DiceSet): void {
-			this.diceSets.set(id, diceSet);
+		public register(id: string, diceSet: DiceSet): void {
+			this._diceSets[id] = diceSet;
 		}
 
-		public static unregister(id: string): void {
-			this.diceSets.delete(id);
+		public unregister(id: string): void {
+			delete this._diceSets[id];
 		}
 
-		public static addListener(listener: DiceListener): void {
-			const index = this.listeners.indexOf(listener);
-			if (index < 0) this.listeners.push(listener);
+		public list(): string[] {
+			return Object.keys(this._diceSets);
 		}
 
-		public static removeListener(listener: DiceListener): void {
-			const index = this.listeners.indexOf(listener);
-			if (index >= 0) this.listeners.splice(index, 1);
+		public get(id: string): DiceSet | undefined {
+			return this._diceSets[id];
 		}
 
-		public static select(id: string): boolean {
-			if (id !== this.current && !this.rolling) {
-				const diceSet = this.diceSets.get(id);
-				if (diceSet != null) {
-					this.current = id;
+		public addListener(listener: DiceListener): void {
+			const index = this._listeners.indexOf(listener);
+			if (index === -1) {
+				this._listeners.push(listener);
 
-					this.raiseEvent("onSelectionChanged", id, diceSet);
+				if (listener.onAttached) listener.onAttached(this);
+			}
+		}
 
-					return true;
+		public removeListener(listener: DiceListener): void {
+			const index = this._listeners.indexOf(listener);
+			if (index !== -1) {
+				this._listeners.splice(index, 1);
+
+				if (listener.onDetached) listener.onDetached(this);
+			}
+		}
+
+		public select(id: string | null): void {
+			if (!this._rolling && id !== this._current) {
+				if (id === null || id in this._diceSets) {
+					this._current = id;
+
+					for (const listener of this._listeners) {
+						if (listener.onDiceSetChanged) listener.onDiceSetChanged(this);
+					}
+				} else {
+					throw new Error(`Unknown DiceSet: ${id}.`);
 				}
 			}
-
-			return false;
 		}
 
-		public static roll(): boolean {
-			if (this.current != null && !this.rolling) {
-				const diceSet = this.diceSets.get(this.current);
-				if (diceSet != null) {
-					this.rollAsync(diceSet)
-
-					return true;
+		public roll(): void {
+			const id = this._current;
+			if (!this._rolling && id !== null) {
+				const diceSet = this._diceSets[id];
+				if (diceSet) {
+					this._rolling = true;
+					this.rollAsync(diceSet).then(() => {
+						this._rolling = false;
+					}, (e: any) => {
+						this._rolling = false;
+						console.error(e);
+					});
 				}
 			}
-
-			return false;
 		}
 
-		private static async rollAsync(diceSet: DiceSet): Promise<void> {
-			this.rolling = true;
-			this.raiseEvent("onStart");
+		private async rollAsync(diceSet: DiceSet): Promise<void> {
+			this.raiseRollEvent(DiceRollEventType.Start);
 
 			const endTime = Date.now() + this.duration;
 			while (Date.now() < endTime) {
-				await new Promise(resolve => setTimeout(resolve, this.interval));
+				this.updateDiceFaces(diceSet);
+				this.raiseRollEvent(DiceRollEventType.Update);
 
-				if (this.current != null) {
-					const values = this.randomValues(diceSet);
-					this.raiseEvent("onUpdate", diceSet, values);
-				}
+				await DiceManager.sleep(this.interval);
 			}
 
-			const results = this.randomValues(diceSet);
-			this.raiseEvent("onStop", diceSet, results);
-			this.rolling = false;
+			this.updateDiceFaces(diceSet);
+			this.raiseRollEvent(DiceRollEventType.Update);
+
+			this.raiseRollEvent(DiceRollEventType.Stop);
 		}
 
-		private static randomValues(diceSet: DiceSet): number[] {
-			const results = [];
+		private updateDiceFaces(diceSet: DiceSet): void {
 			for (const group of diceSet.groups) {
-				results.push(Math.floor(Math.random() * group.max) + 1);
+				group.value = DiceManager.random(group);
 			}
-
-			return results;
 		}
 
-		private static raiseEvent(event: keyof DiceListener, ...args: any[]): void {
-			for (const listener of this.listeners) {
-				const handler = listener[event];
-				if (handler != null) handler.apply(listener, args);
+		private raiseRollEvent(type: DiceRollEventType): void {
+			for (const listener of this._listeners) {
+				if (listener.onRoll) listener.onRoll(this, type);
 			}
+		}
+
+		private static random(group: DiceGroup): number {
+			return Math.floor(Math.random() * group.max) + 1;
+		}
+
+		private static async sleep(duration: number): Promise<void> {
+			await new Promise(resolve => setTimeout(resolve, duration));
 		}
 	}
 }
