@@ -65,22 +65,9 @@ namespace Cthulhu {
 	function initNumberView(): void {
 		const numberView = document.querySelector("#dice>.result>.number-view");
 		if (numberView instanceof HTMLElement) {
-			manager.addListener(new class {
-				public onRoll(manager: DiceManager, type: DiceRollEventType): void {
-					if (type === DiceRollEventType.Update) {
-						const diceSet = manager.diceSet;
-						if (diceSet) {
-							const value = diceSet.groups.reduce((sum, group) => sum + group.value, 0);
+			const renderer = new DiceNumberRenderer(numberView);
 
-							numberView.textContent = value.toString(10);
-						}
-					}
-				}
-
-				public onDiceSetChanged(): void {
-					numberView.textContent = null;
-				}
-			});
+			manager.addListener(renderer);
 		}
 	}
 
