@@ -1,0 +1,13 @@
+@mixin blur-text($offset, $radius, $color) {
+	text-shadow: 
+		-#{$offset} -#{$offset} $radius $color,
+		-#{$offset}  #{$offset} $radius $color,
+		 #{$offset} -#{$offset} $radius $color,
+		 #{$offset}  #{$offset} $radius $color;
+}
+
+%design-font {
+	@include blur-text(2px, 5px, red);
+	color: white;
+	font-family: "Cthulhu";
+}
