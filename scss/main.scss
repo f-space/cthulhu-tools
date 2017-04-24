@@ -10,7 +10,7 @@ body * {
 	background: dimgray;
 }
 
-body{
+body {
 	position: fixed;
 	left:  0;
 	right: 0;
@@ -29,11 +29,11 @@ body{
 	}
 }
 
-#resources{
+#resources {
 	display: none;
 }
 
-#container{
+#container {
 	display:  flex;
 	flex-flow: column nowrap;
 	align-items: stretch;
@@ -44,7 +44,7 @@ body{
 	max-height: 100%;
 }
 
-#main{
+#main {
 	flex: 1 1 0;
 	padding-top: 20px;
 	height: 0;
