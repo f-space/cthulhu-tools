@@ -2,6 +2,7 @@
 
 namespace Cthulhu {
 	const SELETED_CLASS = "selected";
+	const manager = new PageManager(Page.Home);
 
 	function handleSelectionEvent(): void {
 		const elements = <[Page, HTMLElement][]>[
@@ -12,7 +13,7 @@ namespace Cthulhu {
 			[Page.Status, document.getElementById("menu-status")],
 		].filter(x => x[1] != null);
 
-		Application.PageManager.addListener(new class {
+		manager.addListener(new class {
 			public onEnter(page: Page): void {
 				for (const element of elements) {
 					if (element[0] === page) {
@@ -36,9 +37,9 @@ namespace Cthulhu {
 		const diceMenu = document.getElementById("menu-dice");
 		const statusMenu = document.getElementById("menu-status");
 
-		if (title) title.addEventListener("click", () => Application.PageManager.toPage(Page.Home));
-		if (diceMenu) diceMenu.addEventListener("click", () => Application.PageManager.toPage(Page.Dice));
-		if (statusMenu) statusMenu.addEventListener("click", () => Application.PageManager.toPage(Page.Status));
+		if (title) title.addEventListener("click", () => manager.toPage(Page.Home));
+		if (diceMenu) diceMenu.addEventListener("click", () => manager.toPage(Page.Dice));
+		if (statusMenu) statusMenu.addEventListener("click", () => manager.toPage(Page.Status));
 	}
 
 	ViewManager.register(() => {
