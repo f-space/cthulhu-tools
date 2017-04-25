@@ -17,7 +17,9 @@
 		
 		flex: 1 1 0;
 		position: relative;
+		box-sizing: border-box;
 		width: 100%;
+		min-height: 20vh;
 
 		.dice-view {
 			display: flex;
@@ -49,7 +51,7 @@
 			right: 0;
 			top: 0;
 			bottom: 0;
-			font-size: 30vh;
+			font-size: 25vh;
 			opacity: 0.5;
 			color: white;
 			@include blur-text-double(.1ex, .25ex, red);
