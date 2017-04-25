@@ -21,16 +21,21 @@
 		width: 100%;
 		min-height: 20vh;
 
-		.dice-view {
-			display: flex;
-			flex-flow: row nowrap;
-			justify-content: center;
-			align-items: center;
+		%view {
 			position: absolute;
 			left: 0;
 			right: 0;
 			top: 0;
 			bottom: 0;
+		}
+
+		.dice-view {
+			@extend %view;
+
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: center;
+			align-items: center;
 			
 			.dice-image {
 				margin: 0 1em;
@@ -41,16 +46,13 @@
 		}
 
 		.number-view {
+			@extend %view;
+			
 			display: flex;
 			flex-flow: row nowrap;
 			justify-content: center;
 			align-items: center;
-			position: absolute;
 			z-index: -1;
-			left: 0;
-			right: 0;
-			top: 0;
-			bottom: 0;
 			font-size: 25vh;
 			opacity: 0.5;
 			color: white;
