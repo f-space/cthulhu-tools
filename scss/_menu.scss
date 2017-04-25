@@ -4,7 +4,8 @@
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: stretch;
-	flex: 0 0 3rem;
+	flex: 0 0 auto;
+	line-height: 1.2;
 }
 
 .menu-item {
