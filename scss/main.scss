@@ -55,8 +55,7 @@ body {
 	flex: 1 1 0;
 	height: 0;
 	min-height: 0;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden;
 	background: linear-gradient(rgba(255,0,0,0.5), transparent 20px);
 
 	& > :not(.selected) {

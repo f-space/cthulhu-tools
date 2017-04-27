@@ -65,26 +65,40 @@
 
 			<!-- Dice -->
 			<div id="dice">
-				<div class="page-title">
-					<h2>ダイスロール</h2>
+				<div class="contents">
+					<div class="page-title">
+						<h2>ダイスロール</h2>
+					</div>
+					<div class="result">
+						<div class="dice-view" data-dice-class="dice-image"></div>
+						<div class="number-view" data-critical-class="critical" data-fumble-class="fumble"></div>
+					</div>
+					<div class="mode-list">
+						<div class="mode" data-dice="custom">custom</div>
+						<div class="mode" data-dice="1D10">1D10</div>
+						<div class="mode" data-dice="1D100">1D100</div>
+						<div class="mode" data-dice="1D6">1D6</div>
+						<div class="mode" data-dice="2D6">2D6</div>
+						<div class="mode" data-dice="3D6">3D6</div>
+						<div class="mode" data-dice="1D3">1D3</div>
+						<div class="mode" data-dice="2D3">2D3</div>
+						<div class="mode" data-dice="1D4">1D4</div>
+					</div>
+					<button class="roll-button" type="button">Roll</button>
+					<audio src="audio/dice.wav" preload="auto"></audio>
 				</div>
-				<div class="result">
-					<div class="dice-view" data-dice-class="dice-image"></div>
-					<div class="number-view" data-critical-class="critical" data-fumble-class="fumble"></div>
+				<div class="overlay disabled">
+					<div class="custom-dice-dialog hidden">
+						<div class="input-box">
+							<input class="count" type="number" min="1" max="10" value="1" step="1" /> D
+							<input class="max" type="number" min="1" max="100" value="100" step="1" />
+						</div>
+						<div class="buttons">
+							<button class="cancel" type="button">Cancel</button>
+							<button class="ok" type="button">OK</button>
+						</div>
+					</div>
 				</div>
-				<div class="mode-list">
-					<div class="mode" data-dice="custom">custom</div>
-					<div class="mode" data-dice="1D10">1D10</div>
-					<div class="mode" data-dice="1D100">1D100</div>
-					<div class="mode" data-dice="1D6">1D6</div>
-					<div class="mode" data-dice="2D6">2D6</div>
-					<div class="mode" data-dice="3D6">3D6</div>
-					<div class="mode" data-dice="1D3">1D3</div>
-					<div class="mode" data-dice="2D3">2D3</div>
-					<div class="mode" data-dice="1D4">1D4</div>
-				</div>
-				<button class="roll-button" type="button">Roll</button>
-				<audio src="audio/dice.wav" preload="auto"></audio>
 			</div>
 
 			<!-- Status -->
