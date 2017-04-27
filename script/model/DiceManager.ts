@@ -28,10 +28,19 @@ namespace Cthulhu {
 
 		public register(id: string, diceSet: DiceSet): void {
 			this._diceSets[id] = diceSet;
+
+			if (this._current === id) {
+				this.raiseDiceSetChangedEvent();
+			}
 		}
 
 		public unregister(id: string): void {
 			delete this._diceSets[id];
+
+			if (this._current === id) {
+				this._current = null;
+				this.raiseDiceSetChangedEvent();
+			}
 		}
 
 		public list(): string[] {
@@ -65,9 +74,7 @@ namespace Cthulhu {
 				if (id === null || id in this._diceSets) {
 					this._current = id;
 
-					for (const listener of this._listeners) {
-						if (listener.onDiceSetChanged) listener.onDiceSetChanged(this);
-					}
+					this.raiseDiceSetChangedEvent();
 				} else {
 					throw new Error(`Unknown DiceSet: ${id}.`);
 				}
@@ -116,6 +123,12 @@ namespace Cthulhu {
 		private raiseRollEvent(type: DiceRollEventType): void {
 			for (const listener of this._listeners) {
 				if (listener.onRoll) listener.onRoll(this, type);
+			}
+		}
+
+		private raiseDiceSetChangedEvent(): void {
+			for (const listener of this._listeners) {
+				if (listener.onDiceSetChanged) listener.onDiceSetChanged(this);
 			}
 		}
 
