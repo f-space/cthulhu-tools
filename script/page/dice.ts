@@ -106,7 +106,9 @@ namespace Cthulhu {
 				if (countInput instanceof HTMLInputElement && maxInput instanceof HTMLInputElement) {
 					if (countInput.validity.valid && maxInput.validity.valid) {
 						const id = 'custom';
-						const diceSet = DiceSet.create(countInput.valueAsNumber, maxInput.valueAsNumber);
+						const count = parseInt(countInput.value, 10);
+						const max = parseInt(maxInput.value, 10);
+						const diceSet = DiceSet.create(count, max);
 
 						manager.register(id, diceSet);
 						manager.select(id);
