@@ -3,3 +3,9 @@
 		font-size: 80%;
 	}
 }
+
+@media only screen and (orientation: portrait) {
+	body {
+		max-width: none;
+	}
+}
