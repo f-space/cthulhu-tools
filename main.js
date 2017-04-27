@@ -545,7 +545,7 @@ var Cthulhu;
                     callback();
             }
         }());
-        const modes = document.querySelectorAll("#dice>.contents>.mode-list>.mode");
+        const modes = Array.from(document.querySelectorAll("#dice>.contents>.mode-list>.mode"));
         for (const mode of modes) {
             const id = mode.dataset["dice"];
             if (id != null) {

@@ -13,8 +13,8 @@ namespace Cthulhu {
 			}
 		}());
 
-		const modes = document.querySelectorAll("#dice>.contents>.mode-list>.mode");
-		for (const mode of <NodeListOf<HTMLElement>>modes) {
+		const modes = Array.from(<NodeListOf<HTMLElement>>document.querySelectorAll("#dice>.contents>.mode-list>.mode"));
+		for (const mode of modes) {
 			const id = mode.dataset["dice"];
 			if (id != null) {
 				if (id === 'custom') {
