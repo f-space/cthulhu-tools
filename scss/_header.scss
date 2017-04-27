@@ -1,12 +1,15 @@
-#header{
-	flex: 0 0 3rem;
+#header {
+	@extend %unselectable;
+	
+	flex: 0 0 auto;
+	line-height: 1.2;
 	text-align: center;
 }
 
-#title{
+#title {
 	@extend %design-font;
 
 	display: inline;
-	font-size: 3rem;
+	font-size: 2.5rem;
 	cursor: pointer;
 }

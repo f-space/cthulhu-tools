@@ -5,7 +5,9 @@
 	"main": "",
 	"scripts": {
 		"css": "node-sass scss/main.scss main.css --output-style compressed",
-		"js": "tsc -p tsconfig.json",
+		"index": "node indexer.js",
+		"tsc": "tsc -p tsconfig.json", 
+		"js": "npm run index && npm run tsc",
 		"build": "npm run css & npm run js"
 	},
 	"keywords": [

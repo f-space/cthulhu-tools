@@ -1,0 +1,61 @@
+@function selector-leaves($selector) {
+	$result: ();
+	$separator: list-separator($selector);
+	@each $x in $selector {
+		$result: append($result, nth($x, length($x)), $separator);
+	}
+	@return $result;
+}
+
+@mixin count-gt($n) {
+	$leaves: selector-leaves(&);
+	$first: selector-nest(&, "&:first-child:nth-last-child(n+#{$n})");
+	$all: selector-nest($first, "&, & ~ *");
+	$selectors: selector-unify($leaves, $all);
+
+	@at-root #{$selectors} {
+		@content
+	}
+}
+
+@mixin blur-text($offset, $radius, $color) {
+	text-shadow: 
+		-#{$offset} -#{$offset} $radius $color,
+		-#{$offset}  #{$offset} $radius $color,
+		 #{$offset} -#{$offset} $radius $color,
+		 #{$offset}  #{$offset} $radius $color;
+}
+
+@mixin blur-text-double($offset, $radius, $color) {
+	text-shadow: 
+		-#{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
+		-#{$offset / 4}  #{$offset / 4} #{$radius / 4} $color,
+		 #{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
+		 #{$offset / 4}  #{$offset / 4} #{$radius / 4} $color,
+		-#{$offset} -#{$offset} $radius $color,
+		-#{$offset}  #{$offset} $radius $color,
+		 #{$offset} -#{$offset} $radius $color,
+		 #{$offset}  #{$offset} $radius $color;
+}
+
+%unselectable {
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+%number-box {
+	-moz-appearance: textfield;
+
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+}
+
+%design-font {
+	@include blur-text(.1ex, .25ex, red);
+	color: white;
+	font-family: "Cthulhu";
+}

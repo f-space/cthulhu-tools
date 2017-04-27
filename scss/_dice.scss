@@ -1,161 +1,230 @@
-#dice{
-	display: flex;
-	flex-flow: column nowrap;
-	align-items: center;
-	box-sizing: border-box;
-	padding: 1ex 1em;
-	width: 100%;
-	height: 100%;
+#dice {
+	position: relative;
 	
-	.page-title {
-		flex: 0 0 auto;
-		font-size: 120%;
-	}
-
-	.result {
-		flex: 1 1 0;
-		position: relative;
+	.contents {
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: center;
+		overflow-x: hidden;
+		overflow-y: auto;
+		box-sizing: border-box;
 		width: 100%;
+		height: 100%;
 
-		.dice-view {
-			display: flex;
-			flex-flow: row nowrap;
-			justify-content: center;
-			align-items: center;
-			position: absolute;
-			left: 0;
-			right: 0;
-			top: 0;
-			bottom: 0;
-			
-			.dice-image{
-				margin: 0 1em;
+		&.disabled {
+			filter: blur(3px);
+			pointer-events: none;
+		}
+		
+		.page-title {
+			flex: 0 0 auto;
+			font-size: 120%;
+		}
+
+		.result {
+			@extend %unselectable;
+
+			flex: 1 1 0;
+			position: relative;
+			box-sizing: border-box;
+			width: 100%;
+			min-height: 20vh;
+
+			%view {
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+			}
+
+			.dice-view {
+				@extend %view;
+
+				display: flex;
+				flex-flow: row wrap;
+				justify-content: space-around;
+				align-content: space-around;
+
+				.dice-image {
+					margin: 1ex;
+					width: 15vh;
+					height: 15vh;
+					object-fit: contain;
+
+					@include count-gt(4) {
+						margin: .5ex;
+						width: 10vh;
+						height: 10vh;
+					}
+
+					@include count-gt(11) {
+						width: 7.5vh;
+						height: 7.5vh;
+					}
+				}
+			}
+
+			.number-view {
+				@extend %view;
+
+				display: flex;
+				flex-flow: row nowrap;
+				justify-content: center;
+				align-items: center;
+				z-index: -1;
+				font-size: 25vh;
+				opacity: 0.5;
+				color: white;
+				@include blur-text-double(.1ex, .25ex, red);
+
+				&.critical {
+					color: white;
+					@include blur-text-double(.1ex, .25ex, green);
+				}
+
+				&.fumble {
+					color: white;
+					@include blur-text-double(.1ex, .25ex, blue);
+				}
 			}
 		}
 
-		.number-view {
+		.mode-list {
+			@extend %unselectable;
+
 			display: flex;
-			flex-flow: row nowrap;
-			justify-content: center;
-			align-items: center;
-			position: absolute;
-			z-index: -1;
-			left: 0;
-			right: 0;
-			top: 0;
-			bottom: 0;
-			font-size: 30vh;
-			opacity: 0.5;
-			color: white;
-			text-shadow:
-				-2px -2px 5px red,
-				-2px  2px 5px red,
-				 2px -2px 5px red,
-				 2px  2px 5px red;
-		}
-	}
-
-	.mode-list {
-		display: flex;
-		flex-flow: row wrap;
-		justify-content: space-between;
-		flex: 0 0 auto;
-		box-sizing: border-box;
-		margin: 1ex 0;
-		padding: 0 1em;
-		width: 100%;
-
-		& > .mode {
-			flex: 1 1 auto;
-			margin: 1ex .25em;
+			flex-flow: row wrap;
+			justify-content: space-between;
+			flex: 0 0 auto;
 			box-sizing: border-box;
-			width: calc(30% - .25em);
-			border: solid 1px red;
-			border-radius: 2ex/50%;
-			text-align: center;
+			margin: 1ex 0;
+			padding: 0 1em;
+			width: 100%;
+
+			& > .mode {
+				flex: 1 1 auto;
+				margin: 1ex .25em;
+				box-sizing: border-box;
+				width: calc(30% - .25em);
+				border: solid 1px red;
+				border-radius: 2ex/50%;
+				text-align: center;
+				cursor: pointer;
+
+				&.selected {
+					background: red;
+				}
+			}
+		}
+
+		.roll-button {
+			@extend %unselectable;
+			@extend %design-font;
+
+			flex: 0 0 auto;
+			padding: 0 .75em;
+			border: none;
+			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255,0,0,0.5), transparent);
+			line-height: 1;
+			font-size: 5rem;
 			cursor: pointer;
 
-			&.selected {
-				background: red;
+			&:active {
+				background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0,255,0,0.5), transparent);
 			}
 		}
 	}
 
-	.roll-button {
-		@extend %design-font;
+	.overlay {
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: center;
+		align-items: stretch;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: rgba(0,0,0,.5);
 
-		flex: 0 0 auto;
-		margin: 0 0;
-		padding: 0 .5em;
-		border: none;
-		background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255,0,0,0.5), transparent);
-		font-size: 5rem;
-		cursor: pointer;
-
-		&:active {
-			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0,255,0,0.5), transparent);
+		&.disabled {
+			display: none;
 		}
-	}
-}
 
-.dice-image {
-	$width: 86px;
-	$offsetX: 78px + $width;
-	
-	background-image: url(image/dice.png);
-	background-repeat: no-repeat;
-	background-origin: border-box;
-	
-	&.dice6 {
-		$height: 88px;
-		$offsetY: 85px;
+		.custom-dice-dialog {
+			flex: 0 0 auto;
+			position: relative;
+			padding: 2ex 1em;
+			background: linear-gradient(rgb(128,0,0), black 10%, black 90%, rgb(128,0,0));
 
-		width: $width;
-		height: $height;
+			&.hidden {
+				display: none;
+			}
 
-		&[data-dice-value="1"] { background-position: #{-($offsetX + $width * 0)} #{-$offsetY}; }
-		&[data-dice-value="2"] { background-position: #{-($offsetX + $width * 1)} #{-$offsetY}; }
-		&[data-dice-value="3"] { background-position: #{-($offsetX + $width * 2)} #{-$offsetY}; }
-		&[data-dice-value="4"] { background-position: #{-($offsetX + $width * 3)} #{-$offsetY}; }
-		&[data-dice-value="5"] { background-position: #{-($offsetX + $width * 4)} #{-$offsetY}; }
-		&[data-dice-value="6"] { background-position: #{-($offsetX + $width * 5)} #{-$offsetY}; }
-	}
+			&::before {
+				@extend %design-font;
+				
+				content: "Custom Dice";
+				display: block;
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: -1.5ex;
+				font-size: 3rem;
+				line-height: 1.2;
+				text-align: center;
+			}
 
-	&.dice10 {
-		$height: 88px;
-		$offsetY: 173px;
+			.input-box {
+				margin: 2ex 1em;
+				font-size: 150%;
+				text-align: center;
+				vertical-align: middle;
+				
+				input[type="number"] {
+					@extend %number-box;
 
-		width: $width;
-		height: $height;
+					width: 4ex;
+					margin: auto .5em;
+					padding: .5ex .5em;
+					border: solid 1px red;
+					border-radius: 1ex;
+					background: transparent;
+					text-align: center;
 
-		&[data-dice-value="0"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="1"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="2"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="3"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="4"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="5"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="6"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="7"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="8"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="9"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 1)}; }
-	}
+					&:invalid {
+						background: rgba(255,0,0,0.25);
+					}
+				}
+			}
 
-	&.dice100 {
-		$height: 88px;
-		$offsetY: 349px;
+			.buttons {
+				float: right;
 
-		width: $width;
-		height: $height;
+				%button {
+					margin: .5ex .5em;
+					padding: .5ex .5em;
+					box-sizing: border-box;
+					width: 5em;
+					border: solid 1px rgb(128,0,0);
+					border-radius: .5ex;
+					text-align: center;
+					vertical-align: middle;
+				}
 
-		&[data-dice-value="0"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="10"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="20"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="30"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="40"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 0)}; }
-		&[data-dice-value="50"] { background-position: #{-($offsetX + $width * 0)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="60"] { background-position: #{-($offsetX + $width * 1)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="70"] { background-position: #{-($offsetX + $width * 2)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="80"] { background-position: #{-($offsetX + $width * 3)} #{-($offsetY + $height * 1)}; }
-		&[data-dice-value="90"] { background-position: #{-($offsetX + $width * 4)} #{-($offsetY + $height * 1)}; }
+				.cancel {
+					@extend %button;
+
+					background: transparent;
+				}
+
+				.ok {
+					@extend %button;
+
+					background: rgb(128,0,0);
+				}
+			}
+		}
 	}
 }
