@@ -61,7 +61,7 @@ namespace Cthulhu {
 			}
 		}
 
-		private async requestAsync(url: string): Promise<any> {
+		private requestAsync(url: string): Promise<any> {
 			return new Promise((resolve, reject) => {
 				const xhr = new XMLHttpRequest();
 				xhr.responseType = 'json';
