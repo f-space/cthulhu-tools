@@ -42,7 +42,7 @@ namespace Cthulhu {
 	}
 
 	function initRollSound(): void {
-		const rollSound = document.querySelector("#dice>.contents>audio");
+		const rollSound = document.querySelector("#dice-sound");
 		if (rollSound instanceof HTMLAudioElement) {
 			manager.addListener(new class {
 				public onRoll(manager: DiceManager, type: DiceRollEventType) {

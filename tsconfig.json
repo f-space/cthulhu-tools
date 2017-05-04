@@ -2,10 +2,9 @@
 	"compilerOptions": {
 		"target": "es6",
 		"outFile": "main.js",
-		"noImplicitAny": true,
+		"strict": true,
 		"noFallthroughCasesInSwitch": true,
-		"noImplicitReturns": true,
-		"strictNullChecks": true
+		"noImplicitReturns": true
 	},
 	"include": [
 		"script/**/*"

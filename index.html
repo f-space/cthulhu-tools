@@ -3,6 +3,7 @@
 <head>
 	<title>クトゥルフTRPG ツール</title>
 	<meta charset="utf-8">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
 	<meta name="description" content="クトゥルフTRPGのためのツール。ダイスやステータス管理など。">
 	<meta name="author" content="F_">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +14,7 @@
 <body>
 	<div id="resources">
 		<img id="dice-image" src="image/dice.png" data-layout="image/dice.json" />
+		<audio id="dice-sound" src="audio/dice.wav" preload="auto"></audio>
 	</div>
 	<div id="container">
 		<div id="header">
@@ -85,7 +87,6 @@
 						<div class="mode" data-dice="1D4">1D4</div>
 					</div>
 					<button class="roll-button" type="button">Roll</button>
-					<audio src="audio/dice.wav" preload="auto"></audio>
 				</div>
 				<div class="overlay disabled">
 					<div class="custom-dice-dialog hidden">
