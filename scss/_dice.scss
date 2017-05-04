@@ -44,6 +44,11 @@
 				justify-content: space-around;
 				align-content: space-around;
 				align-items: center;
+				transition: opacity 300ms;
+
+				&:active {
+					opacity: 0.25;
+				}
 
 				.dice-image {
 					margin: 1ex;
