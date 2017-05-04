@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -284,24 +285,22 @@ var Cthulhu;
             });
         }
         requestAsync(url) {
-            return __awaiter(this, void 0, void 0, function* () {
-                return new Promise((resolve, reject) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.responseType = 'json';
-                    xhr.open('GET', url);
-                    xhr.onload = () => {
-                        if (xhr.status === 200) {
-                            resolve(xhr.response);
-                        }
-                        else {
-                            reject(new Error(xhr.statusText));
-                        }
-                    };
-                    xhr.onerror = () => {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.responseType = 'json';
+                xhr.open('GET', url);
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        resolve(xhr.response);
+                    }
+                    else {
                         reject(new Error(xhr.statusText));
-                    };
-                    xhr.send();
-                });
+                    }
+                };
+                xhr.onerror = () => {
+                    reject(new Error(xhr.statusText));
+                };
+                xhr.send();
             });
         }
         parseJson(json) {
@@ -574,7 +573,7 @@ var Cthulhu;
         }
     }
     function initRollSound() {
-        const rollSound = document.querySelector("#dice>.contents>audio");
+        const rollSound = document.querySelector("#dice-sound");
         if (rollSound instanceof HTMLAudioElement) {
             manager.addListener(new class {
                 onRoll(manager, type) {
