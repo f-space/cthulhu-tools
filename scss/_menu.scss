@@ -9,7 +9,7 @@
 }
 
 .menu-item {
-	@extend %design-font;
+	@include designed-font;
 
 	display: flex;
 	flex-flow: column nowrap;
@@ -31,7 +31,7 @@
 }
 
 .extra-menu-item {
-	@extend %design-font;
+	@include designed-font;
 
 	display: flex;
 	flex-flow: column nowrap;

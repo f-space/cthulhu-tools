@@ -38,6 +38,12 @@
 		 #{$offset}  #{$offset} $radius $color;
 }
 
+@mixin designed-font($color: red) {
+	@include blur-text(.1ex, .25ex, $color);
+	color: white;
+	font-family: "Cthulhu";
+}
+
 %unselectable {
 	-ms-user-select: none;
 	-moz-user-select: none;
@@ -54,10 +60,4 @@
 		-webkit-appearance: none;
 		margin: 0;
 	}
-}
-
-%design-font {
-	@include blur-text(.1ex, .25ex, red);
-	color: white;
-	font-family: "Cthulhu";
 }
