@@ -11,9 +11,12 @@
 .menu-item {
 	@extend %design-font;
 
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
 	flex: 1 1 0;
 	font-size: 3rem;
-	text-align: center;
 	cursor: pointer;
 
 	&.selected {
