@@ -1,5 +1,5 @@
 #header {
-	@extend %unselectable;
+	@include unselectable;
 	
 	flex: 0 0 auto;
 	line-height: 1.2;

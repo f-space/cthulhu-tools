@@ -1,5 +1,5 @@
 #menu {
-	@extend %unselectable;
+	@include unselectable;
 
 	display: flex;
 	flex-flow: row nowrap;

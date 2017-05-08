@@ -1,63 +1,16 @@
-@function selector-leaves($selector) {
-	$result: ();
-	$separator: list-separator($selector);
-	@each $x in $selector {
-		$result: append($result, nth($x, length($x)), $separator);
-	}
-	@return $result;
+body * {
+	margin: unset;
+	padding: unset;
+	color: unset;
+	border: unset;
+	outline: unset;
+	background: unset;
 }
 
-@mixin count-gt($n) {
-	$leaves: selector-leaves(&);
-	$first: selector-nest(&, "&:first-child:nth-last-child(n+#{$n})");
-	$all: selector-nest($first, "&, & ~ *");
-	$selectors: selector-unify($leaves, $all);
-
-	@at-root #{$selectors} {
-		@content
-	}
+input {
+	font: unset;
 }
 
-@mixin blur-text($offset, $radius, $color) {
-	text-shadow: 
-		-#{$offset} -#{$offset} $radius $color,
-		-#{$offset}  #{$offset} $radius $color,
-		 #{$offset} -#{$offset} $radius $color,
-		 #{$offset}  #{$offset} $radius $color;
-}
-
-@mixin blur-text-double($offset, $radius, $color) {
-	text-shadow: 
-		-#{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
-		-#{$offset / 4}  #{$offset / 4} #{$radius / 4} $color,
-		 #{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
-		 #{$offset / 4}  #{$offset / 4} #{$radius / 4} $color,
-		-#{$offset} -#{$offset} $radius $color,
-		-#{$offset}  #{$offset} $radius $color,
-		 #{$offset} -#{$offset} $radius $color,
-		 #{$offset}  #{$offset} $radius $color;
-}
-
-@mixin designed-font($color: red) {
-	@include blur-text(.1ex, .25ex, $color);
-	color: white;
-	font-family: "Cthulhu";
-}
-
-%unselectable {
-	-ms-user-select: none;
-	-moz-user-select: none;
-	-webkit-tap-highlight-color: transparent;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
-%number-box {
-	-moz-appearance: textfield;
-
-	&::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
+body a {
+	color: red;
 }
