@@ -29,3 +29,23 @@
 		opacity: 0.5;
 	}
 }
+
+.extra-menu-item {
+	@extend %design-font;
+
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+	flex: 1 1 0;
+	line-height: 0.8;
+	font-size: 2rem;
+	background: linear-gradient(transparent 50%, blue);
+	cursor: pointer;
+	overflow: hidden;
+	transition: flex 300ms;
+
+	&:not(.selected) {
+		flex: 0 0 0;
+	}
+}

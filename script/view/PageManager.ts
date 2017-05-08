@@ -3,6 +3,8 @@ namespace Cthulhu {
 		Home,
 		Dice,
 		Status,
+		CharacterManagement,
+		CharacterCreation,
 	}
 
 	export interface PageListener {
