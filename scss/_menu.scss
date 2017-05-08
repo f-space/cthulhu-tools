@@ -1,51 +1,51 @@
 #menu {
 	@extend %unselectable;
-	
+
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: stretch;
 	flex: 0 0 auto;
-	line-height: 1.2;
-}
 
-.menu-item {
-	@include designed-font;
+	%item {
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: center;
+		align-items: center;
+		line-height: 1.2;
+		font-size: 3rem;
+		overflow: hidden;
+		cursor: pointer;
 
-	display: flex;
-	flex-flow: column nowrap;
-	justify-content: center;
-	align-items: center;
-	flex: 1 1 0;
-	font-size: 3rem;
-	cursor: pointer;
-
-	&.selected {
-		background: linear-gradient(transparent 50%, green);
-		opacity: 1;
+		&.two-lines {
+			line-height: 0.8;
+			font-size: 2rem;
+		}
 	}
 
-	&:not(.selected) {
+	.menu-item {
+		@extend %item;
+		@include designed-font;
+
+		flex: 1 1 0;
 		background: linear-gradient(transparent 80%, red);
 		opacity: 0.5;
+
+		&.selected {
+			background: linear-gradient(transparent 50%, green);
+			opacity: 1;
+		}
 	}
-}
 
-.extra-menu-item {
-	@include designed-font;
+	.extra-menu-item {
+		@extend %item;
+		@include designed-font(blue);
 
-	display: flex;
-	flex-flow: column nowrap;
-	justify-content: center;
-	align-items: center;
-	flex: 1 1 0;
-	line-height: 0.8;
-	font-size: 2rem;
-	background: linear-gradient(transparent 50%, blue);
-	cursor: pointer;
-	overflow: hidden;
-	transition: flex 300ms;
-
-	&:not(.selected) {
 		flex: 0 0 0;
+		background: linear-gradient(transparent 50%, blue);
+		transition: flex 300ms;
+
+		&.selected {
+			flex: 1 1 0;
+		}
 	}
 }
