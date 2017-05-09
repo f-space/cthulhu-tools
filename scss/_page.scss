@@ -1,5 +1,4 @@
 .page {
-	display: none;
 	position: relative;
 	box-sizing: border-box;
 	width: 100%;
@@ -7,8 +6,8 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 
-	&.selected {
-		display: block;
+	&:not(.selected) {
+		display: none;
 	}
 
 	.navigations {
