@@ -89,7 +89,7 @@ namespace Cthulhu {
 	function openCustomDiceDialog(): void {
 		const dialog = document.getElementById("custom-dice-dialog");
 		if (dialog instanceof HTMLElement) {
-			dialog.classList.remove('hidden');
+			dialog.classList.add('open');
 		}
 
 		updateOverlay();
@@ -98,7 +98,7 @@ namespace Cthulhu {
 	function closeCustomDiceDialog(cancel: boolean): void {
 		const dialog = document.getElementById("custom-dice-dialog");
 		if (dialog instanceof HTMLElement) {
-			dialog.classList.add('hidden');
+			dialog.classList.remove('open');
 
 			if (!cancel) {
 				const countInput = document.querySelector("#custom-dice-dialog .count");
@@ -121,16 +121,13 @@ namespace Cthulhu {
 	}
 
 	function updateOverlay(): void {
-		const contents = document.querySelector("#dice>.contents");
-		const overlay = document.querySelector("#dice>.overlay");
-		if (contents instanceof HTMLElement && overlay instanceof HTMLElement) {
-			const children = Array.from(overlay.children);
-			if (children.some(dialog => !dialog.classList.contains('hidden'))) {
-				contents.classList.add('disabled');
-				overlay.classList.remove('disabled');
+		const dice = document.getElementById("dice");
+		if (dice instanceof HTMLElement) {
+			const dialogs = <HTMLElement[]>Array.from(document.querySelectorAll("#dice>.overlay>.dialog"));
+			if (dialogs.some(dialog => dialog.classList.contains('open'))) {
+				dice.classList.add('overlaid');
 			} else {
-				contents.classList.remove('disabled');
-				overlay.classList.add('disabled');
+				dice.classList.remove('overlaid');
 			}
 		}
 	}
