@@ -1,14 +1,5 @@
 #home {
 	.contents {
-		display: flex;
-		flex-flow: column nowrap;
-		align-items: stretch;
-		
-		.page-title {
-			font-size: 1.2em;
-			text-align: center;
-		}
-
 		.heading {
 			margin: 1ex 0;
 			text-align: center;

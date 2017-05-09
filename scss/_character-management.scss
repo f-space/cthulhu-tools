@@ -1,25 +1,3 @@
 #character-management {
-	position: relative;
 
-	.navigations {
-		position: absolute;
-		right: 0;
-		top: 0;
-		margin: 1ex 1em;
-	}
-
-	.contents {
-		display: flex;
-		flex-flow: column nowrap;
-		align-items: stretch;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100%;
-		
-		.page-title {
-			flex: 0 0 auto;
-			font-size: 120%;
-			text-align: center;
-		}
-	}
 }
