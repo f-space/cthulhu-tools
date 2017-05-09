@@ -76,8 +76,8 @@ namespace Cthulhu {
 	}
 
 	function initCustomDiceDialog(): void {
-		const cancelButton = document.querySelector("#dice>.overlay>.custom-dice-dialog .cancel");
-		const okButton = document.querySelector("#dice>.overlay>.custom-dice-dialog .ok");
+		const cancelButton = document.querySelector("#custom-dice-dialog .cancel");
+		const okButton = document.querySelector("#custom-dice-dialog .ok");
 		if (cancelButton instanceof HTMLButtonElement) {
 			cancelButton.addEventListener("click", () => { closeCustomDiceDialog(true); });
 		}
@@ -87,7 +87,7 @@ namespace Cthulhu {
 	}
 
 	function openCustomDiceDialog(): void {
-		const dialog = document.querySelector("#dice>.overlay>.custom-dice-dialog");
+		const dialog = document.getElementById("custom-dice-dialog");
 		if (dialog instanceof HTMLElement) {
 			dialog.classList.remove('hidden');
 		}
@@ -96,13 +96,13 @@ namespace Cthulhu {
 	}
 
 	function closeCustomDiceDialog(cancel: boolean): void {
-		const dialog = document.querySelector("#dice>.overlay>.custom-dice-dialog");
+		const dialog = document.getElementById("custom-dice-dialog");
 		if (dialog instanceof HTMLElement) {
 			dialog.classList.add('hidden');
 
 			if (!cancel) {
-				const countInput = document.querySelector("#dice>.overlay>.custom-dice-dialog .count");
-				const maxInput = document.querySelector("#dice>.overlay>.custom-dice-dialog .max");
+				const countInput = document.querySelector("#custom-dice-dialog .count");
+				const maxInput = document.querySelector("#custom-dice-dialog .max");
 				if (countInput instanceof HTMLInputElement && maxInput instanceof HTMLInputElement) {
 					if (countInput.validity.valid && maxInput.validity.valid) {
 						const id = 'custom';

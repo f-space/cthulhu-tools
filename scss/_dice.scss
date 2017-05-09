@@ -1,10 +1,5 @@
 #dice {
 	.contents {
-		&.disabled {
-			filter: blur(3px);
-			pointer-events: none;
-		}
-
 		.result {
 			@include unselectable;
 
@@ -122,81 +117,56 @@
 			}
 		}
 	}
+}
 
-	.overlay {
-		.custom-dice-dialog {
-			flex: 0 0 auto;
-			position: relative;
-			padding: 2ex 1em;
-			background: linear-gradient(rgb(128,0,0), black 10%, black 90%, rgb(128,0,0));
+#custom-dice-dialog {
+	.input-box {
+		margin: 2ex 1em;
+		font-size: 150%;
+		text-align: center;
+		vertical-align: middle;
 
-			&.hidden {
-				display: none;
+		input[type="number"] {
+			@include no-spin-button;
+
+			width: 4ex;
+			margin: auto .5em;
+			padding: .5ex .5em;
+			border: solid 1px red;
+			border-radius: 1ex;
+			background: transparent;
+			text-align: center;
+
+			&:invalid {
+				background: rgba(255,0,0,0.25);
 			}
+		}
+	}
 
-			&::before {
-				@include designed-font;
-				
-				content: "Custom Dice";
-				display: block;
-				position: absolute;
-				left: 0;
-				right: 0;
-				top: -1.5ex;
-				font-size: 3rem;
-				line-height: 1.2;
-				text-align: center;
-			}
+	.buttons {
+		float: right;
 
-			.input-box {
-				margin: 2ex 1em;
-				font-size: 150%;
-				text-align: center;
-				vertical-align: middle;
-				
-				input[type="number"] {
-					@include no-spin-button;
+		%button {
+			margin: .5ex .5em;
+			padding: .5ex .5em;
+			box-sizing: border-box;
+			width: 5em;
+			border: solid 1px rgb(128,0,0);
+			border-radius: .5ex;
+			text-align: center;
+			vertical-align: middle;
+		}
 
-					width: 4ex;
-					margin: auto .5em;
-					padding: .5ex .5em;
-					border: solid 1px red;
-					border-radius: 1ex;
-					background: transparent;
-					text-align: center;
+		.cancel {
+			@extend %button;
 
-					&:invalid {
-						background: rgba(255,0,0,0.25);
-					}
-				}
-			}
+			background: transparent;
+		}
 
-			.buttons {
-				float: right;
+		.ok {
+			@extend %button;
 
-				%button {
-					margin: .5ex .5em;
-					padding: .5ex .5em;
-					box-sizing: border-box;
-					width: 5em;
-					border: solid 1px rgb(128,0,0);
-					border-radius: .5ex;
-					text-align: center;
-					vertical-align: middle;
-				}
-
-				.cancel {
-					@extend %button;
-
-					background: transparent;
-				}
-
-				.ok {
-					@extend %button;
-
-					background: rgb(128,0,0);
-				}
-			}
+			background: rgb(128,0,0);
 		}
 	}
 }
