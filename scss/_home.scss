@@ -1,42 +1,53 @@
 #home {
-	padding: 1ex 1em;
-	text-align: center;
+	.contents {
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: stretch;
+		
+		.page-title {
+			font-size: 1.2em;
+			text-align: center;
+		}
 
-	.description {
-		font-size: 120%;
-	}
-}
+		.heading {
+			margin: 1ex 0;
+			text-align: center;
 
-
-
-#info {
-	$margin-side: 1em;
-
-	display: table;
-	box-sizing: border-box;
-	width: calc(100% - #{$margin-side * 2});
-	margin: 1ex $margin-side;
-	border-collapse: collapse;
-
-	tr.info-row {
-		display: table-row;
-
-		& > td {
-			display: table-cell;
-			padding: .5ex .5em;
-			border: solid 1px red;
-
-			&:first-child {
-				vertical-align: top;
+			&::before, &::after {
+				content: "-";
 			}
 		}
-	}
 
-	.assets {
-		td {
-			padding: 0 .5em;
-			font-size: 80%;
-			text-align: left;
+		.table {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+			border-collapse: collapse;
+
+			& > * {
+				display: table-row;
+
+				& > * {
+					display: table-cell;
+					box-sizing: border-box;
+					padding: .5ex .5em;
+					border: solid 1px red;
+				}
+			}
+		}
+
+		.basics {
+			text-align: center;
+
+			dt { width: 30%; }
+			dd { width: 70%; }
+		}
+
+		.copyrights {
+			font-size: .8em;
+
+			dt { width: 55%; }
+			dd { width: 45%; }
 		}
 	}
 }
