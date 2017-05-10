@@ -14,7 +14,6 @@
 		line-height: 1.2;
 		font-size: 3rem;
 		overflow: hidden;
-		cursor: pointer;
 
 		&.two-lines {
 			line-height: 0.8;
@@ -33,6 +32,10 @@
 		&.selected {
 			background: linear-gradient(transparent 50%, green);
 			opacity: 1;
+		}
+
+		&:not(.selected) {
+			cursor: pointer;
 		}
 	}
 
