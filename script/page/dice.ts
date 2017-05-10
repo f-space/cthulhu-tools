@@ -2,47 +2,42 @@
 /// <reference path="../view/__index__.ts"/>
 
 namespace Cthulhu {
-	const SELETED_CLASS = "selected";
 	const manager = new DiceManager();
 
 	function initDiceSet(): void {
-		const callbacks = <Function[]>[];
-		manager.addListener(new class {
-			public onDiceSetChanged(): void {
-				for (const callback of callbacks) callback();
-			}
-		}());
-
-		const modes = Array.from(<NodeListOf<HTMLElement>>document.querySelectorAll("#dice>.contents>.mode-list>.mode"));
-		for (const mode of modes) {
-			const id = mode.dataset["dice"];
-			if (id != null) {
-				if (id === 'custom') {
-					mode.addEventListener("click", () => { openCustomDiceDialog(); });
-				} else {
-					manager.register(id, DiceSet.parse(id));
-					mode.addEventListener("click", () => { manager.select(id); });
-				}
-				callbacks.push(() => {
-					if (manager.current === id) {
-						mode.classList.add(SELETED_CLASS);
-					} else {
-						mode.classList.remove(SELETED_CLASS);
-					}
-				});
+		const elements = <HTMLElement[]>Array.from(document.querySelectorAll("#dice .mode-list .mode"));
+		const modes = elements.map<[HTMLElement, string]>(element => [element, element.dataset['dice'] || 'custom']);
+		for (const [mode, id] of modes) {
+			if (id === 'custom') {
+				mode.addEventListener("click", () => { openCustomDiceDialog(); });
+			} else {
+				mode.addEventListener("click", () => { manager.select(id); });
+				manager.register(id, DiceSet.parse(id));
 			}
 		}
+
+		manager.addListener(new class {
+			public onDiceSetChanged(): void {
+				for (const [mode, id] of modes) {
+					if (manager.current === id) {
+						mode.classList.add('selected');
+					} else {
+						mode.classList.remove('selected');
+					}
+				}
+			}
+		});
 	}
 
 	function initRollButton(): void {
-		const rollButton = document.querySelector("#dice>.contents>.roll-button");
+		const rollButton = document.querySelector("#dice .roll-button");
 		if (rollButton instanceof HTMLButtonElement) {
 			rollButton.addEventListener("click", () => { manager.roll() });
 		}
 	}
 
 	function initRollSound(): void {
-		const rollSound = document.querySelector("#dice-sound");
+		const rollSound = document.getElementById("dice-sound");
 		if (rollSound instanceof HTMLAudioElement) {
 			manager.addListener(new class {
 				public onRoll(manager: DiceManager, type: DiceRollEventType) {
@@ -57,7 +52,7 @@ namespace Cthulhu {
 	}
 
 	function initDiceView(): void {
-		const diceView = document.querySelector("#dice>.contents>.result>.dice-view");
+		const diceView = document.querySelector("#dice .result .dice-view");
 		const diceImage = document.getElementById("dice-image");
 		if (diceView instanceof HTMLElement && diceImage instanceof HTMLImageElement) {
 			const renderer = new DiceRenderer(diceView, new DiceImage(diceImage));
@@ -67,7 +62,7 @@ namespace Cthulhu {
 	}
 
 	function initNumberView(): void {
-		const numberView = document.querySelector("#dice>.contents>.result>.number-view");
+		const numberView = document.querySelector("#dice .result .number-view");
 		if (numberView instanceof HTMLElement) {
 			const renderer = new DiceNumberRenderer(numberView);
 
@@ -101,29 +96,33 @@ namespace Cthulhu {
 			dialog.classList.remove('open');
 
 			if (!cancel) {
-				const countInput = document.querySelector("#custom-dice-dialog .count");
-				const maxInput = document.querySelector("#custom-dice-dialog .max");
-				if (countInput instanceof HTMLInputElement && maxInput instanceof HTMLInputElement) {
-					if (countInput.validity.valid && maxInput.validity.valid) {
-						const id = 'custom';
-						const count = parseInt(countInput.value, 10);
-						const max = parseInt(maxInput.value, 10);
-						const diceSet = DiceSet.create(count, max);
-
-						manager.register(id, diceSet);
-						manager.select(id);
-					}
-				}
+				registerCustomDice();
 			}
 		}
 
 		updateOverlay();
 	}
 
+	function registerCustomDice(): void {
+		const countInput = document.querySelector("#custom-dice-dialog .count");
+		const maxInput = document.querySelector("#custom-dice-dialog .max");
+		if (countInput instanceof HTMLInputElement && maxInput instanceof HTMLInputElement) {
+			if (countInput.validity.valid && maxInput.validity.valid) {
+				const id = 'custom';
+				const count = parseInt(countInput.value, 10);
+				const max = parseInt(maxInput.value, 10);
+				const diceSet = DiceSet.create(count, max);
+
+				manager.register(id, diceSet);
+				manager.select(id);
+			}
+		}
+	}
+
 	function updateOverlay(): void {
 		const dice = document.getElementById("dice");
 		if (dice instanceof HTMLElement) {
-			const dialogs = <HTMLElement[]>Array.from(document.querySelectorAll("#dice>.overlay>.dialog"));
+			const dialogs = <HTMLElement[]>Array.from(document.querySelectorAll("#dice .dialog"));
 			if (dialogs.some(dialog => dialog.classList.contains('open'))) {
 				dice.classList.add('overlaid');
 			} else {

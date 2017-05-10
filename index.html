@@ -18,11 +18,11 @@
 	</div>
 	<div id="container">
 		<div id="header">
-			<h1 id="title">Cthulhu Tools</h1>
+			<h1 id="title" data-nav="home">Cthulhu Tools</h1>
 		</div>
 		<div id="main">
 			<!-- Home -->
-			<div id="home" class="page">
+			<div id="home" class="page" data-page="home">
 				<div class="contents">
 					<div class="page-title">
 						<h2>クトゥルフTRPGのための
@@ -66,7 +66,7 @@
 			</div>
 
 			<!-- Dice -->
-			<div id="dice" class="page">
+			<div id="dice" class="page" data-page="dice">
 				<div class="contents">
 					<div class="page-title">
 						<h2>ダイスロール</h2>
@@ -103,9 +103,9 @@
 			</div>
 
 			<!-- Status -->
-			<div id="status" class="page">
+			<div id="status" class="page" data-page="status">
 				<div class="navigations">
-					<button class="management" type="button">管理</button>
+					<button type="button" data-nav="character-management">管理</button>
 				</div>
 				<div class="contents">
 					<div class="page-title">
@@ -117,9 +117,9 @@
 			</div>
 
 			<!-- Characters -->
-			<div id="character-management" class="page">
+			<div id="character-management" class="page" data-page="character-management">
 				<div class="navigations">
-					<button class="creation" type="button">作成</button>
+					<button type="button" data-nav="character-creation">作成</button>
 				</div>
 				<div class="contents">
 					<div class="page-title">
@@ -131,7 +131,7 @@
 			</div>
 
 			<!-- Character Creation -->
-			<div id="character-creation" class="page">
+			<div id="character-creation" class="page" data-page="character-creation">
 				<div class="contents">
 					<div class="page-title">
 						<h2>キャラクター作成</h2>
@@ -142,10 +142,10 @@
 			</div>
 		</div>
 		<div id="menu">
-			<div id="menu-dice" class="menu-item">Dice</div>
-			<div id="menu-status" class="menu-item">Status</div>
-			<div id="menu-character-management" class="extra-menu-item two-lines"><span>Character</span><span>Management</span></div>
-			<div id="menu-character-creation" class="extra-menu-item two-lines"><span>Character</span><span>Creation</span></div>
+			<div id="menu-dice" class="menu-item" data-page="dice" data-nav="dice">Dice</div>
+			<div id="menu-status" class="menu-item" data-page="status" data-nav="status">Status</div>
+			<div id="menu-character-management" class="extra-menu-item two-lines" data-page="character-management"><span>Character</span><span>Management</span></div>
+			<div id="menu-character-creation" class="extra-menu-item two-lines" data-page="character-creation"><span>Character</span><span>Creation</span></div>
 		</div>
 	</div>
 </body>
