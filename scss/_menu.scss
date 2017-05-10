@@ -38,10 +38,10 @@
 
 	.extra-menu-item {
 		@extend %item;
-		@include designed-font(blue);
+		@include designed-font(limegreen);
 
 		flex: 0 0 0;
-		background: linear-gradient(transparent 50%, blue);
+		background: linear-gradient(transparent 50%, green);
 		transition: flex 300ms;
 
 		&.selected {
