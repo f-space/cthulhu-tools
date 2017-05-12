@@ -17,19 +17,21 @@
 		<audio id="dice-sound" src="audio/dice.wav" preload="auto"></audio>
 	</div>
 	<div id="container">
-		<div id="header">
+		<header id="header">
 			<h1 id="title" data-nav="home">Cthulhu Tools</h1>
-		</div>
-		<div id="main">
+		</header>
+		<main id="main">
 			<!-- Home -->
-			<div id="home" class="page" data-page="home">
+			<section id="home" class="page" data-page="home">
 				<div class="contents">
-					<div class="page-title">
+					<header class="page-title">
 						<h2>クトゥルフTRPGのための
 							<wbr/>Webアプリ</h2>
-					</div>
+					</header>
 					<section>
-						<h3 class="heading">Basics</h3>
+						<header>
+							<h3 class="heading">Basics</h3>
+						</header>
 						<dl class="basics table">
 							<div>
 								<dt>Author</dt>
@@ -42,7 +44,9 @@
 						</dl>
 					</section>
 					<section>
-						<h3 class="heading">Copyrights</h3>
+						<header>
+							<h3 class="heading">Copyrights</h3>
+						</header>
 						<dl class="copyrights table">
 							<div>
 								<dt><a href="https://commons.nicovideo.jp/material/nc67333">エルダーサイン</a></dt>
@@ -63,14 +67,14 @@
 						</dl>
 					</section>
 				</div>
-			</div>
+			</section>
 
 			<!-- Dice -->
-			<div id="dice" class="page" data-page="dice">
+			<section id="dice" class="page" data-page="dice">
 				<div class="contents">
-					<div class="page-title">
+					<header class="page-title">
 						<h2>ダイスロール</h2>
-					</div>
+					</header>
 					<div class="result">
 						<div class="dice-view" data-dice-class="dice-image"></div>
 						<div class="number-view" data-critical-class="critical" data-fumble-class="fumble"></div>
@@ -100,53 +104,53 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 
 			<!-- Status -->
-			<div id="status" class="page" data-page="status">
-				<div class="navigations">
-					<button type="button" data-nav="character-management">管理</button>
-				</div>
+			<section id="status" class="page" data-page="status">
 				<div class="contents">
-					<div class="page-title">
+					<header class="page-title">
 						<h2>ステータス</h2>
-					</div>
+					</header>
 					<div class="characters">
 					</div>
 				</div>
-			</div>
+				<nav class="navigations">
+					<button type="button" data-nav="character-management">管理</button>
+				</nav>
+			</section>
 
-			<!-- Characters -->
-			<div id="character-management" class="page" data-page="character-management">
-				<div class="navigations">
-					<button type="button" data-nav="character-creation">作成</button>
-				</div>
+			<!-- Character Management -->
+			<section id="character-management" class="page" data-page="character-management">
 				<div class="contents">
-					<div class="page-title">
+					<header class="page-title">
 						<h2>キャラクター管理</h2>
-					</div>
+					</header>
 					<div class="characters">
 					</div>
 				</div>
-			</div>
+				<nav class="navigations">
+					<button type="button" data-nav="character-creation">作成</button>
+				</nav>
+			</section>
 
 			<!-- Character Creation -->
-			<div id="character-creation" class="page" data-page="character-creation">
+			<section id="character-creation" class="page" data-page="character-creation">
 				<div class="contents">
-					<div class="page-title">
+					<header class="page-title">
 						<h2>キャラクター作成</h2>
-					</div>
+					</header>
 					<div class="entry">
 					</div>
 				</div>
-			</div>
-		</div>
-		<div id="menu">
+			</section>
+		</main>
+		<nav id="menu">
 			<div id="menu-dice" class="menu-item" data-page="dice" data-nav="dice">Dice</div>
 			<div id="menu-status" class="menu-item" data-page="status" data-nav="status">Status</div>
 			<div id="menu-character-management" class="extra-menu-item two-lines" data-page="character-management"><span>Character</span><span>Management</span></div>
 			<div id="menu-character-creation" class="extra-menu-item two-lines" data-page="character-creation"><span>Character</span><span>Creation</span></div>
-		</div>
+		</nav>
 	</div>
 </body>
 </html>
