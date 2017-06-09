@@ -86,7 +86,7 @@ export class D100 implements DiceGroup {
 }
 
 export class DiceSet {
-	private static readonly DICE_REGEX = /[1-9]\d*D[1-9]\d*/.compile();
+	private static readonly DICE_REGEX = /[1-9]\d*D[1-9]\d*/;
 
 	public constructor(readonly groups: ReadonlyArray<DiceGroup>) { }
 
