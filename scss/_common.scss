@@ -46,7 +46,7 @@ button {
 	vertical-align: middle;
 
 	&:active {
-		border: rgb(255,128,128);
+		border-color: rgb(255,128,128);
 		background: rgb(255,128,128);
 	}
 
@@ -54,7 +54,7 @@ button {
 		background: rgb(128,0,0);
 
 		&:active {
-			border: rgb(255,128,128);
+			border-color: rgb(255,128,128);
 			background: rgb(255,128,128);
 		}
 	}
