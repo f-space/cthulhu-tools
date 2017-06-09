@@ -49,8 +49,8 @@ export default class DiceRenderer implements DiceListener {
 
 	private makeDices(diceSet: DiceSet): void {
 		const diceClass = this.container.dataset[DiceRenderer.DATA_DICE_CLASS];
-		for (const group of diceSet.groups) {
-			for (const dice of group.dices) {
+		for (const group of diceSet) {
+			for (const dice of group) {
 				const element = this.createDice(diceClass);
 
 				this._map.set(dice, element);
@@ -59,8 +59,8 @@ export default class DiceRenderer implements DiceListener {
 	}
 
 	private refresh(diceSet: DiceSet): void {
-		for (const group of diceSet.groups) {
-			for (const dice of group.dices) {
+		for (const group of diceSet) {
+			for (const dice of group) {
 				const element = this._map.get(dice);
 				if (element != null) {
 					this.image.blit(element, dice.type, dice.face);

@@ -12,7 +12,7 @@ export class Dice {
 	public constructor(readonly type: DiceType, public face: number) { }
 }
 
-export interface DiceGroup {
+export interface DiceGroup extends Iterable<Dice> {
 	value: number;
 	readonly max: number;
 	readonly dices: ReadonlyArray<Dice>;
@@ -46,6 +46,10 @@ export class D6 implements DiceGroup {
 
 		this.value = 1;
 	}
+
+	public [Symbol.iterator](): Iterator<Dice> {
+		return this.dices[Symbol.iterator]();
+	}
 }
 
 export class D10 implements DiceGroup {
@@ -62,6 +66,10 @@ export class D10 implements DiceGroup {
 		this._dice = new Dice(DiceType.D10, 0);
 
 		this.value = this.max;
+	}
+
+	public [Symbol.iterator](): Iterator<Dice> {
+		return this.dices[Symbol.iterator]();
 	}
 }
 
@@ -83,12 +91,25 @@ export class D100 implements DiceGroup {
 
 		this.value = this.max;
 	}
+
+	public [Symbol.iterator](): Iterator<Dice> {
+		return this.dices[Symbol.iterator]();
+	}
 }
 
-export class DiceSet {
+export class DiceSet implements Iterable<DiceGroup> {
 	private static readonly DICE_REGEX = /[1-9]\d*D[1-9]\d*/;
 
+	public get size(): number { return this.groups.length; }
+	public get values(): number[] { return this.groups.map(group => group.value); }
+	public get total(): number { return this.groups.reduce((sum, group) => sum + group.value, 0); }
+	public get max(): number { return this.groups.reduce((sum, group) => sum + group.max, 0); }
+
 	public constructor(readonly groups: ReadonlyArray<DiceGroup>) { }
+
+	[Symbol.iterator](): Iterator<DiceGroup> {
+		return this.groups[Symbol.iterator]();
+	}
 
 	public static create(count: number, max: number) {
 		const groups = <DiceGroup[]>[];

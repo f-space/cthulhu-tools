@@ -25,7 +25,7 @@ export class DiceManager {
 	private _rolling: boolean = false;
 
 	public get current(): string | null { return this._current; }
-	public get diceSet(): DiceSet | null | undefined { return (this._current !== null ? this._diceSets[this._current] : null); }
+	public get diceSet(): DiceSet | null { return ((this._current !== null && this._diceSets[this._current]) || null); }
 
 	public register(id: string, diceSet: DiceSet): void {
 		this._diceSets[id] = diceSet;
@@ -116,7 +116,7 @@ export class DiceManager {
 	}
 
 	private updateDiceFaces(diceSet: DiceSet): void {
-		for (const group of diceSet.groups) {
+		for (const group of diceSet) {
 			group.value = DiceManager.random(group);
 		}
 	}
