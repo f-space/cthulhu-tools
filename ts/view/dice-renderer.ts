@@ -4,16 +4,14 @@ import DiceImage from "./dice-image";
 
 export default class DiceRenderer implements DiceListener {
 
-	public static readonly DATA_DICE_CLASS = "diceClass";
-
 	private _map: Map<Dice, HTMLCanvasElement> = new Map();
 
-	public constructor(readonly container: HTMLElement, readonly image: DiceImage) { }
+	public constructor(readonly view: HTMLElement, readonly image: DiceImage, readonly group?: string, readonly dice?: string) { }
 
 	public clear(): void {
 		this._map.clear();
 
-		DiceRenderer.clearChild(this.container);
+		DiceRenderer.clearChildren(this.view);
 	}
 
 	public onAttached(manager: DiceManager): void {
@@ -48,12 +46,12 @@ export default class DiceRenderer implements DiceListener {
 	}
 
 	private makeDices(diceSet: DiceSet): void {
-		const diceClass = this.container.dataset[DiceRenderer.DATA_DICE_CLASS];
 		for (const group of diceSet) {
+			const groupElement = DiceRenderer.createElement(this.view, 'div', this.group);
 			for (const dice of group) {
-				const element = this.createDice(diceClass);
+				const diceElement = DiceRenderer.createElement(groupElement, 'canvas', this.dice);
 
-				this._map.set(dice, element);
+				this._map.set(dice, diceElement);
 			}
 		}
 	}
@@ -69,17 +67,13 @@ export default class DiceRenderer implements DiceListener {
 		}
 	}
 
-	private createDice(diceClass?: string): HTMLCanvasElement {
-		const dice = document.createElement('canvas');
-		if (diceClass != null) dice.classList.add(diceClass);
-		this.container.appendChild(dice);
-
-		return dice;
+	private static createElement<K extends keyof HTMLElementTagNameMap>(parent: Node, tag: K, clazz?: string): HTMLElementTagNameMap[K] {
+		const element = document.createElement(tag);
+		if (clazz) element.classList.add(clazz);
+		return parent.appendChild(element);
 	}
 
-	private static clearChild(element: HTMLElement): void {
-		while (element.firstChild) {
-			element.removeChild(element.firstChild);
-		}
+	private static clearChildren(element: HTMLElement): void {
+		while (element.lastChild) element.removeChild(element.lastChild);
 	}
 }

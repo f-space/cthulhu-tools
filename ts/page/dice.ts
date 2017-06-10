@@ -57,7 +57,7 @@ function initDiceView(): void {
 	const diceView = document.querySelector("#dice .result .dice-view");
 	const diceImage = document.getElementById("dice-image");
 	if (diceView instanceof HTMLElement && diceImage instanceof HTMLImageElement) {
-		const renderer = new DiceRenderer(diceView, new DiceImage(diceImage));
+		const renderer = new DiceRenderer(diceView, new DiceImage(diceImage), 'dice-group', 'dice');
 
 		manager.addListener(renderer);
 	}
@@ -66,7 +66,7 @@ function initDiceView(): void {
 function initNumberView(): void {
 	const numberView = document.querySelector("#dice .result .number-view");
 	if (numberView instanceof HTMLElement) {
-		const renderer = new DiceNumberRenderer(numberView);
+		const renderer = new DiceNumberRenderer(numberView, 'critical', 'fumble');
 
 		manager.addListener(renderer);
 	}

@@ -1,19 +1,13 @@
-@function selector-leaves($selector) {
-	$result: ();
-	$separator: list-separator($selector);
-	@each $x in $selector {
-		$result: append($result, nth($x, length($x)), $separator);
+@mixin count-eq($n) {
+	&:first-child:nth-last-child(#{$n}),
+	&:first-child:nth-last-child(#{$n}) ~ * {
+		@content;
 	}
-	@return $result;
 }
 
 @mixin count-gt($n) {
-	$leaves: selector-leaves(&);
-	$first: selector-nest(&, "&:first-child:nth-last-child(n+#{$n})");
-	$all: selector-nest($first, "&, & ~ *");
-	$selectors: selector-unify($leaves, $all);
-
-	@at-root #{$selectors} {
+	&:first-child:nth-last-child(n+#{$n}),
+	&:first-child:nth-last-child(n+#{$n}) ~ * {
 		@content;
 	}
 }

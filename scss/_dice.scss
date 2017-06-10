@@ -13,6 +13,7 @@
 				right: 0;
 				bottom: 0;
 				left: 0;
+				overflow: hidden;
 			}
 
 			.dice-view {
@@ -29,22 +30,35 @@
 					opacity: 0.25;
 				}
 
-				.dice-image {
-					margin: 1ex;
-					width: 15vh;
-					height: 15vh;
-					object-fit: contain;
+				.dice-group {
+					display: flex;
+					flex-flow: row nowrap;
 
-					@include count-gt(4) {
-						margin: 0.5ex;
-						width: 10vh;
-						height: 10vh;
+					.dice {
+						--scale: 1;
+
+						margin: calc(1ex * var(--scale));
+						width: calc(15vh * var(--scale));
+						height: calc(15vh * var(--scale));
+						object-fit: contain;
 					}
 
-					@include count-gt(11) {
-						width: 7.5vh;
-						height: 7.5vh;
+					@mixin dice-count($m, $n) {
+						@include count-gt($n) {
+							.dice {
+								@include count-eq($m) {
+									@content;
+								}
+							}
+						}
 					}
+
+					@include dice-count(1, 4) { --scale: 0.75; }
+					@include dice-count(1, 9) { --scale: 0.6; }
+					@include dice-count(2, 2) { --scale: 0.75; }
+					@include dice-count(2, 5) { --scale: 0.6; }
+					@include dice-count(2, 7) { --scale: 0.5; }
+					@include dice-count(2, 10) { --scale: 0.4; }
 				}
 			}
 

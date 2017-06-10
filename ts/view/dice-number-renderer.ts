@@ -9,10 +9,7 @@ enum Result {
 
 export default class DiceNumberRenderer implements DiceListener {
 
-	public static readonly DATA_CRITICAL_CLASS = "criticalClass";
-	public static readonly DATA_FUMBLE_CLASS = "fumbleClass";
-
-	public constructor(readonly view: HTMLElement) { }
+	public constructor(readonly view: HTMLElement, readonly critical?: string, readonly fumble?: string) { }
 
 	public clear(): void {
 		this.view.textContent = null;
@@ -45,25 +42,9 @@ export default class DiceNumberRenderer implements DiceListener {
 	}
 
 	private updateClass(diceSet: DiceSet): void {
-		const critical = this.view.dataset[DiceNumberRenderer.DATA_CRITICAL_CLASS];
-		const fumble = this.view.dataset[DiceNumberRenderer.DATA_FUMBLE_CLASS];
-		const classList = this.view.classList;
-
 		const result = this.getResult(diceSet);
-		if (critical) {
-			if (result === Result.Critical) {
-				classList.add(critical);
-			} else {
-				classList.remove(critical);
-			}
-		}
-		if (fumble) {
-			if (result === Result.Fumble) {
-				classList.add(fumble);
-			} else {
-				classList.remove(fumble);
-			}
-		}
+		this.setClass(this.critical, result === Result.Critical);
+		this.setClass(this.fumble, result === Result.Fumble);
 	}
 
 	private getResult(diceSet: DiceSet): Result {
@@ -73,5 +54,15 @@ export default class DiceNumberRenderer implements DiceListener {
 			if (value > 95) return Result.Fumble;
 		}
 		return Result.Normal;
+	}
+
+	private setClass(clazz: string | undefined, condition: boolean): void {
+		if (clazz) {
+			if (condition) {
+				this.view.classList.add(clazz);
+			} else {
+				this.view.classList.remove(clazz);
+			}
+		}
 	}
 }
