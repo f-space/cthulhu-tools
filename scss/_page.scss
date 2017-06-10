@@ -1,10 +1,10 @@
 .page {
 	position: relative;
+	overflow-x: hidden;
+	overflow-y: auto;
 	box-sizing: border-box;
 	width: 100%;
 	height: 100%;
-	overflow-x: hidden;
-	overflow-y: auto;
 
 	&:not(.selected) {
 		display: none;
@@ -12,8 +12,8 @@
 
 	.navigations {
 		position: absolute;
-		right: 0;
 		top: 0;
+		right: 0;
 		margin: 1ex 1em;
 	}
 
@@ -30,8 +30,8 @@
 		& > .page-title {
 			flex: 0 0 auto;
 			align-self: center;
-			font-size: 1.2em;
 			text-align: center;
+			font-size: 1.2em;
 		}
 	}
 
@@ -41,22 +41,22 @@
 	}
 
 	.overlay {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
 		display: flex;
 		flex-flow: column nowrap;
 		justify-content: center;
 		align-items: stretch;
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		background: rgba(0,0,0,.5);
+		background: rgba(0, 0, 0, 0.5);
 
 		.dialog {
-			flex: 0 0 auto;
 			position: relative;
+			flex: 0 0 auto;
 			padding: 2ex 1em;
-			background: linear-gradient(rgb(128,0,0), black 10%, black 90%, rgb(128,0,0));
+			background: linear-gradient(rgb(128, 0, 0), black 10%, black 90%, rgb(128, 0, 0));
 
 			&:not(.open) {
 				display: none;
@@ -64,15 +64,15 @@
 
 			&::before {
 				@include designed-font;
-				
-				content: attr(data-title);
-				display: block;
+
 				position: absolute;
-				left: 0;
-				right: 0;
 				top: -2ex;
-				font-size: 3rem;
+				right: 0;
+				left: 0;
+				display: block;
+				content: attr(data-title);
 				text-align: center;
+				font-size: 3rem;
 				pointer-events: none;
 			}
 		}

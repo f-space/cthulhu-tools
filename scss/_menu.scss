@@ -11,13 +11,13 @@
 		flex-flow: column nowrap;
 		justify-content: center;
 		align-items: center;
-		line-height: 1.2;
-		font-size: 3rem;
 		overflow: hidden;
+		font-size: 3rem;
+		line-height: 1.2;
 
 		&.two-lines {
-			line-height: 0.8;
 			font-size: 2rem;
+			line-height: 0.8;
 		}
 	}
 

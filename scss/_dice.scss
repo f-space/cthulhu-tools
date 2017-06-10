@@ -3,16 +3,16 @@
 		.result {
 			@include unselectable;
 
-			flex: 1 1 0;
 			position: relative;
+			flex: 1 1 0;
 			min-height: 20vh;
 
 			%view {
 				position: absolute;
-				left: 0;
-				right: 0;
 				top: 0;
+				right: 0;
 				bottom: 0;
+				left: 0;
 			}
 
 			.dice-view {
@@ -36,7 +36,7 @@
 					object-fit: contain;
 
 					@include count-gt(4) {
-						margin: .5ex;
+						margin: 0.5ex;
 						width: 10vh;
 						height: 10vh;
 					}
@@ -50,25 +50,25 @@
 
 			.number-view {
 				@extend %view;
+				@include blur-text-double(0.1ex, 0.25ex, red);
 
+				z-index: -1;
 				display: flex;
 				flex-flow: row nowrap;
 				justify-content: center;
 				align-items: center;
-				z-index: -1;
+				color: white;
 				font-size: 25vh;
 				opacity: 0.5;
-				color: white;
-				@include blur-text-double(.1ex, .25ex, red);
 
 				&.critical {
 					color: white;
-					@include blur-text-double(.1ex, .25ex, green);
+					@include blur-text-double(0.1ex, 0.25ex, green);
 				}
 
 				&.fumble {
 					color: white;
-					@include blur-text-double(.1ex, .25ex, blue);
+					@include blur-text-double(0.1ex, 0.25ex, blue);
 				}
 			}
 		}
@@ -85,9 +85,9 @@
 
 			& > .mode {
 				flex: 1 1 auto;
-				margin: 1ex .25em;
 				box-sizing: border-box;
-				width: calc(30% - .25em);
+				margin: 1ex 0.25em;
+				width: calc(30% - 0.25em);
 				border: solid 1px red;
 				border-radius: 2ex/50%;
 				text-align: center;
@@ -105,15 +105,15 @@
 
 			flex: 0 0 auto;
 			align-self: center;
-			padding: 0 .75em;
+			padding: 0 0.75em;
 			border: none;
-			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255,0,0,0.5), transparent);
-			line-height: 1;
+			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255, 0, 0, 0.5), transparent);
 			font-size: 5rem;
+			line-height: 1;
 			cursor: pointer;
 
 			&:active {
-				background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0,255,0,0.5), transparent);
+				background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0, 255, 0, 0.5), transparent);
 			}
 		}
 	}
@@ -122,12 +122,12 @@
 #custom-dice-dialog {
 	.input-box {
 		margin: 2ex 1em;
-		font-size: 150%;
 		text-align: center;
+		font-size: 150%;
 
 		input[type="number"] {
+			margin: auto 0.5em;
 			width: 4ex;
-			margin: auto .5em;
 		}
 	}
 
@@ -135,7 +135,7 @@
 		float: right;
 
 		button {
-			margin: .5ex .5em;
+			margin: 0.5ex 0.5em;
 			width: 5em;
 		}
 	}

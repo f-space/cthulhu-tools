@@ -12,8 +12,8 @@
 		.table {
 			display: table;
 			width: 100%;
-			table-layout: fixed;
 			border-collapse: collapse;
+			table-layout: fixed;
 
 			& > * {
 				display: table-row;
@@ -21,7 +21,7 @@
 				& > * {
 					display: table-cell;
 					box-sizing: border-box;
-					padding: .5ex .5em;
+					padding: 0.5ex 0.5em;
 					border: solid 1px red;
 				}
 			}
@@ -35,7 +35,7 @@
 		}
 
 		.copyrights {
-			font-size: .8em;
+			font-size: 0.8em;
 
 			dt { width: 55%; }
 			dd { width: 45%; }

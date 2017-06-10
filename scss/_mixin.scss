@@ -19,38 +19,39 @@
 }
 
 @mixin blur-text($offset, $radius, $color) {
-	text-shadow: 
+	text-shadow:
 		-#{$offset} -#{$offset} $radius $color,
-		-#{$offset}  #{$offset} $radius $color,
-		 #{$offset} -#{$offset} $radius $color,
-		 #{$offset}  #{$offset} $radius $color;
+		-#{$offset} +#{$offset} $radius $color,
+		+#{$offset} -#{$offset} $radius $color,
+		+#{$offset} +#{$offset} $radius $color;
 }
 
 @mixin blur-text-double($offset, $radius, $color) {
-	text-shadow: 
+	text-shadow:
 		-#{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
-		-#{$offset / 4}  #{$offset / 4} #{$radius / 4} $color,
-		 #{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
-		 #{$offset / 4}  #{$offset / 4} #{$radius / 4} $color,
+		-#{$offset / 4} +#{$offset / 4} #{$radius / 4} $color,
+		+#{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
+		+#{$offset / 4} +#{$offset / 4} #{$radius / 4} $color,
 		-#{$offset} -#{$offset} $radius $color,
-		-#{$offset}  #{$offset} $radius $color,
-		 #{$offset} -#{$offset} $radius $color,
-		 #{$offset}  #{$offset} $radius $color;
+		-#{$offset} +#{$offset} $radius $color,
+		+#{$offset} -#{$offset} $radius $color,
+		+#{$offset} +#{$offset} $radius $color;
 }
 
 @mixin designed-font($color: red) {
-	@include blur-text(.1ex, .25ex, $color);
+	@include blur-text(0.1ex, 0.25ex, $color);
+
 	color: white;
 	font-family: "Cthulhu";
 }
 
 @mixin unselectable {
-	-ms-user-select: none;
 	-moz-user-select: none;
-	-webkit-tap-highlight-color: transparent;
-	-webkit-touch-callout: none;
+	-ms-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
 }
 
 @mixin no-spin-button {

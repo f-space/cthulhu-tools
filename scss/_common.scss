@@ -1,10 +1,10 @@
 * {
 	margin: unset;
 	padding: unset;
-	color: unset;
-	border: unset;
 	outline: unset;
+	border: unset;
 	background: unset;
+	color: unset;
 	font: unset;
 }
 
@@ -16,8 +16,8 @@ h1 { font-size: 2em; }
 h2 { font-size: 1.5em; }
 h3 { font-size: 1.17em; }
 h4 { font-size: 1em; }
-h5 { font-size: .83em; }
-h6 { font-size: .67em; }
+h5 { font-size: 0.83em; }
+h6 { font-size: 0.67em; }
 
 a {
 	color: red;
@@ -26,36 +26,36 @@ a {
 input[type="number"] {
 	@include no-spin-button;
 
-	padding: .5ex .5em;
+	padding: 0.5ex 0.5em;
 	border: solid 1px red;
 	border-radius: 1ex;
 	background: transparent;
 	text-align: center;
 
 	&:invalid {
-		background: rgba(255,0,0,0.25);
+		background: rgba(255, 0, 0, 0.25);
 	}
 }
 
 button {
 	box-sizing: border-box;
-	padding: .5ex .5em;
-	border: solid 1px rgb(128,0,0);
-	border-radius: .5ex;
-	text-align: center;
+	padding: 0.5ex 0.5em;
+	border: solid 1px rgb(128, 0, 0);
+	border-radius: 0.5ex;
 	vertical-align: middle;
+	text-align: center;
 
 	&:active {
-		border-color: rgb(255,128,128);
-		background: rgb(255,128,128);
+		border-color: rgb(255, 128, 128);
+		background: rgb(255, 128, 128);
 	}
 
 	&.commit {
-		background: rgb(128,0,0);
+		background: rgb(128, 0, 0);
 
 		&:active {
-			border-color: rgb(255,128,128);
-			background: rgb(255,128,128);
+			border-color: rgb(255, 128, 128);
+			background: rgb(255, 128, 128);
 		}
 	}
 }
