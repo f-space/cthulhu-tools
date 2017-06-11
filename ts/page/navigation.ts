@@ -1,4 +1,5 @@
-import { PageManager, Page } from "view/page";
+import { Page } from "view/page";
+import { navigation } from "./application";
 
 const ID_TO_PAGE = <{ [id: string]: Page }>{
 	"home": Page.Home,
@@ -8,11 +9,14 @@ const ID_TO_PAGE = <{ [id: string]: Page }>{
 	"character-creation": Page.CharacterCreation,
 };
 
-const manager = new PageManager(Page.Home);
+export default function () {
+	initSelectables();
+	initNavigation();
+}
 
 function initSelectables(): void {
 	const selectables = collectPageElements('page');
-	manager.addListener(new class {
+	navigation.addListener(new class {
 		public onEnter(page: Page): void {
 			for (const [element, trigger] of selectables) {
 				if (trigger === page) {
@@ -34,7 +38,7 @@ function initSelectables(): void {
 function initNavigation(): void {
 	for (const [element, page] of collectPageElements('nav')) {
 		if (page !== undefined) {
-			element.addEventListener("click", () => manager.toPage(page));
+			element.addEventListener("click", () => navigation.toPage(page));
 		}
 	}
 }
@@ -42,9 +46,4 @@ function initNavigation(): void {
 function collectPageElements(attribute: string): [HTMLElement, Page][] {
 	return Array.from(<NodeListOf<HTMLElement>>document.querySelectorAll(`[data-${attribute}]`))
 		.map<[HTMLElement, Page]>(x => [x, ID_TO_PAGE[<string>x.dataset[attribute]]]);
-}
-
-export default function () {
-	initSelectables();
-	initNavigation();
 }

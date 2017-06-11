@@ -146,11 +146,16 @@
 	}
 
 	.buttons {
-		float: right;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: flex-end;
 
 		button {
 			margin: 0.5ex 0.5em;
 			width: 5em;
 		}
+
+		.cancel { order: 0; }
+		.ok { order: 1; }
 	}
 }
