@@ -87,16 +87,12 @@ function initCustomDiceDialog(): void {
 
 function openCustomDiceDialog(): void {
 	dialog.classList.add('open');
-
-	updateOverlay();
 }
 
 function closeCustomDiceDialog(cancel: boolean): void {
 	dialog.classList.remove('open');
 
 	if (!cancel) registerCustomDice();
-
-	updateOverlay();
 }
 
 function registerCustomDice(): void {
@@ -111,14 +107,5 @@ function registerCustomDice(): void {
 
 		manager.register(id, diceSet);
 		manager.select(id);
-	}
-}
-
-function updateOverlay(): void {
-	const dialogs = <HTMLElement[]>Array.from(page.querySelectorAll(".dialog"));
-	if (dialogs.some(dialog => dialog.classList.contains('open'))) {
-		page.classList.add('overlaid');
-	} else {
-		page.classList.remove('overlaid');
 	}
 }

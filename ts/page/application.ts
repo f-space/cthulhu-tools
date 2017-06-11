@@ -3,7 +3,7 @@ import { AttributeManager } from "model/attribute";
 import { SkillManager } from "model/skill";
 import { CharacterManager } from "model/character";
 import { StatusManager } from "model/status";
-import { PageManager, Page } from "view/page";
+import { PageManager } from "view/page";
 import DiceImage from "view/dice-image";
 
 export const status = new StatusManager(
@@ -13,7 +13,7 @@ export const status = new StatusManager(
 	new CharacterManager(),
 );
 
-export const navigation = new PageManager(Page.Home);
+export const navigation = new PageManager('home');
 
 class Resources {
 	private _diceImage: DiceImage | undefined;

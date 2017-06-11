@@ -1,10 +1,4 @@
-export enum Page {
-	Home,
-	Dice,
-	Status,
-	CharacterManagement,
-	CharacterCreation,
-}
+export type Page = 'home' | 'dice' | 'status' | 'character-management' | 'character-creation';
 
 export interface PageListener {
 	onEnter?(page: Page): void;
@@ -39,15 +33,17 @@ export class PageManager {
 		}
 	}
 
-	public toPage(next: Page): void {
-		for (const listener of this._listeners) {
-			if (listener.onExit) listener.onExit(this.page);
-		}
+	public toPage(next: Page, force: boolean = false): void {
+		if (this._page !== next || force) {
+			for (const listener of this._listeners) {
+				if (listener.onExit) listener.onExit(this.page);
+			}
 
-		this._page = next;
+			this._page = next;
 
-		for (const listener of this._listeners) {
-			if (listener.onEnter) listener.onEnter(this.page);
+			for (const listener of this._listeners) {
+				if (listener.onEnter) listener.onEnter(this.page);
+			}
 		}
 	}
 }

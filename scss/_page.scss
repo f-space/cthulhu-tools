@@ -17,7 +17,7 @@
 		margin: 1ex 1em;
 	}
 
-	.contents {
+	& > .contents {
 		display: flex;
 		flex-flow: column nowrap;
 		justify-content: flex-start;
@@ -35,12 +35,12 @@
 		}
 	}
 
-	&.overlaid .contents {
+	&.overlaid > .contents {
 		filter: blur(3px);
 		pointer-events: none;
 	}
 
-	.overlay {
+	& > .overlay {
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -52,7 +52,7 @@
 		align-items: stretch;
 		background: rgba(0, 0, 0, 0.5);
 
-		.dialog {
+		& > .dialog {
 			position: relative;
 			flex: 0 0 auto;
 			padding: 2ex 1em;
@@ -78,7 +78,7 @@
 		}
 	}
 
-	&:not(.overlaid) .overlay {
+	&:not(.overlaid) > .overlay {
 		display: none;
 	}
 }
