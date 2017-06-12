@@ -44,6 +44,8 @@ button {
 	border-radius: 0.5ex;
 	vertical-align: middle;
 	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 
 	&:active {
 		border-color: rgb(255, 128, 128);
