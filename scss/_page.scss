@@ -9,13 +9,6 @@
 		display: none;
 	}
 
-	.navigations {
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin: 1ex 1em;
-	}
-
 	& > .contents {
 		display: flex;
 		flex-flow: column nowrap;
@@ -32,6 +25,14 @@
 			flex: 0 0 auto;
 			align-self: center;
 			text-align: center;
+		}
+
+		& > .navigations {
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: flex-end;
+			align-items: stretch;
+			flex: 0 0 auto;
 		}
 	}
 
