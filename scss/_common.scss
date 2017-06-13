@@ -23,17 +23,47 @@ a {
 	color: red;
 }
 
-input[type="number"] {
-	@include no-spin-button;
-
+%input {
 	padding: 0.5ex 0.5em;
 	border: solid 1px red;
 	border-radius: 1ex;
 	background: transparent;
-	text-align: center;
 
 	&:invalid {
 		background: rgba(255, 0, 0, 0.25);
+	}
+}
+
+input[type="text"] {
+	@extend %input;
+}
+
+input[type="number"] {
+	@include no-spin-button;
+	@extend %input;
+
+	text-align: center;
+}
+
+input[type="checkbox"] {
+	display: none;
+
+	& + *::before {
+		display: inline-block;
+		width: 1em;
+		height: 1em;
+		border: solid 1px rgb(128, 0, 0);
+		border-radius: 0.25em;
+		background: transparent;
+		color: rgb(128, 0, 0);
+		content: "";
+		vertical-align: middle;
+		text-align: center;
+		line-height: 1;
+	}
+
+	&:checked + *::before {
+		content: "\2713";
 	}
 }
 
