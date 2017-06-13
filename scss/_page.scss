@@ -56,8 +56,9 @@
 		& > .dialog {
 			position: relative;
 			flex: 0 0 auto;
-			padding: 2ex 1em;
-			background: linear-gradient(rgb(128, 0, 0), black 10%, black 90%, rgb(128, 0, 0));
+			padding: calc(1rem + 1ex) 1em;
+			max-height: 80%;
+			background: linear-gradient(rgb(128, 0, 0), black 1rem, black calc(100% - 1rem), rgb(128, 0, 0));
 
 			&:not(.open) {
 				display: none;
@@ -75,6 +76,12 @@
 				text-align: center;
 				font-size: 3rem;
 				pointer-events: none;
+			}
+
+			& > .contents {
+				overflow-x: hidden;
+				overflow-y: auto;
+				height: 100%;
 			}
 		}
 	}
