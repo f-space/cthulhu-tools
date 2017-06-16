@@ -1,39 +1,19 @@
 #dice {
-	position: relative;
-	
 	.contents {
-		display: flex;
-		flex-flow: column nowrap;
-		align-items: center;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100%;
-
-		&.disabled {
-			filter: blur(3px);
-			pointer-events: none;
-		}
-		
-		.page-title {
-			flex: 0 0 auto;
-			font-size: 120%;
-		}
-
 		.result {
-			@extend %unselectable;
+			@include unselectable;
 
-			flex: 1 1 0;
 			position: relative;
-			box-sizing: border-box;
-			width: 100%;
+			flex: 1 1 0;
 			min-height: 20vh;
 
 			%view {
 				position: absolute;
-				left: 0;
-				right: 0;
 				top: 0;
+				right: 0;
 				bottom: 0;
+				left: 0;
+				overflow: hidden;
 			}
 
 			.dice-view {
@@ -50,67 +30,78 @@
 					opacity: 0.25;
 				}
 
-				.dice-image {
-					margin: 1ex;
-					width: 15vh;
-					height: 15vh;
-					object-fit: contain;
+				.dice-group {
+					display: flex;
+					flex-flow: row nowrap;
 
-					@include count-gt(4) {
-						margin: .5ex;
-						width: 10vh;
-						height: 10vh;
+					.dice {
+						--scale: 1;
+
+						margin: calc(1ex * var(--scale));
+						width: calc(15vh * var(--scale));
+						height: calc(15vh * var(--scale));
+						object-fit: contain;
 					}
 
-					@include count-gt(11) {
-						width: 7.5vh;
-						height: 7.5vh;
+					@mixin dice-count($m, $n) {
+						@include count-gt($n) {
+							.dice {
+								@include count-eq($m) {
+									@content;
+								}
+							}
+						}
 					}
+
+					@include dice-count(1, 4) { --scale: 0.75; }
+					@include dice-count(1, 9) { --scale: 0.6; }
+					@include dice-count(2, 2) { --scale: 0.75; }
+					@include dice-count(2, 5) { --scale: 0.6; }
+					@include dice-count(2, 7) { --scale: 0.5; }
+					@include dice-count(2, 10) { --scale: 0.4; }
 				}
 			}
 
 			.number-view {
 				@extend %view;
+				@include blur-text-double(0.1ex, 0.25ex, red);
 
+				z-index: -1;
 				display: flex;
 				flex-flow: row nowrap;
 				justify-content: center;
 				align-items: center;
-				z-index: -1;
+				color: white;
 				font-size: 25vh;
 				opacity: 0.5;
-				color: white;
-				@include blur-text-double(.1ex, .25ex, red);
 
 				&.critical {
 					color: white;
-					@include blur-text-double(.1ex, .25ex, green);
+					@include blur-text-double(0.1ex, 0.25ex, green);
 				}
 
 				&.fumble {
 					color: white;
-					@include blur-text-double(.1ex, .25ex, blue);
+					@include blur-text-double(0.1ex, 0.25ex, blue);
 				}
 			}
 		}
 
 		.mode-list {
-			@extend %unselectable;
+			@include unselectable;
 
 			display: flex;
 			flex-flow: row wrap;
 			justify-content: space-between;
 			flex: 0 0 auto;
-			box-sizing: border-box;
 			margin: 1ex 0;
 			padding: 0 1em;
-			width: 100%;
 
 			& > .mode {
 				flex: 1 1 auto;
-				margin: 1ex .25em;
 				box-sizing: border-box;
-				width: calc(30% - .25em);
+				margin: 1ex 0.25em;
+				width: calc(30% - 0.25em);
 				border: solid 1px red;
 				border-radius: 2ex/50%;
 				text-align: center;
@@ -123,112 +114,48 @@
 		}
 
 		.roll-button {
-			@extend %unselectable;
-			@extend %design-font;
+			@include unselectable;
+			@include designed-font;
 
 			flex: 0 0 auto;
-			padding: 0 .75em;
+			align-self: center;
+			padding: 0 0.75em;
 			border: none;
-			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255,0,0,0.5), transparent);
-			line-height: 1;
+			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255, 0, 0, 0.5), transparent);
 			font-size: 5rem;
+			line-height: 1;
 			cursor: pointer;
 
 			&:active {
-				background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0,255,0,0.5), transparent);
+				background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0, 255, 0, 0.5), transparent);
 			}
 		}
 	}
+}
 
-	.overlay {
+#custom-dice-dialog {
+	.input-box {
+		margin: 2ex 1em;
+		text-align: center;
+		font-size: 1.5em;
+
+		input[type="number"] {
+			margin: auto 0.5em;
+			width: 4ex;
+		}
+	}
+
+	.buttons {
 		display: flex;
-		flex-flow: column nowrap;
-		justify-content: center;
-		align-items: stretch;
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		background: rgba(0,0,0,.5);
+		flex-flow: row wrap;
+		justify-content: flex-end;
 
-		&.disabled {
-			display: none;
+		button {
+			margin: 0.5ex 0.5em;
+			width: 5em;
 		}
 
-		.custom-dice-dialog {
-			flex: 0 0 auto;
-			position: relative;
-			padding: 2ex 1em;
-			background: linear-gradient(rgb(128,0,0), black 10%, black 90%, rgb(128,0,0));
-
-			&.hidden {
-				display: none;
-			}
-
-			&::before {
-				@extend %design-font;
-				
-				content: "Custom Dice";
-				display: block;
-				position: absolute;
-				left: 0;
-				right: 0;
-				top: -1.5ex;
-				font-size: 3rem;
-				line-height: 1.2;
-				text-align: center;
-			}
-
-			.input-box {
-				margin: 2ex 1em;
-				font-size: 150%;
-				text-align: center;
-				vertical-align: middle;
-				
-				input[type="number"] {
-					@extend %number-box;
-
-					width: 4ex;
-					margin: auto .5em;
-					padding: .5ex .5em;
-					border: solid 1px red;
-					border-radius: 1ex;
-					background: transparent;
-					text-align: center;
-
-					&:invalid {
-						background: rgba(255,0,0,0.25);
-					}
-				}
-			}
-
-			.buttons {
-				float: right;
-
-				%button {
-					margin: .5ex .5em;
-					padding: .5ex .5em;
-					box-sizing: border-box;
-					width: 5em;
-					border: solid 1px rgb(128,0,0);
-					border-radius: .5ex;
-					text-align: center;
-					vertical-align: middle;
-				}
-
-				.cancel {
-					@extend %button;
-
-					background: transparent;
-				}
-
-				.ok {
-					@extend %button;
-
-					background: rgb(128,0,0);
-				}
-			}
-		}
+		.cancel { order: 0; }
+		.ok { order: 1; }
 	}
 }

@@ -1,0 +1,92 @@
+.page {
+	position: relative;
+	overflow: hidden;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+
+	&:not(.selected) {
+		display: none;
+	}
+
+	& > .contents {
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: flex-start;
+		align-items: stretch;
+		overflow-x: hidden;
+		overflow-y: auto;
+		box-sizing: border-box;
+		padding: 1ex 1em calc(1ex + 10px);
+		width: 100%;
+		height: 100%;
+
+		& > .page-title {
+			flex: 0 0 auto;
+			align-self: center;
+			text-align: center;
+		}
+
+		& > .navigations {
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: flex-end;
+			align-items: stretch;
+			flex: 0 0 auto;
+		}
+	}
+
+	&.overlaid > .contents {
+		filter: blur(3px);
+		pointer-events: none;
+	}
+
+	& > .overlay {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: center;
+		align-items: stretch;
+		background: rgba(0, 0, 0, 0.5);
+
+		& > .dialog {
+			position: relative;
+			flex: 0 0 auto;
+			padding: calc(1rem + 1ex) 1em;
+			max-height: 80%;
+			background: linear-gradient(rgb(128, 0, 0), black 1rem, black calc(100% - 1rem), rgb(128, 0, 0));
+
+			&:not(.open) {
+				display: none;
+			}
+
+			&::before {
+				@include designed-font;
+
+				position: absolute;
+				top: -2ex;
+				right: 0;
+				left: 0;
+				display: block;
+				content: attr(data-title);
+				text-align: center;
+				font-size: 3rem;
+				pointer-events: none;
+			}
+
+			& > .contents {
+				overflow-x: hidden;
+				overflow-y: auto;
+				height: 100%;
+			}
+		}
+	}
+
+	&:not(.overlaid) > .overlay {
+		display: none;
+	}
+}

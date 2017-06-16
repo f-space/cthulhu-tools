@@ -1,12 +1,14 @@
 {
 	"compilerOptions": {
-		"target": "es6",
-		"outFile": "main.js",
+		"target": "ES6",
+		"moduleResolution": "Node",
+		"outDir": "js",
+		"baseUrl": "ts",
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true
 	},
 	"include": [
-		"script/**/*"
+		"ts/**/*"
 	]
 }

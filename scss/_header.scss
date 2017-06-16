@@ -1,15 +1,14 @@
 #header {
-	@extend %unselectable;
-	
+	@include unselectable;
+
 	flex: 0 0 auto;
-	line-height: 1.2;
 	text-align: center;
+	line-height: 1.2;
 }
 
 #title {
-	@extend %design-font;
+	@include designed-font;
 
 	display: inline;
-	font-size: 2.5rem;
 	cursor: pointer;
 }
