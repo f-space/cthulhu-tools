@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,13 +71,13 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_model_profile__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_model_profile__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_model_attribute__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_model_skill__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_model_character__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_model_status__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_view_page__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_view_dice_image__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_view_page__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_view_dice_image__ = __webpack_require__(23);
 
 
 
@@ -115,9 +115,9 @@ const resources = new Resources();
 /* unused harmony export toHexString */
 /* harmony export (immutable) */ __webpack_exports__["a"] = getSHA256;
 /* harmony export (immutable) */ __webpack_exports__["b"] = requestJSON;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fast_sha256__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fast_sha256__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fast_sha256___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fast_sha256__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stablelib_utf8__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stablelib_utf8__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stablelib_utf8___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__stablelib_utf8__);
 
 
@@ -408,7 +408,7 @@ class DiceManager {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return StatusData; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__property__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__property__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__attribute__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__operation__ = __webpack_require__(11);
@@ -1091,7 +1091,7 @@ function isFiniteOrString(x) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = evaluate;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_expr_eval__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_expr_eval__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_expr_eval___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_expr_eval__);
 
 function evaluate(expression, resolver, map) {
@@ -1815,7 +1815,7 @@ class DiceRenderer {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_model_dice__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_model_dice_roll__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_view_dice_renderer__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_view_dice_number_renderer__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_view_dice_number_renderer__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__application__ = __webpack_require__(0);
 
 
@@ -1980,10 +1980,24 @@ function initOverlay() {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function () {
+    if (NodeList.prototype.forEach === undefined) {
+        NodeList.prototype.forEach = function (callbackfn, thisArg) {
+            Array.prototype.forEach.call(this, callbackfn, thisArg);
+        };
+    }
+});
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_model_status__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__application__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__character_management__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__character_edit__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__character_management__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__character_edit__ = __webpack_require__(20);
 
 
 
@@ -2093,7 +2107,7 @@ function loadDefaultData() {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2127,7 +2141,7 @@ function watchCharacters() {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2286,7 +2300,7 @@ class ProfileManager {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2350,7 +2364,7 @@ class SimpleResolver {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2694,13 +2708,13 @@ function newTextInput(template, context) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_model_character__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_model_status__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_view_file__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_view_file__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__application__ = __webpack_require__(0);
 
 
@@ -2864,29 +2878,32 @@ function getCheckedCharacter() {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__page__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__storage__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dice__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__status__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfill__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__storage__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dice__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__status__ = __webpack_require__(16);
+
 
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__page__["a" /* default */])();
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__storage__["a" /* default */])();
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__dice__["a" /* default */])();
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__status__["a" /* default */])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__polyfill__["a" /* default */])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__page__["a" /* default */])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__storage__["a" /* default */])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__dice__["a" /* default */])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__status__["a" /* default */])();
 });
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2987,7 +3004,7 @@ DiceImage.DATA_LAYOUT = 'layout';
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3060,7 +3077,7 @@ class DiceNumberRenderer {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3114,7 +3131,7 @@ function triggerClickEvent(target) {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3160,7 +3177,7 @@ class PageManager {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3279,7 +3296,7 @@ exports.decode = decode;
 //# sourceMappingURL=utf8.js.map
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
@@ -4588,7 +4605,7 @@ return parser;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
