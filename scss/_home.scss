@@ -1,10 +1,13 @@
 #home {
+	p { margin: 1ex 0; }
+
 	.contents {
 		.heading {
 			margin: 1ex 0;
 			text-align: center;
 
 			&::before, &::after {
+				margin: 0 0.5em;
 				content: "-";
 			}
 		}
@@ -34,11 +37,15 @@
 			dd { width: 70%; }
 		}
 
-		.copyrights {
+		.assets, .libraries {
 			font-size: 0.8em;
 
 			dt { width: 55%; }
 			dd { width: 45%; }
+		}
+
+		.license {
+			font-size: 0.8em;
 		}
 	}
 }
