@@ -161,6 +161,58 @@
 						<button type="button" data-nav="character-management">管理</button>
 					</nav>
 					<div class="characters">
+						<template class="character-template">
+							<section class="character">
+								<section>
+									<header>
+										<h3>人物/能力</h3>
+									</header>
+									<dl class="attributes"></dl>
+								</section>
+								<section>
+									<header>
+										<h3>技能</h3>
+									</header>
+									<dl class="skills"></dl>
+								</section>
+								<section>
+									<header>
+										<h3>所持品</h3>
+									</header>
+									<dl class="items"></dl>
+								</section>
+							</section>
+						</template>
+						<template class="integer-template">
+							<div class="attribute integer">
+								<dt class="attr-name"></dt>
+								<dd class="attr-value"></dd>
+							</div>
+						</template>
+						<template class="number-template">
+							<div class="attribute number">
+								<dt class="attr-name"></dt>
+								<dd class="attr-value"></dd>
+							</div>
+						</template>
+						<template class="text-template">
+							<div class="attribute text">
+								<dt class="attr-name"></dt>
+								<dd class="attr-value"></dd>
+							</div>
+						</template>
+						<template class="skill-template">
+							<div class="skill">
+								<dt class="skill-name"></dt>
+								<dd class="skill-score"></dd>
+							</div>
+						</template>
+						<template class="item-template">
+							<div class="item">
+								<dt class="item-name"></dt>
+								<dd class="item-desc"></dd>
+							</div>
+						</template>
 					</div>
 				</div>
 			</section>
@@ -175,6 +227,23 @@
 						<button type="button" data-nav="character-edit">作成</button>
 					</nav>
 					<div class="characters">
+						<template class="character-template">
+							<div class="character">
+								<label class="check">
+									<input type="checkbox" />
+									<span></span>
+								</label>
+								<div class="name"></div>
+								<button class="visibility" type="button" data-shown="表示" data-hidden="非表示"></button>
+							</div>
+						</template>
+					</div>
+					<div class="commands">
+						<button class="command delete" type="button">削除</button>
+						<button class="command clone" type="button">複製</button>
+						<button class="command edit" type="button">編集</button>
+						<button class="command import" type="button">読込み</button>
+						<button class="command export" type="button">書出し</button>
 					</div>
 				</div>
 			</section>
@@ -186,6 +255,84 @@
 						<h2>キャラクター編集</h2>
 					</header>
 					<div class="entry">
+						<section class="attributes">
+							<header>
+								<h3>能力値</h3>
+							</header>
+						</section>
+						<section class="skills">
+							<header>
+								<h3>技能</h3>
+							</header>
+							<div class="available-points"></div>
+						</section>
+						<section class="items">
+							<header>
+								<h3>所持品</h3>
+							</header>
+						</section>
+						<div class="actions">
+							<button class="ok commit" type="button">OK</button>
+							<button class="cancel" type="button">Cancel</button>
+						</div>
+						<template class="attribute-template">
+							<div class="attribute">
+								<div class="name"></div>
+								<div class="value"></div>
+								<button class="input" type="button">入力</button>
+							</div>
+						</template>
+						<template class="skill-template">
+							<div class="skill">
+								<select class="id" type="text" pattern="[\w_]*"></select>
+								<div class="base"></div>
+								<input class="points" type="number" step="1" />
+								<div class="value"></div>
+							</div>
+						</template>
+						<template class="item-template">
+							<div class="item">
+								<input class="name" type="text" />
+								<input class="description" type="text" />
+							</div>
+						</template>
+					</div>
+				</div>
+				<div class="overlay">
+					<div id="character-input-dialog" class="dialog" data-title="Input">
+						<template class="contents-template">
+							<div class="contents">
+								<div class="info">
+									<div class="name"></div>=
+									<div class="expression"></div>
+								</div>
+								<div class="inputs"></div>
+								<div class="value"></div>
+								<div class="buttons">
+									<button class="ok commit" type="button">OK</button>
+									<button class="cancel" type="button">Cancel</button>
+								</div>
+							</div>
+						</template>
+						<template class="dice-input-template">
+							<div class="input dice">
+								<div class="input-name"></div>
+								<div class="dice-view"></div>
+								<button class="roll-button" type="button">Roll</button>
+							</div>
+						</template>
+						<template class="number-input-template">
+							<div class="input number">
+								<div class="input-name"></div>
+								<input type="number" />
+							</div>
+						</template>
+						<template class="text-input-template">
+							<div class="input text">
+								<div class="input-name"></div>
+								<input type="text" />
+							</div>
+						</template>
 					</div>
 				</div>
 			</section>
