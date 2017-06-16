@@ -40,6 +40,10 @@
 
 			.input {
 				flex: 0 0 auto;
+
+				&.no-input {
+					visibility: hidden;
+				}
 			}
 		}
 	}
@@ -47,6 +51,14 @@
 	.skills {
 		display: flex;
 		flex-flow: column nowrap;
+
+		.point-stats {
+			text-align: right;
+			font-size: 1.2em;
+
+			&.full { @include blur-text(1px, 0, green); }
+			&.over { @include blur-text(1px, 0, red); }
+		}
 
 		.skill {
 			display: flex;
