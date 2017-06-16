@@ -213,6 +213,7 @@ function refreshItems(): void {
 function refreshValues(): void {
 	const attributeElements = Array.from(page.querySelectorAll(".attributes .attribute")) as HTMLElement[];
 	const skillElements = Array.from(page.querySelectorAll(".skills .skill")) as HTMLElement[];
+	const pointStatsElement = page.querySelector(".skills .point-stats") as HTMLElement;
 
 	const characterBase = new Character(character);
 	characterBase.points.clear();
@@ -238,6 +239,17 @@ function refreshValues(): void {
 			valueElement.textContent = resolver.resolve(id, null);
 		}
 	}
+
+	const consumedElement = pointStatsElement.querySelector(".consumed") as HTMLElement;
+	const availableElement = pointStatsElement.querySelector(".available") as HTMLElement;
+	const consumed = Array.from(character.points).reduce((sum, x) => sum + x[1], 0);
+	const available = resolver.resolve('occupation_skill_points') + resolver.resolve('hobby_skill_points');
+	consumedElement.textContent = consumed.toString(10);
+	availableElement.textContent = available.toString(10);
+
+	pointStatsElement.classList.remove('full', 'over');
+	if (consumed === available) pointStatsElement.classList.add('full');
+	else if (consumed > available) pointStatsElement.classList.add('over');
 }
 
 function getInputDialog(): HTMLElement {
