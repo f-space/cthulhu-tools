@@ -1,3 +1,244 @@
 #character-edit {
+	.entry {
+		& > section {
+			& > header {
+				margin-top: 2ex;
+				text-align: center;
+			}
+		}
+	}
 
+	.attributes {
+		display: flex;
+		flex-flow: column nowrap;
+
+		.attribute {
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: flex-end;
+			flex: 0 0 auto;
+			margin-top: 1.5ex;
+			padding-bottom: 0.5ex;
+			border-bottom: dashed 1px rgb(128, 0, 0);
+			line-height: 1.4;
+
+			.name {
+				flex: 0 0 8em;
+				overflow: hidden;
+				text-align: center;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.value {
+				flex: 1 1 0;
+				overflow: hidden;
+				text-align: center;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.input {
+				flex: 0 0 auto;
+			}
+		}
+	}
+
+	.skills {
+		display: flex;
+		flex-flow: column nowrap;
+
+		.skill {
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			margin-top: 1ex;
+
+			.id {
+				flex: 1 1 8em;
+			}
+
+			.base {
+				flex: 1 0 4ex;
+				text-align: center;
+
+				&::before {
+					content: "+";
+				}
+			}
+
+			.points {
+				flex: 0.5 0 auto;
+				width: 3ex;
+			}
+
+			.value {
+				flex: 1 0 4ex;
+				text-align: center;
+			}
+		}
+	}
+
+	.items {
+		display: flex;
+		flex-flow: column nowrap;
+
+		.item {
+			display: flex;
+			flex-flow: row nowrap;
+			margin-top: 1ex;
+
+			.name {
+				flex: 1 1 auto;
+				width: 0;
+			}
+
+			.description {
+				display: none;
+			}
+		}
+	}
+
+	.actions {
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: flex-end;
+		align-items: center;
+		margin: 3ex 0 1ex;
+
+		button {
+			margin-left: 0.5em;
+			width: 4em;
+		}
+
+		.ok { order: 1; }
+		.cancel { order: 0; }
+	}
+}
+
+#character-input-dialog {
+	& > .contents {
+		display: flex;
+		flex-flow: column nowrap;
+
+		.info {
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: center;
+			align-items: center;
+			align-self: center;
+			margin: 1ex 0;
+
+			.name {
+				margin: 0 0.5em;
+			}
+
+			.expression {
+				margin: 0 0.5em;
+			}
+		}
+
+		.inputs {
+			display: flex;
+			flex-flow: column nowrap;
+
+			.input {
+				display: flex;
+				flex-flow: row nowrap;
+				justify-content: flex-start;
+				align-items: center;
+				margin: 1ex 0;
+
+				.input-name {
+					flex: 0 0 6ex;
+					text-align: right;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+
+					&::after {
+						margin-right: 0.5em;
+						content: ":";
+					}
+				}
+
+				&.dice {
+					.dice-view {
+						display: flex;
+						flex-flow: row wrap;
+						justify-content: center;
+						align-content: space-between;
+						align-items: center;
+						flex: 1 1 0;
+
+						.dice-group {
+							display: flex;
+							flex-flow: row nowrap;
+
+							.dice {
+								display: inline-block;
+								width: 3em;
+								height: 3em;
+								vertical-align: middle;
+							}
+						}
+					}
+
+					.roll-button {
+						@include unselectable;
+						@include designed-font;
+
+						flex: 0 0 auto;
+						border: none;
+						background: transparent;
+						vertical-align: middle;
+						font-size: 3em;
+						line-height: 1;
+						cursor: pointer;
+					}
+				}
+
+				&.number {
+					input[type="number"] {
+						flex: 1 1 auto;
+						width: 0;
+					}
+				}
+
+				&.text {
+					input[type="text"] {
+						flex: 1 1 auto;
+						width: 0;
+					}
+				}
+			}
+		}
+
+		.value {
+			align-self: center;
+			overflow-wrap: break-word;
+			overflow-x: hidden;
+			overflow-y: auto;
+			margin: 0.5ex 0;
+			min-height: 1.6em;
+			text-align: center;
+			word-break: break-all;
+			font-size: 2em;
+		}
+
+		.buttons {
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: flex-end;
+			align-items: center;
+			margin-top: 0.5ex;
+
+			button {
+				margin-left: 0.5em;
+				width: 4em;
+			}
+
+			.ok { order: 1; }
+			.cancel { order: 0; }
+		}
+	}
 }
