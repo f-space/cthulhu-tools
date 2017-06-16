@@ -1,5 +1,6 @@
 #home {
 	p { margin: 1ex 0; }
+	li { margin-left: 2em; }
 
 	.contents {
 		.heading {
@@ -28,13 +29,6 @@
 					border: solid 1px red;
 				}
 			}
-		}
-
-		.basics {
-			text-align: center;
-
-			dt { width: 30%; }
-			dd { width: 70%; }
 		}
 
 		.assets, .libraries {
