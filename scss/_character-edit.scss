@@ -40,6 +40,10 @@
 
 			.input {
 				flex: 0 0 auto;
+
+				&.no-input {
+					visibility: hidden;
+				}
 			}
 		}
 	}
