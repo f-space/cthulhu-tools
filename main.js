@@ -2555,6 +2555,7 @@ function refreshItems() {
 function refreshValues() {
     const attributeElements = Array.from(page.querySelectorAll(".attributes .attribute"));
     const skillElements = Array.from(page.querySelectorAll(".skills .skill"));
+    const pointStatsElement = page.querySelector(".skills .point-stats");
     const characterBase = new __WEBPACK_IMPORTED_MODULE_2_model_character__["b" /* Character */](character);
     characterBase.points.clear();
     const resolver = new __WEBPACK_IMPORTED_MODULE_3_model_status__["a" /* StatusResolver */](__WEBPACK_IMPORTED_MODULE_6__application__["a" /* status */], character);
@@ -2576,6 +2577,17 @@ function refreshValues() {
             valueElement.textContent = resolver.resolve(id, null);
         }
     }
+    const consumedElement = pointStatsElement.querySelector(".consumed");
+    const availableElement = pointStatsElement.querySelector(".available");
+    const consumed = Array.from(character.points).reduce((sum, x) => sum + x[1], 0);
+    const available = resolver.resolve('occupation_skill_points') + resolver.resolve('hobby_skill_points');
+    consumedElement.textContent = consumed.toString(10);
+    availableElement.textContent = available.toString(10);
+    pointStatsElement.classList.remove('full', 'over');
+    if (consumed === available)
+        pointStatsElement.classList.add('full');
+    else if (consumed > available)
+        pointStatsElement.classList.add('over');
 }
 function getInputDialog() {
     return document.getElementById("character-input-dialog");
