@@ -102,6 +102,7 @@ export class DiceSet implements Iterable<DiceGroup> {
 
 	public get size(): number { return this.groups.length; }
 	public get values(): number[] { return this.groups.map(group => group.value); }
+	public set values(value: number[]) { this.groups.forEach((group, index) => { group.value = value[index]; }); }
 	public get total(): number { return this.groups.reduce((sum, group) => sum + group.value, 0); }
 	public get max(): number { return this.groups.reduce((sum, group) => sum + group.max, 0); }
 
