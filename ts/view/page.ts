@@ -1,8 +1,8 @@
 export type Page = 'home' | 'dice' | 'status' | 'character-management' | 'character-creation';
 
 export interface PageListener {
-	onEnter?(page: Page): void;
-	onExit?(page: Page): void;
+	onEnter?(page: Page, context?: any): void;
+	onExit?(page: Page, context?: any): void;
 }
 
 export class PageManager {
@@ -11,6 +11,7 @@ export class PageManager {
 	}
 
 	private _page: Page;
+	private _context: any;
 	private _listeners: PageListener[] = [];
 
 	public get page(): Page { return this._page; }
@@ -33,16 +34,17 @@ export class PageManager {
 		}
 	}
 
-	public toPage(next: Page, force: boolean = false): void {
+	public toPage(next: Page, context?: any, force: boolean = false): void {
 		if (this._page !== next || force) {
 			for (const listener of this._listeners) {
-				if (listener.onExit) listener.onExit(this.page);
+				if (listener.onExit) listener.onExit(this.page, this._context);
 			}
 
 			this._page = next;
+			this._context = context;
 
 			for (const listener of this._listeners) {
-				if (listener.onEnter) listener.onEnter(this.page);
+				if (listener.onEnter) listener.onEnter(this.page, this._context);
 			}
 		}
 	}
