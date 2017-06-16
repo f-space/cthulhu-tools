@@ -6,6 +6,7 @@
 		.character {
 			display: flex;
 			flex-flow: column nowrap;
+			flex: 0 0 auto;
 			margin: 1ex 0;
 			padding: 2ex 0.5em;
 			border: solid 1px red;
