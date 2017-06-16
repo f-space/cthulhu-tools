@@ -1,4 +1,4 @@
-export type Page = 'home' | 'dice' | 'status' | 'character-management' | 'character-creation';
+export type Page = 'home' | 'dice' | 'status' | 'character-management' | 'character-edit';
 
 export interface PageListener {
 	onEnter?(page: Page, context?: any): void;
