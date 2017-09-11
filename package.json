@@ -4,9 +4,10 @@
 	"description": "",
 	"main": "",
 	"scripts": {
+		"html": "pug pug/index.pug --out .",
 		"css": "node-sass scss/main.scss main.css --output-style compressed",
 		"js": "tsc -p tsconfig.json && webpack",
-		"build": "npm run css & npm run js"
+		"build": "npm run html & npm run css & npm run js"
 	},
 	"keywords": [
 		"Cthulhu"
