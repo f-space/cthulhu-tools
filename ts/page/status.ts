@@ -130,7 +130,7 @@ function newItem(item: Item, resolver: PropertyResolver, template: HTMLTemplateE
 }
 
 function loadDefaultData(): Promise<void> {
-	return <Promise<void>>Promise.all([
+	return <Promise<any>>Promise.all([
 		status.profiles.load("./data/profiles.json", true),
 		status.attributes.load("./data/attributes.json", true),
 		status.skills.load("./data/skills.json", true),
