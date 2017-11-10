@@ -1,48 +1,63 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const { LoaderOptionsPlugin } = require('webpack');
 
-module.exports = {
-	entry: {
-		css: "./scss/main.scss",
-		js: "./ts/page/root.ts"
-	},
-	output: {
-		path: path.resolve(__dirname, "docs"),
-		filename: "main.[name]"
-	},
-	module: {
-		rules: [
-			{
-				test: /\.s?css$/,
-				loader: ExtractTextPlugin.extract("css-loader?-url!sass-loader")
-			},
-			{
-				test: /\.tsx?$/,
-				exclude: /node_modules/,
-				loader: "ts-loader"
+module.exports = function (env) {
+
+	const production = env && env.production;
+
+	const cssLoader = `css-loader?-url${production ? "&minimize" : "&sourceMap"}!sass-loader`;
+
+	return {
+		entry: {
+			main: "./src/index.ts"
+		},
+		output: {
+			path: path.resolve(__dirname, "docs"),
+			filename: "[name].js"
+		},
+		module: {
+			rules: [
+				{
+					test: /\.vue$/,
+					loader: "vue-loader",
+					options: {
+						loaders: {
+							scss: ExtractTextPlugin.extract(cssLoader)
+						},
+					}
+				},
+				{
+					test: /\.pug$/,
+					loader: "pug-loader"
+				},
+				{
+					test: /\.tsx?$/,
+					loader: "ts-loader",
+					options: {
+						appendTsSuffixTo: [/\.vue$/]
+					}
+				}
+			]
+		},
+		resolve: {
+			extensions: [".ts", ".js", ".vue", ".json"],
+			alias: {
+				components: path.resolve(__dirname, "src/components")
 			}
+		},
+		devServer: {
+			contentBase: "docs"
+		},
+		plugins: [
+			new ExtractTextPlugin("[name].css"),
+			new HtmlWebpackPlugin({
+				template: "./src/index.pug",
+				inject: 'head',
+				production: production
+			}),
+			...(production ? [new UglifyJSPlugin()] : [])
 		]
-	},
-	resolve: {
-		extensions: [".ts", ".js", ".json"],
-		modules: [
-			path.resolve(__dirname, "ts"),
-			"node_modules"
-		]
-	},
-	devServer: {
-		contentBase: "docs"
-	},
-	plugins: [
-		new ExtractTextPlugin("main.css"),
-	]
-}
-
-if (!process.argv.includes("--debug")) {
-	module.exports.plugins = (module.exports.plugins || []).concat([
-		new UglifyJSPlugin(),
-		new LoaderOptionsPlugin({ minimize: true })
-	]);
+	}
 }

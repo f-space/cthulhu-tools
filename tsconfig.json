@@ -3,12 +3,13 @@
 		"target": "es2017",
 		"module": "es2015",
 		"moduleResolution": "node",
-		"baseUrl": "ts",
+		"baseUrl": "src",
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true
 	},
-	"include": [
+	"exclude": [
+		"node_modules",
 		"ts/**/*"
 	]
 }

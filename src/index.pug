@@ -1,0 +1,18 @@
+doctype html
+html
+	head
+		title クトゥルフTRPG ツール
+		meta(charset="utf-8")
+		if htmlWebpackPlugin.options.production
+			meta(http-equiv="Content-Security-Policy", content="default-src 'self'")
+		else
+			meta(http-equiv="Content-Security-Policy", content="default-src 'self'; connect-src 'self' ws:")
+		meta(name="description", content="クトゥルフTRPGのためのツール。ダイスやステータス管理など。")
+		meta(name="author", content="F_")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		link(rel="icon", type="image/png", href="image/icon.png")
+	body
+		#resources
+			img#dice-image(src="image/dice.png", data-layout="image/dice.json")
+			audio#dice-sound(src="audio/dice.wav", preload="auto")
+		#app
