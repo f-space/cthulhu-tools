@@ -1,0 +1,38 @@
+section#status.page
+	.contents
+		header.page-title
+			h2 ステータス
+		nav.navigations
+			button(type="button", @click="$root.characterManagement()") 管理
+		.characters
+			template.character-template
+				section.character
+					section
+						header: h3 人物/能力
+						dl.attributes
+					section
+						header: h3 技能
+						dl.skills
+					section
+						header: h3 所持品
+						dl.items
+			template.integer-template
+				.attribute.integer
+					dt.attr-name
+					dd.attr-value
+			template.number-template
+				.attribute.number
+					dt.attr-name
+					dd.attr-value
+			template.text-template
+				.attribute.text
+					dt.attr-name
+					dd.attr-value
+			template.skill-template
+				.skill
+					dt.skill-name
+					dd.skill-score
+			template.item-template
+				.item
+					dt.item-name
+					dd.item-desc
