@@ -1,0 +1,56 @@
+#menu {
+	@include unselectable;
+
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: stretch;
+	flex: 0 0 auto;
+
+	%item {
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+		font-size: 3rem;
+		line-height: 1.2;
+
+		&.two-lines {
+			font-size: 2rem;
+			line-height: 0.8;
+		}
+	}
+
+	.menu-item {
+		@extend %item;
+		@include designed-font;
+
+		flex: 1 1 0;
+		background: linear-gradient(transparent 80%, red);
+		opacity: 0.5;
+
+		&.selected {
+			background: linear-gradient(transparent 50%, green);
+			opacity: 1;
+		}
+
+		&:not(.selected) {
+			cursor: pointer;
+		}
+	}
+
+	.extra-menu-item {
+		@extend %item;
+		@include designed-font(limegreen);
+
+		visibility: hidden;
+		flex: 0 0 0;
+		background: linear-gradient(transparent 50%, green);
+		transition: flex 300ms;
+
+		&.selected {
+			visibility: visible;
+			flex: 1 1 0;
+		}
+	}
+}

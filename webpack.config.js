@@ -11,7 +11,7 @@ module.exports = function (env) {
 
 	return {
 		entry: {
-			main: "./src/index.ts"
+			main: ["./src/index.ts", "./src/index.scss"],
 		},
 		output: {
 			path: path.resolve(__dirname, "docs"),
@@ -38,13 +38,18 @@ module.exports = function (env) {
 					options: {
 						appendTsSuffixTo: [/\.vue$/]
 					}
+				},
+				{
+					test: /\.scss$/,
+					loader: ExtractTextPlugin.extract(cssLoader)
 				}
 			]
 		},
 		resolve: {
 			extensions: [".ts", ".js", ".vue", ".json"],
 			alias: {
-				components: path.resolve(__dirname, "src/components")
+				components: path.resolve(__dirname, "src/components"),
+				scss: path.resolve(__dirname, "src/scss")
 			}
 		},
 		devServer: {

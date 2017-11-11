@@ -1,0 +1,161 @@
+#dice {
+	.contents {
+		.result {
+			@include unselectable;
+
+			position: relative;
+			flex: 1 1 0;
+			min-height: 20vh;
+
+			%view {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				overflow: hidden;
+			}
+
+			.dice-view {
+				@extend %view;
+
+				display: flex;
+				flex-flow: row wrap;
+				justify-content: space-around;
+				align-content: space-around;
+				align-items: center;
+				transition: opacity 300ms;
+
+				&:active {
+					opacity: 0.25;
+				}
+
+				.dice-group {
+					display: flex;
+					flex-flow: row nowrap;
+
+					.dice {
+						--scale: 1;
+
+						margin: calc(1ex * var(--scale));
+						width: calc(15vh * var(--scale));
+						height: calc(15vh * var(--scale));
+						object-fit: contain;
+					}
+
+					@mixin dice-count($m, $n) {
+						@include count-gt($n) {
+							.dice {
+								@include count-eq($m) {
+									@content;
+								}
+							}
+						}
+					}
+
+					@include dice-count(1, 4) { --scale: 0.75; }
+					@include dice-count(1, 9) { --scale: 0.6; }
+					@include dice-count(2, 2) { --scale: 0.75; }
+					@include dice-count(2, 5) { --scale: 0.6; }
+					@include dice-count(2, 7) { --scale: 0.5; }
+					@include dice-count(2, 10) { --scale: 0.4; }
+				}
+			}
+
+			.number-view {
+				@extend %view;
+				@include blur-text-double(0.1ex, 0.25ex, red);
+
+				z-index: -1;
+				display: flex;
+				flex-flow: row nowrap;
+				justify-content: center;
+				align-items: center;
+				color: white;
+				font-size: 25vh;
+				opacity: 0.5;
+
+				&.critical {
+					color: white;
+					@include blur-text-double(0.1ex, 0.25ex, green);
+				}
+
+				&.fumble {
+					color: white;
+					@include blur-text-double(0.1ex, 0.25ex, blue);
+				}
+			}
+		}
+
+		.mode-list {
+			@include unselectable;
+
+			display: flex;
+			flex-flow: row wrap;
+			justify-content: space-between;
+			flex: 0 0 auto;
+			margin: 1ex 0;
+			padding: 0 1em;
+
+			& > .mode {
+				flex: 1 1 auto;
+				box-sizing: border-box;
+				margin: 1ex 0.25em;
+				width: calc(30% - 0.25em);
+				border: solid 1px red;
+				border-radius: 2ex/50%;
+				text-align: center;
+				cursor: pointer;
+
+				&.selected {
+					background: red;
+				}
+			}
+		}
+
+		.roll-button {
+			@include unselectable;
+			@include designed-font;
+
+			flex: 0 0 auto;
+			align-self: center;
+			padding: 0 0.75em;
+			border: none;
+			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255, 0, 0, 0.5), transparent);
+			font-size: 5rem;
+			line-height: 1;
+			cursor: pointer;
+
+			&:active {
+				background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0, 255, 0, 0.5), transparent);
+			}
+		}
+	}
+}
+
+#custom-dice-dialog {
+	.input-box {
+		margin: 2ex 1em;
+		text-align: center;
+		font-size: 1.5em;
+
+		input[type="number"] {
+			margin: auto 0.5em;
+			width: 4ex;
+		}
+	}
+
+	.buttons {
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: flex-end;
+
+		button {
+			margin: 0.5ex 0.5em;
+			width: 5em;
+		}
+
+		.cancel { order: 0; }
+		.ok { order: 1; }
+	}
+}

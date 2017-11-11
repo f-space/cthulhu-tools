@@ -1,0 +1,45 @@
+#home {
+	p { margin: 1ex 0; }
+	li { margin-left: 2em; }
+
+	.contents {
+		.heading {
+			margin: 1ex 0;
+			text-align: center;
+
+			&::before, &::after {
+				margin: 0 0.5em;
+				content: "-";
+			}
+		}
+
+		.table {
+			display: table;
+			width: 100%;
+			border-collapse: collapse;
+			table-layout: fixed;
+
+			& > * {
+				display: table-row;
+
+				& > * {
+					display: table-cell;
+					box-sizing: border-box;
+					padding: 0.5ex 0.5em;
+					border: solid 1px red;
+				}
+			}
+		}
+
+		.assets, .libraries {
+			font-size: 0.8em;
+
+			dt { width: 55%; }
+			dd { width: 45%; }
+		}
+
+		.license {
+			font-size: 0.8em;
+		}
+	}
+}

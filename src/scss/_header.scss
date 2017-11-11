@@ -1,0 +1,14 @@
+#header {
+	@include unselectable;
+
+	flex: 0 0 auto;
+	text-align: center;
+	line-height: 1.2;
+}
+
+#title {
+	@include designed-font;
+
+	display: inline;
+	cursor: pointer;
+}

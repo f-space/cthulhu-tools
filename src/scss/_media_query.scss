@@ -1,0 +1,11 @@
+@media only screen and (max-width: 480px) {
+	:root {
+		font-size: 0.8em;
+	}
+}
+
+@media only screen and (orientation: portrait) {
+	body {
+		max-width: none;
+	}
+}
