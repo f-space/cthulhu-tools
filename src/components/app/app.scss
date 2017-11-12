@@ -1,0 +1,94 @@
+@import "scss/mixin";
+
+#app {
+	box-sizing: border-box;
+	display: flex;
+	align-items: stretch;
+	flex-flow: column nowrap;
+	width: 100%;
+	max-width: 100%;
+	height: 100%;
+	max-height: 100%;
+}
+
+#main {
+	flex: 1 1 0;
+	background: linear-gradient(rgba(255, 0, 0, 0.5), transparent 20px);
+	height: 0;
+	min-height: 0;
+	overflow: hidden;
+}
+
+#header {
+	@include unselectable;
+
+	flex: 0 0 auto;
+	text-align: center;
+	line-height: 1.2;
+}
+
+#title {
+	@include designed-font;
+
+	display: inline;
+	cursor: pointer;
+}
+
+#menu {
+	@include unselectable;
+
+	display: flex;
+	align-items: stretch;
+	flex: 0 0 auto;
+	flex-flow: row nowrap;
+
+	%item {
+		display: flex;
+		align-items: center;
+		flex-flow: column nowrap;
+		justify-content: center;
+		overflow: hidden;
+		line-height: 1.2;
+		font-size: 3rem;
+
+		&.two-lines {
+			line-height: 0.8;
+			font-size: 2rem;
+		}
+	}
+
+	.menu-item {
+		@extend %item;
+
+		@include designed-font;
+
+		flex: 1 1 0;
+		opacity: 0.5;
+		background: linear-gradient(transparent 80%, red);
+
+		&.selected {
+			opacity: 1;
+			background: linear-gradient(transparent 50%, green);
+		}
+
+		&:not(.selected) {
+			cursor: pointer;
+		}
+	}
+
+	.extra-menu-item {
+		@extend %item;
+
+		@include designed-font(limegreen);
+
+		flex: 0 0 0;
+		transition: flex 300ms;
+		visibility: hidden;
+		background: linear-gradient(transparent 50%, green);
+
+		&.selected {
+			flex: 1 1 0;
+			visibility: visible;
+		}
+	}
+}

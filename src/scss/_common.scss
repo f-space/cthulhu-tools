@@ -1,15 +1,20 @@
 * {
 	box-sizing: unset;
 	margin: unset;
-	padding: unset;
 	outline: unset;
 	border: unset;
 	background: unset;
+	padding: unset;
 	color: unset;
 	font: unset;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-weight: bold;
 }
 
@@ -25,10 +30,10 @@ a {
 }
 
 %input {
-	padding: 0.5ex 0.5em;
 	border: solid 1px rgb(128, 0, 0);
 	border-radius: 1ex;
 	background: transparent;
+	padding: 0.5ex 0.5em;
 
 	&:invalid {
 		background: rgba(255, 0, 0, 0.25);
@@ -40,8 +45,9 @@ input[type="text"] {
 }
 
 input[type="number"] {
-	@include no-spin-button;
 	@extend %input;
+
+	@include no-spin-button;
 
 	text-align: center;
 }
@@ -51,16 +57,16 @@ input[type="checkbox"] {
 
 	& + *::before {
 		display: inline-block;
-		width: 1em;
-		height: 1em;
 		border: solid 1px rgb(128, 0, 0);
 		border-radius: 0.25em;
 		background: transparent;
-		color: red;
-		content: "";
+		width: 1em;
+		height: 1em;
 		vertical-align: middle;
 		text-align: center;
 		line-height: 1;
+		color: red;
+		content: "";
 	}
 
 	&:checked + *::before {
@@ -73,9 +79,9 @@ option {
 }
 
 button {
-	padding: 0.5ex 0.5em;
 	border: solid 1px rgb(128, 0, 0);
 	border-radius: 0.5ex;
+	padding: 0.5ex 0.5em;
 	vertical-align: middle;
 	text-align: center;
 	white-space: nowrap;
