@@ -1,10 +1,10 @@
 #app
 	header#header
-		h1#title(@click="home") Cthulhu Tools
+		h1#title(@click="toHome") Cthulhu Tools
 	main#main
 		component(:is="page")
 	nav#menu
-		div#menu-dice.menu-item(@click="dice") Dice
-		div#menu-status.menu-item(@click="status") Status
-		div#menu-character-management.extra-menu-item.two-lines(@click="characterManagement") #[span Character]#[span Management]
-		div#menu-character-edit.extra-menu-item.two-lines(@click="characterEdit") #[span Character]#[span Edit]
+		div#menu-dice.menu-item(@click="toDice") Dice
+		div#menu-status.menu-item(@click="toStatus") Status
+		div#menu-character-management.extra-menu-item.two-lines #[span Character]#[span Management]
+		div#menu-character-edit.extra-menu-item.two-lines #[span Character]#[span Edit]

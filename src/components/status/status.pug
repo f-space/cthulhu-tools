@@ -3,7 +3,7 @@ section#status.page
 		header.page-title
 			h2 ステータス
 		nav.navigations
-			button(type="button", @click="$root.characterManagement()") 管理
+			button(type="button", @click="toCharacterManagement") 管理
 		.characters
 			template.character-template
 				section.character
