@@ -4,7 +4,11 @@
 	main#main
 		component(:is="page")
 	nav#menu
-		div#menu-dice.menu-item(@click="toDice") Dice
-		div#menu-status.menu-item(@click="toStatus") Status
-		div#menu-character-management.extra-menu-item.two-lines #[span Character]#[span Management]
-		div#menu-character-edit.extra-menu-item.two-lines #[span Character]#[span Edit]
+		div.menu-item(:class="{active: inDice}", @click="toDice") Dice
+		div.menu-item(:class="{active: inStatus}", @click="toStatus") Status
+		div.extra-menu-item.two-lines(:class="{active: inCharacterManagement}")
+			span Character
+			span Management
+		div.extra-menu-item.two-lines(:class="{active: inCharacterEdit}")
+			span Character
+			span Edit

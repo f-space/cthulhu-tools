@@ -66,12 +66,12 @@
 		opacity: 0.5;
 		background: linear-gradient(transparent 80%, red);
 
-		&.selected {
+		&.active {
 			opacity: 1;
 			background: linear-gradient(transparent 50%, green);
 		}
 
-		&:not(.selected) {
+		&:not(.active) {
 			cursor: pointer;
 		}
 	}
@@ -86,7 +86,7 @@
 		visibility: hidden;
 		background: linear-gradient(transparent 50%, green);
 
-		&.selected {
+		&.active {
 			flex: 1 1 0;
 			visibility: visible;
 		}

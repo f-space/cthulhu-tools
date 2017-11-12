@@ -21,7 +21,12 @@ export default Vue.extend({
 	name: "app-component",
 	computed: {
 		...mapState<State>({
-			page(state) { return PAGE_MAP[state.page]; }
+			page(state) { return PAGE_MAP[state.page]; },
+			inHome(state) { return state.page === Page.Home; },
+			inDice(state) { return state.page === Page.Dice; },
+			inStatus(state) { return state.page === Page.Status; },
+			inCharacterManagement(state) { return state.page === Page.CharacterManagement; },
+			inCharacterEdit(state) { return state.page === Page.CharacterEdit; },
 		}),
 	},
 	methods: {
