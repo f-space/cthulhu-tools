@@ -7,7 +7,21 @@ module.exports = function (env) {
 
 	const production = env && env.production;
 
-	const cssLoader = `css-loader?-url${production ? "&minimize" : "&sourceMap"}!sass-loader`;
+	const cssLoader = [
+		{
+			loader: 'css-loader',
+			options: {
+				url: false,
+				...(production ? { minimize: true } : { sourceMap: true })
+			}
+		},
+		{
+			loader: 'sass-loader',
+			options: {
+				...(production ? {} : { sourceMap: true })
+			}
+		}
+	];
 
 	return {
 		entry: {
@@ -26,6 +40,7 @@ module.exports = function (env) {
 						loaders: {
 							scss: ExtractTextPlugin.extract(cssLoader)
 						},
+						cssSourceMap: false,
 					}
 				},
 				{
@@ -36,7 +51,8 @@ module.exports = function (env) {
 					test: /\.tsx?$/,
 					loader: "ts-loader",
 					options: {
-						appendTsSuffixTo: [/\.vue$/]
+						appendTsSuffixTo: [/\.vue$/],
+						compilerOptions: (production ? {} : { sourceMap: true })
 					}
 				},
 				{
