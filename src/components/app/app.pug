@@ -1,4 +1,7 @@
 #app
+	#resources(v-show="false")
+		img#dice-image(src="image/dice.png", data-layout="image/dice.json")
+		audio#dice-sound(src="audio/dice.wav", preload="auto")
 	header#header
 		h1#title(@click="toHome") Cthulhu Tools
 	main#main
