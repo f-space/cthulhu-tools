@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { createNamespacedHelpers } from "vuex";
 import { Page, State } from "modules/page";
+import ResourceComponent from "components/resource/resource.vue";
 import HomeComponent from "components/home/home.vue";
 import DiceComponent from "components/dice/dice.vue";
 import StatusComponent from "components/status/status.vue";
@@ -19,7 +20,9 @@ const PAGE_MAP = {
 
 export default Vue.extend({
 	name: "app-component",
+	provide(this: any) { return { app: this } },
 	computed: {
+		resources(): any { return this.$refs.resources; },
 		...mapState<State>({
 			page(state) { return PAGE_MAP[state.page]; },
 			inHome(state) { return state.page === Page.Home; },
@@ -33,6 +36,7 @@ export default Vue.extend({
 		...mapMutations(["toHome", "toDice", "toStatus"]),
 	},
 	components: {
+		ResourceComponent,
 		[PAGE_MAP[Page.Home]]: HomeComponent,
 		[PAGE_MAP[Page.Dice]]: DiceComponent,
 		[PAGE_MAP[Page.Status]]: StatusComponent,
