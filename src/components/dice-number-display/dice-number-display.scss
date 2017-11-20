@@ -1,0 +1,25 @@
+@import "scss/mixin";
+
+.dice-number-display {
+	@include blur-text-double(0.1ex, 0.25ex, red);
+
+	display: flex;
+	align-items: center;
+	flex-flow: row nowrap;
+	justify-content: center;
+	opacity: 0.5;
+	color: white;
+	font-size: var(--font-size);
+
+	&.critical {
+		@include blur-text-double(0.1ex, 0.25ex, green);
+
+		color: white;
+	}
+
+	&.fumble {
+		@include blur-text-double(0.1ex, 0.25ex, blue);
+
+		color: white;
+	}
+}

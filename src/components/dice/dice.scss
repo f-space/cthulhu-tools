@@ -1,171 +1,51 @@
 @import "scss/mixin";
 
-@mixin dice-count($m, $n) {
-	@include count-gt($n) {
-		.dice {
-			@include count-eq($m) {
-				@content;
-			}
-		}
-	}
+.dice-view {
+	flex: 1 1 0;
+	margin: 1em 0;
+	min-height: 20vh;
 }
 
-#dice {
-	.contents {
-		.result {
-			@include unselectable;
+.dice-set-list {
+	@include unselectable;
 
-			position: relative;
-			flex: 1 1 0;
-			min-height: 20vh;
+	display: flex;
+	flex: 0 0 auto;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin: 1ex 0;
+	padding: 0 1em;
 
-			%view {
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				overflow: hidden;
-			}
-
-			.dice-view {
-				@extend %view;
-
-				display: flex;
-				align-content: space-around;
-				align-items: center;
-				flex-flow: row wrap;
-				justify-content: space-around;
-				transition: opacity 300ms;
-
-				&:active {
-					opacity: 0.25;
-				}
-
-				.dice-group {
-					@include dice-count(1, 4) { --scale: 0.75; }
-
-					@include dice-count(1, 9) { --scale: 0.6; }
-
-					@include dice-count(2, 2) { --scale: 0.75; }
-
-					@include dice-count(2, 5) { --scale: 0.6; }
-
-					@include dice-count(2, 7) { --scale: 0.5; }
-
-					@include dice-count(2, 10) { --scale: 0.4; }
-
-					display: flex;
-					flex-flow: row nowrap;
-
-					.dice {
-						--scale: 1;
-
-						margin: calc(1ex * var(--scale));
-						width: calc(15vh * var(--scale));
-						height: calc(15vh * var(--scale));
-						object-fit: contain;
-					}
-				}
-			}
-
-			.number-view {
-				@extend %view;
-
-				@include blur-text-double(0.1ex, 0.25ex, red);
-
-				display: flex;
-				align-items: center;
-				flex-flow: row nowrap;
-				justify-content: center;
-				opacity: 0.5;
-				z-index: -1;
-				color: white;
-				font-size: 25vh;
-
-				&.critical {
-					@include blur-text-double(0.1ex, 0.25ex, green);
-
-					color: white;
-				}
-
-				&.fumble {
-					@include blur-text-double(0.1ex, 0.25ex, blue);
-
-					color: white;
-				}
-			}
-		}
-
-		.mode-list {
-			@include unselectable;
-
-			display: flex;
-			flex: 0 0 auto;
-			flex-flow: row wrap;
-			justify-content: space-between;
-			margin: 1ex 0;
-			padding: 0 1em;
-
-			& > .mode {
-				box-sizing: border-box;
-				flex: 1 1 auto;
-				margin: 1ex 0.25em;
-				border: solid 1px red;
-				border-radius: 2ex/50%;
-				cursor: pointer;
-				width: calc(30% - 0.25em);
-				text-align: center;
-
-				&.selected {
-					background: red;
-				}
-			}
-		}
-
-		.roll-button {
-			@include unselectable;
-			@include designed-font;
-
-			align-self: center;
-			flex: 0 0 auto;
-			border: none;
-			background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255, 0, 0, 0.5), transparent);
-			cursor: pointer;
-			padding: 0 0.75em;
-			line-height: 1;
-			font-size: 5rem;
-
-			&:active {
-				background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0, 255, 0, 0.5), transparent);
-			}
-		}
-	}
-}
-
-#custom-dice-dialog {
-	.input-box {
-		margin: 2ex 1em;
+	& > .dice-set {
+		box-sizing: border-box;
+		flex: 1 1 auto;
+		margin: 1ex 0.25em;
+		border: solid 1px red;
+		border-radius: 2ex/50%;
+		cursor: pointer;
+		width: calc(30% - 0.25em);
 		text-align: center;
-		font-size: 1.5em;
 
-		input[type="number"] {
-			margin: auto 0.5em;
-			width: 4ex;
+		&.active {
+			background: red;
 		}
 	}
+}
 
-	.buttons {
-		display: flex;
-		flex-flow: row wrap;
-		justify-content: flex-end;
+.roll-button {
+	@include unselectable;
+	@include designed-font;
 
-		button {
-			margin: 0.5ex 0.5em;
-			width: 5em;
-		}
+	align-self: center;
+	flex: 0 0 auto;
+	border: none;
+	background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255, 0, 0, 0.5), transparent);
+	cursor: pointer;
+	padding: 0 0.75em;
+	line-height: 1;
+	font-size: 5rem;
 
-		.cancel { order: 0; }
-		.ok { order: 1; }
+	&:active {
+		background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0, 255, 0, 0.5), transparent);
 	}
 }
