@@ -6,7 +6,7 @@ const COMPONENTS_PATH = "./src/components";
 const VUE_TEMPLATE = `\
 <template lang="pug" src="./{{name}}.pug"></template>
 <script lang="ts" src="./{{name}}.ts"></script>
-<style lang="scss" src="./{{name}}.scss"></style>
+<style lang="scss" src="./{{name}}.scss" scoped></style>
 `
 
 async function getName() {
