@@ -65,6 +65,7 @@ module.exports = function (env) {
 			extensions: [".ts", ".js", ".vue", ".json"],
 			alias: {
 				components: path.resolve(__dirname, "src/components"),
+				mixins: path.resolve(__dirname, "src/mixins"),
 				models: path.resolve(__dirname, "src/models"),
 				modules: path.resolve(__dirname, "src/modules"),
 				scss: path.resolve(__dirname, "src/scss")
