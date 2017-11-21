@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { DiceImageLayout, DiceSprite } from 'components/resource/resource';
+import { DiceImageLayout, DiceSprite } from "@component/resource";
 
 export default Vue.extend({
 	name: "dice-image",
