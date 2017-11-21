@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import DiceLayout from "components/dice-layout/dice-layout";
+import DiceLayout from "@component/dice-layout";
 
 export default DiceLayout.extend({
 	name: "dice-circle-view",

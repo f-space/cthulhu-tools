@@ -1,5 +1,5 @@
 import store from "modules/store";
-import AppComponent from "components/app/app.vue";
+import AppComponent from "@component/app";
 
 document.addEventListener("DOMContentLoaded", () => {
 	const vm = new AppComponent({ store: store });

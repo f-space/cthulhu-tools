@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import { DiceSet } from "models/dice";
-import AppPage from "components/page/page.vue";
-import DiceView from "components/dice-view/dice-view.vue";
-import CustomDiceDialog from "components/dice/custom-dice-dialog/custom-dice-dialog.vue";
+import AppPage from "@component/page";
+import DiceView from "@component/dice-view";
+import CustomDiceDialog from "@component/dice/custom-dice-dialog";
 
 export default Vue.extend({
 	name: 'dice-component',

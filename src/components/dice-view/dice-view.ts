@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import ResizeEvent from "mixins/resize-event";
-import DiceRoll from "components/dice-roll/dice-roll";
-import DiceRowLayout from "components/dice-row-layout/dice-row-layout.vue";
-import DiceCircleLayout from "components/dice-circle-layout/dice-circle-layout.vue";
-import DiceFlowLayout from "components/dice-flow-layout/dice-flow-layout.vue";
-import DiceImage from "components/dice-image/dice-image.vue";
-import DiceNumberDisplay from "components/dice-number-display/dice-number-display.vue";
+import DiceRoll from "@component/dice-roll";
+import DiceRowLayout from "@component/dice-row-layout";
+import DiceCircleLayout from "@component/dice-circle-layout";
+import DiceFlowLayout from "@component/dice-flow-layout";
+import DiceImage from "@component/dice-image";
+import DiceNumberDisplay from "@component/dice-number-display";
 
 export default DiceRoll.extend({
 	name: "dice-view",

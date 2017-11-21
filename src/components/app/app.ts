@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import { createNamespacedHelpers } from "vuex";
 import { Page, State } from "modules/page";
-import ResourceComponent from "components/resource/resource.vue";
-import HomeComponent from "components/home/home.vue";
-import DiceComponent from "components/dice/dice.vue";
-import StatusComponent from "components/status/status.vue";
-import CharacterManagementComponent from "components/character-management/character-management.vue";
-import CharacterEditComponent from "components/character-edit/character-edit.vue";
+import ResourceComponent from "@component/resource";
+import HomeComponent from "@component/home";
+import DiceComponent from "@component/dice";
+import StatusComponent from "@component/status";
+import CharacterManagementComponent from "@component/character-management";
+import CharacterEditComponent from "@component/character-edit";
 
 const { mapState, mapMutations } = createNamespacedHelpers("page");
 

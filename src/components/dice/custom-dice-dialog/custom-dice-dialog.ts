@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import PageDialog from "components/dialog/dialog.vue";
+import PageDialog from "@component/dialog";
 
 export default Vue.extend({
 	name: "custom-dice-dialog",

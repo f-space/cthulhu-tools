@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TsConfigPlugin = require("./tsconfig-webpack-plugin");
 
 module.exports = function (env) {
 
@@ -64,12 +65,11 @@ module.exports = function (env) {
 		resolve: {
 			extensions: [".ts", ".js", ".vue", ".json"],
 			alias: {
-				components: path.resolve(__dirname, "src/components"),
-				mixins: path.resolve(__dirname, "src/mixins"),
-				models: path.resolve(__dirname, "src/models"),
-				modules: path.resolve(__dirname, "src/modules"),
 				scss: path.resolve(__dirname, "src/scss")
-			}
+			},
+			plugins: [
+				new TsConfigPlugin()
+			]
 		},
 		devServer: {
 			contentBase: "docs"

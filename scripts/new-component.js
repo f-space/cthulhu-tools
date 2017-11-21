@@ -33,7 +33,7 @@ getName().then(name => {
 		fs.writeFileSync(path.join(dir, `${name}.pug`), "", { encoding: "utf8" });
 		fs.writeFileSync(path.join(dir, `${name}.ts`), "", { encoding: "utf8" });
 		fs.writeFileSync(path.join(dir, `${name}.scss`), "", { encoding: "utf8" });
-		fs.writeFileSync(path.join(dir, `${name}.vue`), VUE_TEMPLATE.replace(/{{name}}/g, name), { encoding: "utf8" });
+		fs.writeFileSync(path.join(dir, `component.vue`), VUE_TEMPLATE.replace(/{{name}}/g, name), { encoding: "utf8" });
 	}
 });
 
