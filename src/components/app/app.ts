@@ -2,47 +2,42 @@ import Vue from 'vue';
 import { Component, Provide } from 'vue-property-decorator';
 import { State, Mutation, namespace } from 'vuex-class';
 import { Page } from "modules/page";
-import ResourceComponent from "@component/resource";
-import HomeComponent from "@component/home";
-import DiceComponent from "@component/dice";
-import StatusComponent from "@component/status";
-import CharacterManagementComponent from "@component/character-management";
-import CharacterEditComponent from "@component/character-edit";
+import AppResource from "@component/resource";
+import HomePage from "@component/home";
+import DicePage from "@component/dice";
+import StatusPage from "@component/status";
+import CharacterManagementPage from "@component/character-management";
+import CharacterEditPage from "@component/character-edit";
 
 const PageNamespace = "page";
 const PageState = namespace(PageNamespace, State);
 const PageMutation = namespace(PageNamespace, Mutation);
 
 const PAGE_MAP = {
-	[Page.Home]: "home-component",
-	[Page.Dice]: "dice-component",
-	[Page.Status]: "status-component",
-	[Page.CharacterManagement]: "character-management-component",
-	[Page.CharacterEdit]: "character-edit-component",
+	[Page.Home]: HomePage,
+	[Page.Dice]: DicePage,
+	[Page.Status]: StatusPage,
+	[Page.CharacterManagement]: CharacterManagementPage,
+	[Page.CharacterEdit]: CharacterEditPage,
 }
 
 @Component({
 	components: {
-		ResourceComponent,
-		[PAGE_MAP[Page.Home]]: HomeComponent,
-		[PAGE_MAP[Page.Dice]]: DiceComponent,
-		[PAGE_MAP[Page.Status]]: StatusComponent,
-		[PAGE_MAP[Page.CharacterManagement]]: CharacterManagementComponent,
-		[PAGE_MAP[Page.CharacterEdit]]: CharacterEditComponent,
+		AppResource,
 	}
 })
 export default class CthulhuApp extends Vue {
 	@Provide()
 	public app: CthulhuApp = this;
 
-	@PageState(state => PAGE_MAP[state.page as Page]) page: string;
+	@PageState(state => PAGE_MAP[state.page as Page]) page: typeof Vue;
 	@PageState(state => state.page === Page.Home) inHome: boolean;
 	@PageState(state => state.page === Page.Dice) inDice: boolean;
 	@PageState(state => state.page === Page.Status) inStatus: boolean;
 	@PageState(state => state.page === Page.CharacterManagement) inCharacterManagement: boolean;
 	@PageState(state => state.page === Page.CharacterEdit) inCharacterEdit: boolean;
 
-	public get resources(): ResourceComponent { return this.$refs.resources as ResourceComponent; }
+	public get resources(): AppResource { return this.$refs.resources as AppResource; }
 
 	@PageMutation toHome: () => void;
 	@PageMutation toDice: () => void;
