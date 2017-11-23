@@ -1,71 +1,71 @@
 import Vue from 'vue';
+import { Component, Watch } from 'vue-property-decorator';
 import { DiceSet } from "models/dice";
 import AppPage from "@component/page";
 import DiceView from "@component/dice-view";
 import CustomDiceDialog from "@component/dice/custom-dice-dialog";
 
-export default Vue.extend({
-	name: 'dice-component',
-	data() {
-		return {
-			type: null as (string | null),
-			custom: {
-				count: 1,
-				max: 100,
-			},
-			values: [] as number[],
-			presets: ['1D10', '1D100', '1D6', '2D6', '3D6', '1D3', '2D3', '1D4'],
-			dialog: null as (typeof Vue | null),
-		};
-	},
-	computed: {
-		CUSTOM_TYPE() { return 'custom'; },
-		diceSet(): DiceSet {
-			if (this.type !== null) {
-				if (this.type !== this.CUSTOM_TYPE) {
-					return DiceSet.parse(this.type);
-				} else {
-					return DiceSet.create(this.custom.count, this.custom.max);
-				}
-			}
-			return new DiceSet([]);
-		},
-		view(): any { return this.$refs.view; },
-	},
-	watch: {
-		type(value) { this.reset(); },
-		custom: {
-			handler({ count, max }) {
-				if (this.type === this.CUSTOM_TYPE) {
-					this.reset();
-				}
-			},
-			deep: true,
-		}
-	},
-	methods: {
-		reset() {
-			this.values = this.diceSet.dices.map(x => x.default);
-			this.view.stop();
-		},
-		roll() {
-			this.values = this.diceSet.dices.map(x => x.roll(Math.random()));
-			this.view.roll();
-		},
-		openCustomDiceDialog() {
-			this.dialog = CustomDiceDialog;
-		},
-		closeCustomDiceDialog(result: { canceled: boolean, count?: number, max?: number }) {
-			if (!result.canceled) {
-				this.type = this.CUSTOM_TYPE;
-				this.custom.count = result.count as number;
-				this.custom.max = result.max as number;
-			}
-			this.dialog = null;
-		},
-	},
+type CustomDice = { count: number, max: number };
+
+@Component({
 	components: {
 		AppPage,
 		DiceView,
 	}
-});
+})
+export default class DicePage extends Vue {
+	public type: string | null = null;
+	public custom: CustomDice = { count: 1, max: 100 };
+	public values: number[] = [];
+
+	public presets: string[] = ['1D10', '1D100', '1D6', '2D6', '3D6', '1D3', '2D3', '1D4'];
+	public dialog: typeof Vue | null = null;
+
+	public get CUSTOM_TYPE(): string { return 'custom'; }
+
+	public get diceSet(): DiceSet {
+		if (this.type !== null) {
+			if (this.type !== this.CUSTOM_TYPE) {
+				return DiceSet.parse(this.type);
+			} else {
+				return DiceSet.create(this.custom.count, this.custom.max);
+			}
+		}
+		return new DiceSet([]);
+	}
+
+	public get view(): DiceView { return this.$refs.view as DiceView; }
+
+	@Watch("type")
+	protected onTypeChanged(): void { this.reset(); }
+
+	@Watch("custom", { deep: true })
+	protected onCustomChanged({ count, max }: CustomDice): void {
+		if (this.type === this.CUSTOM_TYPE) {
+			this.reset();
+		}
+	}
+
+	public reset(): void {
+		this.values = this.diceSet.dices.map(x => x.default);
+		this.view.stop();
+	}
+
+	public roll(): void {
+		this.values = this.diceSet.dices.map(x => x.roll(Math.random()));
+		this.view.roll();
+	}
+
+	public openCustomDiceDialog(): void {
+		this.dialog = CustomDiceDialog;
+	}
+
+	public closeCustomDiceDialog(result: { canceled: boolean } & Partial<CustomDice>): void {
+		if (!result.canceled) {
+			this.type = this.CUSTOM_TYPE;
+			this.custom.count = result.count as number;
+			this.custom.max = result.max as number;
+		}
+		this.dialog = null;
+	}
+}

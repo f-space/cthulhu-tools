@@ -1,11 +1,10 @@
 import Vue from 'vue';
-import { createNamespacedHelpers } from "vuex";
+import { Component } from 'vue-property-decorator';
+import { Mutation, namespace } from 'vuex-class';
 
-const { mapMutations } = createNamespacedHelpers("page");
+const PageMutation = namespace("page", Mutation);
 
-export default Vue.extend({
-	name: "status-component",
-	methods: {
-		...mapMutations(["toCharacterManagement"])
-	}
-});
+@Component
+export default class StatusPage extends Vue {
+	@PageMutation toCharacterManagement: () => void;
+}

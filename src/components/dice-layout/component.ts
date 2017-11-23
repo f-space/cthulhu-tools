@@ -1,29 +1,28 @@
 import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
 
-export default Vue.extend({
-	name: "dice-layout",
-	props: {
-		width: {
-			type: Number,
-			required: true,
-			validator(value: number) { return Number.isFinite(value) && value >= 0; },
-		},
-		height: {
-			type: Number,
-			required: true,
-			validator(value: number) { return Number.isFinite(value) && value >= 0; },
-		},
-		groupCount: {
-			type: Number,
-			required: true,
-		},
-		groupLength: {
-			type: Number,
-			required: true,
-		},
-		dices: {
-			type: Array as { (): { type: string, face: number }[][] },
-			required: true,
-		},
-	},
-});
+type DiceInfo = { type: string, face: number };
+
+@Component
+export default class DiceLayout extends Vue {
+	@Prop({
+		required: true,
+		validator(value: number) { return Number.isFinite(value) && value >= 0; },
+	})
+	public width: number;
+
+	@Prop({
+		required: true,
+		validator(value: number) { return Number.isFinite(value) && value >= 0; },
+	})
+	public height: number;
+
+	@Prop({ required: true })
+	public groupCount: number;
+
+	@Prop({ required: true })
+	public groupLength: number;
+
+	@Prop({ required: true })
+	public dices: DiceInfo[][];
+}

@@ -1,7 +1,8 @@
 import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
 
-export default Vue.extend({
-	props: {
-		title: String
-	},
-});
+@Component
+export default class Dialog extends Vue {
+	@Prop()
+	public title: string;
+}

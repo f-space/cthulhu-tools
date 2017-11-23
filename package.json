@@ -23,7 +23,9 @@
 		"expr-eval": "^1.2.0",
 		"fast-sha256": "^1.0.0",
 		"vue": "^2.5.3",
-		"vuex": "^3.0.1"
+		"vue-property-decorator": "^6.0.0",
+		"vuex": "^3.0.1",
+		"vuex-class": "^0.3.0"
 	},
 	"devDependencies": {
 		"css-loader": "^0.28.7",

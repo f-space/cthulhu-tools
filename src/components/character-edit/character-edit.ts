@@ -1,5 +1,5 @@
 import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
 
-export default Vue.extend({
-	name: "character-edit-component",
-});
+@Component
+export default class CharacterEditPage extends Vue { }

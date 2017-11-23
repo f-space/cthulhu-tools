@@ -10,6 +10,8 @@
 				"components/*/component.vue"
 			]
 		},
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true
