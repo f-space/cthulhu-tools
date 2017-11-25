@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const TsConfigPlugin = require("./tsconfig-webpack-plugin");
@@ -80,6 +81,9 @@ module.exports = function (env) {
 				template: "./src/index.pug",
 				inject: 'head',
 				production: production
+			}),
+			new ScriptExtHtmlWebpackPlugin({
+				defaultAttribute: 'async'
 			}),
 			...(production ? [new UglifyJSPlugin()] : [])
 		]
