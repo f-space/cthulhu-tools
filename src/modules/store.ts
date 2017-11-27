@@ -1,18 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { createStore } from "modules/helper";
+import { ModuleInterface, Store, SubModule } from "modules/vuex-class-module";
 import PageModule from "modules/page";
 
 Vue.use(Vuex);
 
-export interface Modules {
-	page: typeof PageModule;
+@Store
+export class RootModule extends ModuleInterface {
+	@SubModule
+	public page: PageModule;
 }
 
-export type RootType = { S: {}, G: {}, MD: {} };
-
-export default createStore<{}, {}, {}, {}, Modules>({
-	modules: {
-		page: PageModule
-	}
-});
+export default new Vuex.Store(RootModule);

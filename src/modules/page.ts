@@ -1,4 +1,4 @@
-import { createModule } from "modules/helper";
+import { ModuleInterface, Module, Mutation } from "modules/vuex-class-module";
 
 export enum Page {
 	Home = "home",
@@ -8,28 +8,13 @@ export enum Page {
 	CharacterEdit = "character-edit",
 }
 
-export interface State {
-	page: Page;
-}
+@Module({ namespaced: true })
+export default class PageModule extends ModuleInterface {
+	public page: Page = Page.Home;
 
-export interface Mutations {
-	toHome: void;
-	toDice: void;
-	toStatus: void;
-	toCharacterManagement: void;
-	toCharacterEdit: void;
+	@Mutation public toHome(): void { this.page = Page.Home; }
+	@Mutation public toDice(): void { this.page = Page.Dice; }
+	@Mutation public toStatus(): void { this.page = Page.Status; }
+	@Mutation public toCharacterManagement(): void { this.page = Page.CharacterManagement; }
+	@Mutation public toCharacterEdit(): void { this.page = Page.CharacterEdit; }
 }
-
-export default createModule<any, State, {}, Mutations>({
-	namespaced: true,
-	state: {
-		page: Page.Home,
-	},
-	mutations: {
-		toHome(state) { state.page = Page.Home; },
-		toDice(state) { state.page = Page.Dice; },
-		toStatus(state) { state.page = Page.Status; },
-		toCharacterManagement(state) { state.page = Page.CharacterManagement; },
-		toCharacterEdit(state) { state.page = Page.CharacterEdit; },
-	}
-});
