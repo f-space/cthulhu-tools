@@ -1,15 +1,15 @@
 #app
 	app-resource#resources(ref="resources")
 	header#header
-		h1#title(@click="toHome") Cthulhu Tools
+		router-link(tag="h1", to="/")#title Cthulhu Tools
 	main#main
-		component(:is="page")
+		router-view
 	nav#menu
-		div.menu-item(:class="{active: inDice}", @click="toDice") Dice
-		div.menu-item(:class="{active: inStatus}", @click="toStatus") Status
-		div.extra-menu-item.two-lines(:class="{active: inCharacterManagement}")
+		router-link.menu-item(tag="div", to="/dice") Dice
+		router-link.menu-item(tag="div", to="/status") Status
+		router-link.extra-menu-item.two-lines(tag="div", to="/status/character-management", event="")
 			span Character
 			span Management
-		div.extra-menu-item.two-lines(:class="{active: inCharacterEdit}")
+		router-link.extra-menu-item.two-lines(tag="div", to="/status/character-edit", event="")
 			span Character
 			span Edit

@@ -3,7 +3,7 @@ section#character-management.page
 		header.page-title
 			h2 キャラクター管理
 		nav.navigations
-			button(type="button", @click="toCharacterEdit") 作成
+			router-link(tag="button", type="button", to="/status/character-edit") 作成
 		.characters
 			template.character-template
 				.character

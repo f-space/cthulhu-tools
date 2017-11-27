@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
-import RootModule from "modules/root";
+import VueRouter from 'vue-router';
 import AppComponent from "@component/app";
+import routes from "./route";
 
-Vue.use(Vuex);
+Vue.use(VueRouter);
 
-const store = new Vuex.Store(RootModule);
-const app = new AppComponent({ store });
+const router = new VueRouter(routes);
+const app = new AppComponent({ router });
 
 if (document.readyState !== 'loading') {
 	mount();
