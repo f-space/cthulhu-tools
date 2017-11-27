@@ -1,14 +1,19 @@
-import store from "modules/store";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import RootModule from "modules/root";
 import AppComponent from "@component/app";
 
+Vue.use(Vuex);
+
+const store = new Vuex.Store(RootModule);
+const app = new AppComponent({ store });
+
 if (document.readyState !== 'loading') {
-	initialize();
+	mount();
 } else {
-	document.addEventListener("DOMContentLoaded", initialize);
+	document.addEventListener("DOMContentLoaded", mount);
 }
 
-function initialize() {
-	const vm = new AppComponent({ store: store });
-
-	vm.$mount("#app");
+function mount() {
+	app.$mount("#app");;
 }
