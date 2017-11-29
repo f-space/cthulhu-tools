@@ -5,6 +5,17 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const TsConfigPlugin = require("./tsconfig-webpack-plugin");
 
+if (process.platform === "win32") {
+	const { resolve } = path;
+	path.resolve = function () {
+		const result = resolve.apply(this, arguments);
+		if (arguments.length !== 0 && arguments[0].startsWith("/css-loader!")) {
+			return result.slice(result.indexOf("!") + 1);
+		}
+		return result;
+	}
+}
+
 module.exports = function (env) {
 
 	const production = env && env.production;
@@ -14,12 +25,22 @@ module.exports = function (env) {
 			loader: 'css-loader',
 			options: {
 				url: false,
+				importLoaders: 2,
 				...(production ? { minimize: true } : { sourceMap: true })
+			}
+		},
+		{
+			loader: 'postcss-loader',
+			options: {
+				...(production ? {} : { sourceMap: true })
 			}
 		},
 		{
 			loader: 'sass-loader',
 			options: {
+				includePaths: [
+					path.resolve(__dirname, "src/scss")
+				],
 				...(production ? {} : { sourceMap: true })
 			}
 		}
@@ -42,7 +63,6 @@ module.exports = function (env) {
 						loaders: {
 							scss: ExtractTextPlugin.extract(cssLoader)
 						},
-						cssSourceMap: false,
 					}
 				},
 				{
@@ -65,9 +85,6 @@ module.exports = function (env) {
 		},
 		resolve: {
 			extensions: [".ts", ".js", ".vue", ".json"],
-			alias: {
-				scss: path.resolve(__dirname, "src/scss")
-			},
 			plugins: [
 				new TsConfigPlugin()
 			]

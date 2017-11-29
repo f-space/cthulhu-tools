@@ -1,4 +1,4 @@
-@import "~scss/mixin";
+@import "mixin";
 
 .dice-number-display {
 	@include blur-text-double(0.1ex, 0.25ex, red);

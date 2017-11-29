@@ -14,22 +14,22 @@
 
 @mixin blur-text($offset, $radius, $color) {
 	text-shadow:
-		-#{$offset} -#{$offset} $radius $color,
-		-#{$offset} +#{$offset} $radius $color,
-		+#{$offset} -#{$offset} $radius $color,
-		+#{$offset} +#{$offset} $radius $color;
+		(-$offset) (-$offset) $radius $color,
+		(-$offset) (+$offset) $radius $color,
+		(+$offset) (-$offset) $radius $color,
+		(+$offset) (+$offset) $radius $color;
 }
 
 @mixin blur-text-double($offset, $radius, $color) {
 	text-shadow:
-		-#{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
-		-#{$offset / 4} +#{$offset / 4} #{$radius / 4} $color,
-		+#{$offset / 4} -#{$offset / 4} #{$radius / 4} $color,
-		+#{$offset / 4} +#{$offset / 4} #{$radius / 4} $color,
-		-#{$offset} -#{$offset} $radius $color,
-		-#{$offset} +#{$offset} $radius $color,
-		+#{$offset} -#{$offset} $radius $color,
-		+#{$offset} +#{$offset} $radius $color;
+		(-$offset / 4) (-$offset / 4) ($radius / 4) $color,
+		(-$offset / 4) (+$offset / 4) ($radius / 4) $color,
+		(+$offset / 4) (-$offset / 4) ($radius / 4) $color,
+		(+$offset / 4) (+$offset / 4) ($radius / 4) $color,
+		(-$offset) (-$offset) $radius $color,
+		(-$offset) (+$offset) $radius $color,
+		(+$offset) (-$offset) $radius $color,
+		(+$offset) (+$offset) $radius $color;
 }
 
 @mixin designed-font($color: red) {
@@ -40,9 +40,6 @@
 }
 
 @mixin unselectable {
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-webkit-user-select: none;
 	user-select: none;
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
