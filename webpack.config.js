@@ -89,7 +89,10 @@ module.exports = function (env) {
 			contentBase: "docs"
 		},
 		plugins: [
-			new ExtractTextPlugin("[name].css"),
+			new ExtractTextPlugin({
+				filename: "[name].css",
+				allChunks: true
+			}),
 			new HtmlWebpackPlugin({
 				template: "./src/index.pug",
 				inject: 'head',
