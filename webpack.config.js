@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const StylelintPlugin = require('stylelint-webpack-plugin');
 const TsConfigPlugin = require("./tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./source-map-fix-webpack-plugin");
 
@@ -97,7 +98,7 @@ module.exports = function (env) {
 			new ScriptExtHtmlWebpackPlugin({
 				defaultAttribute: 'async'
 			}),
-			...(production ? [new UglifyJSPlugin()] : [])
+			...(production ? [new UglifyJSPlugin()] : [new StylelintPlugin({ files: "src/**/*.scss" })])
 		]
 	}
 }
