@@ -4,17 +4,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const TsConfigPlugin = require("./tsconfig-webpack-plugin");
-
-if (process.platform === "win32") {
-	const { resolve } = path;
-	path.resolve = function () {
-		const result = resolve.apply(this, arguments);
-		if (arguments.length !== 0 && arguments[0].startsWith("/css-loader!")) {
-			return result.slice(result.indexOf("!") + 1);
-		}
-		return result;
-	}
-}
+const SourceMapFixPlugin = require("./source-map-fix-webpack-plugin");
 
 module.exports = function (env) {
 
@@ -87,6 +77,11 @@ module.exports = function (env) {
 			extensions: [".ts", ".js", ".vue", ".json"],
 			plugins: [
 				new TsConfigPlugin()
+			]
+		},
+		resolveLoader: {
+			plugins: [
+				new SourceMapFixPlugin()
 			]
 		},
 		devServer: {
