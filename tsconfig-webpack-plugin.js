@@ -1,9 +1,16 @@
 const fs = require('fs');
-const path = require('path');
+const { posix, win32 } = require('path');
 
-function normalize(p) {
-	const normalized = path.normalize(p);
-	return (process.platform === 'win32' ? normalized.replace(/\\/g, '/') : normalized);
+const path = (process.platform !== 'win32') ? posix : {
+	resolve() { return replaceSep(win32.resolve.apply(this, arguments)); },
+	relative() { return replaceSep(win32.relative.apply(this, arguments)); },
+	normalize() { return replaceSep(win32.normalize.apply(this, arguments)); },
+	join() { return replaceSep(win32.join.apply(this, arguments)); },
+	dirname() { return replaceSep(win32.dirname.apply(this, arguments)); },
+};
+
+function replaceSep(p) {
+	return p.replace(/\\/g, '/');
 }
 
 function byTs(pattern, request) {
@@ -25,7 +32,7 @@ function expandOptions(options) {
 	} else {
 		options.options = options.options || {};
 	}
-	options.test = RegExp(options.test || /.tsx?$/);
+	options.test = RegExp(options.test || /\.tsx?$/);
 
 	return options;
 }
@@ -46,13 +53,13 @@ class TsBaseUrlPlugin {
 		this.options = expandOptions(options);
 
 		const { baseUrl } = this.options.options;
-		this.baseUrl = (typeof baseUrl === 'string') ? normalize(baseUrl) : "";
+		this.baseUrl = (typeof baseUrl === 'string') ? path.normalize(baseUrl) : "";
 	}
 
 	apply(resolver) {
 		if (this.baseUrl) {
-			const configPath = this.options.config ? path.resolve(this.options.config) : ".";
-			const root = normalize(path.resolve(path.dirname(configPath), this.baseUrl));
+			const configPath = this.options.config || ".";
+			const root = path.resolve(path.dirname(configPath), this.baseUrl);
 
 			resolver.plugin('module', (request, callback) => {
 				if (byTs(this.options.test, request)) {
@@ -143,20 +150,21 @@ class TsRootDirsPlugin {
 		this.options = expandOptions(options);
 
 		const { rootDirs } = this.options.options;
-		this.rootDirs = (rootDirs || []).filter(dir => typeof dir === 'string').map(dir => normalize(dir));
+		this.rootDirs = (rootDirs || []).filter(dir => typeof dir === 'string').map(dir => path.normalize(dir));
 	}
 
 	apply(resolver) {
-		const roots = this.rootDirs.map(dir => normalize(path.resolve(dir)));
+		const configPath = this.options.config || ".";
+		const roots = this.rootDirs.map(dir => path.resolve(path.dirname(configPath), dir));
 		for (const root of roots) {
 			resolver.plugin('described-resolve', (request, callback) => {
 				if (byTs(this.options.test, request)) {
 					const innerRequest = request.request;
 					if (innerRequest && isRelative(innerRequest)) {
-						const absolutePath = normalize(path.join(request.path, innerRequest));
+						const absolutePath = path.join(request.path, innerRequest);
 						const matchedRoot = roots.find(root => absolutePath.startsWith(root));
 						if (matchedRoot && matchedRoot !== root) {
-							const newInnerRequest = normalize(path.resolve(root, path.relative(matchedRoot, absolutePath)));
+							const newInnerRequest = path.resolve(root, path.relative(matchedRoot, absolutePath));
 							const newRequest = Object.assign({}, request, { request: newInnerRequest, });
 							const message = `looking for modules in ${root}`;
 
