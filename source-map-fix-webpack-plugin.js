@@ -66,17 +66,31 @@ module.exports = (function () {
 
 	function fixSourceMap(content, map) {
 		if (map) {
-			const CHARSET_CODE = "@charset \"UTF-8\";";
-			if (content.startsWith(CHARSET_CODE) && map.sourcesContent.every(content => !content.startsWith(CHARSET_CODE))) {
-				const consumer = new SourceMapConsumer(map);
-				const generator = SourceMapGenerator.fromSourceMap(consumer);
-				generator.addMapping({
-					source: map.sources[0],
-					original: { line: 1, column: 0 },
-					generated: { line: 1, column: 0 },
-				});
-				map = generator.toJSON();
-			}
+			const consumer = new SourceMapConsumer(map);
+			const generator = SourceMapGenerator.fromSourceMap(consumer);
+
+			let previous = { source: map.sources[0], originalLine: 1, originalColumn: 0, generatedLine: 0 };
+			consumer.eachMapping(mapping => {
+				if (previous.generatedLine !== mapping.generatedLine) {
+					for (let i = previous.generatedLine + 1; i < mapping.generatedLine; i++) {
+						generator.addMapping({
+							source: previous.source,
+							original: { line: previous.originalLine, column: previous.originalColumn },
+							generated: { line: i, column: 0 },
+						});
+					}
+					if (mapping.generatedColumn !== 0) {
+						generator.addMapping({
+							source: mapping.source,
+							original: { line: mapping.originalLine, column: mapping.originalColumn },
+							generated: { line: mapping.generatedLine, column: 0 },
+						})
+					}
+				}
+				previous = mapping;
+			});
+
+			map = generator.toJSON();
 		}
 
 		return map;
