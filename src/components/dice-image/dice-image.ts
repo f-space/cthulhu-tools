@@ -1,25 +1,28 @@
 import Vue from 'vue';
 import { Component, Inject, Prop, Watch } from 'vue-property-decorator';
-import App from "@component/app";
-import { DiceImageLayout, DiceSprite } from "@component/resource";
+import { State, namespace } from 'vuex-class';
+import ResourceModule, { DiceImageLayout, DiceSprite } from "modules/resource";
+
+const ResourceState = namespace("resource", State);
 
 @Component
 export default class DiceImage extends Vue {
-	@Inject()
-	private app: App;
-
 	@Prop({ required: true })
 	public type: string;
 
 	@Prop({ required: true })
 	public face: number;
 
+	@ResourceState("diceImage")
+	public image: HTMLImageElement;
+
+	@ResourceState("diceImageLayout")
+	public layout: DiceImageLayout;
+
 	private canvas: HTMLCanvasElement | null = null;
 
 	private dirty: boolean = true;
 
-	public get image(): HTMLImageElement | null { return this.app.resources.diceImage; }
-	public get layout(): DiceImageLayout | null { return this.app.resources.diceImageLayout; }
 	public get ready(): boolean { return Boolean(this.canvas && this.image && this.layout); }
 	public get sprite(): DiceSprite | null {
 		const layout = this.layout;

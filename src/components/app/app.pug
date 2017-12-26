@@ -1,5 +1,7 @@
 #app
-	app-resource#resources(ref="resources")
+	div#resources(v-show="false")
+		img(src="image/dice.png", data-layout="image/dice.json", ref="diceImage")
+		audio(src="audio/dice.wav", preload="auto", ref="diceSound")
 	header#header
 		router-link(tag="h1", to="/")#title Cthulhu Tools
 	main#main

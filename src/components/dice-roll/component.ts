@@ -1,16 +1,15 @@
 import Vue from 'vue';
 import { Component, Inject, Prop, Watch } from 'vue-property-decorator';
-import App from "@component/app";
+import { State, namespace } from 'vuex-class';
 import { DiceSet, Dice } from 'models/dice';
+
+const ResourceState = namespace("resource", State);
 
 type DiceType = 'D6' | 'D10' | 'D100';
 type DiceInfo = { type: DiceType, face: number };
 
 @Component
 export default class DiceRoll extends Vue {
-	@Inject()
-	private app: App;
-
 	@Prop({ required: true })
 	public diceSet: DiceSet;
 
@@ -25,6 +24,9 @@ export default class DiceRoll extends Vue {
 
 	@Prop({ default: 10 })
 	public maxIteration: number;
+
+	@ResourceState("diceSound")
+	public sound: HTMLAudioElement;
 
 	private display: number[] = this.values;
 	private rolling: boolean = false;
@@ -115,7 +117,7 @@ export default class DiceRoll extends Vue {
 	}
 
 	private playSound(): void {
-		const audio = this.app.resources.diceSound;
+		const audio = this.sound;
 		if (audio) {
 			audio.pause();
 			audio.currentTime = 0

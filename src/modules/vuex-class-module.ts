@@ -1,264 +1,277 @@
 import * as Vuex from 'vuex';
 import 'reflect-metadata';
 
-export abstract class ModuleInterface {
-	public static state: any;
-	public static getters?: Vuex.GetterTree<any, any>;
-	public static mutations?: Vuex.MutationTree<any>;
-	public static actions?: Vuex.ActionTree<any, any>;
-	public static modules?: Vuex.ModuleTree<any>;
+export const TypeSymbol = Symbol('type');
+
+export interface IModule<R = any> {
+	readonly $state: any;
+	readonly $getters: any;
+	readonly $commit: Vuex.Commit;
+	readonly $dispatch: Vuex.Dispatch;
+	readonly $root: R;
 }
 
-type DecoratedClass = {
+interface DecoratedClass extends Function {
 	namespaced?: boolean;
-	__root__?: { key: string, module: () => DecoratedClass };
-	__getters__?: { [key: string]: Function };
-	__mutations__?: { [key: string]: Function };
-	__actions__?: { [key: string]: Function };
-	__modules__?: { [key: string]: DecoratedClass };
+	__members__?: {
+		getters?: { [key: string]: Function };
+		mutations?: { [key: string]: Function };
+		actions?: { [key: string]: Function };
+		modules?: { [key: string]: DecoratedClass };
+	}
 }
 
-interface GetterContext {
-	state: any;
-	getters: any;
+interface Context {
+	readonly state: any;
+	readonly getters: any;
+	readonly rootState: any;
+	readonly rootGetters: any;
+	readonly commit: Vuex.Commit;
+	readonly dispatch: Vuex.Dispatch;
+	readonly path: string;
+	readonly writable: boolean;
 }
 
-interface GetterContextWithRoot extends GetterContext {
-	rootState: any;
-	rootGetters: any;
+class GetterContext implements Context {
+	constructor(readonly state: any, readonly getters: any, readonly rootState: any, readonly rootGetters: any) { }
+	public get commit(): never { throw new Error(getUnusableErrorMessage("getters", "commit")); }
+	public get dispatch(): never { throw new Error(getUnusableErrorMessage("getters", "dispatch")); }
+	public get path(): string { return ""; }
+	public get writable(): false { return false; }
 }
 
-interface ActionContext {
-	state: any;
-	getters: any;
-	commit: Vuex.Commit;
-	dispatch: Vuex.Dispatch;
+class MutationContext implements Context {
+	constructor(readonly state: any) { }
+	public get getters(): never { throw new Error(getUnusableErrorMessage("mutations", "getters")) }
+	public get rootState(): never { throw new Error(getUnusableErrorMessage("mutations", "rootState")) }
+	public get rootGetters(): never { throw new Error(getUnusableErrorMessage("mutations", "rootGetters")) }
+	public get commit(): never { throw new Error(getUnusableErrorMessage("mutations", "commit")) }
+	public get dispatch(): never { throw new Error(getUnusableErrorMessage("mutations", "displatch")) }
+	public get path(): string { return ""; }
+	public get writable(): true { return true; }
 }
 
-interface ActionContextWithRoot extends ActionContext {
-	rootState: any;
-	rootGetters: any;
+class ActionContext implements Context {
+	constructor(readonly context: Vuex.ActionContext<any, any>) { }
+	public get state(): any { return this.context.state; }
+	public get getters(): any { return this.context.getters; }
+	public get rootState(): any { return this.context.rootState; }
+	public get rootGetters(): any { return this.context.rootGetters; }
+	public get commit(): Vuex.Commit { return this.context.commit; }
+	public get dispatch(): Vuex.Dispatch { return this.context.dispatch; }
+	public get path(): string { return ""; }
+	public get writable(): false { return false; }
 }
 
-export function Store(target: any): any;
-export function Store(options: Vuex.StoreOptions<any>): (target: any) => any;
-export function Store(argument: any) {
-	if (typeof argument === 'function') {
-		return createModule(argument, true);
+class RootContext implements Context {
+	constructor(readonly context: Context) { }
+	public get state(): any { return this.context.rootState; }
+	public get getters(): any { return this.context.rootGetters; }
+	public get rootState(): any { return this.context.rootState; }
+	public get rootGetters(): any { return this.context.rootGetters; }
+	public get commit(): Vuex.Commit { return (type: string, payload: any) => this.context.commit(type, payload, { root: true }); }
+	public get dispatch(): Vuex.Dispatch { return (type: string, payload: any) => this.context.dispatch(type, payload, { root: true }); }
+	public get path(): string { return ""; }
+	public get writable(): boolean { return this.context.writable; }
+}
+
+class ModuleContext implements Context {
+	constructor(readonly parent: Context, readonly state: any, readonly path: string) { }
+	public get getters(): any { return this.parent.getters; }
+	public get rootState(): any { return this.parent.rootState; }
+	public get rootGetters(): any { return this.parent.rootGetters; }
+	public get commit(): Vuex.Commit { return this.parent.commit; }
+	public get dispatch(): Vuex.Dispatch { return this.parent.dispatch; }
+	public get writable(): boolean { return this.parent.writable; }
+}
+
+function getUnusableErrorMessage(context: string, property: string): string {
+	return `Unable to use '${property}' in ${context}.`;
+}
+
+export function Module(options: Vuex.StoreOptions<any> | Vuex.Module<any, any>): <T>(target: T) => T;
+export function Module<T>(target: T): T;
+export function Module(): any {
+	if (typeof arguments[0] === 'function') {
+		return createModule(arguments[0]);
 	} else {
+		const options = arguments[0];
 		return function (target: any) {
-			return createModule(target, true, argument);
+			return createModule(target, options);
 		}
 	}
 }
 
-export function Module(target: any): any;
-export function Module(options: Vuex.Module<any, any> & { __root__: DecoratedClass["__root__"] }): (target: any) => any;
-export function Module(argument: any) {
-	if (typeof argument === 'function') {
-		return createModule(argument, false);
+export function Getter(target: any, key: string, descriptor: PropertyDescriptor): void {
+	if (typeof descriptor.get !== 'function') throw new Error(`${key} is not a getter.`);
+
+	setMember('getters', target, key, descriptor.get);
+}
+
+export function Mutation(target: any, key: string, descriptor: PropertyDescriptor): void {
+	if (typeof descriptor.value !== 'function') throw new Error(`${key} is not a method.`);
+
+	setMember('mutations', target, key, descriptor.value);
+}
+
+export function Action(target: any, key: string, descriptor: PropertyDescriptor): void {
+	if (typeof descriptor.value !== 'function') throw new Error(`${key} is not a method.`);
+
+	setMember('actions', target, key, descriptor.value);
+}
+
+export function Child(child: object): (target: any, key: string) => void;
+export function Child(target: any, key: string): void;
+export function Child(): any {
+	if (arguments.length === 1) {
+		const child = arguments[0];
+		return function (target: any, key: string) {
+			setModule(target, key, child);
+		}
 	} else {
-		return function (target: any) {
-			return createModule(target, false, argument);
-		}
+		const target = arguments[0] as any;
+		const key = arguments[1] as string;
+		const child = Reflect.getMetadata('design:type', target, key);
+		setModule(target, key, child);
+	}
+
+	function setModule(target: any, key: string, child: any) {
+		if (typeof child !== 'function' && typeof child !== 'object') throw new Error(`${child} is not a module definition.`);
+
+		setMember('modules', target, key, child);
 	}
 }
 
-export function Getter(target: ModuleInterface, key: string, descriptor: PropertyDescriptor): void {
-	if (typeof descriptor.get === 'function' && typeof target.constructor === 'function') {
-		const Module = target.constructor as DecoratedClass;
-		(Module.__getters__ || (Module.__getters__ = Object.create(null)))[key] = descriptor.get;
-	}
+function setMember(type: 'getters' | 'mutations' | 'actions' | 'modules', target: any, key: string, value: any): void {
+	if (typeof target.constructor !== 'function') throw new Error(`${target} has no constructor function.`);
+
+	const Module = target.constructor as DecoratedClass;
+	const members = Module.__members__ || (Module.__members__ = {});
+	const entries = members[type] || (members[type] = Object.create(null));
+	entries[key] = value;
 }
 
-export function Mutation(target: ModuleInterface, key: string, descriptor: PropertyDescriptor): void {
-	if (typeof descriptor.value === 'function' && typeof target.constructor === 'function') {
-		const Module = target.constructor as DecoratedClass;
-		(Module.__mutations__ || (Module.__mutations__ = Object.create(null)))[key] = descriptor.value;
-	}
-}
-
-export function Action(target: ModuleInterface, key: string, descriptor: PropertyDescriptor): void {
-	if (typeof descriptor.value === 'function' && typeof target.constructor === 'function') {
-		const Module = target.constructor as DecoratedClass;
-		(Module.__actions__ || (Module.__actions__ = Object.create(null)))[key] = descriptor.value;
-	}
-}
-
-export function SubModule(Module: typeof ModuleInterface): (target: ModuleInterface, key: string) => void;
-export function SubModule(target: ModuleInterface, key: string): void;
-export function SubModule(...args: any[]) {
-	if (args.length !== 1) {
-		const target = args[0] as ModuleInterface;
-		const key = args[1] as string;
-		const type = Reflect.getMetadata('design:type', target, key);
-		addModule(target, key, type)
-		return;
-	} else {
-		const Module = args[0] as ModuleInterface;
-		return function (target: ModuleInterface, key: string) {
-			addModule(target, key, Module);
-		}
-	}
-
-	function addModule(target: ModuleInterface, key: string, module: ModuleInterface) {
-		if (typeof module === 'function' && typeof target.constructor === 'function') {
-			const Module = target.constructor as DecoratedClass;
-			(Module.__modules__ || (Module.__modules__ = Object.create(null)))[key] = module;
-		}
-	}
-}
-
-function createModule(Module: typeof ModuleInterface & DecoratedClass, isStore: boolean, options: any = {}) {
+function createModule(Module: Vuex.Module<any, any> & DecoratedClass, options?: any): any {
 	Object.assign(Module, options);
 
-	const originalState = Module.state;
-	const newState = () => Object.assign(Reflect.construct(Module, []), originalState);
-	Module.state = isStore ? newState() : newState;
+	const master = Object.assign({ [TypeSymbol]: Module }, Reflect.construct(Module, []), Module.state);
+	Module.state = () => Object.assign({}, master);
 
-	if (Module.__getters__) {
-		const getters = Object.create(null);
-		for (const key in Module.__getters__) {
-			const original = Module.__getters__[key];
-			getters[key] = function (state: any, getters: any, rootState: any, rootGetters: any): any {
-				const proxy = getGetterProxy(Module, { state, getters, rootState, rootGetters });
-				return original.call(proxy);
+	if (Module.__members__) {
+		const members = Module.__members__;
+
+		if (members.getters) {
+			const getters = Object.create(null);
+			for (const key in members.getters) {
+				const original = members.getters[key];
+				getters[key] = function (state: any, getters: any, rootState: any, rootGetters: any): any {
+					return original.call(getProxy(new GetterContext(state, getters, rootState, rootGetters)));
+				}
 			}
+
+			Module.getters = Object.assign(getters, Module.getters);
 		}
 
-		Module.getters = Object.assign(getters, Module.getters);
-	}
-
-	if (Module.__mutations__) {
-		const mutations = Object.create(null);
-		for (const key in Module.__mutations__) {
-			const original = Module.__mutations__[key];
-			mutations[key] = function (state: any, payload?: any[]): any {
-				return original.apply(state, payload);
+		if (members.mutations) {
+			const mutations = Object.create(null);
+			for (const key in members.mutations) {
+				const original = members.mutations[key];
+				mutations[key] = function (state: any, payload?: any[]): any {
+					return original.apply(getProxy(new MutationContext(state)), payload);
+				}
 			}
+
+			Module.mutations = Object.assign(mutations, Module.mutations);
 		}
 
-		Module.mutations = Object.assign(mutations, Module.mutations);
-	}
-
-	if (Module.__actions__) {
-		const actions = Object.create(null);
-		for (const key in Module.__actions__) {
-			const original = Module.__actions__[key];
-			actions[key] = function (context: any, payload?: any[]): any {
-				const proxy = getActionProxy(Module, context);
-				return original.apply(proxy, payload);
+		if (members.actions) {
+			const actions = Object.create(null);
+			for (const key in members.actions) {
+				const original = members.actions[key];
+				actions[key] = function (context: any, payload?: any[]): any {
+					return original.apply(getProxy(new ActionContext(context)), payload);
+				}
 			}
+
+			Module.actions = Object.assign(actions, Module.actions);
 		}
 
-		Module.actions = Object.assign(actions, Module.actions);
-	}
-
-	if (Module.__modules__) {
-		Module.modules = Object.assign(Object.create(null), Module.__modules__, Module.modules);
+		if (members.modules) {
+			Module.modules = Object.assign(Object.create(null), members.modules, Module.modules);
+		}
 	}
 
 	return Module;
 }
 
-const getterProxyCache = new WeakMap();
-const actionProxyCache = new WeakMap();
+const handlers = new WeakMap<DecoratedClass, ProxyHandler<Context>>();
+let altHandler: ProxyHandler<Context>;
 
-function getGetterProxy(Module: DecoratedClass, context: GetterContextWithRoot): any {
-	let proxy = getterProxyCache.get(context.state);
-	if (!proxy) getterProxyCache.set(context.state, proxy = createGetterProxy(Module, context));
-	return proxy;
+type PropertyMap = { [key: string]: (context: Context, key: string) => any };
+const basicProps: PropertyMap = {
+	$state(context) { return context.state; },
+	$getters(context) { return context.getters; },
+	$commit(context) { return context.commit; },
+	$dispatch(context) { return context.dispatch; },
+	$root(context) { return getProxy(new RootContext(context)); },
+};
+
+function getProxy(context: Context): any {
+	return new Proxy(context, getProxyHandler(context.state[TypeSymbol]));
 }
 
-function createGetterProxy(Module: DecoratedClass, context: GetterContextWithRoot): any;
-function createGetterProxy(Module: DecoratedClass, context: GetterContext, root?: (() => any) | null, path?: string): any;
-function createGetterProxy(Module: DecoratedClass, context: GetterContext, root?: (() => any) | null, path: string = ""): any {
-	if (root === undefined) root = createRootProxy(Module, context as GetterContextWithRoot);
-
-	const { __root__, __getters__, __modules__ } = Module;
-	const { state, getters } = context;
-
-	const cache = Object.create(null);
-	return new Proxy(state, {
-		get: (target, prop, receiver) => {
-			if (typeof prop === 'string') {
-				if (__root__ && prop === __root__.key) return getCache(prop, () => root ? root() : receiver);
-				if (__getters__ && prop in __getters__) return getters[path + prop];
-				if (__modules__ && prop in __modules__) return getCache(prop, () => createSubProxy(prop, __modules__[prop]));
-			}
-			return target[prop];
-		}
-	});
-
-	function createRootProxy(Module: DecoratedClass, context: GetterContextWithRoot): any {
-		if (Module.__root__) {
-			const { rootState: state, rootGetters: getters } = context;
-			const rootContext = { state, getters };
-
-			return createGetterProxy(Module.__root__.module(), rootContext, null);
-		}
-		return undefined;
+function getProxyHandler(Module?: DecoratedClass): ProxyHandler<Context> {
+	if (Module) {
+		let handler = handlers.get(Module);
+		if (!handler) handlers.set(Module, handler = createProxyHandler(Module));
+		return handler;
 	}
-
-	function createSubProxy(name: string, SubModule: DecoratedClass): any {
-		const newPath = SubModule.namespaced ? `${path}${name}/` : path;
-		return createGetterProxy(SubModule, context, root, newPath);
-	}
-
-	function getCache<T>(key: string, factory: () => T): T {
-		return (cache[key] || (cache[key] = factory()));
-	}
+	return altHandler || (altHandler = createProxyHandler());
 }
 
-function getActionProxy(Module: DecoratedClass, context: ActionContextWithRoot): any {
-	let proxy = actionProxyCache.get(context.state);
-	if (!proxy) actionProxyCache.set(context.state, proxy = createActionProxy(Module, context));
-	return proxy;
+function createProxyHandler(Module?: DecoratedClass): ProxyHandler<Context> {
+	return { get: createProxyGetHandler(Module), set: setHandler };
 }
 
-function createActionProxy(Module: DecoratedClass, context: ActionContextWithRoot): any;
-function createActionProxy(Module: DecoratedClass, context: ActionContext, root?: (() => any) | null, path?: string): any;
-function createActionProxy(Module: DecoratedClass, context: ActionContext, root?: (() => any) | null, path: string = ""): any {
-	if (root === undefined) root = () => createRootProxy(Module, context as ActionContextWithRoot);
-
-	const { __root__, __getters__, __mutations__, __actions__, __modules__ } = Module;
-	const { state, getters, commit, dispatch } = context;
-
-	const cache = Object.create(null);
-	return new Proxy(state, {
-		get: (target, prop, receiver) => {
-			if (typeof prop === 'string') {
-				if (__root__ && prop === __root__.key) return getCache(prop, () => root ? root() : receiver);
-				if (__getters__ && prop in __getters__) return getters[path + prop];
-				if (__mutations__ && prop in __mutations__) return (...args: any[]) => commit.call(null, path + prop, args);
-				if (__actions__ && prop in __actions__) return (...args: any[]) => dispatch.call(null, path + prop, args);
-				if (__modules__ && prop in __modules__) return getCache(prop, () => createSubProxy(prop, __modules__[prop]));
-			}
-			return target[prop];
-		}
-	});
-
-	function createRootProxy(Module: DecoratedClass, context: ActionContextWithRoot): any {
-		if (Module.__root__) {
-			const { rootState: state, rootGetters: getters, commit, dispatch } = context;
-			const rootContext = {
-				state,
-				getters,
-				commit(type: string, payload: any) { return commit(type, payload, { root: true }); },
-				dispatch(type: string, payload: any) { return dispatch(type, payload, { root: true }); },
-			}
-
-			return createActionProxy(Module.__root__.module(), rootContext, null);
-		}
-		return undefined;
+function createProxyGetHandler(Module?: DecoratedClass): ProxyHandler<Context>['get'] {
+	const props = Object.assign(Object.create(null) as {}, basicProps);
+	const members = Module && Module.__members__;
+	if (members) {
+		for (const key in members.getters || {}) props[key] = getGetter;
+		for (const key in members.mutations || {}) props[key] = getMutation;
+		for (const key in members.actions || {}) props[key] = getAction;
+		for (const key in members.modules || {}) props[key] = getModule;
 	}
 
-	function createSubProxy(name: string, SubModule: DecoratedClass): any {
-		const newPath = SubModule.namespaced ? `${path}${name}/` : path;
-		return createActionProxy(SubModule, context, root, newPath);
-	}
+	const prototype = (Module && Module.prototype) || Object.create(null);
 
-	function getCache<T>(key: string, factory: () => T): T {
-		return (cache[key] || (cache[key] = factory()));
-	}
+	return function (target, prop) {
+		return (
+			prop in props ? props[prop](target, prop as string) :
+				prop in prototype ? prototype[prop] : target.state[prop]
+		);
+	};
+}
+
+function getGetter(context: Context, key: string): any {
+	return context.getters[context.path + key];
+}
+
+function getMutation(context: Context, key: string): any {
+	return (...args: any[]) => context.commit.call(null, context.path + key, args);
+}
+
+function getAction(context: Context, key: string): any {
+	return (...args: any[]) => context.dispatch.call(null, context.path + key, args);
+}
+
+function getModule(context: Context, key: string): any {
+	const state = context.state[key];
+	const type = state[TypeSymbol];
+	const path = type && type.namespaced ? `${context.path}${key}/` : context.path;
+	return getProxy(new ModuleContext(context, state, path));
+}
+
+function setHandler(target: Context, prop: PropertyKey, value: any): boolean {
+	return target.writable ? Reflect.set(target.state, prop, value) : false;
 }

@@ -1,8 +1,8 @@
-import { ModuleInterface, Store, SubModule } from "modules/vuex-class-module";
-import PageModule from "modules/page";
+import { Module, Child } from "modules/vuex-class-module";
+import ResourceModule from "modules/resource";
 
-@Store
-export default class RootModule extends ModuleInterface {
-	@SubModule
-	public page: PageModule;
+@Module
+export default class RootModule {
+	@Child
+	public resource: ResourceModule;
 }
