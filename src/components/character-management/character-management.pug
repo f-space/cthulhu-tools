@@ -1,20 +1,19 @@
-section#character-management.page
-	.contents
-		header.page-title
-			h2 キャラクター管理
-		nav.navigations
-			router-link(tag="button", type="button", to="/status/character-edit") 作成
-		.characters
-			template.character-template
-				.character
-					label.check
-						input(type="checkbox")
-						span
-					.name
-					button.visibility(type="button", data-shown="表示", data-hidden="非表示")
-		.commands
-			button.command.delete(type="button") 削除
-			button.command.clone(type="button") 複製
-			button.command.edit(type="button") 編集
-			button.command.import(type="button") 読込み
-			button.command.export(type="button") 書出し
+app-page#character-management
+	header.page-title
+		h2 キャラクター管理
+	nav.navigations
+		router-link(tag="button", type="button", to="/status/character-edit") 作成
+	.characters
+		template.character-template
+			.character
+				label.check
+					input(type="checkbox")
+					span
+				.name
+				button.visibility(type="button", data-shown="表示", data-hidden="非表示")
+	.commands
+		button.command.delete(type="button") 削除
+		button.command.clone(type="button") 複製
+		button.command.edit(type="button") 編集
+		button.command.import(type="button") 読込み
+		button.command.export(type="button") 書出し
