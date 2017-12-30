@@ -1,0 +1,23 @@
+@import "mixin";
+
+.navigation {
+	@include unselectable;
+
+	display: flex;
+	align-items: stretch;
+	flex-flow: row nowrap;
+}
+
+.nav-item {
+	flex: 1 1 0;
+
+	&.slide-enter-active,
+	&.slide-leave-active {
+		transition: flex 300ms;
+	}
+
+	&.slide-enter,
+	&.slide-leave-to, {
+		flex: 0 0 0;
+	}
+}

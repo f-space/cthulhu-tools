@@ -1,0 +1,15 @@
+@import "mixin";
+
+.header {
+	@include unselectable;
+
+	text-align: center;
+	line-height: 1.2;
+}
+
+.title {
+	@include designed-font;
+
+	display: inline;
+	cursor: pointer;
+}

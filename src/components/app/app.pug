@@ -1,17 +1,8 @@
-#app
-	div#resources(v-show="false")
+.app
+	.resources(v-show="false")
 		img(src="image/dice.png", data-layout="image/dice.json", ref="diceImage")
 		audio(src="audio/dice.wav", preload="auto", ref="diceSound")
-	header#header
-		router-link(tag="h1", to="/")#title Cthulhu Tools
-	main#main
+	page-header.header
+	main.page
 		router-view
-	nav#menu
-		router-link.menu-item(tag="div", to="/dice") Dice
-		router-link.menu-item(tag="div", to="/status") Status
-		router-link.extra-menu-item.two-lines(tag="div", to="/status/character-management", event="")
-			span Character
-			span Management
-		router-link.extra-menu-item.two-lines(tag="div", to="/status/character-edit", event="")
-			span Character
-			span Edit
+	page-navigation.navigation

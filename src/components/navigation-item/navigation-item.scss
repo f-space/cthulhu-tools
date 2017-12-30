@@ -1,0 +1,31 @@
+@import "mixin";
+
+.nav-item {
+	@include designed-font;
+
+	display: flex;
+	align-items: center;
+	flex-flow: column nowrap;
+	justify-content: center;
+	opacity: 0.5;
+	background: linear-gradient(transparent 80%, red);
+	cursor: pointer;
+	overflow: hidden;
+	line-height: 1.2;
+	font-size: 3rem;
+
+	&.active {
+		opacity: 1;
+		background: linear-gradient(transparent 50%, green);
+		cursor: default;
+	}
+
+	&.long {
+		line-height: 0.8;
+		font-size: 2rem;
+	}
+}
+
+.extra {
+	@include designed-font(limegreen);
+}

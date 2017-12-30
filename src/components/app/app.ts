@@ -1,10 +1,17 @@
 import Vue from 'vue';
-import { Component, Provide } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import { Action, namespace } from 'vuex-class';
+import PageHeader from "@component/header";
+import PageNavigation from "@component/navigation";
 
 const ResourceAction = namespace("resource", Action);
 
-@Component
+@Component({
+	components: {
+		PageHeader,
+		PageNavigation,
+	}
+})
 export default class CthulhuApp extends Vue {
 	@ResourceAction("updateDiceImage")
 	public setDiceImage: (payload: [HTMLImageElement]) => void;

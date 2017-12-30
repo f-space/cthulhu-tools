@@ -1,0 +1,10 @@
+nav.navigation
+	navigation-item(to="/dice") Dice
+	navigation-item(to="/status") Status
+	transition(name="slide")
+		navigation-item(v-if="$route.path === '/status/character-management'", :key="$route.path", long)
+			span Character
+			span Management
+		navigation-item(v-if="$route.path === '/status/character-edit'", :key="$route.path", long)
+			span Character
+			span Edit
