@@ -3,7 +3,9 @@ import HomePage from "@component/home";
 import DicePage from "@component/dice";
 import StatusPage from "@component/status";
 import CharacterManagementPage from "@component/character-management";
+import CharacterManagementNav from "@component/character-management-nav";
 import CharacterEditPage from "@component/character-edit";
+import CharacterEditNav from "@component/character-edit-nav";
 
 export default {
 	routes: [
@@ -21,11 +23,17 @@ export default {
 		},
 		{
 			path: "/status/character-management",
-			component: CharacterManagementPage,
+			components: {
+				default: CharacterManagementPage,
+				navigation: CharacterManagementNav,
+			},
 		},
 		{
 			path: "/status/character-edit",
-			component: CharacterEditPage,
+			components: {
+				default: CharacterEditPage,
+				navigation: CharacterEditNav,
+			},
 		},
 	],
 	linkActiveClass: "",
