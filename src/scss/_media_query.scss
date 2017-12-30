@@ -4,7 +4,7 @@
 	}
 }
 
-@media only screen and (orientation: portrait) {
+@media only screen and (max-aspect-ratio: 2/3) {
 	body {
 		max-width: none;
 	}
