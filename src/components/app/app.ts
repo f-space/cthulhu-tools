@@ -1,6 +1,8 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Watch } from 'vue-property-decorator';
 import { Action, namespace } from 'vuex-class';
+import mixin from "mixins/mixin";
+import { DialogHost } from "mixins/dialog";
 import PageHeader from "@component/header";
 import PageNavigation from "@component/navigation";
 
@@ -12,7 +14,7 @@ const ResourceAction = namespace("resource", Action);
 		PageNavigation,
 	}
 })
-export default class CthulhuApp extends Vue {
+export default class CthulhuApp extends mixin(Vue, DialogHost) {
 	@ResourceAction("updateDiceImage")
 	public setDiceImage: (payload: [HTMLImageElement]) => void;
 
@@ -25,5 +27,10 @@ export default class CthulhuApp extends Vue {
 
 		this.setDiceImage([image]);
 		this.setDiceSound([sound]);
+	}
+
+	@Watch("$route")
+	protected onRouteChanged(): void {
+		this.$dialog.cancel();
 	}
 }

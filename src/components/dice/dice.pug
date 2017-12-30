@@ -6,5 +6,3 @@ app-page#dice
 		.dice-set(:class="{active: type === CUSTOM_TYPE}", @click="openCustomDiceDialog") custom
 		.dice-set(:class="{active: type === preset}", @click="type = preset", v-for="preset in presets") {{ preset }}
 	button.roll-button(type="button", @click="roll") Roll
-
-	component(slot="dialog", :is="dialog", :init-count="custom.count", :init-max="custom.max", @closed="closeCustomDiceDialog")

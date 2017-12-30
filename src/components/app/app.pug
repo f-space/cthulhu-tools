@@ -2,7 +2,9 @@
 	.resources(v-show="false")
 		img(src="image/dice.png", data-layout="image/dice.json", ref="diceImage")
 		audio(src="audio/dice.wav", preload="auto", ref="diceSound")
-	page-header.header
-	main.page
-		router-view
-	page-navigation.navigation
+	.overlay
+		dialog-slot
+	.container
+		page-header.header
+		router-view.page
+		page-navigation.navigation

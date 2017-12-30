@@ -2,12 +2,17 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import PageDialog from "@component/dialog";
 
+export interface CustomDiceDialogResult {
+	readonly count: number;
+	readonly max: number;
+}
+
 @Component({
 	components: {
 		PageDialog,
 	}
 })
-export default class CustomDiceDialog extends Vue {
+export default class CustomDiceDialog extends PageDialog<CustomDiceDialogResult> {
 	@Prop({ default: 1 })
 	public initCount: number;
 
@@ -24,8 +29,7 @@ export default class CustomDiceDialog extends Vue {
 	@Watch("max")
 	protected onMaxChanged(): void { this.valid = this.validate(); }
 
-	public ok(): void { this.$emit('closed', { canceled: false, count: this.count, max: this.max }); }
-	public cancel(): void { this.$emit('closed', { canceled: true }); }
+	public ok(): void { this.commit({ count: this.count, max: this.max }); }
 
 	private validate(): boolean {
 		const { count, max } = this.$refs as { [prop: string]: HTMLInputElement };
