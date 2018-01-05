@@ -1,11 +1,11 @@
 import { RouterOptions } from 'vue-router';
-import HomePage from "@component/home";
-import DicePage from "@component/dice";
-import StatusPage from "@component/status";
-import CharacterManagementPage from "@component/character-management";
-import CharacterManagementNav from "@component/character-management-nav";
-import CharacterEditPage from "@component/character-edit";
-import CharacterEditNav from "@component/character-edit-nav";
+import HomePage from "@component/pages/home";
+import DicePage from "@component/pages/dice";
+import StatusPage from "@component/pages/status";
+import CharacterManagementPage from "@component/pages/character-management";
+import CharacterManagementNav from "@component/pages/character-management-nav";
+import CharacterEditPage from "@component/pages/character-edit";
+import CharacterEditNav from "@component/pages/character-edit-nav";
 
 export default {
 	routes: [

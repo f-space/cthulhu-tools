@@ -3,8 +3,8 @@ import { Component, Watch } from 'vue-property-decorator';
 import { Action, namespace } from 'vuex-class';
 import mixin from "mixins/mixin";
 import { DialogHost } from "mixins/dialog";
-import PageHeader from "@component/header";
-import PageNavigation from "@component/navigation";
+import PageHeader from "@component/frame/header";
+import PageNavigation from "@component/frame/navigation";
 
 const ResourceAction = namespace("resource", Action);
 

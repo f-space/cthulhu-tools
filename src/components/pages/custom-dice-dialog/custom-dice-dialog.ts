@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import PageDialog from "@component/dialog";
+import PageDialog from "@component/frame/dialog";
 
 export interface CustomDiceDialogResult {
 	readonly count: number;

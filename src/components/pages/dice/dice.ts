@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
 import { DiceSet } from "models/dice";
-import AppPage from "@component/page";
-import DiceView from "@component/dice-view";
-import CustomDiceDialog from "@component/dice/custom-dice-dialog";
+import DiceView from "@component/organisms/dice-view";
+import CustomDiceDialog from "@component/pages/custom-dice-dialog";
+import AppPage from "@component/frame/page";
 
 type CustomDice = { count: number, max: number };
 

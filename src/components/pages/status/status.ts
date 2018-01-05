@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import AppPage from "@component/page";
+import AppPage from "@component/frame/page";
 
 @Component({
 	components: {

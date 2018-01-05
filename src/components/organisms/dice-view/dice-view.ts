@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import ResizeEvent, { mixin } from "mixins/resize-event";
-import DiceRoll from "@component/dice-roll";
-import DiceRowLayout from "@component/dice-row-layout";
-import DiceCircleLayout from "@component/dice-circle-layout";
-import DiceFlowLayout from "@component/dice-flow-layout";
-import DiceImage from "@component/dice-image";
-import DiceNumberDisplay from "@component/dice-number-display";
+import DiceImage from "@component/atoms/dice-image";
+import DiceNumberDisplay from "@component/atoms/dice-number-display";
+import DiceRowLayout from "@component/molecules/dice-row-layout";
+import DiceCircleLayout from "@component/molecules/dice-circle-layout";
+import DiceFlowLayout from "@component/molecules/dice-flow-layout";
+import DiceRoll from "@component/organisms/dice-roll";
 
 @Component({
 	components: {

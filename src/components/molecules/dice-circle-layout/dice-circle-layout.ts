@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import DiceLayout from "@component/dice-layout";
+import DiceLayout from "@component/molecules/dice-layout";
 
 type Position = { x: number, y: number };
 
