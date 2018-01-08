@@ -2,46 +2,44 @@
 	p { margin: 1ex 0; }
 	li { margin-left: 2em; }
 
-	.contents {
-		.heading {
-			margin: 1ex 0;
-			text-align: center;
+	.heading {
+		margin: 1ex 0;
+		text-align: center;
 
-			&::before,
-			&::after {
-				margin: 0 0.5em;
-				content: "-";
-			}
+		&::before,
+		&::after {
+			margin: 0 0.5em;
+			content: "-";
 		}
+	}
 
-		.table {
-			display: table;
-			width: 100%;
-			table-layout: fixed;
-			border-collapse: collapse;
+	.table {
+		display: table;
+		width: 100%;
+		table-layout: fixed;
+		border-collapse: collapse;
+
+		& > * {
+			display: table-row;
 
 			& > * {
-				display: table-row;
-
-				& > * {
-					box-sizing: border-box;
-					display: table-cell;
-					border: solid 1px red;
-					padding: 0.5ex 0.5em;
-				}
+				box-sizing: border-box;
+				display: table-cell;
+				border: solid 1px red;
+				padding: 0.5ex 0.5em;
 			}
 		}
+	}
 
-		.assets,
-		.libraries {
-			font-size: 0.8em;
+	.assets,
+	.libraries {
+		font-size: 0.8em;
 
-			dt { width: 55%; }
-			dd { width: 45%; }
-		}
+		dt { width: 55%; }
+		dd { width: 45%; }
+	}
 
-		.license {
-			font-size: 0.8em;
-		}
+	.license {
+		font-size: 0.8em;
 	}
 }
