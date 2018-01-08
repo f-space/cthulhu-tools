@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import { State, namespace } from 'vuex-class';
+import { DiceImage as DiceImageRenderer } from "models/resource";
 import ResizeEvent, { mixin } from "mixins/resize-event";
 import DiceImage from "@component/atoms/dice-image";
 import DiceNumberDisplay from "@component/atoms/dice-number-display";
@@ -8,6 +10,8 @@ import DiceCircleLayout from "@component/molecules/dice-circle-layout";
 import DiceFlowLayout from "@component/molecules/dice-flow-layout";
 import DiceRoll from "@component/organisms/dice-roll";
 
+const ResourceState = namespace("resource", State);
+
 @Component({
 	components: {
 		DiceImage,
@@ -15,6 +19,9 @@ import DiceRoll from "@component/organisms/dice-roll";
 	}
 })
 export default class DiceView extends mixin(DiceRoll, ResizeEvent) {
+	@ResourceState("diceImage")
+	public image: DiceImageRenderer | null;
+
 	private width: number = 0;
 	private height: number = 0;
 

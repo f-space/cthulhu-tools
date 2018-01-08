@@ -1,26 +1,14 @@
+import { DiceImage, DiceImageLayout } from "models/resource";
 import { Module, Mutation, Action } from "modules/vuex-class-module"
-
-export interface DiceImageLayout {
-	[type: string]: DiceSprite[];
-}
-
-export interface DiceSprite {
-	x: number;
-	y: number;
-	w: number;
-	h: number;
-}
 
 @Module({ namespaced: true })
 export default class ResourceModule {
-	public diceImage: HTMLImageElement | null = null;
-	public diceImageLayout: DiceImageLayout | null = null;
+	public diceImage: DiceImage | null = null;
 	public diceSound: HTMLAudioElement | null = null;
 
 	@Mutation
-	public setDiceImage(image: HTMLImageElement, layout: DiceImageLayout): void {
+	public setDiceImage(image: DiceImage): void {
 		this.diceImage = image;
-		this.diceImageLayout = layout;
 	}
 
 	@Mutation
@@ -29,13 +17,13 @@ export default class ResourceModule {
 	}
 
 	@Action
-	public updateDiceImage(image: HTMLImageElement): void {
-		const url = image.dataset.layout;
+	public updateDiceImage(source: HTMLImageElement): void {
+		const url = source.dataset.layout;
 		if (url) {
 			fetch(url).then(response => {
 				if (response.ok) {
 					response.json().then(data => {
-						this.setDiceImage(image, data);
+						this.setDiceImage(new DiceImage(source, data));
 					});
 				}
 			});
