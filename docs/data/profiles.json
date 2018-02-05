@@ -1,7 +1,7 @@
 [
 	{
 		"uuid": "cabf304b-7cfd-4917-8800-30a93adb6110",
-		"version": 0,
+		"version": 1,
 		"name": "デフォルト プロファイル",
 		"attributes": [
 			"a29e11a0-f7fa-4287-a54d-28d258cec5cb",
@@ -29,11 +29,6 @@
 			"01e9829a-6353-4278-bbde-bd572a852dd5",
 			"61d7fbac-01e2-4b6e-acad-d676402bfdf3"
 		],
-		"skillSlots": {
-			"initial": 8
-		},
-		"itemSlots": {
-			"initial": 5
-		}
+		"default": true
 	}
 ]
