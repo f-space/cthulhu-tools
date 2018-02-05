@@ -5,6 +5,7 @@
 		"stylelint-config-concentric-order"
 	],
 	"rules": {
-		"indentation": "tab"
+		"indentation": "tab",
+		"no-empty-source": null
 	}
 }
