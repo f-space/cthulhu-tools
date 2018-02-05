@@ -3,8 +3,8 @@
 .dialog {
 	display: flex;
 	position: relative;
-	align-items: stretch;
 	flex-flow: column nowrap;
+	align-items: stretch;
 	background: linear-gradient(rgb(128, 0, 0), black 1rem, black calc(100% - 1rem), rgb(128, 0, 0));
 	padding: calc(1rem + 1ex) 1em;
 	max-height: 80%;

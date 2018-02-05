@@ -4,8 +4,8 @@
 	@include unselectable;
 
 	display: flex;
-	align-items: stretch;
 	flex-flow: row nowrap;
+	align-items: stretch;
 }
 
 .nav-item {

@@ -1,8 +1,8 @@
 .attribute {
 	display: flex;
-	align-items: flex-end;
 	flex: 0 0 auto;
 	flex-flow: row nowrap;
+	align-items: flex-end;
 	margin-top: 1.5ex;
 	border-bottom: dashed 1px rgb(128, 0, 0);
 	padding-bottom: 0.5ex;
@@ -19,9 +19,9 @@
 
 .input {
 	display: flex;
-	align-items: center;
 	flex: 1 1 0;
 	flex-flow: row wrap;
+	align-items: center;
 	overflow: hidden;
 	text-align: center;
 	text-overflow: ellipsis;

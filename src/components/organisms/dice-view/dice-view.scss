@@ -23,8 +23,8 @@
 
 .dice-group {
 	display: flex;
-	align-items: center;
 	flex-flow: row nowrap;
+	align-items: center;
 	justify-content: center;
 	margin: 0 var(--dice-group-margin, calc(var(--dice-margin)));
 	min-width: 0;

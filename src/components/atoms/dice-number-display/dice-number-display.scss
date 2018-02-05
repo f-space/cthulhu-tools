@@ -4,8 +4,8 @@
 	@include blur-text-double(0.1ex, 0.25ex, red);
 
 	display: flex;
-	align-items: center;
 	flex-flow: row nowrap;
+	align-items: center;
 	justify-content: center;
 	opacity: 0.5;
 	color: white;

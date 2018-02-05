@@ -36,8 +36,8 @@
 	@include unselectable;
 	@include designed-font;
 
-	align-self: center;
 	flex: 0 0 auto;
+	align-self: center;
 	border: none;
 	background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255, 0, 0, 0.5), transparent);
 	cursor: pointer;

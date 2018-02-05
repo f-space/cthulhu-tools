@@ -4,8 +4,8 @@
 	@include designed-font;
 
 	display: flex;
-	align-items: center;
 	flex-flow: column nowrap;
+	align-items: center;
 	justify-content: center;
 	opacity: 0.5;
 	background: linear-gradient(transparent 80%, red);
