@@ -4,55 +4,27 @@ app-page#character-edit
 	.entry
 		section.attributes
 			header: h3 能力値
+			attribute-input(v-for="attribute in attributes", :key="attribute.uuid", :attribute="attribute", :evaluator="evaluator", :image="diceImage",
+				:data="attributeParams[attribute.id]", @input="value => { updateAttributeParams(attribute.id, value); }")
 		section.skills
 			header: h3 技能
 			.point-stats
-				span.consumed
+				span.consumed {{ consumedSkillPoints }}
 				span /
-				span.available
+				span.available {{ availableSkillPoints }}
+			.commands
+				button(type="button", @click="newSkillSlot") 追加
+				button(type="button", @click="deleteSkillSlot") 削除
+			skill-input(v-for="(_, index) in skillSlots", :key="index", :skills="skills", :evaluator="evaluator" v-model="skillSlots[index]")
 		section.items
 			header: h3 所持品
+			.commands
+				button(type="button", @click="newItemSlot") 追加
+				button(type="button", @click="deleteItemSlot") 削除
+			.item(v-for="(_, index) in itemSlots", :key="index")
+				select.id(type="text", pattern="[\\w_]*", v-model="id")
+					option(value="", disabled) 未選択
+					option(v-for="item in items", :value="item.uuid") {{ item.name }}
 		.actions
-			button.ok.commit(type="button") OK
-			button.cancel(type="button") Cancel
-		template.attribute-template
-			.attribute
-				.name
-				.value
-				button.input(type="button") 入力
-		template.skill-template
-			.skill
-				select.id(type="text", pattern="[\\w_]*")
-				.base
-				input.points(type="number", step="1")
-				.value
-		template.item-template
-			.item
-				input.name(type="text")
-				input.description(type="text")
-
-	#character-input-dialog.dialog(slot="dialog", data-title="Input")
-		template.contents-template
-			.contents
-				.info
-					.name
-					| =
-					.expression
-				.inputs
-				.value
-				.buttons
-					button.ok.commit(type="button") OK
-					button.cancel(type="button") Cancel
-		template.dice-input-template
-			.input.dice
-				.input-name
-				.dice-view
-				button.roll-button(type="button") Roll
-		template.number-input-template
-			.input.number
-				.input-name
-				input(type="number")
-		template.text-input-template
-			.input.text
-				.input-name
-				input(type="text")
+			button.ok.commit(type="button", :disabled="!valid", @click="ok") OK
+			button.cancel(type="button", @click="cancel") Cancel

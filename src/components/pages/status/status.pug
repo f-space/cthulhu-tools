@@ -4,34 +4,22 @@ app-page#status
 	nav.navigations
 		router-link(tag="button", type="button", to="/status/character-management") 管理
 	.characters
-		template.character-template
-			section.character
-				section
-					header: h3 人物/能力
-					dl.attributes
-				section
-					header: h3 技能
-					dl.skills
-				section
-					header: h3 所持品
-					dl.items
-		template.integer-template
-			.attribute.integer
-				dt.attr-name
-				dd.attr-value
-		template.number-template
-			.attribute.number
-				dt.attr-name
-				dd.attr-value
-		template.text-template
-			.attribute.text
-				dt.attr-name
-				dd.attr-value
-		template.skill-template
-			.skill
-				dt.skill-name
-				dd.skill-score
-		template.item-template
-			.item
-				dt.item-name
-				dd.item-desc
+		section.character(v-for="character in characters", :key="character.$uuid")
+			section
+				header: h3 人物/能力
+				dl.attributes
+					.attribute(v-for="attribute in character.$attributes", :key="attribute.uuid", :class="attribute.type")
+						dt.attr-name {{ attribute.name }}
+						dd.attr-value {{ character[attribute.id] }}
+			section
+				header: h3 技能
+				dl.skills
+					.skill(v-for="skill in character.$skills", :key="skill.id")
+						dt.skill-name {{ skill.name }}
+						dd.skill-score {{ character[skill.id] }}
+			section
+				header: h3 所持品
+				dl.items
+					.item(v-for="item in character.$items", :key="item.uuid")
+						dt.item-name {{ item.name }}
+						dd.item-desc {{ item.description }}

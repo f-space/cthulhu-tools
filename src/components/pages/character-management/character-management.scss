@@ -1,101 +1,72 @@
-#character-management {
-	.contents { overflow: hidden; }
+.characters {
+	display: flex;
+	flex: 1 1 0;
+	flex-flow: column nowrap;
+	margin: 1ex 0;
+	border-top: solid 1px red;
+	border-bottom: solid 1px red;
+	padding: 2ex 0.5em;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
 
-	.characters {
-		display: flex;
-		flex: 1 1 0;
-		flex-flow: column nowrap;
-		margin: 1ex 0;
-		border-top: solid 1px red;
-		border-bottom: solid 1px red;
-		padding: 2ex 0.5em;
-		overflow-x: hidden;
-		overflow-y: auto;
+.character {
+	flex: 0 0 auto;
+	border-bottom: dashed 1px rgb(128, 0, 0);
+	padding-bottom: 0.5ex;
+}
 
-		.character {
-			display: flex;
-			align-items: center;
-			flex: 0 0 auto;
-			flex-flow: row nowrap;
-			justify-content: flex-start;
-			border-bottom: dashed 1px rgb(128, 0, 0);
-			padding-bottom: 0.5ex;
+.content {
+	display: flex;
+	align-items: center;
+	flex-flow: row nowrap;
+}
 
-			.check {
-				flex: 0 0 auto;
-				font-size: 2em;
-			}
+.name {
+	flex: 1 1 0;
+	margin-left: 0.5em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 1.2em;
+}
 
-			.name {
-				flex: 1 1 0;
-				margin-left: 0.5em;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				font-size: 1.2em;
-			}
+.visibility {
+	flex: 0 0 auto;
+	border-radius: 2ex;
+	border-color: rgb(128, 0, 0);
+	background: rgb(128, 0, 0);
+	width: 3.5em;
+	line-height: 1.4;
+	font-size: 0.9em;
 
-			.visibility {
-				flex: 0 0 auto;
-				border-radius: 2ex;
-				border-color: rgb(128, 0, 0);
-				background: rgb(128, 0, 0);
-				width: 3.5em;
-				line-height: 1.4;
-				font-size: 0.9em;
-
-				&::before {
-					content: attr(data-shown);
-				}
-
-				&.hidden {
-					background: transparent;
-
-					&::before {
-						content: attr(data-hidden);
-					}
-				}
-			}
-		}
+	&.hidden {
+		background: transparent;
 	}
+}
 
-	.commands {
-		display: flex;
-		align-items: center;
-		flex: 0 0 auto;
-		flex-flow: row nowrap;
-		justify-content: flex-end;
-		overflow-x: auto;
-		overflow-y: hidden;
+.commands {
+	display: flex;
+	align-items: center;
+	flex: 0 0 auto;
+	flex-flow: row nowrap;
+	justify-content: flex-end;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
 
-		.command {
-			flex: 0 0 3em;
-			transition: flex 300ms;
-			visibility: visible;
-			margin: 0 0.25em;
-			overflow: hidden;
-		}
-	}
+.command {
+	flex: 0 0 3em;
+	transition: flex 300ms;
+	visibility: visible;
+	margin: 0 0.25em;
+	overflow: hidden;
 
-	%hidden {
+	&.hidden {
 		flex: 0 0 0;
 		visibility: hidden;
 		margin: 0;
 		border: none;
 		padding: 0;
-	}
-
-	.characters:not(.selected) ~ .commands {
-		.delete,
-		.clone,
-		.export { @extend %hidden; }
-	}
-
-	.characters:not(.single) ~ .commands {
-		.edit { @extend %hidden; }
-	}
-
-	.characters.selected ~ .commands {
-		.import { @extend %hidden; }
 	}
 }

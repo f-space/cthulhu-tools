@@ -1,4 +1,4 @@
-import { RouterOptions } from 'vue-router';
+import { Route, RouterOptions } from 'vue-router';
 import HomePage from "@component/pages/home";
 import DicePage from "@component/pages/dice";
 import StatusPage from "@component/pages/status";
@@ -34,6 +34,7 @@ export default {
 				default: CharacterEditPage,
 				navigation: CharacterEditNav,
 			},
+			props: { default: (route: Route) => ({ uuid: route.query.uuid }) }
 		},
 	],
 	linkActiveClass: "",

@@ -1,0 +1,13 @@
+.attribute(:class="{ valid }")
+	.name {{ attribute.name }}
+	.input
+		template(v-for="segment in segments")
+			span(v-if="typeof segment === 'string'") {{ segment }}
+			component(
+				v-else,
+				:is="component(segment)",
+				:method="segment",
+				:value="data[segment.name]",
+				:image="segment.type === 'dice' ? image : undefined",
+				@input="value => onInput(segment.name, value)")
+	.value {{ value !== undefined ? value : "-" }}

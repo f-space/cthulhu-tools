@@ -1,0 +1,7 @@
+.skill
+	select.id(type="text", pattern="[\\w_]*", v-model="id")
+		option(value="", disabled) 未選択
+		option(v-for="skill in skills", :value="skill.id") {{ skill.name }}
+	.base {{ id !== "" ? base : "-" }}
+	input.points(type="number", :min="min", :max="max", step="1", v-model.number="point")
+	.value {{ id !== "" ? sum : "-" }}

@@ -4,16 +4,14 @@ app-page#character-management
 	nav.navigations
 		router-link(tag="button", type="button", to="/status/character-edit") 作成
 	.characters
-		template.character-template
-			.character
-				label.check
-					input(type="checkbox")
-					span
-				.name
-				button.visibility(type="button", data-shown="表示", data-hidden="非表示")
+		selectable-item.character(v-for="character in characters", :key="character.$uuid" v-model="checked[character.$uuid]")
+			.content
+				.name {{ character.name }}
+				button.visibility(v-if="views[character.$uuid].visible", type="button", @click="toggleVisibility(character.$uuid)") 表示
+				button.visibility.hidden(v-else, type="button", @click="toggleVisibility(character.$uuid)") 非表示
 	.commands
-		button.command.delete(type="button") 削除
-		button.command.clone(type="button") 複製
-		button.command.edit(type="button") 編集
-		button.command.import(type="button") 読込み
-		button.command.export(type="button") 書出し
+		button.command.delete(:class="{ hidden: !some }", type="button", @click="deleteOp") 削除
+		button.command.clone(:class="{ hidden: !some }", type="button", @click="cloneOp") 複製
+		button.command.edit(:class="{ hidden: !single }", type="button", @click="editOp") 編集
+		button.command.import(:class="{ hidden: false }", type="button", @click="importOp") 読込み
+		button.command.export(:class="{ hidden: !some }", type="button", @click="exportOp") 書出し

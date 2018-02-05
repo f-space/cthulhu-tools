@@ -12,11 +12,13 @@ const router = new VueRouter(routes);
 const store = new Vuex.Store(RootModule as any)
 const app = new AppComponent({ router, store });
 
-if (document.readyState !== 'loading') {
-	mount();
-} else {
-	document.addEventListener("DOMContentLoaded", mount);
-}
+store.dispatch("status/load").then(() => {
+	if (document.readyState !== 'loading') {
+		mount();
+	} else {
+		document.addEventListener("DOMContentLoaded", mount);
+	}
+});
 
 function mount() {
 	app.$mount("#app");;

@@ -1,0 +1,5 @@
+.selectable
+	label.check
+		input(type="checkbox", :checked="props.value", @change="listeners.input($event.target.checked)")
+		span
+	slot

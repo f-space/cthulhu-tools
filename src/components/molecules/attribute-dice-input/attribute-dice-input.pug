@@ -1,0 +1,2 @@
+.dice-input(@click="openInputDialog")
+	dice-image.dice(v-for="(dice, index) in dices", :key="index", :type="dice.type", :face="dice.face", :image="image")
