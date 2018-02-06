@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { AttributeData, Attribute, AttributeProvider } from "models/status";
 import DB from "models/storage";
 import { Module, Getter, Mutation, Action } from "modules/vuex-class-module";
+import BUILTIN_ATTRIBUTES_URL from "@resource/data/attributes.json";
 
 type AttributeTable = { [uuid: string]: Attribute };
 
@@ -51,6 +52,7 @@ export default class AttributeModule implements AttributeProvider {
 
 	@Action
 	public async load(): Promise<void> {
+		await this.loadBuiltins();
 		await DB.transaction("r", DB.attributes, () => {
 			return DB.attributes.toArray();
 		}).then(attributes => {
@@ -61,7 +63,7 @@ export default class AttributeModule implements AttributeProvider {
 	}
 
 	@Action
-	public async loadBuiltins(url: string): Promise<void> {
+	public async loadBuiltins(url: string = BUILTIN_ATTRIBUTES_URL): Promise<void> {
 		await fetch(url).then(response => {
 			if (response.ok) {
 				return response.json();

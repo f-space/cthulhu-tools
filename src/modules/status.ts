@@ -9,10 +9,6 @@ import SkillModule from "modules/skill";
 import ItemModule from "modules/item";
 import HistoryModule from "modules/history";
 
-const BUILTIN_PROFILES = "data/profiles.json";
-const BUILTIN_ATTRIBUTES = "data/attributes.json";
-const BUILTIN_SKILLS = "data/skills.json";
-
 @Module({ namespaced: true })
 export default class StatusModule {
 	@Getter
@@ -32,9 +28,9 @@ export default class StatusModule {
 		await Promise.all([
 			this.view.load(),
 			this.character.load(),
-			this.profile.loadBuiltins(BUILTIN_PROFILES).then(() => this.profile.load()),
-			this.attribute.loadBuiltins(BUILTIN_ATTRIBUTES).then(() => this.attribute.load()),
-			this.skill.loadBuiltins(BUILTIN_SKILLS).then(() => this.skill.load()),
+			this.profile.load(),
+			this.attribute.load(),
+			this.skill.load(),
 			this.item.load(),
 			this.history.load(),
 			CacheStorage.load(),

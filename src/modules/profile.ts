@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { ProfileData, Profile, ProfileProvider } from "models/status";
 import DB from "models/storage";
 import { Module, Getter, Mutation, Action } from "modules/vuex-class-module";
+import BUILTIN_PROFILES_URL from "@resource/data/profiles.json";
 
 type ProfileTable = { [uuid: string]: Profile };
 
@@ -63,6 +64,7 @@ export default class ProfileModule implements ProfileProvider {
 
 	@Action
 	public async load(): Promise<void> {
+		await this.loadBuiltins();
 		await DB.transaction("r", DB.profiles, () => {
 			return DB.profiles.toArray();
 		}).then(profiles => {
@@ -73,7 +75,7 @@ export default class ProfileModule implements ProfileProvider {
 	}
 
 	@Action
-	public async loadBuiltins(url: string): Promise<void> {
+	public async loadBuiltins(url: string = BUILTIN_PROFILES_URL): Promise<void> {
 		await fetch(url).then(response => {
 			if (response.ok) {
 				return response.json();

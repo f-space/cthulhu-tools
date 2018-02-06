@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { SkillData, Skill, SkillProvider } from "models/status";
 import DB from "models/storage";
 import { Module, Getter, Mutation, Action } from "modules/vuex-class-module";
+import BUILTIN_SKILLS_URL from "@resource/data/skills.json";
 
 type SkillTable = { [id: string]: Skill };
 
@@ -51,6 +52,7 @@ export default class SkillModule implements SkillProvider {
 
 	@Action
 	public async load(): Promise<void> {
+		await this.loadBuiltins();
 		await DB.transaction("r", DB.skills, () => {
 			return DB.skills.toArray();
 		}).then(skills => {
@@ -61,7 +63,7 @@ export default class SkillModule implements SkillProvider {
 	}
 
 	@Action
-	public async loadBuiltins(url: string): Promise<void> {
+	public async loadBuiltins(url: string = BUILTIN_SKILLS_URL): Promise<void> {
 		await fetch(url).then(response => {
 			if (response.ok) {
 				return response.json();
