@@ -71,11 +71,23 @@ module.exports = function (env) {
 				{
 					test: /\.scss$/,
 					loader: ExtractTextPlugin.extract(cssLoader)
+				},
+				{
+					test: /\.(png|wav|json)/,
+					loader: "file-loader",
+					options: {
+						name: "[path][name].[ext]",
+						outputPath: url => path.relative("docs", url),
+						emitFile: false
+					}
 				}
 			]
 		},
 		resolve: {
 			extensions: [".ts", ".js", ".vue", ".json"],
+			alias: {
+				"@resource": path.resolve(__dirname, "docs")
+			},
 			plugins: [
 				new TsConfigPlugin()
 			]
