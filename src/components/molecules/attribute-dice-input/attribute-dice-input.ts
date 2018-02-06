@@ -2,7 +2,6 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { DiceSet } from 'models/dice';
 import { DiceInputMethod } from 'models/status';
-import { DiceImage as DiceImageRenderer } from "models/resource";
 import DiceImage from "@component/atoms/dice-image";
 
 @Component({
@@ -17,16 +16,13 @@ export default class AttributeDiceInput extends Vue {
 	@Prop()
 	public readonly value?: number[];
 
-	@Prop({ required: true })
-	public readonly image: DiceImageRenderer | null;
-
 	public get diceSet(): DiceSet { return DiceSet.create(this.method.count, this.method.max); }
 
 	public get dices(): { type: string, face: number }[] {
 		const value = this.method.validate(this.value) ? this.value : this.method.default;
 		return this.diceSet.dices.map((dice, index) => ({
 			type: `D${dice.max}`,
-			face: value[index],
+			face: value[index] - 1,
 		}));
 	}
 

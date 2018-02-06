@@ -4,7 +4,7 @@ app-page#character-edit
 	.entry
 		section.attributes
 			header: h3 能力値
-			attribute-input(v-for="attribute in attributes", :key="attribute.uuid", :attribute="attribute", :evaluator="evaluator", :image="diceImage",
+			attribute-input(v-for="attribute in attributes", :key="attribute.uuid", :attribute="attribute", :evaluator="evaluator",
 				:data="attributeParams[attribute.id]", @input="value => { updateAttributeParams(attribute.id, value); }")
 		section.skills
 			header: h3 技能

@@ -8,6 +8,5 @@
 				:is="component(segment)",
 				:method="segment",
 				:value="data[segment.name]",
-				:image="segment.type === 'dice' ? image : undefined",
 				@input="value => onInput(segment.name, value)")
 	.value {{ value !== undefined ? value : "-" }}

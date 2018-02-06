@@ -1,12 +1,11 @@
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
-import { State, Getter, Action, namespace } from 'vuex-class';
+import { Component, Prop } from 'vue-property-decorator';
+import { Getter, Action, namespace } from 'vuex-class';
 import {
 	Character, Profile, Attribute, Skill, Item, Property, DataProvider,
 	AttributeParams, SkillParams,
 	PropertyResolver, PropertyEvaluator, EvaluationContext, ProfileEvaluationContext, ResolverBuilder, EvaluatorBuilder
 } from "models/status";
-import { DiceImage } from 'models/resource';
 import { deepClone } from "models/utility";
 import AttributeInput from "@component/molecules/attribute-input";
 import SkillInput from "@component/molecules/skill-input";
@@ -24,7 +23,6 @@ interface ItemSlot {
 const StatusGetter = namespace("status", Getter);
 const ViewAction = namespace("status/view", Action);
 const CharacterAction = namespace("status/character", Action);
-const ResourceState = namespace("resource", State);
 
 const OCCUPATION_SKILL_POINTS = "occupation_skill_points";
 const HOBBY_SKILL_POINTS = "hobby_skill_points";
@@ -53,9 +51,6 @@ export default class CharacterEditPage extends AppPage {
 
 	@CharacterAction("update")
 	public readonly updateCharacter: (args: [Character]) => Promise<void>;
-
-	@ResourceState("diceImage")
-	public readonly diceImage: DiceImage | null;
 
 	public get profile(): Profile | undefined {
 		return this.profileUUID !== null ? this.provider.profile.get(this.profileUUID) : this.provider.profile.default;

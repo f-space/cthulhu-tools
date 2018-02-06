@@ -1,9 +1,7 @@
 import Vue from 'vue';
-import { Component, Inject, Prop, Watch } from 'vue-property-decorator';
-import { State, namespace } from 'vuex-class';
-import { DiceSet, Dice } from 'models/dice';
-
-const ResourceState = namespace("resource", State);
+import { Component, Prop, Watch } from 'vue-property-decorator';
+import { DiceSet, Dice } from "models/dice";
+import { DiceSoundManager } from "models/resource";
 
 type DiceType = 'D6' | 'D10' | 'D100';
 type DiceInfo = { type: DiceType, face: number };
@@ -25,13 +23,11 @@ export default class DiceRoll extends Vue {
 	@Prop({ default: 10 })
 	public maxIteration: number;
 
-	@ResourceState("diceSound")
-	public sound: HTMLAudioElement;
-
 	private display: number[] = this.values;
 	private rolling: boolean = false;
 	private version: number = 0;
 	private time: number = 0;
+	private player: HTMLAudioElement | null = null;
 
 	public get dices(): DiceInfo[][] {
 		return this.diceSet.dices.map((dice, i) => {
@@ -57,6 +53,12 @@ export default class DiceRoll extends Vue {
 
 			this.playSound();
 		}
+	}
+
+	protected created(): void {
+		DiceSoundManager.load()
+			.then(() => DiceSoundManager.player())
+			.then(player => { this.player = player; });
 	}
 
 	public roll(): void { this.rolling = true; }
@@ -93,35 +95,35 @@ export default class DiceRoll extends Vue {
 	}
 
 	private getD6(value: number): DiceInfo[] {
-		return [{ type: 'D6', face: value }];
+		return [{ type: 'D6', face: value - 1 }];
 	}
 
 	private getD10(value: number): DiceInfo[] {
-		return [{ type: 'D10', face: value }];
+		return [{ type: 'D10', face: value % 10 }];
 	}
 
 	private getD100(value: number): DiceInfo[] {
 		return [
-			{ type: 'D100', face: Math.floor(value / 10) || 10 },
-			{ type: 'D10', face: value % 10 || 10 },
+			{ type: 'D100', face: Math.floor(value / 10) % 10 },
+			{ type: 'D10', face: value % 10 },
 		];
 	}
 
 	private getD10x(count: number, value: number): DiceInfo[] {
 		return Array.from(function* () {
 			for (let i = 0; i < count; i++) {
-				yield { type: 'D10' as DiceType, face: value % 10 || 10 };
+				yield { type: 'D10' as DiceType, face: value % 10 };
 				value = Math.floor(value / 10)
 			}
 		}()).reverse();
 	}
 
 	private playSound(): void {
-		const audio = this.sound;
-		if (audio) {
-			audio.pause();
-			audio.currentTime = 0
-			audio.play();
+		const sound = this.player;
+		if (sound !== null) {
+			sound.pause();
+			sound.currentTime = 0
+			sound.play();
 		}
 	}
 }

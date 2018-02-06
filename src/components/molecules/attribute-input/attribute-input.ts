@@ -2,7 +2,6 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { Attribute, InputMethod, InputParams, PropertyEvaluator } from "models/status";
 import { substitute } from "models/eval";
-import { DiceImage } from "models/resource";
 import DiceInput from "@component/molecules/attribute-dice-input";
 import NumberInput from "@component/molecules/attribute-number-input";
 import TextInput from "@component/molecules/attribute-text-input";
@@ -14,9 +13,6 @@ export default class AttributeInput extends Vue {
 
 	@Prop({ required: true })
 	public readonly evaluator: PropertyEvaluator;
-
-	@Prop({ required: true })
-	public readonly image: DiceImage | null;
 
 	@Prop({ required: true, default: () => Object.create(null) })
 	public readonly data: InputParams;

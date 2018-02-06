@@ -1,7 +1,7 @@
 .dice-view
 	component.dice-layout(:is="layout", :width="width", :height="height", :groupCount="groupCount", :groupLength="groupLength", :dices="dices")
 		.dice-group(slot-scope="props")
-			dice-image.dice(v-for="(dice, index) in props.group", :key="index", :type="dice.type", :face="dice.face", :image="image")
+			dice-image.dice(v-for="(dice, index) in props.group", :key="index", :type="dice.type", :face="dice.face")
 	dice-number-display.dice-number(
 		:width="width", :height="height",
 		:diceSet="diceSet", :values="diceValues",
