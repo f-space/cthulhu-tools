@@ -9,13 +9,13 @@ import TextInput from "@component/molecules/attribute-text-input";
 @Component({ model: { prop: 'data' } })
 export default class AttributeInput extends Vue {
 	@Prop({ required: true })
-	public readonly attribute: Attribute;
+	public readonly attribute!: Attribute;
 
 	@Prop({ required: true })
-	public readonly evaluator: PropertyEvaluator;
+	public readonly evaluator!: PropertyEvaluator;
 
 	@Prop({ required: true, default: () => Object.create(null) })
-	public readonly data: InputParams;
+	public readonly data!: InputParams;
 
 	public get segments(): (string | InputMethod)[] {
 		const values = this.attribute.inputs.reduce((obj, { name }) => (obj[name] = `XXX___${name}___XXX`, obj), Object.create(null));

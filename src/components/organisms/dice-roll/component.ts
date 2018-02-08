@@ -10,16 +10,16 @@ function sleep(time: number): Promise<void> {
 @Component({ model: { prop: 'faces' } })
 export default class DiceRoll extends Vue {
 	@Prop({ required: true })
-	public readonly dices: Dice[];
+	public readonly dices!: Dice[];
 
 	@Prop({ required: true })
-	public readonly faces: number[];
+	public readonly faces!: number[];
 
 	@Prop({ default: 100 })
-	public readonly interval: number;
+	public readonly interval!: number;
 
 	@Prop({ default: 1000 })
-	public readonly duration: number;
+	public readonly duration!: number;
 
 	private version: number = 0;
 

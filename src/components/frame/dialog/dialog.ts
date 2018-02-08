@@ -5,5 +5,5 @@ import { Dialog as DialogBase } from "mixins/dialog";
 @Component
 export default class Dialog<T> extends DialogBase<T> {
 	@Prop()
-	public title: string;
+	public readonly title!: string;
 }

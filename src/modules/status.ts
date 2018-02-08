@@ -38,23 +38,23 @@ export default class StatusModule {
 	}
 
 	@Child
-	public view: ViewModule;
+	public readonly view!: ViewModule;
 
 	@Child
-	public character: CharacterModule;
+	public readonly character!: CharacterModule;
 
 	@Child
-	public profile: ProfileModule;
+	public readonly profile!: ProfileModule;
 
 	@Child
-	public attribute: AttributeModule;
+	public readonly attribute!: AttributeModule;
 
 	@Child
-	public skill: SkillModule;
+	public readonly skill!: SkillModule;
 
 	@Child
-	public item: ItemModule;
+	public readonly item!: ItemModule;
 
 	@Child
-	public history: HistoryModule;
+	public readonly history!: HistoryModule;
 }

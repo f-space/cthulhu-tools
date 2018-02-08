@@ -23,19 +23,19 @@ export default class CharacterManagementPage extends Vue {
 	public checked: { [uuid: string]: boolean } = Object.create(null);
 
 	@StatusGetter("provider")
-	public readonly provider: DataProvider;
+	public readonly provider!: DataProvider;
 
 	@ViewState("views")
-	public readonly views: { [uuid: string]: CharacterView };
+	public readonly views!: { [uuid: string]: CharacterView };
 
 	@ViewAction("update")
-	public readonly updateView: (args: [CharacterView]) => void;
+	public readonly updateView!: (args: [CharacterView]) => void;
 
 	@CharacterAction("create")
-	public readonly createCharacter: (args: [Character]) => void;
+	public readonly createCharacter!: (args: [Character]) => void;
 
 	@CharacterAction("delete")
-	public readonly deleteCharacter: (args: [string]) => void;
+	public readonly deleteCharacter!: (args: [string]) => void;
 
 	public get some(): boolean { return Object.values(this.checked).some(x => x); }
 

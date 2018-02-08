@@ -4,5 +4,5 @@ import StatusModule from "modules/status";
 @Module
 export default class RootModule {
 	@Child
-	public status: StatusModule;
+	public readonly status!: StatusModule;
 }

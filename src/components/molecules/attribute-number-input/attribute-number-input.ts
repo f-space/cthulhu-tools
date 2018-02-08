@@ -5,7 +5,7 @@ import { NumberInputMethod } from 'models/status';
 @Component
 export default class AttributeNumberInput extends Vue {
 	@Prop({ required: true })
-	public readonly method: NumberInputMethod;
+	public readonly method!: NumberInputMethod;
 
 	@Prop()
 	public readonly value?: number;

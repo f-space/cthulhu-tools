@@ -6,7 +6,7 @@ import SizeMixin, { mixin } from "mixins/size";
 @Component
 export default class DiceRowLayout extends mixin(Vue, SizeMixin) {
 	@Prop({ required: true })
-	public display: DiceDisplay[][];
+	public readonly display!: DiceDisplay[][];
 
 	public get groups(): number { return this.display.length; }
 	public get perGroup(): number { return this.display.length !== 0 ? this.display[0].length : 0; }

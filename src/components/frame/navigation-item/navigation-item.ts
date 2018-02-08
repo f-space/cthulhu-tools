@@ -4,8 +4,8 @@ import { Component, Prop } from 'vue-property-decorator';
 @Component
 export default class NavigationItem extends Vue {
 	@Prop({ default: "" })
-	public to: string;
+	public readonly to!: string;
 
 	@Prop({ default: false })
-	public long: boolean;
+	public readonly long!: boolean;
 }

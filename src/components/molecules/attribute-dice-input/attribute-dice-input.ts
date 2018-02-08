@@ -11,7 +11,7 @@ import DiceImage from "@component/atoms/dice-image";
 })
 export default class AttributeDiceInput extends Vue {
 	@Prop({ required: true })
-	public readonly method: DiceInputMethod;
+	public readonly method!: DiceInputMethod;
 
 	@Prop()
 	public readonly value?: number[];

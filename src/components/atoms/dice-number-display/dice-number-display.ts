@@ -5,16 +5,16 @@ import SizeMixin, { mixin } from "mixins/size";
 @Component
 export default class DiceNumberDisplay extends mixin(Vue, SizeMixin) {
 	@Prop({ required: true })
-	public digits: number;
+	public readonly digits!: number;
 
 	@Prop()
-	public value?: number;
+	public readonly value?: number;
 
 	@Prop({ default: false })
-	public critical: boolean;
+	public readonly critical!: boolean;
 
 	@Prop({ default: false })
-	public fumble: boolean;
+	public readonly fumble!: boolean;
 
 	private font: string = "";
 

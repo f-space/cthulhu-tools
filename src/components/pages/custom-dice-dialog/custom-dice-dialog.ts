@@ -14,10 +14,10 @@ export interface CustomDiceDialogResult {
 })
 export default class CustomDiceDialog extends PageDialog<CustomDiceDialogResult> {
 	@Prop({ default: 1 })
-	public initCount: number;
+	public readonly initCount!: number;
 
 	@Prop({ default: 100 })
-	public initMax: number;
+	public readonly initMax!: number;
 
 	public count: number = this.initCount;
 	public max: number = this.initMax;

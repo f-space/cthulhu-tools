@@ -41,16 +41,16 @@ export default class CharacterEditPage extends AppPage {
 	public itemSlots: ItemSlot[] = [];
 
 	@Prop()
-	public readonly uuid: string;
+	public readonly uuid!: string;
 
 	@StatusGetter("provider")
-	public readonly provider: DataProvider;
+	public readonly provider!: DataProvider;
 
 	@CharacterAction("create")
-	public readonly createCharacter: (args: [Character]) => Promise<void>;
+	public readonly createCharacter!: (args: [Character]) => Promise<void>;
 
 	@CharacterAction("update")
-	public readonly updateCharacter: (args: [Character]) => Promise<void>;
+	public readonly updateCharacter!: (args: [Character]) => Promise<void>;
 
 	public get profile(): Profile | undefined {
 		return this.profileUUID !== null ? this.provider.profile.get(this.profileUUID) : this.provider.profile.default;

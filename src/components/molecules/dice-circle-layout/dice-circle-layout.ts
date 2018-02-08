@@ -8,7 +8,7 @@ type Position = { x: number, y: number };
 @Component
 export default class DiceCircleLayout extends mixin(Vue, SizeMixin) {
 	@Prop({ required: true })
-	public display: DiceDisplay[][];
+	public readonly display!: DiceDisplay[][];
 
 	public get diceCount(): number { return this.display.length; }
 

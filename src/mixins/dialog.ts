@@ -46,7 +46,7 @@ class DialogHub extends Vue {
 @Component
 class DialogRenderer extends Vue {
 	@Inject()
-	public $dialog: DialogHub;
+	public readonly $dialog!: DialogHub;
 
 	public render(createElement: CreateElement): VNode {
 		const hub = this.$dialog;
@@ -63,7 +63,7 @@ class DialogRenderer extends Vue {
 })
 export class DialogHost extends Vue {
 	@Provide()
-	public $dialog: DialogHub;
+	public $dialog!: DialogHub;
 
 	protected beforeCreate(): void {
 		this.$dialog = new DialogHub();
@@ -73,7 +73,7 @@ export class DialogHost extends Vue {
 @Component
 export class DialogClient extends Vue {
 	@Inject()
-	public $dialog: DialogHub;
+	public readonly $dialog!: DialogHub;
 
 	public openDialog<T>(dialog: VueClass<Dialog<T>>, data?: any): Promise<DialogResult<T>> {
 		return new Promise(resolve => {

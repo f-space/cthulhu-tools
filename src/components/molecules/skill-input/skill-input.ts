@@ -11,13 +11,13 @@ type InputType = {
 @Component
 export default class SkillInput extends Vue {
 	@Prop({ required: true })
-	public readonly skills: Skill[];
+	public readonly skills!: Skill[];
 
 	@Prop({ required: true })
-	public readonly evaluator: PropertyEvaluator;
+	public readonly evaluator!: PropertyEvaluator;
 
 	@Prop({ required: true })
-	public readonly value: InputType;
+	public readonly value!: InputType;
 
 	public id: string = this.value.id;
 	public point: number = this.value.point;

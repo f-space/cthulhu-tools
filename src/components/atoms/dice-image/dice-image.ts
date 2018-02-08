@@ -5,10 +5,10 @@ import { DiceImageManager } from "models/resource";
 @Component
 export default class DiceImage extends Vue {
 	@Prop({ required: true })
-	public type: string;
+	public readonly type!: string;
 
 	@Prop({ required: true })
-	public face: number;
+	public readonly face!: number;
 
 	public loaded: boolean = false;
 

@@ -15,10 +15,10 @@ const ViewState = namespace("status/view", State);
 })
 export default class StatusPage extends Vue {
 	@StatusGetter("provider")
-	public readonly provider: DataProvider;
+	public readonly provider!: DataProvider;
 
 	@ViewState("views")
-	public readonly views: { [uuid: string]: CharacterView };
+	public readonly views!: { [uuid: string]: CharacterView };
 
 	public get characters(): Status[] {
 		return Object.entries(this.views)
