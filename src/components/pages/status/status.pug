@@ -2,7 +2,7 @@ app-page#status
 	header.page-title
 		h2 ステータス
 	nav.navigations
-		router-link(tag="button", type="button", to="/status/character-management") 管理
+		router-link(tag="button", type="button", :to="{ name: 'character-management' }") 管理
 	.characters
 		section.character(v-for="character in characters", :key="character.$uuid")
 			section

@@ -2,7 +2,7 @@ app-page#character-management
 	header.page-title
 		h2 キャラクター管理
 	nav.navigations
-		router-link(tag="button", type="button", to="/status/character-edit") 作成
+		router-link(tag="button", type="button", :to="{ name: 'character-edit' }") 作成
 	.characters
 		selectable-item.character(v-for="character in characters", :key="character.$uuid" v-model="checked[character.$uuid]")
 			.content

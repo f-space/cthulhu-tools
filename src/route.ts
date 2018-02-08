@@ -10,18 +10,22 @@ import CharacterEditNav from "@component/pages/character-edit-nav";
 export default {
 	routes: [
 		{
+			name: "home",
 			path: "/",
 			component: HomePage,
 		},
 		{
+			name: "dice",
 			path: "/dice",
 			component: DicePage,
 		},
 		{
+			name: "status",
 			path: "/status",
 			component: StatusPage,
 		},
 		{
+			name: "character-management",
 			path: "/status/character-management",
 			components: {
 				default: CharacterManagementPage,
@@ -29,6 +33,7 @@ export default {
 			},
 		},
 		{
+			name: "character-edit",
 			path: "/status/character-edit",
 			components: {
 				default: CharacterEditPage,

@@ -11,7 +11,7 @@ const ViewState = namespace("status/view", State);
 const ViewAction = namespace("status/view", Action);
 const CharacterAction = namespace("status/character", Action);
 
-const CHARACTER_EDIT_PAGE = "/status/character-edit";
+const CHARACTER_EDIT_PAGE = "character-edit";
 
 @Component({
 	components: {
@@ -77,7 +77,7 @@ export default class CharacterManagementPage extends Vue {
 	public editOp(): void {
 		const target = this.selection[0];
 		if (target !== undefined) {
-			this.$router.push({ path: CHARACTER_EDIT_PAGE, query: { uuid: target } });
+			this.$router.push({ name: CHARACTER_EDIT_PAGE, query: { uuid: target } });
 		}
 	}
 
