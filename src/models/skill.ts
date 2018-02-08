@@ -2,7 +2,7 @@ import * as validation from "models/validation";
 
 export enum SkillCategory {
 	locomotion = 'locomotion',
-	exploration = 'exploration',
+	investigation = 'investigation',
 	knowledge = 'knowledge',
 	communication = 'communication',
 	language = 'language',

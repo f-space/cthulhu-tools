@@ -79,21 +79,21 @@
 	{
 		"id": "conceal",
 		"name": "隠す",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 15
 	},
 	{
 		"id": "computer_use",
 		"name": "コンピューター",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 1
 	},
 	{
 		"id": "craft",
 		"name": "製作",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 5
 	},
@@ -137,7 +137,7 @@
 	{
 		"id": "electrical_repair",
 		"name": "電気修理",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 10
 	},
@@ -165,7 +165,7 @@
 	{
 		"id": "first_aid",
 		"name": "応急手当",
-		"category": "combat",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 30
 	},
@@ -221,7 +221,7 @@
 	{
 		"id": "hide",
 		"name": "隠れる",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 10
 	},
@@ -277,21 +277,21 @@
 	{
 		"id": "library_use",
 		"name": "図書館",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 25
 	},
 	{
 		"id": "listen",
 		"name": "聞き耳",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 25
 	},
 	{
 		"id": "locksmith",
 		"name": "鍵開け",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 1
 	},
@@ -312,7 +312,7 @@
 	{
 		"id": "mechanical_repair",
 		"name": "機械修理",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 20
 	},
@@ -347,7 +347,7 @@
 	{
 		"id": "operate_heavy_machine",
 		"name": "重機械操作",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 1
 	},
@@ -377,7 +377,7 @@
 	{
 		"id": "photography",
 		"name": "写真術",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 10
 	},
@@ -405,7 +405,7 @@
 	{
 		"id": "psychoanalysis",
 		"name": "精神分析",
-		"category": "communication",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 1
 	},
@@ -447,7 +447,7 @@
 	{
 		"id": "sneak",
 		"name": "忍び歩き",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 10
 	},
@@ -461,7 +461,7 @@
 	{
 		"id": "spot_hidden",
 		"name": "目星",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 25
 	},
@@ -482,14 +482,14 @@
 	{
 		"id": "throw",
 		"name": "投擲",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 25
 	},
 	{
 		"id": "track",
 		"name": "追跡",
-		"category": "exploration",
+		"category": "investigation",
 		"dependencies": [],
 		"base": 10
 	}
