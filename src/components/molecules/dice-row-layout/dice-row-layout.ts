@@ -1,56 +1,35 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
-import DiceLayout from "@component/molecules/dice-layout";
-
-type DiceInfo = { type: string, face: number };
+import { Component, Prop } from 'vue-property-decorator';
+import { DiceDisplay } from "models/dice";
+import SizeMixin, { mixin } from "mixins/size";
 
 @Component
-export default class DiceRowLayout extends DiceLayout {
-	public get rowDices(): DiceInfo[][][] {
-		return this.getRowDices();
+export default class DiceRowLayout extends mixin(Vue, SizeMixin) {
+	@Prop({ required: true })
+	public display: DiceDisplay[][];
+
+	public get groups(): number { return this.display.length; }
+	public get perGroup(): number { return this.display.length !== 0 ? this.display[0].length : 0; }
+	public get rows(): number { return this.columns > 0 ? Math.ceil(this.groups / this.columns) : 0; }
+	public get columns(): number { return this.getPreferredColumnSize(); }
+
+	public get dices(): DiceDisplay[][][] {
+		return this.getRowOffsets().map((_, i, offsets) => this.display.slice(offsets[i], offsets[i + 1]));
 	}
 
-	public get rows(): number {
-		return this.columns > 0 ? Math.ceil(this.groupCount / this.columns) : 0;
-	}
-
-	public get columns(): number {
-		return this.getPreferredColumnSize();
-	}
-
-	public get offsets(): number[] {
-		return this.getRowOffsets();
-	}
-
-	public get rowSize(): number {
-		return this.rows > 0 ? this.height / this.rows : 0;
-	}
-
-	public get columnSize(): number {
-		return this.columns > 0 ? this.width / this.columns : 0;
-	}
-
-	public get displaySize(): number {
-		return Math.floor(Math.min(this.rowSize, this.columnSize / this.groupLength));
-	}
-
-	public get style(): object {
-		return { "--dice-size": `${this.displaySize}px` };
-	}
-
-	private getRowDices(): DiceInfo[][][] {
-		return this.offsets.map((_, i, offsets) => this.dices.slice(offsets[i], offsets[i + 1]));
-	}
+	public get rowSize(): number { return this.rows > 0 ? this.height / this.rows : 0; }
+	public get columnSize(): number { return this.columns > 0 ? this.width / this.columns : 0; }
+	public get diceSize(): number { return Math.floor(Math.min(this.rowSize, this.columnSize / this.perGroup)); }
 
 	private getPreferredColumnSize(): number {
-		const count = this.groupCount;
-		const ratio = (this.width / this.height) / this.groupLength;
+		const count = this.groups;
+		const ratio = (this.width / this.height) / this.perGroup;
 		const column = Math.round((ratio + Math.sqrt(ratio * (ratio + 16 * count))) / 4);
 		return Number.isSafeInteger(column) ? column : 0;
 	}
 
 	private getRowOffsets(): number[] {
-		const count = this.groupCount;
+		const count = this.groups;
 		const columns = this.columns;
 		const rows = this.rows;
 		const rest = rows * columns - count;

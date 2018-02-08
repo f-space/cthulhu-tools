@@ -1,4 +1,4 @@
-import { DiceSet } from "models/dice";
+import { Dice } from "models/dice";
 import * as validation from "models/validation";
 
 type InputType = 'dice' | 'number' | 'text';
@@ -73,13 +73,15 @@ abstract class InputMethodBase<T extends InputType> implements InputMethodDataBa
 export class DiceInputMethod extends InputMethodBase<'dice'> implements DiceInputMethodData {
 	public readonly count: number;
 	public readonly max: number;
+	public readonly dices: ReadonlyArray<Dice>
 
-	public get default(): number[] { return DiceSet.create(this.count, this.max).dices.map(dice => dice.default); }
+	public get default(): number[] { return this.dices.map(dice => dice.default); }
 
 	public constructor({ count, max, ...rest }: DiceInputMethodData) {
 		super(rest);
 		this.count = validation.int(count, 0);
 		this.max = validation.int(max, 1);
+		this.dices = Dice.create(this.count, this.max);
 	}
 
 	public toJSON(): DiceInputMethodData {
@@ -90,11 +92,11 @@ export class DiceInputMethod extends InputMethodBase<'dice'> implements DiceInpu
 	}
 
 	public evaluate(data: any): number | undefined {
-		return this.validate(data) ? data.reduce((sum, x) => sum + x, 0) : undefined;
+		return this.validate(data) ? this.dices.reduce((sum, dice, index) => sum + dice.value(data[index]), 0) : undefined;
 	}
 
 	public validate(data: any): data is number[] {
-		return (Array.isArray(data) && data.length === this.count && data.every(x => Number.isSafeInteger(x) && x >= 1 && x <= this.max));
+		return (Array.isArray(data) && data.length === this.count && data.every(x => Number.isSafeInteger(x) && x >= 0 && x < this.max));
 	}
 }
 

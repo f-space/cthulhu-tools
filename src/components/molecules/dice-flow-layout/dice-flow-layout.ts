@@ -1,18 +1,13 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
-import DiceLayout from "@component/molecules/dice-layout";
+import { Component, Prop } from 'vue-property-decorator';
+import { DiceDisplay } from "models/dice";
+import SizeMixin, { mixin } from "mixins/size";
 
 @Component
-export default class DiceFlowLayout extends DiceLayout {
-	public get diceCount(): number {
-		return this.dices.reduce((sum, group) => sum += group.length, 0);
-	}
+export default class DiceFlowLayout extends mixin(Vue, SizeMixin) {
+	@Prop({ required: true })
+	public display: DiceDisplay[][];
 
-	public get displaySize(): number {
-		return Math.floor(Math.sqrt((this.width * this.height) / this.diceCount * 0.75));
-	}
-
-	public get style(): object {
-		return { "--dice-size": `${this.displaySize}px` };
-	}
+	public get diceCount(): number { return this.display.reduce((sum, group) => sum + group.length, 0); }
+	public get diceSize(): number { return Math.floor(Math.sqrt((this.width * this.height) / this.diceCount * 0.75)); }
 }

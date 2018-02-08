@@ -1,8 +1,6 @@
 .dice-view
-	component.dice-layout(:is="layout", :width="width", :height="height", :groupCount="groupCount", :groupLength="groupLength", :dices="dices")
-		.dice-group(slot-scope="props")
-			dice-image.dice(v-for="(dice, index) in props.group", :key="index", :type="dice.type", :face="dice.face")
-	dice-number-display.dice-number(
-		:width="width", :height="height",
-		:diceSet="diceSet", :values="diceValues",
-		:critical="is1D100 ? 96 : undefined", :fumble="is1D100 ? 5 : undefined")
+	template(v-if="dices.length > 0")
+		dice-layout.dice-layout(:layout="layout", :display="display")
+			.dice-group(slot-scope="props")
+				dice-image.dice(v-for="(dice, index) in props.group", :key="index", :type="dice.type", :face="dice.face")
+		dice-number-display.dice-number(:digits="digits", :value="value",:critical="critical", :fumble="fumble")

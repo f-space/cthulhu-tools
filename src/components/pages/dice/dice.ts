@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
-import { DiceSet } from "models/dice";
+import { Dice } from "models/dice";
 import DiceView from "@component/organisms/dice-view";
 import CustomDiceDialog from "@component/pages/custom-dice-dialog";
 import AppPage from "@component/frame/page";
@@ -16,21 +16,21 @@ type CustomDice = { count: number, max: number };
 export default class DicePage extends AppPage {
 	public type: string | null = null;
 	public custom: CustomDice = { count: 1, max: 100 };
-	public values: number[] = [];
+	public faces: number[] = [];
 
 	public presets: string[] = ['1D10', '1D100', '1D6', '2D6', '3D6', '1D3', '2D3', '1D4'];
 
 	public get CUSTOM_TYPE(): string { return 'custom'; }
 
-	public get diceSet(): DiceSet {
+	public get dices(): ReadonlyArray<Dice> {
 		if (this.type !== null) {
 			if (this.type !== this.CUSTOM_TYPE) {
-				return DiceSet.parse(this.type);
+				return Dice.parse(this.type);
 			} else {
-				return DiceSet.create(this.custom.count, this.custom.max);
+				return Dice.create(this.custom.count, this.custom.max);
 			}
 		}
-		return new DiceSet([]);
+		return [];
 	}
 
 	public get view(): DiceView { return this.$refs.view as DiceView; }
@@ -46,12 +46,11 @@ export default class DicePage extends AppPage {
 	}
 
 	public reset(): void {
-		this.values = this.diceSet.dices.map(x => x.default);
+		this.faces = this.dices.map(dice => dice.default);
 		this.view.stop();
 	}
 
 	public roll(): void {
-		this.values = this.diceSet.dices.map(x => x.roll(Math.random()));
 		this.view.roll();
 	}
 

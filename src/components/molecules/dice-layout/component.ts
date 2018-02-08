@@ -1,28 +1,35 @@
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import Vue, { CreateElement, RenderContext } from 'vue';
+import FlowLayout from "@component/molecules/dice-flow-layout";
+import CircleLayout from "@component/molecules/dice-circle-layout";
+import RowLayout from "@component/molecules/dice-row-layout";
 
-type DiceInfo = { type: string, face: number };
+type LayoutType = 'flow' | 'circle' | 'row';
 
-@Component
-export default class DiceLayout extends Vue {
-	@Prop({
-		required: true,
-		validator(value: number) { return Number.isFinite(value) && value >= 0; },
-	})
-	public width: number;
+export default Vue.extend({
+	functional: true,
+	props: {
+		layout: {
+			type: String,
+			required: true,
+		},
+		display: {
+			type: Array,
+			required: true,
+		}
+	},
+	render: function (createElement: CreateElement, context: RenderContext) {
+		const component = selectLayout(context.props.layout as LayoutType);
+		const data = Object.assign({}, context.data, { props: { display: context.props.display } });
+		const children = context.children;
 
-	@Prop({
-		required: true,
-		validator(value: number) { return Number.isFinite(value) && value >= 0; },
-	})
-	public height: number;
+		return createElement(component, data, children);
 
-	@Prop({ required: true })
-	public groupCount: number;
-
-	@Prop({ required: true })
-	public groupLength: number;
-
-	@Prop({ required: true })
-	public dices: DiceInfo[][];
-}
+		function selectLayout(layout: LayoutType) {
+			switch (layout) {
+				case 'flow': return FlowLayout;
+				case 'circle': return CircleLayout;
+				case 'row': return RowLayout;
+			}
+		}
+	}
+});

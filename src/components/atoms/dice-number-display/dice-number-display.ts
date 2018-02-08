@@ -1,50 +1,22 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { DiceSet } from 'models/dice';
+import SizeMixin, { mixin } from "mixins/size";
 
 @Component
-export default class DiceNumberDisplay extends Vue {
-	@Prop({
-		required: true,
-		validator(value: number) { return Number.isFinite(value) && value >= 0; },
-	})
-	public width: number;
-
-	@Prop({
-		required: true,
-		validator(value: number) { return Number.isFinite(value) && value >= 0; },
-	})
-	public height: number;
-
+export default class DiceNumberDisplay extends mixin(Vue, SizeMixin) {
 	@Prop({ required: true })
-	public diceSet: DiceSet;
+	public digits: number;
 
-	@Prop({ required: true })
-	public values: number[]
+	@Prop()
+	public value?: number;
 
-	@Prop({ default: Infinity })
-	public critical: number;
+	@Prop({ default: false })
+	public critical: boolean;
 
-	@Prop({ default: -Infinity })
-	public fumble: number;
+	@Prop({ default: false })
+	public fumble: boolean;
 
 	private font: string = "";
-
-	public get empty(): boolean {
-		return this.diceSet.size === 0;
-	}
-
-	public get value(): number {
-		return this.values.reduce((sum, value) => sum += value, 0);
-	}
-
-	public get max(): number {
-		return this.diceSet.dices.reduce((sum, dice) => sum += dice.max, 0);
-	}
-
-	public get type(): string {
-		return this.value >= this.critical ? "critical" : this.value <= this.fumble ? "fumble" : "";
-	}
 
 	public get textAspectRatio(): number {
 		return this.getTextAspectRatio();
@@ -52,10 +24,6 @@ export default class DiceNumberDisplay extends Vue {
 
 	public get fontSize(): number {
 		return this.getFontSize();
-	}
-
-	public get style(): object {
-		return { "--font-size": `${this.fontSize}px` };
 	}
 
 	protected mounted(): void {
@@ -74,7 +42,7 @@ export default class DiceNumberDisplay extends Vue {
 	private getTextAspectRatio(): number {
 		const height = 100;
 		const font = this.font.replace(/\d+px/, `${height}px`);
-		const text = String(this.max);
+		const text = "0".repeat(this.digits);
 		const width = this.measure(text, font);
 		return (width / height);
 	}
