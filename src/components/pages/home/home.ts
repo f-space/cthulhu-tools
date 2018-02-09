@@ -1,10 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import AppPage from "@component/frame/page";
+import Page from "vue-models/page";
+import PageTemplate from "@component/templates/page";
 
-@Component({
-	components: {
-		AppPage,
-	}
-})
-export default class HomePage extends Vue { }
+@Component({ components: { PageTemplate } })
+export default class HomePage extends Page { }

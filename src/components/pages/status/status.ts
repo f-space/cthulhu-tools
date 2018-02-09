@@ -3,17 +3,14 @@ import { Component } from 'vue-property-decorator';
 import { State, Getter, namespace } from 'vuex-class';
 import { CharacterView, DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
-import AppPage from "@component/frame/page";
+import Page from "vue-models/page";
+import PageTemplate from "@component/templates/page";
 
 const StatusGetter = namespace("status", Getter);
 const ViewState = namespace("status/view", State);
 
-@Component({
-	components: {
-		AppPage,
-	}
-})
-export default class StatusPage extends Vue {
+@Component({ components: { PageTemplate } })
+export default class StatusPage extends Page {
 	@StatusGetter("provider")
 	public readonly provider!: DataProvider;
 

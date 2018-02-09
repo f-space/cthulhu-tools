@@ -1,18 +1,15 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import PageDialog from "@component/frame/dialog";
+import { Dialog } from "vue-models/dialog";
+import DialogTemplate from "@component/templates/dialog";
 
 export interface CustomDiceDialogResult {
 	readonly count: number;
 	readonly max: number;
 }
 
-@Component({
-	components: {
-		PageDialog,
-	}
-})
-export default class CustomDiceDialog extends PageDialog<CustomDiceDialogResult> {
+@Component({ components: { DialogTemplate } })
+export default class CustomDiceDialog extends Dialog<CustomDiceDialogResult> {
 	@Prop({ default: 1 })
 	public readonly initCount!: number;
 

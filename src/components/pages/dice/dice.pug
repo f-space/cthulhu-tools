@@ -1,5 +1,5 @@
-app-page#dice
-	header.page-title
+page-template#dice
+	template(slot="title")
 		h2 ダイスロール
 	dice-view.dice-view(ref="view", :dices="dices", v-model="faces")
 	.dice-set-list

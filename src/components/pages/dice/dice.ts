@@ -1,19 +1,20 @@
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
 import { Dice } from "models/dice";
+import Page from "vue-models/page";
 import DiceView from "@component/organisms/dice-view";
 import CustomDiceDialog from "@component/pages/custom-dice-dialog";
-import AppPage from "@component/frame/page";
+import PageTemplate from "@component/templates/page";
 
 type CustomDice = { count: number, max: number };
 
 @Component({
 	components: {
-		AppPage,
 		DiceView,
+		PageTemplate,
 	}
 })
-export default class DicePage extends AppPage {
+export default class DicePage extends Page {
 	public type: string | null = null;
 	public custom: CustomDice = { count: 1, max: 100 };
 	public faces: number[] = [];

@@ -7,9 +7,10 @@ import {
 	PropertyResolver, PropertyEvaluator, EvaluationContext, ProfileEvaluationContext, ResolverBuilder, EvaluatorBuilder
 } from "models/status";
 import { deepClone } from "models/utility";
+import Page from "vue-models/page";
 import AttributeInput from "@component/molecules/attribute-input";
 import SkillInput from "@component/molecules/skill-input";
-import AppPage from "@component/frame/page";
+import PageTemplate from "@component/templates/page";
 
 interface SkillSlot {
 	id: string;
@@ -31,10 +32,10 @@ const HOBBY_SKILL_POINTS = "hobby_skill_points";
 	components: {
 		AttributeInput,
 		SkillInput,
-		AppPage,
+		PageTemplate,
 	}
 })
-export default class CharacterEditPage extends AppPage {
+export default class CharacterEditPage extends Page {
 	public profileUUID: string | null = null;
 	public attributeParams: AttributeParams = Object.create(null);
 	public skillSlots: SkillSlot[] = [];

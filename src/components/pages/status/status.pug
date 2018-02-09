@@ -1,7 +1,7 @@
-app-page#status
-	header.page-title
+page-template#status
+	template(slot="title")
 		h2 ステータス
-	nav.navigations
+	template(slot="navs")
 		router-link(tag="button", type="button", :to="{ name: 'character-management' }") 管理
 	.characters
 		section.character(v-for="character in characters", :key="character.$uuid")

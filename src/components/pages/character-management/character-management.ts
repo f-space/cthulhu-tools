@@ -3,8 +3,9 @@ import { Component } from 'vue-property-decorator';
 import { State, Getter, Action, namespace } from 'vuex-class';
 import { CharacterView, Character, DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
+import Page from "vue-models/page";
 import SelectableItem from "@component/molecules/selectable-item";
-import AppPage from "@component/frame/page";
+import PageTemplate from "@component/templates/page";
 
 const StatusGetter = namespace("status", Getter);
 const ViewState = namespace("status/view", State);
@@ -16,10 +17,10 @@ const CHARACTER_EDIT_PAGE = "character-edit";
 @Component({
 	components: {
 		SelectableItem,
-		AppPage,
+		PageTemplate,
 	}
 })
-export default class CharacterManagementPage extends Vue {
+export default class CharacterManagementPage extends Page {
 	public checked: { [uuid: string]: boolean } = Object.create(null);
 
 	@StatusGetter("provider")
