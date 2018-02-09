@@ -1,4 +1,4 @@
-import Vue, { CreateElement, VNode } from 'vue';
+import Vue, { CreateElement, RenderContext, VNode } from 'vue';
 import { Component, Provide, Inject } from 'vue-property-decorator';
 import MixinPlugin from "vue-models/mixin-plugin";
 
@@ -46,29 +46,27 @@ class DialogHub extends Vue {
 	}
 }
 
-@Component
-class DialogRenderer extends Vue {
-	@Inject()
-	public readonly $dialog!: DialogHub;
-
-	public render(createElement: CreateElement): VNode {
-		const hub = this.$dialog;
+const DialogRenderer = Vue.extend({
+	functional: true,
+	inject: ['$dialog'],
+	render(createElement: CreateElement, context: RenderContext): VNode {
+		const hub = context.injections.$dialog;
 		const dialog = hub.current || {} as DialogData;
 		return createElement(dialog.component, {
 			props: dialog.data,
 			on: { [DIALOG_CLOSE_EVENT]() { return hub.$emit(DIALOG_CLOSE_EVENT, ...arguments); } },
 		});
-	}
-}
+	},
+})
 
 @Component({
 	components: { DialogSlot: DialogRenderer },
 })
 export class DialogHost extends Vue {
 	@Provide()
-	public $dialog!: DialogHub;
+	public readonly $dialog!: DialogHub;
 
-	protected beforeCreate(): void {
+	protected beforeCreate(this: any): void {
 		this.$dialog = new DialogHub();
 	}
 }
