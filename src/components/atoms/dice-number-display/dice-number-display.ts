@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import SizeMixin, { mixin } from "mixins/size";
+import ReactiveSize from "vue-models/reactive-size";
 
 @Component
-export default class DiceNumberDisplay extends mixin(Vue, SizeMixin) {
+export default class DiceNumberDisplay extends Vue.mixes(ReactiveSize) {
 	@Prop({ required: true })
 	public readonly digits!: number;
 

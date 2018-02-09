@@ -1,5 +1,8 @@
 import Vue, { CreateElement, VNode } from 'vue';
 import { Component, Provide, Inject } from 'vue-property-decorator';
+import MixinPlugin from "vue-models/mixin-plugin";
+
+Vue.use(MixinPlugin);
 
 interface DialogData {
 	readonly component: typeof Vue;

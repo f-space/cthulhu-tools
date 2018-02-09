@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { DiceDisplay } from "models/dice";
-import SizeMixin, { mixin } from "mixins/size";
+import ReactiveSize from "vue-models/reactive-size";
 
 type Position = { x: number, y: number };
 
 @Component
-export default class DiceCircleLayout extends mixin(Vue, SizeMixin) {
+export default class DiceCircleLayout extends Vue.mixes(ReactiveSize) {
 	@Prop({ required: true })
 	public readonly display!: DiceDisplay[][];
 

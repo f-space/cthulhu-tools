@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
-import mixin from "mixins/mixin";
-import { DialogHost } from "mixins/dialog";
+import { DialogHost } from "vue-models/dialog";
 import PageHeader from "@component/frame/header";
 import PageNavigation from "@component/frame/navigation";
 
@@ -11,7 +10,7 @@ import PageNavigation from "@component/frame/navigation";
 		PageNavigation,
 	}
 })
-export default class CthulhuApp extends mixin(Vue, DialogHost) {
+export default class CthulhuApp extends Vue.mixes(DialogHost) {
 	@Watch("$route")
 	protected onRouteChanged(): void {
 		this.$dialog.cancel();

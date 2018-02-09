@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { DiceDisplay } from 'models/dice';
+import { DiceDisplay } from "models/dice";
+import DiceRoll from "vue-models/dice-roll";
 import DiceImage from "@component/atoms/dice-image";
 import DiceNumberDisplay from "@component/atoms/dice-number-display";
 import DiceLayout from "@component/molecules/dice-layout";
-import DiceRoll from "@component/organisms/dice-roll";
 
 @Component({
 	components: {
