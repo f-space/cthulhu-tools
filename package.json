@@ -22,6 +22,7 @@
 		"dexie": "^2.0.1",
 		"expr-eval": "^1.2.1",
 		"fast-sha256": "^1.1.0",
+		"sanitize.css": "^5.0.0",
 		"vue": "^2.5.13",
 		"vue-property-decorator": "^6.0.0",
 		"vue-router": "^3.0.1",
