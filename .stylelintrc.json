@@ -6,6 +6,15 @@
 	],
 	"rules": {
 		"indentation": "tab",
-		"no-empty-source": null
+		"no-empty-source": null,
+		"selector-pseudo-class-no-unknown": [
+			true,
+			{
+				"ignorePseudoClasses": [
+					"global",
+					"local"
+				]
+			}
+		]
 	}
 }
