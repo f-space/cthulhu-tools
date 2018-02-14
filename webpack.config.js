@@ -48,15 +48,6 @@ module.exports = function (env) {
 		module: {
 			rules: [
 				{
-					test: /\.vue$/,
-					loader: "vue-loader",
-					options: {
-						loaders: {
-							scss: ExtractTextPlugin.extract(cssLoader)
-						},
-					}
-				},
-				{
 					test: /\.pug$/,
 					loader: "pug-loader"
 				},
@@ -64,7 +55,6 @@ module.exports = function (env) {
 					test: /\.tsx?$/,
 					loader: "ts-loader",
 					options: {
-						appendTsSuffixTo: [/\.vue$/],
 						compilerOptions: (production ? {} : { sourceMap: true })
 					}
 				},
@@ -84,7 +74,7 @@ module.exports = function (env) {
 			]
 		},
 		resolve: {
-			extensions: [".ts", ".js", ".vue", ".json"],
+			extensions: [".ts", ".js", ".json"],
 			alias: {
 				"@resource": path.resolve(__dirname, "docs")
 			},

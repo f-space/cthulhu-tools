@@ -9,8 +9,7 @@
 		"start:prod": "webpack-dev-server --env.production --define process.env.NODE_ENV='production'",
 		"build": "npm run build:prod",
 		"build:dev": "webpack --debug --devtool inline-source-map --output-pathinfo",
-		"build:prod": "webpack --env.production --define process.env.NODE_ENV='production'",
-		"new:component": "node scripts/new-component.js"
+		"build:prod": "webpack --env.production --define process.env.NODE_ENV='production'"
 	},
 	"keywords": [
 		"Cthulhu"
@@ -22,12 +21,12 @@
 		"dexie": "^2.0.1",
 		"expr-eval": "^1.2.1",
 		"fast-sha256": "^1.1.0",
-		"sanitize.css": "^5.0.0",
-		"vue": "^2.5.13",
-		"vue-property-decorator": "^6.0.0",
-		"vue-router": "^3.0.1",
-		"vuex": "^3.0.1",
-		"vuex-class": "^0.3.0"
+		"immutable": "^3.8.2",
+		"react": "^16.2.0",
+		"react-dom": "^16.2.0",
+		"react-router-dom": "^4.2.2",
+		"redux": "^3.7.2",
+		"sanitize.css": "^5.0.0"
 	},
 	"devDependencies": {
 		"autoprefixer": "^8.0.0",
@@ -50,8 +49,6 @@
 		"ts-loader": "^3.5.0",
 		"typescript": "^2.7.1",
 		"uglifyjs-webpack-plugin": "^1.1.8",
-		"vue-loader": "^14.1.1",
-		"vue-template-compiler": "^2.5.13",
 		"webpack": "^3.11.0",
 		"webpack-dev-server": "^2.11.1"
 	}

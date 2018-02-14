@@ -4,14 +4,6 @@
 		"module": "es2015",
 		"moduleResolution": "node",
 		"baseUrl": "src",
-		"paths": {
-			"@component/*": [
-				"components/*/component",
-				"components/*/component.vue"
-			]
-		},
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true
