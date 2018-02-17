@@ -4,6 +4,8 @@
 		"module": "es2015",
 		"moduleResolution": "node",
 		"baseUrl": "src",
+		"jsx": "react",
+		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true

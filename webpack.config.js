@@ -75,7 +75,7 @@ module.exports = function (env) {
 			]
 		},
 		resolve: {
-			extensions: [".ts", ".js", ".json"],
+			extensions: [".tsx", ".ts", ".js", ".json"],
 			alias: {
 				"@resource": path.resolve(__dirname, "docs")
 			},
