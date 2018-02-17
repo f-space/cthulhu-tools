@@ -1,0 +1,62 @@
+@import "mixin";
+
+.navigation {
+	@include unselectable;
+
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: stretch;
+}
+
+%item-size {
+	flex: 1 1 0;
+	overflow: hidden;
+
+	&:global(.slide-enter-active),
+	&:global(.slide-exit-active) {
+		transition: flex 300ms;
+	}
+
+	&:global(.slide-enter),
+	&:global(.slide-exit), {
+		flex: 0 0 0;
+	}
+}
+
+%item-layout {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: center;
+}
+
+%item-display {
+	opacity: 0.5;
+	background: linear-gradient(transparent 80%, red);
+	cursor: pointer;
+	line-height: 1.2;
+	font-size: 3rem;
+
+	&.active {
+		opacity: 1;
+		background: linear-gradient(transparent 50%, green);
+		cursor: default;
+	}
+
+	&.two-lines {
+		line-height: 0.8;
+		font-size: 2rem;
+	}
+
+	&.indicator {
+		@include designed-font(limegreen);
+	}
+}
+
+.nav-item {
+	@extend %item-size;
+	@extend %item-layout;
+	@extend %item-display;
+
+	@include designed-font;
+}

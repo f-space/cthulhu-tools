@@ -35,6 +35,7 @@
 @mixin designed-font($color: red) {
 	@include blur-text(0.1ex, 0.25ex, $color);
 
+	text-decoration: none;
 	color: white;
 	font-family: "Cthulhu", sans-serif;
 }

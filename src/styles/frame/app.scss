@@ -1,0 +1,68 @@
+.app {
+	box-sizing: border-box;
+	position: relative;
+	background: black;
+	width: 100%;
+	height: 100%;
+	line-height: 1.6;
+	color: white;
+	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, sans-serif;
+}
+
+.overlay {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	flex-flow: column nowrap;
+	align-items: stretch;
+	justify-content: center;
+	z-index: 1;
+	background: rgba(0, 0, 0, 0.5);
+	overflow: hidden;
+
+	&:empty {
+		display: none;
+	}
+}
+
+.container {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	flex-flow: column nowrap;
+	align-items: stretch;
+	justify-content: flex-start;
+	z-index: 0;
+	overflow: hidden;
+
+	.overlay:not(:empty) ~ & {
+		filter: blur(3px);
+		pointer-events: none;
+	}
+}
+
+.header {
+	flex: 0 0 auto;
+}
+
+.content {
+	display: flex;
+	position: relative;
+	flex: 1 1 0;
+	flex-flow: column nowrap;
+	align-items: stretch;
+	justify-content: flex-start;
+	background: linear-gradient(rgba(255, 0, 0, 0.5), transparent 20px);
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.navigation {
+	flex: 0 0 auto;
+}

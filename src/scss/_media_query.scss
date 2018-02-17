@@ -5,7 +5,7 @@
 }
 
 @media only screen and (max-aspect-ratio: 2/3) {
-	body {
+	:global(#app) {
 		max-width: none;
 	}
 }

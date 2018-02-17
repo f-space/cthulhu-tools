@@ -93,7 +93,7 @@ button {
 		background: rgb(255, 128, 128);
 	}
 
-	&.commit {
+	&:global(.commit) {
 		background: rgb(128, 0, 0);
 
 		&:active {

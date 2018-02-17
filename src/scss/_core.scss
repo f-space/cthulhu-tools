@@ -2,7 +2,7 @@
 	background: dimgray;
 }
 
-body {
+:global(#app) {
 	position: fixed;
 	top: 0;
 	right: 0;
