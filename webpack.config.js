@@ -53,6 +53,10 @@ module.exports = function (env) {
 					loader: "pug-loader"
 				},
 				{
+					test: /\.pugx$/,
+					use: require.resolve("./pugx-loader.js")
+				},
+				{
 					test: /\.tsx?$/,
 					loader: "ts-loader",
 					options: {
