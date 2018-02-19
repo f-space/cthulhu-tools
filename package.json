@@ -30,7 +30,7 @@
 		"react-transition-group": "^2.2.1",
 		"redux": "^3.7.2",
 		"reselect": "^3.0.1",
-		"sanitize.css": "^5.0.0"
+		"ress": "^1.2.2"
 	},
 	"devDependencies": {
 		"@types/classnames": "^2.2.3",
