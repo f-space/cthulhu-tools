@@ -15,7 +15,8 @@ export default class App extends React.Component {
 		return <HashRouter>
 			<div className={style['app']}>
 				<DialogProvider>
-					<DialogSlot className={style['overlay']}>
+					<DialogSlot>
+						<div className={style['overlay']} />
 					</DialogSlot>
 					<div className={style['container']}>
 						<Header className={style['header']} />
