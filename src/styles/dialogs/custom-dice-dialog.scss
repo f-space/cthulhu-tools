@@ -1,0 +1,25 @@
+.inputs {
+	margin: 2ex 1em;
+	text-align: center;
+	font-size: 1.5em;
+}
+
+.number {
+	margin: auto 0.5em;
+	width: 5ex;
+}
+
+.buttons {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+}
+
+.ok,
+.cancel {
+	margin: 0.5ex 0.5em;
+	width: 5em;
+}
+
+.cancel { order: 0; }
+.ok { order: 1; }

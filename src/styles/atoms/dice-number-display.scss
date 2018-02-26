@@ -1,0 +1,25 @@
+@import "mixin";
+
+.display {
+	@include blur-text-double(0.1ex, 0.25ex, red);
+
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.5;
+	color: white;
+	font-size: 0;
+}
+
+.critical {
+	@include blur-text-double(0.1ex, 0.25ex, green);
+}
+
+.fumble {
+	@include blur-text-double(0.1ex, 0.25ex, blue);
+}
+
+.canvas {
+	font-size: 100px;
+}

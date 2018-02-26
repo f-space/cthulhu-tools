@@ -1,0 +1,26 @@
+@import "mixin";
+
+.dice-sets {
+	@include unselectable;
+
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin: 1ex 0;
+	padding: 0 1em;
+}
+
+.dice-set {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	margin: 1ex 0.25em;
+	border: solid 1px red;
+	border-radius: 2ex/50%;
+	cursor: pointer;
+	width: calc(30% - 0.25em);
+	text-align: center;
+
+	&.active {
+		background: red;
+	}
+}

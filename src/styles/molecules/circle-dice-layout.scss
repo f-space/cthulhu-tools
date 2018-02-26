@@ -1,0 +1,10 @@
+.layout {
+	--dice-width: var(--dice-size);
+	--dice-height: var(--dice-size);
+	--dice-margin: calc(var(--dice-size) * 0.05);
+}
+
+.container {
+	position: absolute;
+	transform: translate(-50%, -50%);
+}

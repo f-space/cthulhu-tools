@@ -1,0 +1,9 @@
+.layout {
+	--dice-height: calc(var(--dice-size, 0) * 0.95);
+	--dice-margin: calc(var(--dice-size, 0) * 0.05);
+
+	display: flex;
+	flex-flow: row wrap;
+	align-items: stretch;
+	justify-content: space-evenly;
+}

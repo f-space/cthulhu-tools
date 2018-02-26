@@ -1,0 +1,22 @@
+.button {
+	border: solid 1px rgb(128, 0, 0);
+	border-radius: 0.5ex;
+	padding: 0.5ex 0.5em;
+	vertical-align: middle;
+	text-align: center;
+	white-space: nowrap;
+
+	&:active {
+		border-color: rgb(255, 128, 128);
+		background: rgb(255, 128, 128);
+	}
+}
+
+.commit {
+	background: rgb(128, 0, 0);
+
+	&:active {
+		border-color: rgb(255, 128, 128);
+		background: rgb(255, 128, 128);
+	}
+}
