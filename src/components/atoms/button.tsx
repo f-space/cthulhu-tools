@@ -6,8 +6,14 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 	commit?: boolean;
 }
 
-export default function Button(props: ButtonProps) {
-	const { type = "button", commit, className, ...rest } = props;
+export function Button(props: ButtonProps) {
+	const { commit = false, className, ...rest } = props;
 
-	return <button {...rest} className={classNames(className, style['button'], { [style['commit']]: commit })} type={type} />
+	return <button {...rest} className={classNames(className, style['button'], { [style['commit']]: commit })} type="button" />
+}
+
+export function SubmitButton(props: ButtonProps) {
+	const { commit = true, className, ...rest } = props;
+
+	return <button {...rest} className={classNames(className, style['button'], { [style['commit']]: commit })} type="submit" />
 }

@@ -1,7 +1,7 @@
 import React from 'react';
-import Form from "components/functions/form";
+import { Form, UpdateEvent } from "components/functions/form";
 import { NumberInput } from "components/atoms/input";
-import Button from "components/atoms/button";
+import { Button, SubmitButton } from "components/atoms/button";
 import Dialog from "components/templates/dialog";
 import style from "styles/dialogs/custom-dice-dialog.scss";
 
@@ -18,9 +18,8 @@ export interface CustomDiceDialogProps {
 }
 
 export interface CustomDiceDialogState {
-	count: string;
-	max: string;
-	invalid: boolean;
+	count: { value: string, valid: boolean };
+	max: { value: string, valid: boolean };
 }
 
 export default class CustomDiceDialog extends React.Component<CustomDiceDialogProps, CustomDiceDialogState> {
@@ -28,50 +27,44 @@ export default class CustomDiceDialog extends React.Component<CustomDiceDialogPr
 		super(props, context);
 
 		this.state = {
-			count: this.props.count.toString(10),
-			max: this.props.max.toString(10),
-			invalid: false,
+			count: { value: this.props.count.toString(10), valid: false },
+			max: { value: this.props.max.toString(10), valid: false },
 		};
-		this.handleFormChange = this.handleFormChange.bind(this);
-		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleUpdate = this.handleUpdate.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
 
 	public render() {
-		const { count, max, invalid } = this.state;
+		const { count, max } = this.state;
+		const invalid = [count, max].some(prop => !prop.valid);
 
 		return <Dialog when={this.props.when} header={"Custom Dice"}>
-			<Form onChange={this.handleFormChange} onSubmit={this.handleSubmit}>
+			<Form onSubmit={this.handleSubmit}>
 				<div className={style['inputs']}>
-					<NumberInput className={style['number']} name="count" min={1} max={100} step={1} value={count} onChange={this.handleInputChange} />
+					<NumberInput className={style['number']} name="count" min={1} max={100} step={1} value={count.value} onUpdate={this.handleUpdate} />
 					D
-					<NumberInput className={style['number']} name="max" min={1} max={1000} step={1} value={max} onChange={this.handleInputChange} />
+					<NumberInput className={style['number']} name="max" min={1} max={1000} step={1} value={max.value} onUpdate={this.handleUpdate} />
 				</div>
 				<div className={style['buttons']}>
-					<Button className={style['ok']} type="submit" disabled={invalid}>OK</Button>
+					<SubmitButton className={style['ok']} disabled={invalid}>OK</SubmitButton>
 					<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
 				</div >
 			</Form>
 		</Dialog >
 	}
 
-	private handleFormChange(event: React.ChangeEvent<HTMLFormElement>): void {
-		const target = event.currentTarget;
-		const invalid = !target.checkValidity();
-		this.setState({ invalid });
-	}
-
-	private handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
+	private handleUpdate(event: UpdateEvent<HTMLInputElement>): void {
 		const target = event.currentTarget;
 		const name = target.name;
 		const value = target.value;
-		this.setState({ [name]: value } as any);
+		const valid = target.validity.valid;
+		this.setState({ [name]: { value, valid } } as any);
 	}
 
 	private handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
-		const count = Number.parseInt(this.state.count, 10);
-		const max = Number.parseInt(this.state.max, 10);
+		const count = Number.parseInt(this.state.count.value, 10);
+		const max = Number.parseInt(this.state.max.value, 10);
 
 		this.props.onClose({ count, max });
 	}
