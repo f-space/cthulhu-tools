@@ -1,0 +1,79 @@
+.characters {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.character {
+	display: flex;
+	flex: 0 0 auto;
+	flex-flow: column nowrap;
+	margin: 1ex 0;
+	border: solid 1px red;
+	border-radius: 1em;
+	padding: 2ex 0.5em;
+
+	header {
+		margin: 1ex 0;
+		text-align: center;
+	}
+}
+
+.attributes {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.attribute {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	margin-top: 0.5ex;
+	border-bottom: dashed 1px rgb(128, 0, 0);
+
+	.name { flex: 0 0 8em; }
+
+	.value {
+		flex: 1 1 0;
+		text-align: center;
+	}
+}
+
+.skills {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.skill {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	margin-top: 0.5ex;
+	border-bottom: dashed 1px rgb(128, 0, 0);
+
+	.name { flex: 0 0 8em; }
+
+	.value {
+		flex: 1 1 0;
+		text-align: center;
+	}
+}
+
+.items {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.item {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	margin-top: 0.5ex;
+	border-bottom: dashed 1px rgb(128, 0, 0);
+
+	.name { flex: 0 0 8em; }
+
+	.description {
+		flex: 1 1 0;
+		font-size: 0.9em;
+	}
+}
