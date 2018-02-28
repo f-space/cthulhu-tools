@@ -10,11 +10,11 @@ class Provider implements HistoryProvider {
 	public get(uuids: string[]): History[];
 	public get(uuids: string | string[]): History | History[] | undefined {
 		return Array.isArray(uuids)
-			? uuids.map(uuid => this.histories.get(uuid)).filter(x => x !== undefined)
+			? uuids.map(uuid => this.histories.get(uuid)).filter(x => x !== undefined) as History[]
 			: this.histories.get(uuids);
 	}
 
-	public list(): History[] { return [...this.histories.values() as IterableIterator<History>]; }
+	public list(): History[] { return [...this.histories.values()]; }
 }
 
 export const getHistoryProvider = createSelector(

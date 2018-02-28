@@ -10,11 +10,11 @@ class Provider implements ItemProvider {
 	public get(uuids: string[]): Item[];
 	public get(uuids: string | string[]): Item | Item[] | undefined {
 		return Array.isArray(uuids)
-			? uuids.map(uuid => this.items.get(uuid)).filter(x => x !== undefined)
+			? uuids.map(uuid => this.items.get(uuid)).filter(x => x !== undefined) as Item[]
 			: this.items.get(uuids);
 	}
 
-	public list(): Item[] { return [...this.items.values() as IterableIterator<Item>]; }
+	public list(): Item[] { return [...this.items.values()]; }
 }
 
 export const getItemProvider = createSelector(

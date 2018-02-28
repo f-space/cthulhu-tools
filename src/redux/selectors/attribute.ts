@@ -10,11 +10,11 @@ class Provider implements AttributeProvider {
 	public get(uuids: string[]): Attribute[];
 	public get(uuids: string | string[]): Attribute | Attribute[] | undefined {
 		return Array.isArray(uuids)
-			? uuids.map(uuid => this.attributes.get(uuid)).filter(x => x !== undefined)
+			? uuids.map(uuid => this.attributes.get(uuid)).filter(x => x !== undefined) as Attribute[]
 			: this.attributes.get(uuids);
 	}
 
-	public list(): Attribute[] { return [...this.attributes.values() as IterableIterator<Attribute>]; }
+	public list(): Attribute[] { return [...this.attributes.values()]; }
 }
 
 export const getAttributeProvider = createSelector(

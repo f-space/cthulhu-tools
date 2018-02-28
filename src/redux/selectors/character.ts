@@ -10,11 +10,11 @@ class Provider implements CharacterProvider {
 	public get(uuids: string[]): Character[];
 	public get(uuids: string | string[]): Character | Character[] | undefined {
 		return Array.isArray(uuids)
-			? uuids.map(uuid => this.characters.get(uuid)).filter(x => x !== undefined)
+			? uuids.map(uuid => this.characters.get(uuid)).filter(x => x !== undefined) as Character[]
 			: this.characters.get(uuids);
 	}
 
-	public list(): Character[] { return [...this.characters.values() as IterableIterator<Character>]; }
+	public list(): Character[] { return [...this.characters.values()]; }
 }
 
 export const getCharacterProvider = createSelector(

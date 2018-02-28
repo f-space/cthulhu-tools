@@ -12,11 +12,11 @@ class Provider implements ProfileProvider {
 	public get(uuids: string[]): Profile[];
 	public get(uuids: string | string[]): Profile | Profile[] | undefined {
 		return Array.isArray(uuids)
-			? uuids.map(uuid => this.profiles.get(uuid)).filter(x => x !== undefined)
+			? uuids.map(uuid => this.profiles.get(uuid)).filter(x => x !== undefined) as Profile[]
 			: this.profiles.get(uuids);
 	}
 
-	public list(): Profile[] { return [...this.profiles.values() as IterableIterator<Profile>]; }
+	public list(): Profile[] { return [...this.profiles.values()]; }
 }
 
 export const getProfileProvider = createSelector(

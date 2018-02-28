@@ -10,11 +10,11 @@ class Provider implements SkillProvider {
 	public get(ids: string[]): Skill[];
 	public get(ids: string | string[]): Skill | Skill[] | undefined {
 		return Array.isArray(ids)
-			? ids.map(id => this.skills.get(id)).filter(x => x !== undefined)
+			? ids.map(id => this.skills.get(id)).filter(x => x !== undefined) as Skill[]
 			: this.skills.get(ids);
 	}
 
-	public list(): Skill[] { return [...this.skills.values() as IterableIterator<Skill>]; }
+	public list(): Skill[] { return [...this.skills.values()]; }
 }
 
 export const getSkillProvider = createSelector(
