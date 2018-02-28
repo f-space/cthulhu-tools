@@ -1,15 +1,17 @@
 import React from 'react';
 import classNames from 'classnames';
-import FlexibleContainer from "components/functions/flexible-container";
+import { DiceDisplay } from "models/dice";
 import style from "styles/molecules/circle-dice-layout.scss";
 
 export interface CircleDiceLayoutProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 	width: number;
 	height: number;
+	dices: DiceDisplay[][];
+	render(group: DiceDisplay[]): React.ReactNode;
 }
 
-export default function CircleDiceLayout({ width, height, className, children, ...rest }: CircleDiceLayoutProps) {
-	const count = React.Children.count(children);
+export default function CircleDiceLayout({ width, height, dices, render, className, ...rest }: CircleDiceLayoutProps) {
+	const count = dices.length;
 	const angle = Math.PI * 2 / count;
 	const outerRadius = Math.min(width, height) / 2;
 	const innerRadius = outerRadius / (1 + Math.sqrt(2 / (1 - Math.cos(angle))));
@@ -21,14 +23,14 @@ export default function CircleDiceLayout({ width, height, className, children, .
 
 	return <div {...rest} className={classNames(className, style['layout'])} style={{ '--dice-size': `${innerRadius}px` }}>
 		{
-			React.Children.map(children, (child, n) => {
+			dices.map((group, n) => {
 				const position = {
 					left: centerX - Math.sin(angle * n + offset) * radius,
 					top: centerY - Math.cos(angle * n + offset) * radius,
 				};
 
-				return <div className={style['container']} style={position}>
-					{child}
+				return <div key={n} className={style['container']} style={position}>
+					{render(group)}
 				</div>
 			})
 		}

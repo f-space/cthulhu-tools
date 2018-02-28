@@ -1,11 +1,16 @@
 import React from 'react';
 import classNames from 'classnames';
+import { DiceDisplay } from "models/dice";
 import style from "styles/molecules/row-dice-layout.scss";
 
 export interface RowDiceLayoutProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 	width: number;
 	height: number;
+	dices: DiceDisplay[][];
+	render(group: DiceDisplay[]): React.ReactNode;
 }
+
+function Wrapper(props: { children?: React.ReactNode }) { return <>{props.children}</>; };
 
 export default class RowDiceLayout extends React.Component<RowDiceLayoutProps> {
 	private groupCount!: number;
@@ -26,43 +31,39 @@ export default class RowDiceLayout extends React.Component<RowDiceLayoutProps> {
 	}
 
 	public render() {
-		const { width, height, className, children, ...rest } = this.props;
-		const groups = React.Children.toArray(children);
-		const rows = this.offsets.map((_, i, offsets) => groups.slice(offsets[i], offsets[i + 1]));
+		const { width, height, dices, render, className, ...rest } = this.props;
+		const rows = this.offsets.map((_, i, offsets) => dices.slice(offsets[i], offsets[i + 1]));
 
 		return <div {...rest} className={classNames(className, style['layout'])} style={{ '--dice-size': `${this.diceSize}px` }}>
 			{
-				rows.map((groups, n) => {
-					return <div key={n} className={style['row']}>
-						{groups}
+				rows.map((row, rowIndex) => {
+					return <div key={rowIndex} className={style['row']}>
+						{row.map((group, groupIndex) => <Wrapper key={groupIndex}>{render(group)}</Wrapper>)}
 					</div>
 				})
 			}
 		</div>
 	}
 
-	private getGroupInfo(children: React.ReactNode): { count: number, length: number } {
-		const groups = React.Children.toArray(children);
-		const count = groups.length;
-		const length = groups.filter(React.isValidElement)
-			.map(child => React.Children.count((child.props as any).children))
-			.reduce((max, count) => Math.max(max, count), 1);
+	private getGroupInfo(dices: DiceDisplay[][]): { count: number, length: number } {
+		const count = dices.length;
+		const length = dices.reduce((max, group) => Math.max(max, group.length), 1);
 		return { count, length };
 	}
 
-	private isInvalid({ width, height, children }: RowDiceLayoutProps): boolean {
+	private isInvalid({ width, height, dices }: RowDiceLayoutProps): boolean {
 		if (this.props.width !== width) return true;
 		if (this.props.height !== height) return true;
-		if (this.props.children !== children) {
-			const { count, length } = this.getGroupInfo(children);
+		if (this.props.dices !== dices) {
+			const { count, length } = this.getGroupInfo(dices);
 			if (this.groupCount !== count) return true;
 			if (this.groupLength !== length) return true;
 		}
 		return false;
 	}
 
-	private precompute({ width, height, children }: RowDiceLayoutProps): void {
-		const { count, length } = this.getGroupInfo(children);
+	private precompute({ width, height, dices }: RowDiceLayoutProps): void {
+		const { count, length } = this.getGroupInfo(dices);
 		this.groupCount = count;
 		this.groupLength = length;
 

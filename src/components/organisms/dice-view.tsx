@@ -4,10 +4,11 @@ import { Dice, DiceDisplay } from "models/dice";
 import FlexibleContainer from "components/functions/flexible-container";
 import DiceImage from "components/atoms/dice-image";
 import DiceNumberDisplay from "components/atoms/dice-number-display";
+import DiceGroup from "components/molecules/dice-group";
 import DiceLayout, { DiceLayoutType } from "components/molecules/dice-layout";
 import style from "styles/organisms/dice-view.scss";
 
-export interface DiceViewProps extends React.HtmlHTMLAttributes<HTMLDivElement>{
+export interface DiceViewProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 	dices: ReadonlyArray<Dice>;
 	faces: ReadonlyArray<number>;
 }
@@ -25,21 +26,15 @@ export default class DiceView extends React.Component<DiceViewProps> {
 				const state = this.getState(dices, value);
 
 				return <React.Fragment>
-					<DiceLayout {...size} className={style['layout']} type={layout}>
-						{display.map(this.renderDiceGroup)}
-					</DiceLayout>
+					<DiceLayout {...size} className={style['layout']} type={layout} dices={display} render={group =>
+						<DiceGroup dices={group} />
+					} />
 					<DiceNumberDisplay {...size} {...state} className={style['number']} digits={digits} value={value} />
 				</React.Fragment>
 			}
 
 			return null;
 		}} />
-	}
-
-	private renderDiceGroup(group: DiceDisplay[], index: number) {
-		return <div key={index} className={style['group']}>
-			{group.map((dice, n) => <DiceImage key={n} className={style['dice']} type={dice.type} face={dice.face} />)}
-		</div>
 	}
 
 	private selectLayout(dices: ReadonlyArray<Dice>): DiceLayoutType {
