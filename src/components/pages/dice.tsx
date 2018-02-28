@@ -48,7 +48,7 @@ export default class DicePage extends React.Component<{}, DicePageState> {
 		const dices = this.dices || [];
 		const faces = this.state.faces;
 
-		return <Page id={style['dice']} heading={<h2>ダイスロール</h2>}>
+		return <Page id="dice" heading={<h2>ダイスロール</h2>}>
 			<DiceSound ref={sound => this.sound = sound} />
 			<DiceView className={style['view']} dices={dices} faces={faces} />
 			<DiceTypeSelector className={style['selector']} types={PRESETS} selected={this.state.type} onTypeChange={this.handleTypeChange} />

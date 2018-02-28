@@ -4,7 +4,7 @@ import HomeContent from "templates/pages/home.pugx";
 import style from "styles/pages/home.scss";
 
 export default function HomePage() {
-	return <Page id={style['home']} heading={<h2>クトゥルフTRPGのための<wbr />Webアプリ</h2>}>
+	return <Page id="home" className={style['page']} heading={<h2>クトゥルフTRPGのための<wbr />Webアプリ</h2>}>
 		<HomeContent {...style} />
 	</Page>
 }
