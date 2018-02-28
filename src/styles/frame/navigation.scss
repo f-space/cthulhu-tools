@@ -10,16 +10,13 @@
 
 %item-size {
 	flex: 1 1 0;
+	transition: flex 300ms, visibility 300ms;
+	visibility: visible;
 	overflow: hidden;
 
-	&:global(.slide-enter-active),
-	&:global(.slide-exit-active) {
-		transition: flex 300ms;
-	}
-
-	&:global(.slide-enter),
-	&:global(.slide-exit), {
+	&.hidden {
 		flex: 0 0 0;
+		visibility: hidden;
 	}
 }
 
