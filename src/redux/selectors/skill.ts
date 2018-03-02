@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 import { Skill, SkillProvider } from "models/status";
-import { SkillState } from "redux/reducers/skill";
+import { State } from "redux/store";
 
 class Provider implements SkillProvider {
 	constructor(readonly skills: Map<string, Skill>) { }
@@ -17,7 +17,8 @@ class Provider implements SkillProvider {
 	public list(): Skill[] { return [...this.skills.values()]; }
 }
 
-export const getSkillProvider = createSelector(
-	(state: SkillState) => state.skills,
-	(skills) => new Provider(skills)
-);
+export const getSkillState = (state: State) => state.skill;
+
+export const getSkills = createSelector(getSkillState, state => state.skills);
+
+export const getSkillProvider = createSelector(getSkills, skills => new Provider(skills));

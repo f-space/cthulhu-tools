@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 import { Character, CharacterProvider } from "models/status";
-import { CharacterState } from "redux/reducers/character";
+import { State } from "redux/store";
 
 class Provider implements CharacterProvider {
 	constructor(readonly characters: Map<string, Character>) { }
@@ -17,7 +17,8 @@ class Provider implements CharacterProvider {
 	public list(): Character[] { return [...this.characters.values()]; }
 }
 
-export const getCharacterProvider = createSelector(
-	(state: CharacterState) => state.characters,
-	(characters) => new Provider(characters)
-);
+export const getCharacterState = (state: State) => state.character;
+
+export const getCharacters = createSelector(getCharacterState, state => state.characters)
+
+export const getCharacterProvider = createSelector(getCharacters, characters => new Provider(characters));

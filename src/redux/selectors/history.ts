@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 import { History, HistoryProvider } from "models/status";
-import { HistoryState } from "redux/reducers/history";
+import { State } from "redux/store";
 
 class Provider implements HistoryProvider {
 	constructor(readonly histories: Map<string, History>) { }
@@ -17,7 +17,8 @@ class Provider implements HistoryProvider {
 	public list(): History[] { return [...this.histories.values()]; }
 }
 
-export const getHistoryProvider = createSelector(
-	(state: HistoryState) => state.histories,
-	(historys) => new Provider(historys)
-);
+export const getHistoryState = (state: State) => state.history;
+
+export const getHistories = createSelector(getHistoryState, state => state.histories);
+
+export const getHistoryProvider = createSelector(getHistories, histories => new Provider(histories));

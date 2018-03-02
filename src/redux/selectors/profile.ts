@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 import { Profile, ProfileProvider } from "models/status";
-import { ProfileState } from "redux/reducers/profile";
+import { State } from "redux/store";
 
 class Provider implements ProfileProvider {
 	constructor(readonly profiles: Map<string, Profile>, readonly defaultUUID: string | null) { }
@@ -19,8 +19,10 @@ class Provider implements ProfileProvider {
 	public list(): Profile[] { return [...this.profiles.values()]; }
 }
 
-export const getProfileProvider = createSelector(
-	(state: ProfileState) => state.profiles,
-	(state: ProfileState) => state.default,
-	(profiles, defaultUUID) => new Provider(profiles, defaultUUID)
-);
+export const getProfileState = (state: State) => state.profile;
+
+export const getProfiles = createSelector(getProfileState, state => state.profiles);
+
+export const getDefaultProfile = createSelector(getProfileState, state => state.default);
+
+export const getProfileProvider = createSelector(getProfiles, getDefaultProfile, (profiles, defaultUUID) => new Provider(profiles, defaultUUID));
