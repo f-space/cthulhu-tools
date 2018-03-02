@@ -1,17 +1,17 @@
 import { AttributeData, Attribute } from "models/status";
 import DB from "models/storage";
-import { Store } from "redux/reducers/root";
+import { Dispatch } from "redux/store";
 import { setAttribute, deleteAttribute } from "redux/actions/attribute";
 import BUILTIN_ATTRIBUTES_URL from "@resource/data/attributes.json";
 
 export default class AttributeCommand {
-	public constructor(readonly store: Store) { }
+	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(attribute: Attribute): Promise<void> {
 		await DB.transaction("rw", DB.attributes, () => {
 			return DB.attributes.add(attribute.toJSON());
 		}).then(() => {
-			this.store.dispatch(setAttribute(attribute));
+			this.dispatch(setAttribute(attribute));
 		});
 	}
 
@@ -19,7 +19,7 @@ export default class AttributeCommand {
 		await DB.transaction("rw", DB.attributes, () => {
 			return DB.attributes.update(attribute.uuid, attribute.toJSON());
 		}).then(() => {
-			this.store.dispatch(setAttribute(attribute));
+			this.dispatch(setAttribute(attribute));
 		});
 	}
 
@@ -27,7 +27,7 @@ export default class AttributeCommand {
 		await DB.transaction("rw", DB.attributes, () => {
 			return DB.attributes.delete(uuid);
 		}).then(() => {
-			this.store.dispatch(deleteAttribute(uuid));
+			this.dispatch(deleteAttribute(uuid));
 		});
 	}
 
@@ -37,7 +37,7 @@ export default class AttributeCommand {
 			return DB.attributes.toArray();
 		}).then(attributes => {
 			for (const attribute of attributes) {
-				this.store.dispatch(setAttribute(Attribute.from(attribute)));
+				this.dispatch(setAttribute(Attribute.from(attribute)));
 			}
 		});
 	}
@@ -52,7 +52,7 @@ export default class AttributeCommand {
 		}).then(data => {
 			const attributes = (Array.isArray(data) ? data : [data]) as AttributeData[];
 			for (const attribute of attributes) {
-				this.store.dispatch(setAttribute(Attribute.from(attribute, true)));
+				this.dispatch(setAttribute(Attribute.from(attribute, true)));
 			}
 		});
 	}

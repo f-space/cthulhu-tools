@@ -1,5 +1,5 @@
 import CacheStorage from "models/idb-cache";
-import { Store } from "redux/reducers/root";
+import { Dispatch } from "redux/store";
 import ViewCommand from "redux/commands/view";
 import CharacterCommand from "redux/commands/character";
 import ProfileCommand from "redux/commands/profile";
@@ -17,14 +17,14 @@ export default class RootCommand {
 	public readonly item: ItemCommand;
 	public readonly history: HistoryCommand;
 
-	public constructor(readonly store: Store) {
-		this.view = new ViewCommand(store);
-		this.character = new CharacterCommand(store);
-		this.profile = new ProfileCommand(store);
-		this.attribute = new AttributeCommand(store);
-		this.skill = new SkillCommand(store);
-		this.item = new ItemCommand(store);
-		this.history = new HistoryCommand(store);
+	public constructor(readonly dispatch: Dispatch) {
+		this.view = new ViewCommand(dispatch);
+		this.character = new CharacterCommand(dispatch);
+		this.profile = new ProfileCommand(dispatch);
+		this.attribute = new AttributeCommand(dispatch);
+		this.skill = new SkillCommand(dispatch);
+		this.item = new ItemCommand(dispatch);
+		this.history = new HistoryCommand(dispatch);
 	}
 
 	public async load(): Promise<void> {

@@ -1,10 +1,10 @@
 import { CharacterView, Character } from "models/status";
 import DB from "models/storage";
-import { Store } from "redux/reducers/root";
+import { Dispatch } from "redux/store";
 import { setCharacter, deleteCharacter } from "redux/actions/character";
 
 export default class CharacterCommand {
-	public constructor(readonly store: Store) { }
+	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(character: Character): Promise<void> {
 		const view = new CharacterView({ target: character.uuid });
@@ -13,7 +13,7 @@ export default class CharacterCommand {
 				return DB.views.add(view.toJSON());
 			});
 		}).then(() => {
-			this.store.dispatch(setCharacter(character));
+			this.dispatch(setCharacter(character));
 		});
 	}
 
@@ -21,7 +21,7 @@ export default class CharacterCommand {
 		await DB.transaction("rw", DB.characters, () => {
 			return DB.characters.update(character.uuid, character.toJSON());
 		}).then(() => {
-			this.store.dispatch(setCharacter(character));
+			this.dispatch(setCharacter(character));
 		});
 	}
 
@@ -31,7 +31,7 @@ export default class CharacterCommand {
 				return DB.views.delete(uuid);
 			});
 		}).then(() => {
-			this.store.dispatch(deleteCharacter(uuid));
+			this.dispatch(deleteCharacter(uuid));
 		});
 	}
 
@@ -40,7 +40,7 @@ export default class CharacterCommand {
 			return DB.characters.toArray();
 		}).then(characters => {
 			for (const character of characters) {
-				this.store.dispatch(setCharacter(new Character(character)));
+				this.dispatch(setCharacter(new Character(character)));
 			}
 		});
 	}

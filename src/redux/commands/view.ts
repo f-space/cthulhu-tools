@@ -1,16 +1,16 @@
 import { CharacterView } from "models/status";
 import DB from "models/storage";
-import { Store } from "redux/reducers/root";
+import { Dispatch } from "redux/store";
 import { setView, deleteView } from "redux/actions/view";
 
 export default class ViewCommand {
-	public constructor(readonly store: Store) { }
+	public constructor(readonly dispatch: Dispatch) { }
 
 	public async update(view: CharacterView): Promise<void> {
 		await DB.transaction("rw", DB.views, () => {
 			return DB.views.update(view.target, view.toJSON());
 		}).then(() => {
-			this.store.dispatch(setView(view));
+			this.dispatch(setView(view));
 		});
 	}
 
@@ -19,7 +19,7 @@ export default class ViewCommand {
 			return DB.views.toArray();
 		}).then(views => {
 			for (const view of views) {
-				this.store.dispatch(setView(new CharacterView(view)));
+				this.dispatch(setView(new CharacterView(view)));
 			}
 		});
 
@@ -30,12 +30,12 @@ export default class ViewCommand {
 		const self = this;
 		DB.views.hook("creating", function (key, view) {
 			this.onsuccess = function () {
-				self.store.dispatch(setView(new CharacterView(view)));
+				self.dispatch(setView(new CharacterView(view)));
 			}
 		});
 		DB.views.hook("deleting", function (key) {
 			this.onsuccess = function () {
-				self.store.dispatch(deleteView(key));
+				self.dispatch(deleteView(key));
 			}
 		});
 	}

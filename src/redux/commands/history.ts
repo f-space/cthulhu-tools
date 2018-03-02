@@ -1,16 +1,16 @@
 import { History } from "models/status";
 import DB from "models/storage";
-import { Store } from "redux/reducers/root";
+import { Dispatch } from "redux/store";
 import { setHistory, deleteHistory } from "redux/actions/history";
 
 export default class HistoryCommand {
-	public constructor(readonly store: Store) { }
+	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(history: History): Promise<void> {
 		await DB.transaction("rw", DB.histories, () => {
 			return DB.histories.add(history.toJSON());
 		}).then(() => {
-			this.store.dispatch(setHistory(history));
+			this.dispatch(setHistory(history));
 		});
 	}
 
@@ -18,7 +18,7 @@ export default class HistoryCommand {
 		await DB.transaction("rw", DB.histories, () => {
 			return DB.histories.update(history.uuid, history.toJSON());
 		}).then(() => {
-			this.store.dispatch(setHistory(history));
+			this.dispatch(setHistory(history));
 		});
 	}
 
@@ -26,7 +26,7 @@ export default class HistoryCommand {
 		await DB.transaction("rw", DB.histories, () => {
 			return DB.histories.delete(uuid);
 		}).then(() => {
-			this.store.dispatch(deleteHistory(uuid));
+			this.dispatch(deleteHistory(uuid));
 		});
 	}
 
@@ -35,7 +35,7 @@ export default class HistoryCommand {
 			return DB.histories.toArray();
 		}).then(histories => {
 			for (const history of histories) {
-				this.store.dispatch(setHistory(new History(history)));
+				this.dispatch(setHistory(new History(history)));
 			}
 		});
 	}

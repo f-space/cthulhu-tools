@@ -1,17 +1,17 @@
 import { ProfileData, Profile } from "models/status";
 import DB from "models/storage";
-import { Store } from "redux/reducers/root";
+import { Dispatch } from "redux/store";
 import { setProfile, deleteProfile, setDefaultProfile } from "redux/actions/profile";
 import BUILTIN_PROFILES_URL from "@resource/data/profiles.json";
 
 export default class ProfileCommand {
-	public constructor(readonly store: Store) { }
+	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(profile: Profile): Promise<void> {
 		await DB.transaction("rw", DB.profiles, () => {
 			return DB.profiles.add(profile.toJSON());
 		}).then(() => {
-			this.store.dispatch(setProfile(profile));
+			this.dispatch(setProfile(profile));
 		});
 	}
 
@@ -19,7 +19,7 @@ export default class ProfileCommand {
 		await DB.transaction("rw", DB.profiles, () => {
 			return DB.profiles.update(profile.uuid, profile.toJSON());
 		}).then(() => {
-			this.store.dispatch(setProfile(profile));
+			this.dispatch(setProfile(profile));
 		});
 	}
 
@@ -27,7 +27,7 @@ export default class ProfileCommand {
 		await DB.transaction("rw", DB.profiles, () => {
 			return DB.profiles.delete(uuid);
 		}).then(() => {
-			this.store.dispatch(deleteProfile(uuid));
+			this.dispatch(deleteProfile(uuid));
 		});
 	}
 
@@ -37,7 +37,7 @@ export default class ProfileCommand {
 			return DB.profiles.toArray();
 		}).then(profiles => {
 			for (const profile of profiles) {
-				this.store.dispatch(setProfile(new Profile(profile)));
+				this.dispatch(setProfile(new Profile(profile)));
 			}
 		});
 	}
@@ -53,8 +53,8 @@ export default class ProfileCommand {
 			const profiles = (Array.isArray(data) ? data : [data]) as (ProfileData & { default?: boolean })[];
 			for (const profile of profiles) {
 				const instance = new Profile(profile, true);
-				this.store.dispatch(setProfile(instance));
-				if (profile.default) this.store.dispatch(setDefaultProfile(instance.uuid));
+				this.dispatch(setProfile(instance));
+				if (profile.default) this.dispatch(setDefaultProfile(instance.uuid));
 			}
 		});
 	}

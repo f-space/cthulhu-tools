@@ -1,17 +1,17 @@
 import { SkillData, Skill } from "models/status";
 import DB from "models/storage";
-import { Store } from "redux/reducers/root";
+import { Dispatch } from "redux/store";
 import { setSkill, deleteSkill } from "redux/actions/skill";
 import BUILTIN_SKILLS_URL from "@resource/data/skills.json";
 
 export default class SkillCommand {
-	public constructor(readonly store: Store) { }
+	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(skill: Skill): Promise<void> {
 		await DB.transaction("rw", DB.skills, () => {
 			return DB.skills.add(skill.toJSON());
 		}).then(() => {
-			this.store.dispatch(setSkill(skill));
+			this.dispatch(setSkill(skill));
 		});
 	}
 
@@ -19,7 +19,7 @@ export default class SkillCommand {
 		await DB.transaction("rw", DB.skills, () => {
 			return DB.skills.update(skill.id, skill.toJSON());
 		}).then(() => {
-			this.store.dispatch(setSkill(skill));
+			this.dispatch(setSkill(skill));
 		});
 	}
 
@@ -27,7 +27,7 @@ export default class SkillCommand {
 		await DB.transaction("rw", DB.skills, () => {
 			return DB.skills.delete(id);
 		}).then(() => {
-			this.store.dispatch(deleteSkill(id));
+			this.dispatch(deleteSkill(id));
 		});
 	}
 
@@ -37,7 +37,7 @@ export default class SkillCommand {
 			return DB.skills.toArray();
 		}).then(skills => {
 			for (const skill of skills) {
-				this.store.dispatch(setSkill(new Skill(skill)));
+				this.dispatch(setSkill(new Skill(skill)));
 			}
 		});
 	}
@@ -52,7 +52,7 @@ export default class SkillCommand {
 		}).then(data => {
 			const skills = (Array.isArray(data) ? data : [data]) as SkillData[];
 			for (const skill of skills) {
-				this.store.dispatch(setSkill(new Skill(skill, true)));
+				this.dispatch(setSkill(new Skill(skill, true)));
 			}
 		});
 	}
