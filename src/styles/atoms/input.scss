@@ -39,3 +39,22 @@
 	}
 }
 
+.toggle {
+	border-radius: calc(1ex + 1em);
+	text-align: center;
+	appearance: none;
+
+	&::before {
+		display: inline;
+		line-height: 1;
+		content: attr(data-off);
+	}
+
+	&:checked {
+		background: rgb(128, 0, 0);
+
+		&::before {
+			content: attr(data-on);
+		}
+	}
+}
