@@ -4,7 +4,11 @@ import classNames from 'classnames';
 import style from "styles/frame/navigation.scss";
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLElement> { }
-export interface NavigationLinkProps extends NavLinkProps { }
+
+export interface NavigationLinkProps extends NavLinkProps {
+	to: string;
+}
+
 export interface NavigationIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
 	path: string;
 }
@@ -26,19 +30,21 @@ export default function Navigation(props: NavigationProps) {
 	</nav>
 }
 
-export function NavigationLink({ className, to, children, ...rest }: NavigationLinkProps) {
+function NavigationLink({ to, className, children, ...rest }: NavigationLinkProps) {
 	const classList = [
 		className,
 		style['nav-item'],
 		{ [style['two-lines']]: Array.isArray(children) && children.length >= 2 },
 	];
 
-	return <NavLink {...rest} className={classNames(classList)} activeClassName={style['active']} exact to={to}>
-		{children}
-	</NavLink>
+	return <Route path={to} children={({ match }) => {
+		return <NavLink {...rest} className={classNames(classList)} activeClassName={style['active']} exact to={to} replace={Boolean(match)}>
+			{children}
+		</NavLink>
+	}} />
 }
 
-export function NavigationIndicator({ path, className, children, ...rest }: NavigationIndicatorProps) {
+function NavigationIndicator({ path, className, children, ...rest }: NavigationIndicatorProps) {
 	const classList = [
 		className,
 		style['nav-item'],
