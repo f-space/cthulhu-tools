@@ -1,12 +1,12 @@
 import { Store as ReduxStore, Reducer as ReduxReducer } from 'redux';
 import { Action } from "redux/actions/root";
-import { ViewState, ViewReducer } from "./view";
-import { CharacterState, CharacterReducer } from "./character";
-import { ProfileState, ProfileReducer } from "./profile";
-import { AttributeState, AttributeReducer } from "./attribute";
-import { SkillState, SkillReducer } from "./skill";
-import { ItemState, ItemReducer } from "./item";
-import { HistoryState, HistoryReducer } from "./history";
+import { ViewState, ViewReducer } from "redux/reducers/view";
+import { CharacterState, CharacterReducer } from "redux/reducers/character";
+import { ProfileState, ProfileReducer } from "redux/reducers/profile";
+import { AttributeState, AttributeReducer } from "redux/reducers/attribute";
+import { SkillState, SkillReducer } from "redux/reducers/skill";
+import { ItemState, ItemReducer } from "redux/reducers/item";
+import { HistoryState, HistoryReducer } from "redux/reducers/history";
 import combine from "redux/utilities/combine";
 
 export type Store = ReduxStore<State>;

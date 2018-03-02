@@ -1,10 +1,10 @@
-import { ViewAction } from "./view";
-import { CharacterAction } from "./character";
-import { ProfileAction } from "./profile";
-import { AttributeAction } from "./attribute";
-import { SkillAction } from "./skill";
-import { ItemAction } from "./item";
-import { HistoryAction } from "./history";
+import { ViewAction } from "redux/actions/view";
+import { CharacterAction } from "redux/actions/character";
+import { ProfileAction } from "redux/actions/profile";
+import { AttributeAction } from "redux/actions/attribute";
+import { SkillAction } from "redux/actions/skill";
+import { ItemAction } from "redux/actions/item";
+import { HistoryAction } from "redux/actions/history";
 
 export type Action =
 	| ViewAction
