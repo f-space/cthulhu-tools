@@ -16,3 +16,26 @@
 
 	text-align: center;
 }
+
+.checkbox {
+	border-radius: 0.25em;
+	padding: 0;
+	width: 1em;
+	height: 1em;
+	appearance: none;
+	text-align: center;
+	line-height: 1;
+
+	&::before {
+		display: inline-block;
+		vertical-align: middle;
+		color: red;
+		font-size: 0.8em;
+		content: "";
+	}
+
+	&:checked::before {
+		content: "\2713";
+	}
+}
+
