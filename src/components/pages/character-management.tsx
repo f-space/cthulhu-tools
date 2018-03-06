@@ -99,7 +99,7 @@ export class CharacterManagementPage extends React.Component<CMPProps, CMPState>
 	}
 
 	private renderCommand(name: string, condition: boolean, children: React.ReactNode) {
-		return <Button className={classNames(style['command'], { [style['hidden']]: !condition })} name={name} onClick={this.handleClick}>{children}</Button>
+		return <Button className={style['command']} name={name} disabled={!condition} onClick={this.handleClick}>{children}</Button>
 	}
 
 	private handleToggle(name: string, value: boolean): void {
