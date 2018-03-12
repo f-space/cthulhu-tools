@@ -27,16 +27,15 @@ export default class ViewCommand {
 	}
 
 	public async setHook(): Promise<void> {
-		const self = this;
-		DB.views.hook("creating", function (key, view) {
-			this.onsuccess = function () {
-				self.dispatch(setView(new CharacterView(view)));
-			}
+		DB.views.hook("creating", (key, view, transaction) => {
+			transaction.on('complete', () => {
+				this.dispatch(setView(new CharacterView(view)));
+			});
 		});
-		DB.views.hook("deleting", function (key) {
-			this.onsuccess = function () {
-				self.dispatch(deleteView(key));
-			}
+		DB.views.hook("deleting", (key, view, transaction) => {
+			transaction.on('complete', () => {
+				this.dispatch(deleteView(key));
+			});
 		});
 	}
 }
