@@ -40,7 +40,7 @@ module.exports = function (env) {
 
 	return {
 		entry: {
-			main: ["./src/index.tsx", "./src/index.scss"],
+			index: ["./src/index.tsx"],
 		},
 		output: {
 			path: path.resolve(__dirname, "docs"),
