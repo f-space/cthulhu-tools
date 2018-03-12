@@ -32,8 +32,9 @@ export class IDBCacheStorage implements CacheStorage {
 
 	public async requestSave(delay: number = SAVE_DELAY_TIME): Promise<void> {
 		if (this.saveTask === null) {
-			this.saveTask = sleep(delay).then(() => this.save()).then(() => {
+			this.saveTask = sleep(delay).then(() => {
 				this.saveTask = null;
+				return this.save();
 			});
 		}
 
