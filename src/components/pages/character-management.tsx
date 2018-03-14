@@ -7,7 +7,7 @@ import CacheStorage from "models/idb-cache";
 import { State } from "redux/store";
 import { getDataProvider } from "redux/selectors/root";
 import RootCommand from "redux/commands/root";
-import { Form, Field, SyncField, Action, FormSpy, SyncFieldChangeEvent, ActionEvent, FormChangeEvent } from "components/functions/form";
+import { Form, Field, Action, FormSpy, FieldChangeEvent, ActionEvent, FormChangeEvent } from "components/functions/form";
 import { Button, ButtonProps } from "components/atoms/button";
 import { Toggle } from "components/atoms/input";
 import Page from "components/templates/page";
@@ -24,8 +24,10 @@ export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
 type CommandType = "delete" | "clone" | "edit" | "import" | "export";
 
 interface FormValues {
-	[uuid: string]: string;
+	[uuid: string]: boolean;
 }
+
+const BoolField = Field.type<boolean>();
 
 function CommandButton(props: ButtonProps) {
 	return <Button {...props} className={style['command']} />;
@@ -82,13 +84,13 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 					const uuid = character.$uuid;
 					const { visible } = views[uuid];
 
-					return <Field key={uuid} name={uuid} render={({ value, ...props }) =>
-						<SelectableItem className={style['character']} checkbox={{ checked: Boolean(value), ...props }}>
+					return <BoolField key={uuid} name={uuid} render={props =>
+						<SelectableItem className={style['character']} checkbox={props}>
 							<div className={style['content']}>
 								<div className={style['name']}>{character.name}</div>
-								<SyncField name={uuid} value={visible} onChange={this.handleChange} render={({ value, ...props }) =>
-									<Toggle {...props} className={style['visibility']} checked={value} on="表示" off="非表示" />
-								} />
+								<Toggle className={style['visibility']}
+									name={uuid} value={visible} onChange={this.handleChange}
+									on="表示" off="非表示" />
 							</div>
 						</SelectableItem>
 					} />
@@ -117,9 +119,9 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 		}} />
 	}
 
-	private handleChange({ name, value }: SyncFieldChangeEvent): void {
+	private handleChange({ name, value }: FieldChangeEvent<boolean>): void {
 		const uuid = name;
-		const visible = Boolean(value);
+		const visible = value;
 
 		const { views, command } = this.props;
 		const oldView = views[uuid];

@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FieldChangeEvent } from "components/functions/field";
+
+export { FieldChangeEvent };
 
 export interface FormProps<T> {
 	initialValues: T;
@@ -13,36 +16,16 @@ export interface FormRenderProps {
 	onReset(event: React.FormEvent<HTMLFormElement>): void;
 }
 
-export interface FieldProps {
+export interface FieldProps<T> {
 	name: string;
 	uncontrolled?: boolean;
-	render(props: FieldRenderProps): React.ReactNode;
+	render(props: FieldRenderProps<T>): React.ReactNode;
 }
 
-export interface FieldRenderProps {
+export interface FieldRenderProps<T> {
 	name: string;
-	value?: any;
-	onChange(event: React.ChangeEvent<FieldElement>): void;
-}
-
-export type FieldElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-
-export interface SyncFieldProps {
-	name: string;
-	value: any;
-	onChange(event: SyncFieldChangeEvent): void;
-	render(props: SyncFieldRenderProps): React.ReactNode;
-}
-
-export interface SyncFieldRenderProps {
-	name: string;
-	value: any;
-	onChange(event: React.ChangeEvent<FieldElement>): void;
-}
-
-export interface SyncFieldChangeEvent {
-	name: string;
-	value: any;
+	value?: T;
+	onChange(event: FieldChangeEvent<T>): void;
 }
 
 export interface ActionProps<T> {
@@ -105,32 +88,6 @@ interface FormContextChangeEvent {
 }
 
 const contextTypes = { form: PropTypes.any.isRequired };
-
-function getFieldValue(element: FieldElement): any {
-	const type = element.type;
-
-	let input, select;
-	switch (type) {
-		case 'select-multiple':
-			select = element as HTMLSelectElement;
-			return Array.from(select.selectedOptions).map(opt => opt.value);
-		case 'checkbox':
-		case 'radio':
-			input = element as HTMLInputElement;
-			return input.checked ? input.value : undefined;
-		case 'file':
-			input = element as HTMLInputElement;
-			return input.files;
-		case 'button':
-		case 'submit':
-		case 'image':
-			break;
-		default:
-			return element.value;
-	}
-
-	return undefined;
-}
 
 class FormContextImpl<T> implements FormContext<T>{
 	public initialValues: T;
@@ -267,18 +224,22 @@ export class Form<T> extends React.Component<FormProps<T>> {
 	}
 }
 
-export class Field extends React.Component<FieldProps>{
+export class Field<T> extends React.Component<FieldProps<T>>{
 	public static contextTypes = contextTypes;
 
 	private unsubscribe?: FormUnsubscribe;
 
 	private get formContext(): FormContext<any> { return this.context.form; }
 
-	public constructor(props: FieldProps, context: any) {
+	public constructor(props: FieldProps<T>, context: any) {
 		super(props, context);
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleFormChange = this.handleFormChange.bind(this);
+	}
+
+	public static type<T>(): { new(props: FieldProps<T>, context: any): Field<T> } {
+		return Field;
 	}
 
 	public componentDidMount(): void {
@@ -299,11 +260,7 @@ export class Field extends React.Component<FieldProps>{
 		}, uncontrolled ? undefined : { value }));
 	}
 
-	private handleChange(event: React.ChangeEvent<FieldElement>): void {
-		const target = event.currentTarget;
-		const name = target.name;
-		const value = getFieldValue(target);
-
+	private handleChange({ name, value }: FieldChangeEvent<T>): void {
 		this.formContext.setValue(name, value);
 	}
 
@@ -311,32 +268,6 @@ export class Field extends React.Component<FieldProps>{
 		if (target === "values" && (!name || name === this.props.name)) {
 			this.forceUpdate();
 		}
-	}
-}
-
-export class SyncField extends React.Component<SyncFieldProps>{
-	public constructor(props: SyncFieldProps, context: any) {
-		super(props, context);
-
-		this.handleChange = this.handleChange.bind(this);
-	}
-
-	public render() {
-		const { name, value } = this.props;
-
-		return this.props.render({
-			name,
-			value,
-			onChange: this.handleChange,
-		});
-	}
-
-	private handleChange(event: React.ChangeEvent<FieldElement>): void {
-		const target = event.currentTarget;
-		const name = target.name;
-		const value = getFieldValue(target);
-
-		this.props.onChange({ name, value });
 	}
 }
 

@@ -17,10 +17,7 @@ export interface CustomDiceDialogProps {
 	onClose(result?: CustomDiceDialogResult): void;
 }
 
-interface FormValues {
-	count: string;
-	max: string;
-}
+const NumberField = Field.type<number>();
 
 export default class CustomDiceDialog extends React.Component<CustomDiceDialogProps> {
 	public constructor(props: CustomDiceDialogProps, context: any) {
@@ -32,20 +29,16 @@ export default class CustomDiceDialog extends React.Component<CustomDiceDialogPr
 
 	public render() {
 		const { count, max } = this.props;
-		const initialValues = {
-			count: count.toString(10),
-			max: max.toString(10),
-		};
 
 		return <Dialog when={this.props.when} header={"Custom Dice"}>
-			<Form initialValues={initialValues} onSubmit={this.handleSubmit} render={props =>
+			<Form initialValues={{ count, max }} onSubmit={this.handleSubmit} render={props =>
 				<form {...props}>
 					<div className={style['inputs']}>
-						<Field name="count" render={props =>
+						<NumberField name="count" render={props =>
 							<NumberInput {...props} className={style['number']} required min={1} max={100} step={1} />
 						} />
 						D
-						<Field name="max" render={props =>
+						<NumberField name="max" render={props =>
 							<NumberInput {...props} className={style['number']} required min={1} max={1000} step={1} />
 						} />
 					</div>
@@ -60,12 +53,7 @@ export default class CustomDiceDialog extends React.Component<CustomDiceDialogPr
 		</Dialog >
 	}
 
-	private handleSubmit(values: FormValues): void {
-		const result = {
-			count: Number.parseInt(values.count, 10),
-			max: Number.parseInt(values.max, 10),
-		};
-
+	private handleSubmit(result: CustomDiceDialogResult): void {
 		this.props.onClose(result);
 	}
 
