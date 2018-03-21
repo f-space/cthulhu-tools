@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import { Action } from "redux/actions/root";
 import { ViewState, ViewReducer } from "redux/reducers/view";
 import { CharacterState, CharacterReducer } from "redux/reducers/character";
@@ -6,7 +7,6 @@ import { AttributeState, AttributeReducer } from "redux/reducers/attribute";
 import { SkillState, SkillReducer } from "redux/reducers/skill";
 import { ItemState, ItemReducer } from "redux/reducers/item";
 import { HistoryState, HistoryReducer } from "redux/reducers/history";
-import combine from "redux/utilities/combine";
 
 export interface State {
 	view: ViewState;
@@ -18,7 +18,7 @@ export interface State {
 	history: HistoryState;
 }
 
-export const Reducer = combine<State, Action>({
+export const Reducer = combineReducers<State, Action>({
 	view: ViewReducer,
 	character: CharacterReducer,
 	profile: ProfileReducer,

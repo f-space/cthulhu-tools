@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { CharacterView, Character, DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
-import { State } from "redux/store";
+import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/root";
 import RootCommand from "redux/commands/root";
 import { Form, Field, Action, FormSpy, FieldChangeEvent, ActionEvent, FormChangeEvent } from "components/functions/form";
@@ -45,7 +44,7 @@ const mapStateToProps = (state: State) => {
 	return { provider, views, characters };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<State>) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
 	const command = new RootCommand(dispatch);
 	return { command };
 };

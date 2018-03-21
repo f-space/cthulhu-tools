@@ -1,10 +1,12 @@
 import Redux, { createStore } from 'redux';
-import { Action } from "redux/actions/root";
-import { State, Reducer } from "redux/reducers/root";
+import { Reducer } from "redux/reducers/root";
 
-export type Store = Redux.Store<State>;
-export type Reducer = Redux.Reducer<State>;
-export type Dispatch = Redux.Dispatch<State>;
-export { Action, State };
+const store = createStore(Reducer);
 
-export default createStore(Reducer as Reducer);
+export type Store = typeof store;
+export type State = Store extends Redux.Store<infer S, any> ? S : never;
+export type Action = Store extends Redux.Store<any, infer A> ? A : never;
+export type Reducer = Redux.Reducer<State, Action>;
+export type Dispatch = Redux.Dispatch<Action>;
+
+export default store;
