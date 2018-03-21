@@ -59,7 +59,7 @@
 		"stylelint-scss": "^2.3.0",
 		"stylelint-webpack-plugin": "^0.10.1",
 		"ts-loader": "^3.5.0",
-		"typescript": "^2.7.1",
+		"typescript": "^2.8.0-rc",
 		"uglifyjs-webpack-plugin": "^1.1.8",
 		"webpack": "^3.11.0",
 		"webpack-dev-server": "^2.11.1"
