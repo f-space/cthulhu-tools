@@ -29,7 +29,7 @@ export default class App extends React.Component {
 									<Route exact path="/dice" component={Dice} />
 									<Route exact path="/status" component={Status} />
 									<Route exact path="/status/character-management" component={CharacterManagement} />
-									<Route exact path="/status/character-edit" component={CharacterEdit} />
+									<Route exact path="/status/character-edit/:uuid?" component={CharacterEdit} />
 								</Switch>
 							</main>
 							<Navigation className={style['navigation']} />
