@@ -1,121 +1,92 @@
 import React from 'react';
+import { Field, FieldProps } from 'react-final-form';
+import { NumberInput, NumberInputProps } from "components/functions/number-input";
 
-type Diff<T extends string, U extends string> = ({[P in T]: P} & {[P in U]: never} & Record<string, never>)[T];
-type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+type FieldElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+type HTMLInputProps = React.InputHTMLAttributes<HTMLInputElement>;
+type HTMLTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+type HTMLSelectProps = React.SelectHTMLAttributes<HTMLSelectElement>;
 
-export interface FieldChangeEvent<T> {
-	name: string;
-	value: T;
+interface FieldCommonProps {
+	field?: string | FieldProps;
 }
 
-export interface InputFieldProps extends Omit<InputProps, 'onChange'> {
-	onChange?(event: FieldChangeEvent<string>): void;
+export type NonField<T extends FieldCommonProps> = Omit<T, keyof FieldCommonProps>;
+
+export interface InputProps extends HTMLInputProps, FieldCommonProps { }
+export interface TextAreaProps extends HTMLTextAreaProps, FieldCommonProps { }
+export interface SelectProps extends HTMLSelectProps, FieldCommonProps { }
+export interface NInputProps extends NumberInputProps, FieldCommonProps { }
+
+function normalize(field: string | FieldProps): FieldProps {
+	return (typeof field === 'string') ? { name: field } : field;
 }
 
-export interface NumberFieldProps extends Omit<InputProps, 'value' | 'onChange'> {
-	value?: number;
-	uncontrolled?: boolean;
-	onChange?(event: FieldChangeEvent<number>): void;
+export function Input({ field, ...props }: InputProps) {
+	if (field === undefined) {
+		return <input {...props} />
+	} else {
+		return <FieldWrapper {...normalize(field)} {...props} inner="input" />
+	}
 }
 
-export interface CheckFieldProps extends Omit<InputProps, 'value' | 'checked' | 'onChange'> {
-	value?: boolean;
-	uncontrolled?: boolean;
-	onChange?(event: FieldChangeEvent<boolean>): void;
+export function TextArea({ field, ...props }: TextAreaProps) {
+	if (field === undefined) {
+		return <textarea {...props} />
+	} else {
+		return <FieldWrapper {...normalize(field)} {...props} inner="textarea" />
+	}
 }
 
-export class InputField extends React.Component<InputFieldProps>{
-	public constructor(props: InputFieldProps, context: any) {
+export function Select({ field, ...props }: SelectProps) {
+	if (field === undefined) {
+		return <select {...props} />
+	} else {
+		return <FieldWrapper {...normalize(field)} {...props} inner="select" />
+	}
+}
+
+export function NInput({ field, ...props }: NInputProps) {
+	if (field === undefined) {
+		return <NumberInput {...props} />
+	} else {
+		return <FieldWrapper {...normalize(field)} {...props} inner={NumberInput} />
+	}
+}
+
+interface FieldWrapperProps extends FieldProps {
+	inner: 'input' | 'textarea' | 'select' | React.ComponentType<NumberInputProps>;
+}
+
+class FieldWrapper extends React.Component<FieldWrapperProps> {
+	private element: FieldElement | null = null;
+
+	public constructor(props: FieldWrapperProps, context: any) {
 		super(props, context);
 
-		this.handleChange = this.handleChange.bind(this);
+		this.validate = this.validate.bind(this);
+	}
+
+	public componentDidMount(): void {
+		this.forceUpdate();
 	}
 
 	public render() {
-		const { onChange, ...rest } = this.props;
+		const { inner, ...props } = this.props;
+		const ref: React.Ref<FieldElement> = el => { this.element = el; };
 
-		return <input {...rest} onChange={onChange && this.handleChange} />
+		return <Field {...props} subscription={{ value: true }} validate={this.validate} render={({ input, meta, ...rest }) =>
+			typeof inner === 'string'
+				? React.createElement(inner, { ...input, ...rest, ref })
+				: React.createElement(inner, { ...input, ...rest, refDOM: ref })
+		} />
 	}
 
-	private handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
-		const target = event.currentTarget;
-		const name = target.name;
-		const value = target.value;
+	private validate(): any {
+		const { validate } = this.props;
 
-		const { onChange } = this.props;
-		if (onChange) onChange({ name, value });
-	}
-}
-
-export class NumberField extends React.Component<NumberFieldProps, { value: string }>{
-	private element: HTMLInputElement | null = null;
-
-	public constructor(props: NumberFieldProps, context: any) {
-		super(props, context);
-
-		this.state = { value: this.format(props.value) };
-		this.handleChange = this.handleChange.bind(this);
-	}
-
-	public componentWillReceiveProps(nextProps: NumberFieldProps): void {
-		if (this.props.value !== nextProps.value) {
-			const prevValue = this.parse(this.state.value);
-			const nextValue = nextProps.value;
-			if (prevValue !== nextValue) {
-				this.setState({ value: this.format(nextValue) });
-			}
-		}
-	}
-
-	public render() {
-		const { value: _, uncontrolled, onChange, ...rest } = this.props;
-		const value = uncontrolled ? undefined : this.state.value;
-
-		return <input {...rest} type="number" value={value} onChange={onChange && this.handleChange} ref={el => { this.element = el; }} />
-	}
-
-	private handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
-		const target = event.currentTarget;
-		const name = target.name;
-		const value = target.value;
-
-		this.setState({ value }, () => {
-			const { onChange } = this.props;
-			if (onChange) onChange({ name, value: this.parse(value) });
-		});
-	}
-
-	private format(value?: number): string {
-		return value !== undefined && !Number.isNaN(value) ? String(value) : "";
-	}
-
-	private parse(value?: string): number {
-		return value !== undefined && value !== "" ? Number(value) : NaN;
-	}
-}
-
-export class CheckField extends React.Component<CheckFieldProps> {
-	public constructor(props: CheckFieldProps, context: any) {
-		super(props, context);
-
-		this.handleChange = this.handleChange.bind(this);
-	}
-
-	public render() {
-		const { value, uncontrolled, onChange, ...rest } = this.props;
-		const checked = uncontrolled ? undefined : Boolean(value);
-
-		return <input {...rest} type="checkbox" checked={checked} onChange={onChange && this.handleChange} />
-	}
-
-	private handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
-		const target = event.currentTarget;
-		const name = target.name;
-		const value = target.checked;
-
-		const { onChange } = this.props;
-		if (onChange) onChange({ name, value });
+		return (this.element && this.element.validationMessage) || (validate && validate.apply(this, arguments));
 	}
 }

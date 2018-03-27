@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { FormApi } from 'final-form';
+import { Form, Field, FormSpy } from 'react-final-form';
 import { CharacterView, Character, DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/root";
 import RootCommand from "redux/commands/root";
-import { Form, Field, Action, FormSpy, FieldChangeEvent, ActionEvent, FormChangeEvent } from "components/functions/form";
-import { Button, ButtonProps } from "components/atoms/button";
-import { Toggle } from "components/atoms/input";
+import ViewCommand from "redux/commands/view";
+import { Button, SubmitButton, ButtonProps } from "components/atoms/button";
+import { Toggle, ToggleProps } from "components/atoms/input";
 import Page from "components/templates/page";
 import SelectableItem from "components/molecules/selectable-item";
 import style from "styles/pages/character-management.scss";
@@ -23,14 +25,31 @@ export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
 type CommandType = "delete" | "clone" | "edit" | "import" | "export";
 
 interface FormValues {
-	[uuid: string]: boolean;
+	command?: CommandType;
+	selection: string[];
 }
 
-const BoolField = Field.type<boolean>();
-
-function CommandButton(props: ButtonProps) {
-	return <Button {...props} className={style['command']} />;
-}
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type VisibilityToggleProps = Omit<ToggleProps, 'checked' | 'onChange'> & { uuid: string };
+const VisibilityToggle = connect(
+	(state: State, { uuid }: VisibilityToggleProps) => {
+		const view = state.view.views.get(uuid);
+		return { view };
+	},
+	(dispatch: Dispatch, { uuid }: VisibilityToggleProps) => {
+		const command = new ViewCommand(dispatch);
+		return { command };
+	},
+	({ view }, { command }, props: VisibilityToggleProps) => {
+		const { uuid } = props;
+		const checked = Boolean(view && view.visible);
+		const onChange = view && ((event: React.ChangeEvent<HTMLInputElement>) => {
+			const { checked: visible } = event.currentTarget;
+			command.update(new CharacterView({ ...view.toJSON(), visible }));
+		});
+		return { ...props, checked, onChange };
+	}
+)(Toggle);
 
 const mapStateToProps = (state: State) => {
 	const provider = getDataProvider(state);
@@ -53,8 +72,7 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	public constructor(props: CharacterManagementPageProps, context: any) {
 		super(props, context);
 
-		this.handleChange = this.handleChange.bind(this);
-		this.handleClick = this.handleClick.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	public componentWillMount(): void {
@@ -62,11 +80,14 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	}
 
 	public render() {
+		const { views } = this.props;
+		const initialValues = { selection: [] };
+
 		return <Page id="character-management" heading={<h2>キャラクター管理</h2>} navs={
 			<Link to="/status/character-edit"><Button>作成</Button></Link>
 		}>
-			<Form initialValues={{}} render={props =>
-				<form className={style['form']} {...props}>
+			<Form initialValues={initialValues} onSubmit={this.handleSubmit} render={({ handleSubmit }) =>
+				<form className={style['form']} onSubmit={handleSubmit}>
 					{this.renderCharacters()}
 					{this.renderCommands()}
 				</form>
@@ -83,62 +104,46 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 					const uuid = character.$uuid;
 					const { visible } = views[uuid];
 
-					return <BoolField key={uuid} name={uuid} render={props =>
-						<SelectableItem className={style['character']} checkbox={props}>
-							<div className={style['content']}>
-								<div className={style['name']}>{character.name}</div>
-								<Toggle className={style['visibility']}
-									name={uuid} value={visible} onChange={this.handleChange}
-									on="表示" off="非表示" />
-							</div>
-						</SelectableItem>
-					} />
+					return <SelectableItem key={uuid} className={style['character']} checkbox={{ field: "selection", value: uuid }}>
+						<div className={style['content']}>
+							<div className={style['name']}>{character.name}</div>
+							<VisibilityToggle className={style['visibility']} uuid={uuid} on="表示" off="非表示" />
+						</div>
+					</SelectableItem>
 				})
 			}
 		</div>
 	}
 
 	private renderCommands() {
-		return <FormSpy dependency={{ values: true }} render={({ values }: { values: FormValues }) => {
-			const selection = this.getSelection(values);
+		return <FormSpy subscription={{ values: true }} render={({ values: { selection } }) => {
 			const some = (selection.length > 0);
 			const single = (selection.length === 1);
 
 			return <div className={style['commands']}>
-				<Action action={this.handleClick} render={({ action }) =>
-					<React.Fragment>
-						<CommandButton name="delete" disabled={!some} onClick={action} >削除</CommandButton>
-						<CommandButton name="clone" disabled={!some} onClick={action}>複製</CommandButton>
-						<CommandButton name="edit" disabled={!single} onClick={action}>編集</CommandButton>
-						<CommandButton name="import" disabled={false} onClick={action}>読込み</CommandButton>
-						<CommandButton name="export" disabled={!some} onClick={action}>書出し</CommandButton>
+				<Field name="command" render={({ input: { onChange } }) => {
+					function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+						onChange(event.currentTarget.value);
+					}
+
+					return <React.Fragment>
+						<SubmitButton className={style['command']} value="delete" disabled={!some} commit={false} onClick={handleClick} >削除</SubmitButton>
+						<SubmitButton className={style['command']} value="clone" disabled={!some} commit={false} onClick={handleClick}>複製</SubmitButton>
+						<SubmitButton className={style['command']} value="edit" disabled={!single} commit={false} onClick={handleClick}>編集</SubmitButton>
+						<SubmitButton className={style['command']} value="import" disabled={false} commit={false} onClick={handleClick}>読込み</SubmitButton>
+						<SubmitButton className={style['command']} value="export" disabled={!some} commit={false} onClick={handleClick}>書出し</SubmitButton>
 					</React.Fragment>
-				} />
+				}} />
 			</div>
 		}} />
 	}
 
-	private handleChange({ name, value }: FieldChangeEvent<boolean>): void {
-		const uuid = name;
-		const visible = value;
+	private handleSubmit(values: object, form: FormApi): void {
+		const { command, selection } = values as FormValues;
 
-		const { views, command } = this.props;
-		const oldView = views[uuid];
-		const newView = new CharacterView(Object.assign(oldView.toJSON(), { visible }));
-		command.view.update(newView);
-	}
-
-	private handleClick({ name, values, command: { reset } }: ActionEvent<FormValues>): void {
-		const type = name as CommandType;
-		const selection = this.getSelection(values);
-
-		if (this.invokeCommand(type, selection)) {
-			reset();
+		if (command && this.invokeCommand(command, selection)) {
+			form.reset();
 		}
-	}
-
-	private getSelection(values: { [uuid: string]: any }): string[] {
-		return Object.keys(values).filter(uuid => values[uuid]);
 	}
 
 	private invokeCommand(type: CommandType, selection: string[]): boolean {
