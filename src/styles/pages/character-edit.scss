@@ -1,0 +1,48 @@
+@import "mixin";
+
+.entry {
+	header {
+		margin-top: 2ex;
+		text-align: center;
+	}
+}
+
+.attributes {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.skills {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.point-stats {
+	text-align: right;
+	font-size: 1.2em;
+
+	&.full { @include blur-text(1px, 0, green); }
+	&.over { @include blur-text(1px, 0, red); }
+}
+
+.items {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.actions {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: flex-end;
+	margin: 3ex 0 1ex;
+}
+
+.ok,
+.cancel {
+	margin-left: 0.5em;
+	width: 4em;
+}
+
+.ok { order: 1; }
+.cancel { order: 0; }

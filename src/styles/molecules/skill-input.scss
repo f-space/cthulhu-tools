@@ -1,0 +1,29 @@
+.skill {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	margin-top: 1ex;
+}
+
+.id {
+	flex: 1 1 8em;
+}
+
+.base {
+	flex: 1 0 4ex;
+	text-align: center;
+
+	&::before {
+		content: "+";
+	}
+}
+
+.points {
+	flex: 0.5 0 auto;
+	width: 3ex;
+}
+
+.value {
+	flex: 1 0 4ex;
+	text-align: center;
+}

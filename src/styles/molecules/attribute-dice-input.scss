@@ -1,0 +1,11 @@
+.dice-input {
+	display: inline-flex;
+	flex-flow: row nowrap;
+	margin: 0 0.25em;
+}
+
+.dice {
+	--dice-height: 2em;
+
+	margin: 0 0.1em;
+}
