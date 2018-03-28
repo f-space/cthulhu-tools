@@ -31,7 +31,7 @@ module.exports = function (env) {
 			loader: 'sass-loader',
 			options: {
 				includePaths: [
-					path.resolve(__dirname, "src/scss")
+					path.resolve(__dirname, "src/styles")
 				],
 				...(production ? {} : { sourceMap: true })
 			}
