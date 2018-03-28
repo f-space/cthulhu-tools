@@ -3,7 +3,7 @@ import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { setView, deleteView } from "redux/actions/view";
 
-export default class ViewCommand {
+export default class ViewDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
 
 	public async update(view: CharacterView): Promise<void> {

@@ -7,7 +7,7 @@ import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { Character, CharacterParams, AttributeParams, SkillParams, DataProvider, PropertyEvaluator, EvaluationContext, EvaluatorBuilder, SkillEvaluator } from "models/status";
 import { State, Dispatch } from "redux/store";
-import RootCommand from "redux/commands/root";
+import RootDispatcher from "redux/dispatchers/root";
 import { getDataProvider } from "redux/selectors/root";
 import { Button, SubmitButton } from "components/atoms/button";
 import AttributeInput from "components/molecules/attribute-input";
@@ -18,7 +18,7 @@ import style from "styles/pages/character-edit.scss";
 export interface CharacterEditPageProps extends RouteComponentProps<{ uuid?: string }> {
 	provider: DataProvider;
 	context: Partial<EvaluationContext>;
-	command: RootCommand;
+	dispatcher: RootDispatcher;
 }
 
 interface FormValues {
@@ -76,8 +76,8 @@ const mapStateToProps = (state: State) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-	const command = new RootCommand(dispatch);
-	return { command };
+	const dispatcher = new RootDispatcher(dispatch);
+	return { dispatcher };
 }
 
 export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
@@ -91,7 +91,7 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	public get uuid(): string | undefined { return this.props.match.params.uuid; }
 
 	public componentWillMount(): void {
-		this.props.command.load();
+		this.props.dispatcher.load();
 	}
 
 	public render() {
@@ -249,7 +249,7 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	}
 
 	private async saveCharacter(params: CharacterParams): Promise<void> {
-		const { context: { profile }, command } = this.props;
+		const { context: { profile }, dispatcher } = this.props;
 		if (profile) {
 			const character = new Character({
 				uuid: this.uuid,
@@ -258,9 +258,9 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 			});
 
 			if (this.uuid === undefined) {
-				await command.character.create(character);
+				await dispatcher.character.create(character);
 			} else {
-				await command.character.update(character);
+				await dispatcher.character.update(character);
 			}
 		}
 	}

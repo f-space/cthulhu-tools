@@ -4,7 +4,7 @@ import { Dispatch } from "redux/store";
 import { setAttribute, deleteAttribute } from "redux/actions/attribute";
 import BUILTIN_ATTRIBUTES_URL from "@resource/data/attributes.json";
 
-export default class AttributeCommand {
+export default class AttributeDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(attribute: Attribute): Promise<void> {

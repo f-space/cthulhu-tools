@@ -3,7 +3,7 @@ import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { setItem, deleteItem } from "redux/actions/item";
 
-export default class ItemCommand {
+export default class ItemDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(item: Item): Promise<void> {

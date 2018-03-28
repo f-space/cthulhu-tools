@@ -3,7 +3,7 @@ import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { setHistory, deleteHistory } from "redux/actions/history";
 
-export default class HistoryCommand {
+export default class HistoryDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(history: History): Promise<void> {

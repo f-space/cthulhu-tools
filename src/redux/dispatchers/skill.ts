@@ -4,7 +4,7 @@ import { Dispatch } from "redux/store";
 import { setSkill, deleteSkill } from "redux/actions/skill";
 import BUILTIN_SKILLS_URL from "@resource/data/skills.json";
 
-export default class SkillCommand {
+export default class SkillDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(skill: Skill): Promise<void> {

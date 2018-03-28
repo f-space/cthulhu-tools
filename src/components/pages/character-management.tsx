@@ -7,8 +7,8 @@ import { CharacterView, Character, DataProvider, ExternalCache, EvaluationContex
 import CacheStorage from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/root";
-import RootCommand from "redux/commands/root";
-import ViewCommand from "redux/commands/view";
+import RootDispatcher from "redux/dispatchers/root";
+import ViewDispatcher from "redux/dispatchers/view";
 import { SubmitButton, ButtonProps } from "components/atoms/button";
 import { Toggle, ToggleProps } from "components/atoms/input";
 import Page from "components/templates/page";
@@ -19,7 +19,7 @@ export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
 	provider: DataProvider;
 	views: { [uuid: string]: CharacterView };
 	characters: Status[];
-	command: RootCommand;
+	dispatcher: RootDispatcher;
 }
 
 type CommandType = "delete" | "clone" | "edit" | "import" | "export";
@@ -37,15 +37,15 @@ const VisibilityToggle = connect(
 		return { view };
 	},
 	(dispatch: Dispatch, { uuid }: VisibilityToggleProps) => {
-		const command = new ViewCommand(dispatch);
-		return { command };
+		const dispatcher = new ViewDispatcher(dispatch);
+		return { dispatcher };
 	},
-	({ view }, { command }, props: VisibilityToggleProps) => {
+	({ view }, { dispatcher }, props: VisibilityToggleProps) => {
 		const { uuid } = props;
 		const checked = Boolean(view && view.visible);
 		const onChange = view && ((event: React.ChangeEvent<HTMLInputElement>) => {
 			const { checked: visible } = event.currentTarget;
-			command.update(new CharacterView({ ...view.toJSON(), visible }));
+			dispatcher.update(new CharacterView({ ...view.toJSON(), visible }));
 		});
 		return { ...props, checked, onChange };
 	}
@@ -64,8 +64,8 @@ const mapStateToProps = (state: State) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-	const command = new RootCommand(dispatch);
-	return { command };
+	const dispatcher = new RootDispatcher(dispatch);
+	return { dispatcher };
 };
 
 export class CharacterManagementPage extends React.Component<CharacterManagementPageProps> {
@@ -76,7 +76,7 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	}
 
 	public componentWillMount(): void {
-		this.props.command.load();
+		this.props.dispatcher.load();
 	}
 
 	public render() {
@@ -157,20 +157,20 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	}
 
 	private deleteCommand(selection: string[]): boolean {
-		const { command } = this.props;
+		const { dispatcher } = this.props;
 
-		selection.forEach(uuid => command.character.delete(uuid));
+		selection.forEach(uuid => dispatcher.character.delete(uuid));
 
 		return true;
 	}
 
 	private cloneCommand(selection: string[]): boolean {
-		const { provider, command } = this.props;
+		const { provider, dispatcher } = this.props;
 
 		const sources = provider.character.get(selection);
 		for (const source of sources) {
 			const character = new Character(Object.assign(source.toJSON(), { uuid: undefined }));
-			command.character.create(character);
+			dispatcher.character.create(character);
 		}
 
 		return true;
@@ -190,11 +190,11 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	private importCommand(selection: string[]): boolean {
 		// TODO: implementation
 
-		const { provider, command } = this.props;
+		const { provider, dispatcher } = this.props;
 		const profile = provider.profile.default;
 		if (profile) {
 			const character = new Character({ profile: profile.uuid, params: { attribute: { name: { x: "XXX" } } } });
-			command.character.create(character);
+			dispatcher.character.create(character);
 		}
 
 		return true;

@@ -4,7 +4,7 @@ import { Dispatch } from "redux/store";
 import { setProfile, deleteProfile, setDefaultProfile } from "redux/actions/profile";
 import BUILTIN_PROFILES_URL from "@resource/data/profiles.json";
 
-export default class ProfileCommand {
+export default class ProfileDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(profile: Profile): Promise<void> {
