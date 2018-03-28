@@ -10,12 +10,20 @@ export interface DiceImageProps extends React.ImgHTMLAttributes<HTMLImageElement
 }
 
 export default class DiceImage extends React.Component<DiceImageProps> {
-	public constructor(props: DiceImageProps, context: any) {
-		super(props, context);
+	private mounted: boolean = false;
+
+	public componentDidMount(): void {
+		this.mounted = true;
 
 		if (!DiceImageManager.complete) {
-			DiceImageManager.load().then(() => this.forceUpdate());
+			DiceImageManager.load().then(() => {
+				if (this.mounted) this.forceUpdate()
+			});
 		}
+	}
+
+	public componentWillUnmount(): void {
+		this.mounted = false;
 	}
 
 	public render() {
