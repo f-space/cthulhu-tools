@@ -124,7 +124,11 @@ export class DiceImageManager {
 				context.drawImage(image, x, y, w, h, 0, 0, canvas.width, canvas.height);
 			}
 
-			canvas.toBlob(blob => { resolve(blob ? URL.createObjectURL(blob) : "") });
+			if (canvas.toBlob) {
+				canvas.toBlob(blob => { resolve(blob ? URL.createObjectURL(blob) : "") });
+			} else if (canvas.msToBlob) {
+				resolve(URL.createObjectURL(canvas.msToBlob()));
+			}
 		});
 	}
 }
