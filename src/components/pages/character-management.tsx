@@ -9,7 +9,7 @@ import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/root";
 import RootCommand from "redux/commands/root";
 import ViewCommand from "redux/commands/view";
-import { Button, SubmitButton, ButtonProps } from "components/atoms/button";
+import { SubmitButton, ButtonProps } from "components/atoms/button";
 import { Toggle, ToggleProps } from "components/atoms/input";
 import Page from "components/templates/page";
 import SelectableItem from "components/molecules/selectable-item";
@@ -84,7 +84,7 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 		const initialValues = { selection: [] };
 
 		return <Page id="character-management" heading={<h2>キャラクター管理</h2>} navs={
-			<Link to="/status/character-edit"><Button>作成</Button></Link>
+			<Link to="/status/character-edit">作成</Link>
 		}>
 			<Form initialValues={initialValues} onSubmit={this.handleSubmit} render={({ handleSubmit }) =>
 				<form className={style['form']} onSubmit={handleSubmit}>

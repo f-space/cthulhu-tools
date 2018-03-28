@@ -5,7 +5,6 @@ import { DataProvider, ExternalCache, EvaluationContext, Status } from "models/s
 import CacheStorage from "models/idb-cache";
 import { State } from "redux/store";
 import { getDataProvider } from "redux/selectors/root";
-import { Button } from "components/atoms/button";
 import Page from "components/templates/page";
 import style from "styles/pages/status.scss";
 
@@ -34,7 +33,7 @@ export class StatusPage extends React.Component<StatusPageProps> {
 		const { characters } = this.props;
 
 		return <Page id="status" heading={<h2>ステータス</h2>} navs={
-			<Link to="/status/character-management"><Button>管理</Button></Link>
+			<Link to="/status/character-management">管理</Link>
 		}>
 			<div className={style['characters']}>
 				{
