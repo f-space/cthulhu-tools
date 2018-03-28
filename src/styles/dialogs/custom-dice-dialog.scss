@@ -5,6 +5,7 @@
 }
 
 .number {
+	box-sizing: content-box;
 	margin: auto 0.5em;
 	width: 5ex;
 }
@@ -17,6 +18,7 @@
 
 .ok,
 .cancel {
+	box-sizing: content-box;
 	margin: 0.5ex 0.5em;
 	width: 5em;
 }

@@ -38,6 +38,7 @@
 }
 
 .visibility {
+	box-sizing: content-box;
 	flex: 0 0 auto;
 	width: 3.5em;
 	font-size: 0.9em;
@@ -54,6 +55,7 @@
 }
 
 .command {
+	box-sizing: content-box;
 	flex: 0 0 3em;
 	transition-duration: 300ms;
 	transition-property: flex, margin, padding, visibility;

@@ -1,6 +1,7 @@
 .page {
 	p { margin: 1ex 0; }
 	li { margin-left: 2em; }
+	a { color: red; }
 }
 
 .heading {
@@ -24,7 +25,6 @@
 		display: table-row;
 
 		& > * {
-			box-sizing: border-box;
 			display: table-cell;
 			border: solid 1px red;
 			padding: 0.5ex 0.5em;
