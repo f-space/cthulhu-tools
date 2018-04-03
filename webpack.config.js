@@ -1,17 +1,17 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const TsConfigPlugin = require("./tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./source-map-fix-webpack-plugin");
 
-module.exports = function (env) {
-	
-	const production = env && env.production;
+module.exports = function (env, { mode }) {
+
+	const production = (mode === 'production');
 
 	const cssLoader = [
+		MiniCssExtractPlugin.loader,
 		{
 			loader: 'css-loader',
 			options: {
@@ -65,10 +65,11 @@ module.exports = function (env) {
 				},
 				{
 					test: /\.scss$/,
-					loader: ExtractTextPlugin.extract(cssLoader)
+					loader: cssLoader
 				},
 				{
 					test: /\.(png|wav|json)/,
+					type: 'javascript/auto',
 					loader: "file-loader",
 					options: {
 						name: "[path][name].[ext]",
@@ -96,19 +97,18 @@ module.exports = function (env) {
 			contentBase: "docs"
 		},
 		plugins: [
-			new ExtractTextPlugin({
-				filename: "[name].css",
-				allChunks: true
+			new MiniCssExtractPlugin({
+				filename: "[name].css"
 			}),
 			new HtmlWebpackPlugin({
 				template: "./src/index.pug",
-				templateParameters: { process: { env: { NODE_ENV: production ? 'production' : undefined } } },
+				templateParameters: { process: { env: { NODE_ENV: mode } } },
 				inject: 'head'
 			}),
 			new ScriptExtHtmlWebpackPlugin({
 				defaultAttribute: 'async'
 			}),
-			...(production ? [new UglifyJSPlugin()] : [new StylelintPlugin({ files: "src/**/*.scss" })])
+			...(production ? [] : [new StylelintPlugin({ files: "src/**/*.scss" })])
 		]
 	}
 }

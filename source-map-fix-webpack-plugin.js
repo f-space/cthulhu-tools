@@ -52,12 +52,13 @@ module.exports = (function () {
 	}
 
 	SourceMapFixPlugin.prototype.apply = function (resolver) {
-		resolver.plugin('module', (request, callback) => {
+		const target = resolver.ensureHook('resolve');
+		resolver.getHook('module').tapAsync(this.constructor.name, (request, context, callback) => {
 			if (request.request === 'sass-loader') {
 				const newRequest = Object.assign({}, request, { request: __filename });
 				const message = "replace sass-loader";
 
-				return resolver.doResolve('resolve', newRequest, message, callback);
+				return resolver.doResolve(target, newRequest, message, context, callback);
 			}
 
 			return callback();
