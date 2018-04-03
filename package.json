@@ -32,7 +32,6 @@
 		"react-final-form-arrays": "^1.0.4",
 		"react-redux": "^5.0.7",
 		"react-router-dom": "^4.2.2",
-		"react-transition-group": "^2.2.1",
 		"redux": "^4.0.0-beta.2",
 		"reselect": "^3.0.1",
 		"ress": "^1.2.2"
@@ -44,7 +43,6 @@
 		"@types/react-dom": "^16.0.4",
 		"@types/react-redux": "^5.0.15",
 		"@types/react-router-dom": "^4.2.4",
-		"@types/react-transition-group": "^2.0.7",
 		"autoprefixer": "^8.2.0",
 		"css-loader": "^0.28.11",
 		"file-loader": "^1.1.11",
