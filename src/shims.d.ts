@@ -1,4 +1,4 @@
-declare module "*.pugx" {
+declare module "*.jsx.pug" {
 	import { ComponentType } from 'react';
 	const Component: ComponentType;
 	export default Component;
@@ -9,7 +9,17 @@ declare module "*.scss" {
 	export default styles;
 }
 
-declare module "@resource/*" {
+declare module "*.png" {
+	const url: string;
+	export default url;
+}
+
+declare module "*.wav" {
+	const url: string;
+	export default url;
+}
+
+declare module "*.json" {
 	const url: string;
 	export default url;
 }

@@ -1,9 +1,9 @@
 const pug = require('pug');
 const typescript = require('typescript');
 
-module.exports = function PugxLoader(content, map, meta) {
+module.exports = function JsxPugLoader(content, map, meta) {
 	this.cacheable();
-	
+
 	try {
 		const html = pug.render(content);
 		const jsx = html.replace(/class=\"(.*?[^\\])\"/g, (_, list) => {

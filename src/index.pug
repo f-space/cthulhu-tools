@@ -3,7 +3,7 @@ html
 	head
 		title クトゥルフTRPG ツール
 		meta(charset="utf-8")
-		if htmlWebpackPlugin.options.production
+		if process.env.NODE_ENV === 'production'
 			meta(http-equiv="Content-Security-Policy", content="default-src 'self' blob:")
 		meta(name="description", content="クトゥルフTRPGのためのツール。ダイスやステータス管理など。")
 		meta(name="author", content="F_")

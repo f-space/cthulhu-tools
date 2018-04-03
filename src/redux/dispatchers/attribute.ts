@@ -2,7 +2,7 @@ import { AttributeData, Attribute } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { setAttribute, deleteAttribute } from "redux/actions/attribute";
-import BUILTIN_ATTRIBUTES_URL from "@resource/data/attributes.json";
+import BUILTIN_ATTRIBUTES_URL from "assets/data/attributes.json";
 
 export default class AttributeDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }

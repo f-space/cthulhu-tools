@@ -1,6 +1,6 @@
 import React from 'react';
 import Page from "components/templates/page";
-import HomeContent from "templates/pages/home.pugx";
+import HomeContent from "templates/pages/home.jsx.pug";
 import style from "styles/pages/home.scss";
 
 export default function HomePage() {

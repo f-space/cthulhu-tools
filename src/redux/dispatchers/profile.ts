@@ -2,7 +2,7 @@ import { ProfileData, Profile } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { setProfile, deleteProfile, setDefaultProfile } from "redux/actions/profile";
-import BUILTIN_PROFILES_URL from "@resource/data/profiles.json";
+import BUILTIN_PROFILES_URL from "assets/data/profiles.json";
 
 export default class ProfileDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }

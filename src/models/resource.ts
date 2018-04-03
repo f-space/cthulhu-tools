@@ -1,6 +1,6 @@
-import DICE_IMAGE_URL from "@resource/image/dice.png";
-import DICE_IMAGE_LAYOUT_URL from "@resource/image/dice.json";
-import DICE_SOUND_URL from "@resource/audio/dice.wav";
+import DICE_IMAGE_URL from "assets/image/dice.png";
+import DICE_IMAGE_LAYOUT_URL from "assets/image/dice.json";
+import DICE_SOUND_URL from "assets/audio/dice.wav";
 
 interface ResourceMap {
 	json: any;

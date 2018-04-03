@@ -8,7 +8,7 @@ const TsConfigPlugin = require("./tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./source-map-fix-webpack-plugin");
 
 module.exports = function (env) {
-
+	
 	const production = env && env.production;
 
 	const cssLoader = [
@@ -49,12 +49,12 @@ module.exports = function (env) {
 		module: {
 			rules: [
 				{
-					test: /\.pug$/,
+					test: /(?<!\.jsx)\.pug$/,
 					loader: "pug-loader"
 				},
 				{
-					test: /\.pugx$/,
-					use: require.resolve("./pugx-loader.js")
+					test: /\.jsx\.pug$/,
+					use: require.resolve("./jsx-pug-loader")
 				},
 				{
 					test: /\.tsx?$/,
@@ -81,7 +81,7 @@ module.exports = function (env) {
 		resolve: {
 			extensions: [".tsx", ".ts", ".js", ".json"],
 			alias: {
-				"@resource": path.resolve(__dirname, "docs")
+				"assets": path.resolve(__dirname, "docs")
 			},
 			plugins: [
 				new TsConfigPlugin()
@@ -102,8 +102,8 @@ module.exports = function (env) {
 			}),
 			new HtmlWebpackPlugin({
 				template: "./src/index.pug",
-				inject: 'head',
-				production: production
+				templateParameters: { process: { env: { NODE_ENV: production ? 'production' : undefined } } },
+				inject: 'head'
 			}),
 			new ScriptExtHtmlWebpackPlugin({
 				defaultAttribute: 'async'
