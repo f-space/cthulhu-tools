@@ -1,7 +1,7 @@
 import { Item } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
-import { setItem, deleteItem } from "redux/actions/item";
+import { ItemAction } from "redux/actions/item";
 
 export default class ItemDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
@@ -10,7 +10,7 @@ export default class ItemDispatcher {
 		await DB.transaction("rw", DB.items, () => {
 			return DB.items.add(item.toJSON());
 		}).then(() => {
-			this.dispatch(setItem(item));
+			this.dispatch(ItemAction.set(item));
 		});
 	}
 
@@ -18,7 +18,7 @@ export default class ItemDispatcher {
 		await DB.transaction("rw", DB.items, () => {
 			return DB.items.update(item.uuid, item.toJSON());
 		}).then(() => {
-			this.dispatch(setItem(item));
+			this.dispatch(ItemAction.set(item));
 		});
 	}
 
@@ -26,7 +26,7 @@ export default class ItemDispatcher {
 		await DB.transaction("rw", DB.items, () => {
 			return DB.items.delete(uuid);
 		}).then(() => {
-			this.dispatch(deleteItem(uuid));
+			this.dispatch(ItemAction.delete(uuid));
 		});
 	}
 
@@ -34,7 +34,7 @@ export default class ItemDispatcher {
 		await DB.transaction("r", DB.items, () => {
 			return DB.items.toArray();
 		}).then(items => {
-			this.dispatch(setItem(items.map(item => new Item(item))));
+			this.dispatch(ItemAction.set(items.map(item => new Item(item))));
 		});
 	}
 }

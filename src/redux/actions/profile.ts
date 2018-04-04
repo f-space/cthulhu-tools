@@ -1,43 +1,39 @@
 import { Profile } from "models/status";
 
-export const PROFILE_SET = "profile/set";
-export const PROFILE_DELETE = "profile/delete";
-export const PROFILE_SET_DEFAULT = "profile/set-default";
+export enum ProfileActionType {
+	Set = '[profile]::set',
+	Delete = '[profile]::delete',
+	SetDefault = '[profile]::setDefault',
+}
 
 export interface ProfileSetAction {
-	readonly type: typeof PROFILE_SET;
+	readonly type: ProfileActionType.Set;
 	readonly profile: Profile | Profile[];
 }
 
 export interface ProfileDeleteAction {
-	readonly type: typeof PROFILE_DELETE;
+	readonly type: ProfileActionType.Delete;
 	readonly uuid: string | string[];
 }
 
 export interface ProfileSetDefaultAction {
-	readonly type: typeof PROFILE_SET_DEFAULT;
+	readonly type: ProfileActionType.SetDefault;
 	readonly uuid: string;
 }
 
-export type ProfileAction = ProfileSetAction | ProfileDeleteAction | ProfileSetDefaultAction;
+export type ProfileAction =
+	| ProfileSetAction
+	| ProfileDeleteAction
+	| ProfileSetDefaultAction
 
-export function setProfile(profile: Profile | Profile[]): ProfileSetAction {
-	return {
-		type: PROFILE_SET,
-		profile,
-	};
-}
-
-export function deleteProfile(uuid: string | string[]): ProfileDeleteAction {
-	return {
-		type: PROFILE_DELETE,
-		uuid,
-	};
-}
-
-export function setDefaultProfile(uuid: string): ProfileSetDefaultAction {
-	return {
-		type: PROFILE_SET_DEFAULT,
-		uuid,
-	};
+export const ProfileAction = {
+	set(profile: Profile | Profile[]): ProfileSetAction {
+		return { type: ProfileActionType.Set, profile };
+	},
+	delete(uuid: string | string[]): ProfileDeleteAction {
+		return { type: ProfileActionType.Delete, uuid };
+	},
+	setDefault(uuid: string): ProfileSetDefaultAction {
+		return { type: ProfileActionType.SetDefault, uuid };
+	},
 }

@@ -1,30 +1,29 @@
 import { Attribute } from "models/status";
 
-export const ATTRIBUTE_SET = "attribute/set";
-export const ATTRIBUTE_DELETE = "attribute/delete";
+export enum AttributeActionType {
+	Set = '[attribute]::set',
+	Delete = '[attribute]::delete',
+}
 
 export interface AttributeSetAction {
-	readonly type: typeof ATTRIBUTE_SET;
+	readonly type: AttributeActionType.Set;
 	readonly attribute: Attribute | Attribute[];
 }
 
 export interface AttributeDeleteAction {
-	readonly type: typeof ATTRIBUTE_DELETE;
+	readonly type: AttributeActionType.Delete;
 	readonly uuid: string | string[];
 }
 
-export type AttributeAction = AttributeSetAction | AttributeDeleteAction;
+export type AttributeAction =
+	| AttributeSetAction
+	| AttributeDeleteAction
 
-export function setAttribute(attribute: Attribute | Attribute[]): AttributeSetAction {
-	return {
-		type: ATTRIBUTE_SET,
-		attribute,
-	};
-}
-
-export function deleteAttribute(uuid: string | string[]): AttributeDeleteAction {
-	return {
-		type: ATTRIBUTE_DELETE,
-		uuid,
-	};
+export const AttributeAction = {
+	set(attribute: Attribute | Attribute[]): AttributeSetAction {
+		return { type: AttributeActionType.Set, attribute };
+	},
+	delete(uuid: string | string[]): AttributeDeleteAction {
+		return { type: AttributeActionType.Delete, uuid };
+	},
 }

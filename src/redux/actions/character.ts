@@ -1,30 +1,29 @@
 import { Character } from "models/status";
 
-export const CHARACTER_SET = "character/set";
-export const CHARACTER_DELETE = "character/delete";
+export enum CharacterActionType {
+	Set = '[character]::set',
+	Delete = '[character]::delete',
+}
 
 export interface CharacterSetAction {
-	readonly type: typeof CHARACTER_SET;
+	readonly type: CharacterActionType.Set;
 	readonly character: Character | Character[];
 }
 
 export interface CharacterDeleteAction {
-	readonly type: typeof CHARACTER_DELETE;
+	readonly type: CharacterActionType.Delete;
 	readonly uuid: string | string[];
 }
 
-export type CharacterAction = CharacterSetAction | CharacterDeleteAction;
+export type CharacterAction =
+	| CharacterSetAction
+	| CharacterDeleteAction
 
-export function setCharacter(character: Character | Character[]): CharacterSetAction {
-	return {
-		type: CHARACTER_SET,
-		character,
-	};
-}
-
-export function deleteCharacter(uuid: string | string[]): CharacterDeleteAction {
-	return {
-		type: CHARACTER_DELETE,
-		uuid,
-	};
+export const CharacterAction = {
+	set(character: Character | Character[]): CharacterSetAction {
+		return { type: CharacterActionType.Set, character };
+	},
+	delete(uuid: string | string[]): CharacterDeleteAction {
+		return { type: CharacterActionType.Delete, uuid };
+	},
 }

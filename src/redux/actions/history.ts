@@ -1,30 +1,29 @@
 import { History } from "models/status";
 
-export const HISTORY_SET = "history/set";
-export const HISTORY_DELETE = "history/delete";
+export enum HistoryActionType {
+	Set = '[history]::set',
+	Delete = '[history]::delete',
+}
 
 export interface HistorySetAction {
-	readonly type: typeof HISTORY_SET;
+	readonly type: HistoryActionType.Set;
 	readonly history: History | History[];
 }
 
 export interface HistoryDeleteAction {
-	readonly type: typeof HISTORY_DELETE;
+	readonly type: HistoryActionType.Delete;
 	readonly uuid: string | string[];
 }
 
-export type HistoryAction = HistorySetAction | HistoryDeleteAction;
+export type HistoryAction =
+	| HistorySetAction
+	| HistoryDeleteAction
 
-export function setHistory(history: History | History[]): HistorySetAction {
-	return {
-		type: HISTORY_SET,
-		history,
-	};
-}
-
-export function deleteHistory(uuid: string | string[]): HistoryDeleteAction {
-	return {
-		type: HISTORY_DELETE,
-		uuid,
-	};
+export const HistoryAction = {
+	set(history: History | History[]): HistorySetAction {
+		return { type: HistoryActionType.Set, history };
+	},
+	delete(uuid: string | string[]): HistoryDeleteAction {
+		return { type: HistoryActionType.Delete, uuid };
+	},
 }

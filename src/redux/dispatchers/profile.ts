@@ -1,7 +1,7 @@
 import { ProfileData, Profile } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
-import { setProfile, deleteProfile, setDefaultProfile } from "redux/actions/profile";
+import { ProfileAction } from "redux/actions/profile";
 import BUILTIN_PROFILES_URL from "assets/data/profiles.json";
 
 export default class ProfileDispatcher {
@@ -11,7 +11,7 @@ export default class ProfileDispatcher {
 		await DB.transaction("rw", DB.profiles, () => {
 			return DB.profiles.add(profile.toJSON());
 		}).then(() => {
-			this.dispatch(setProfile(profile));
+			this.dispatch(ProfileAction.set(profile));
 		});
 	}
 
@@ -19,7 +19,7 @@ export default class ProfileDispatcher {
 		await DB.transaction("rw", DB.profiles, () => {
 			return DB.profiles.update(profile.uuid, profile.toJSON());
 		}).then(() => {
-			this.dispatch(setProfile(profile));
+			this.dispatch(ProfileAction.set(profile));
 		});
 	}
 
@@ -27,7 +27,7 @@ export default class ProfileDispatcher {
 		await DB.transaction("rw", DB.profiles, () => {
 			return DB.profiles.delete(uuid);
 		}).then(() => {
-			this.dispatch(deleteProfile(uuid));
+			this.dispatch(ProfileAction.delete(uuid));
 		});
 	}
 
@@ -36,7 +36,7 @@ export default class ProfileDispatcher {
 		await DB.transaction("r", DB.profiles, () => {
 			return DB.profiles.toArray();
 		}).then(profiles => {
-			this.dispatch(setProfile(profiles.map(profile => new Profile(profile))));
+			this.dispatch(ProfileAction.set(profiles.map(profile => new Profile(profile))));
 		});
 	}
 
@@ -49,11 +49,11 @@ export default class ProfileDispatcher {
 			}
 		}).then(data => {
 			const profiles = (Array.isArray(data) ? data : [data]) as (ProfileData & { default?: boolean })[];
-			this.dispatch(setProfile(profiles.map(profile => new Profile(profile, true))));
+			this.dispatch(ProfileAction.set(profiles.map(profile => new Profile(profile, true))));
 
 			const defaultProfile = profiles.find(profile => Boolean(profile.default));
 			if (defaultProfile && defaultProfile.uuid) {
-				this.dispatch(setDefaultProfile(defaultProfile.uuid));
+				this.dispatch(ProfileAction.setDefault(defaultProfile.uuid));
 			}
 		});
 	}

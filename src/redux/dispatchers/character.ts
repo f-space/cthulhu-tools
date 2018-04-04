@@ -1,7 +1,7 @@
 import { CharacterView, Character } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
-import { setCharacter, deleteCharacter } from "redux/actions/character";
+import { CharacterAction } from "redux/actions/character";
 
 export default class CharacterDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
@@ -13,7 +13,7 @@ export default class CharacterDispatcher {
 				return DB.views.add(view.toJSON());
 			});
 		}).then(() => {
-			this.dispatch(setCharacter(character));
+			this.dispatch(CharacterAction.set(character));
 		});
 	}
 
@@ -21,7 +21,7 @@ export default class CharacterDispatcher {
 		await DB.transaction("rw", DB.characters, () => {
 			return DB.characters.update(character.uuid, character.toJSON());
 		}).then(() => {
-			this.dispatch(setCharacter(character));
+			this.dispatch(CharacterAction.set(character));
 		});
 	}
 
@@ -31,7 +31,7 @@ export default class CharacterDispatcher {
 				return DB.views.delete(uuid);
 			});
 		}).then(() => {
-			this.dispatch(deleteCharacter(uuid));
+			this.dispatch(CharacterAction.delete(uuid));
 		});
 	}
 
@@ -39,7 +39,7 @@ export default class CharacterDispatcher {
 		await DB.transaction("r", DB.characters, () => {
 			return DB.characters.toArray();
 		}).then(characters => {
-			this.dispatch(setCharacter(characters.map(character => new Character(character))));
+			this.dispatch(CharacterAction.set(characters.map(character => new Character(character))));
 		});
 	}
 }

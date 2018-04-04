@@ -1,7 +1,7 @@
 import { CharacterView } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
-import { setView, deleteView } from "redux/actions/view";
+import { ViewAction } from "redux/actions/view";
 
 export default class ViewDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
@@ -10,7 +10,7 @@ export default class ViewDispatcher {
 		await DB.transaction("rw", DB.views, () => {
 			return DB.views.update(view.target, view.toJSON());
 		}).then(() => {
-			this.dispatch(setView(view));
+			this.dispatch(ViewAction.set(view));
 		});
 	}
 
@@ -18,7 +18,7 @@ export default class ViewDispatcher {
 		await DB.transaction("r", DB.views, () => {
 			return DB.views.toArray();
 		}).then(views => {
-			this.dispatch(setView(views.map(view => new CharacterView(view))));
+			this.dispatch(ViewAction.set(views.map(view => new CharacterView(view))));
 		});
 
 		await this.setHook();
@@ -27,12 +27,12 @@ export default class ViewDispatcher {
 	public async setHook(): Promise<void> {
 		DB.views.hook("creating", (key, view, transaction) => {
 			transaction.on('complete', () => {
-				this.dispatch(setView(new CharacterView(view)));
+				this.dispatch(ViewAction.set(new CharacterView(view)));
 			});
 		});
 		DB.views.hook("deleting", (key, view, transaction) => {
 			transaction.on('complete', () => {
-				this.dispatch(deleteView(key));
+				this.dispatch(ViewAction.delete(key));
 			});
 		});
 	}

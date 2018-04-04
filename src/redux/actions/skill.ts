@@ -1,30 +1,29 @@
 import { Skill } from "models/status";
 
-export const SKILL_SET = "skill/set";
-export const SKILL_DELETE = "skill/delete";
+export enum SkillActionType {
+	Set = '[skill]::set',
+	Delete = '[skill]::delete',
+}
 
 export interface SkillSetAction {
-	readonly type: typeof SKILL_SET;
+	readonly type: SkillActionType.Set;
 	readonly skill: Skill | Skill[];
 }
 
 export interface SkillDeleteAction {
-	readonly type: typeof SKILL_DELETE;
+	readonly type: SkillActionType.Delete;
 	readonly id: string | string[];
 }
 
-export type SkillAction = SkillSetAction | SkillDeleteAction;
+export type SkillAction =
+	| SkillSetAction
+	| SkillDeleteAction
 
-export function setSkill(skill: Skill | Skill[]): SkillSetAction {
-	return {
-		type: SKILL_SET,
-		skill,
-	};
-}
-
-export function deleteSkill(id: string | string[]): SkillDeleteAction {
-	return {
-		type: SKILL_DELETE,
-		id,
-	};
+export const SkillAction = {
+	set(skill: Skill | Skill[]): SkillSetAction {
+		return { type: SkillActionType.Set, skill };
+	},
+	delete(id: string | string[]): SkillDeleteAction {
+		return { type: SkillActionType.Delete, id };
+	},
 }

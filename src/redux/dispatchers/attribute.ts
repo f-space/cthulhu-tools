@@ -1,7 +1,7 @@
 import { AttributeData, Attribute } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
-import { setAttribute, deleteAttribute } from "redux/actions/attribute";
+import { AttributeAction } from "redux/actions/attribute";
 import BUILTIN_ATTRIBUTES_URL from "assets/data/attributes.json";
 
 export default class AttributeDispatcher {
@@ -11,7 +11,7 @@ export default class AttributeDispatcher {
 		await DB.transaction("rw", DB.attributes, () => {
 			return DB.attributes.add(attribute.toJSON());
 		}).then(() => {
-			this.dispatch(setAttribute(attribute));
+			this.dispatch(AttributeAction.set(attribute));
 		});
 	}
 
@@ -19,7 +19,7 @@ export default class AttributeDispatcher {
 		await DB.transaction("rw", DB.attributes, () => {
 			return DB.attributes.update(attribute.uuid, attribute.toJSON());
 		}).then(() => {
-			this.dispatch(setAttribute(attribute));
+			this.dispatch(AttributeAction.set(attribute));
 		});
 	}
 
@@ -27,7 +27,7 @@ export default class AttributeDispatcher {
 		await DB.transaction("rw", DB.attributes, () => {
 			return DB.attributes.delete(uuid);
 		}).then(() => {
-			this.dispatch(deleteAttribute(uuid));
+			this.dispatch(AttributeAction.delete(uuid));
 		});
 	}
 
@@ -36,7 +36,7 @@ export default class AttributeDispatcher {
 		await DB.transaction("r", DB.attributes, () => {
 			return DB.attributes.toArray();
 		}).then(attributes => {
-			this.dispatch(setAttribute(attributes.map(attr => Attribute.from(attr))));
+			this.dispatch(AttributeAction.set(attributes.map(attr => Attribute.from(attr))));
 		});
 	}
 
@@ -49,7 +49,7 @@ export default class AttributeDispatcher {
 			}
 		}).then(data => {
 			const attributes = (Array.isArray(data) ? data : [data]) as AttributeData[];
-			this.dispatch(setAttribute(attributes.map(attribute => Attribute.from(attribute, true))));
+			this.dispatch(AttributeAction.set(attributes.map(attribute => Attribute.from(attribute, true))));
 		});
 	}
 }
