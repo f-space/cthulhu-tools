@@ -10,9 +10,19 @@ export interface ViewState {
 export function ViewReducer(state: ViewState = { views: Map() }, action: Action): ViewState {
 	switch (action.type) {
 		case VIEW_SET:
-			return { views: state.views.set(action.view.target, action.view) };
+			{
+				const { view } = action;
+				const array = Array.isArray(view) ? view : [view];
+
+				return { views: state.views.withMutations(s => array.forEach(view => s.set(view.target, view))) };
+			}
 		case VIEW_DELETE:
-			return { views: state.views.delete(action.target) };
+			{
+				const { target } = action;
+				const array = Array.isArray(target) ? target : [target];
+
+				return { views: state.views.withMutations(s => array.forEach(target => s.delete(target))) };
+			}
 		default:
 			return state;
 	}

@@ -10,9 +10,19 @@ export interface SkillState {
 export function SkillReducer(state: SkillState = { skills: Map() }, action: Action): SkillState {
 	switch (action.type) {
 		case SKILL_SET:
-			return { skills: state.skills.set(action.skill.id, action.skill) };
+			{
+				const { skill } = action;
+				const array = Array.isArray(skill) ? skill : [skill];
+
+				return { skills: state.skills.withMutations(s => array.forEach(skill => s.set(skill.id, skill))) };
+			}
 		case SKILL_DELETE:
-			return { skills: state.skills.delete(action.id) };
+			{
+				const { id } = action;
+				const array = Array.isArray(id) ? id : [id];
+
+				return { skills: state.skills.withMutations(s => array.forEach(id => s.delete(id))) };
+			}
 		default:
 			return state;
 	}

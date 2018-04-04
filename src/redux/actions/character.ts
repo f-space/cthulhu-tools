@@ -5,24 +5,24 @@ export const CHARACTER_DELETE = "character/delete";
 
 export interface CharacterSetAction {
 	readonly type: typeof CHARACTER_SET;
-	readonly character: Character;
+	readonly character: Character | Character[];
 }
 
 export interface CharacterDeleteAction {
 	readonly type: typeof CHARACTER_DELETE;
-	readonly uuid: string;
+	readonly uuid: string | string[];
 }
 
 export type CharacterAction = CharacterSetAction | CharacterDeleteAction;
 
-export function setCharacter(character: Character): CharacterSetAction {
+export function setCharacter(character: Character | Character[]): CharacterSetAction {
 	return {
 		type: CHARACTER_SET,
 		character,
 	};
 }
 
-export function deleteCharacter(uuid: string): CharacterDeleteAction {
+export function deleteCharacter(uuid: string | string[]): CharacterDeleteAction {
 	return {
 		type: CHARACTER_DELETE,
 		uuid,

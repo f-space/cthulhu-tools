@@ -11,20 +11,34 @@ export interface ProfileState {
 export function ProfileReducer(state: ProfileState = { profiles: Map(), default: null }, action: Action): ProfileState {
 	switch (action.type) {
 		case PROFILE_SET:
-			return {
-				profiles: state.profiles.set(action.profile.uuid, action.profile),
-				default: state.default,
-			};
+			{
+				const { profile } = action;
+				const array = Array.isArray(profile) ? profile : [profile];
+
+				return {
+					profiles: state.profiles.withMutations(s => array.forEach(pro => s.set(pro.uuid, pro))),
+					default: state.default,
+				};
+			}
 		case PROFILE_DELETE:
-			return {
-				profiles: state.profiles.delete(action.uuid),
-				default: state.default,
-			};
+			{
+				const { uuid } = action;
+				const array = Array.isArray(uuid) ? uuid : [uuid];
+
+				return {
+					profiles: state.profiles.withMutations(s => array.forEach(uuid => s.delete(uuid))),
+					default: state.default,
+				};
+			}
 		case PROFILE_SET_DEFAULT:
-			return {
-				profiles: state.profiles,
-				default: action.uuid,
-			};
+			{
+				const { uuid } = action;
+
+				return {
+					profiles: state.profiles,
+					default: uuid,
+				};
+			}
 		default:
 			return state;
 	}

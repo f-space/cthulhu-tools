@@ -34,9 +34,7 @@ export default class HistoryDispatcher {
 		await DB.transaction("r", DB.histories, () => {
 			return DB.histories.toArray();
 		}).then(histories => {
-			for (const history of histories) {
-				this.dispatch(setHistory(new History(history)));
-			}
+			this.dispatch(setHistory(histories.map(history => new History(history))));
 		});
 	}
 }

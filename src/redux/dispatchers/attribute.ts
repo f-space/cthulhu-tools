@@ -36,9 +36,7 @@ export default class AttributeDispatcher {
 		await DB.transaction("r", DB.attributes, () => {
 			return DB.attributes.toArray();
 		}).then(attributes => {
-			for (const attribute of attributes) {
-				this.dispatch(setAttribute(Attribute.from(attribute)));
-			}
+			this.dispatch(setAttribute(attributes.map(attr => Attribute.from(attr))));
 		});
 	}
 
@@ -51,9 +49,7 @@ export default class AttributeDispatcher {
 			}
 		}).then(data => {
 			const attributes = (Array.isArray(data) ? data : [data]) as AttributeData[];
-			for (const attribute of attributes) {
-				this.dispatch(setAttribute(Attribute.from(attribute, true)));
-			}
+			this.dispatch(setAttribute(attributes.map(attribute => Attribute.from(attribute, true))));
 		});
 	}
 }

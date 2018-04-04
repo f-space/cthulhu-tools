@@ -10,9 +10,19 @@ export interface AttributeState {
 export function AttributeReducer(state: AttributeState = { attributes: Map() }, action: Action): AttributeState {
 	switch (action.type) {
 		case ATTRIBUTE_SET:
-			return { attributes: state.attributes.set(action.attribute.uuid, action.attribute) };
+			{
+				const { attribute } = action;
+				const array = Array.isArray(attribute) ? attribute : [attribute];
+
+				return { attributes: state.attributes.withMutations(s => array.forEach(attr => s.set(attr.uuid, attr))) };
+			}
 		case ATTRIBUTE_DELETE:
-			return { attributes: state.attributes.delete(action.uuid) };
+			{
+				const { uuid } = action;
+				const array = Array.isArray(uuid) ? uuid : [uuid];
+
+				return { attributes: state.attributes.withMutations(s => array.forEach(uuid => s.delete(uuid))) };
+			}
 		default:
 			return state;
 	}

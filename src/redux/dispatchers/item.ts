@@ -34,9 +34,7 @@ export default class ItemDispatcher {
 		await DB.transaction("r", DB.items, () => {
 			return DB.items.toArray();
 		}).then(items => {
-			for (const item of items) {
-				this.dispatch(setItem(new Item(item)));
-			}
+			this.dispatch(setItem(items.map(item => new Item(item))));
 		});
 	}
 }

@@ -10,9 +10,19 @@ export interface HistoryState {
 export function HistoryReducer(state: HistoryState = { histories: Map() }, action: Action): HistoryState {
 	switch (action.type) {
 		case HISTORY_SET:
-			return { histories: state.histories.set(action.history.uuid, action.history) };
+			{
+				const { history } = action;
+				const array = Array.isArray(history) ? history : [history];
+
+				return { histories: state.histories.withMutations(s => array.forEach(hist => s.set(hist.uuid, hist))) };
+			}
 		case HISTORY_DELETE:
-			return { histories: state.histories.delete(action.uuid) };
+			{
+				const { uuid } = action;
+				const array = Array.isArray(uuid) ? uuid : [uuid];
+
+				return { histories: state.histories.withMutations(s => array.forEach(uuid => s.delete(uuid))) };
+			}
 		default:
 			return state;
 	}

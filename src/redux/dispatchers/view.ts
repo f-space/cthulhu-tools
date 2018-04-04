@@ -18,9 +18,7 @@ export default class ViewDispatcher {
 		await DB.transaction("r", DB.views, () => {
 			return DB.views.toArray();
 		}).then(views => {
-			for (const view of views) {
-				this.dispatch(setView(new CharacterView(view)));
-			}
+			this.dispatch(setView(views.map(view => new CharacterView(view))));
 		});
 
 		await this.setHook();

@@ -10,9 +10,19 @@ export interface ItemState {
 export function ItemReducer(state: ItemState = { items: Map() }, action: Action): ItemState {
 	switch (action.type) {
 		case ITEM_SET:
-			return { items: state.items.set(action.item.uuid, action.item) };
+			{
+				const { item } = action;
+				const array = Array.isArray(item) ? item : [item];
+
+				return { items: state.items.withMutations(s => array.forEach(item => s.set(item.uuid, item))) };
+			}
 		case ITEM_DELETE:
-			return { items: state.items.delete(action.uuid) };
+			{
+				const { uuid } = action;
+				const array = Array.isArray(uuid) ? uuid : [uuid];
+
+				return { items: state.items.withMutations(s => array.forEach(uuid => s.delete(uuid))) };
+			}
 		default:
 			return state;
 	}

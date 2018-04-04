@@ -10,9 +10,19 @@ export interface CharacterState {
 export function CharacterReducer(state: CharacterState = { characters: Map() }, action: Action): CharacterState {
 	switch (action.type) {
 		case CHARACTER_SET:
-			return { characters: state.characters.set(action.character.uuid, action.character) };
+			{
+				const { character } = action;
+				const array = Array.isArray(character) ? character : [character];
+
+				return { characters: state.characters.withMutations(s => array.forEach(char => s.set(char.uuid, char))) };
+			}
 		case CHARACTER_DELETE:
-			return { characters: state.characters.delete(action.uuid) };
+			{
+				const { uuid } = action;
+				const array = Array.isArray(uuid) ? uuid : [uuid];
+
+				return { characters: state.characters.withMutations(s => array.forEach(uuid => s.delete(uuid))) };
+			}
 		default:
 			return state;
 	}

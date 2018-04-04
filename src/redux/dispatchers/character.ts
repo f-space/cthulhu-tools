@@ -39,9 +39,7 @@ export default class CharacterDispatcher {
 		await DB.transaction("r", DB.characters, () => {
 			return DB.characters.toArray();
 		}).then(characters => {
-			for (const character of characters) {
-				this.dispatch(setCharacter(new Character(character)));
-			}
+			this.dispatch(setCharacter(characters.map(character => new Character(character))));
 		});
 	}
 }

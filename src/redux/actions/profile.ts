@@ -6,12 +6,12 @@ export const PROFILE_SET_DEFAULT = "profile/set-default";
 
 export interface ProfileSetAction {
 	readonly type: typeof PROFILE_SET;
-	readonly profile: Profile;
+	readonly profile: Profile | Profile[];
 }
 
 export interface ProfileDeleteAction {
 	readonly type: typeof PROFILE_DELETE;
-	readonly uuid: string;
+	readonly uuid: string | string[];
 }
 
 export interface ProfileSetDefaultAction {
@@ -21,14 +21,14 @@ export interface ProfileSetDefaultAction {
 
 export type ProfileAction = ProfileSetAction | ProfileDeleteAction | ProfileSetDefaultAction;
 
-export function setProfile(profile: Profile): ProfileSetAction {
+export function setProfile(profile: Profile | Profile[]): ProfileSetAction {
 	return {
 		type: PROFILE_SET,
 		profile,
 	};
 }
 
-export function deleteProfile(uuid: string): ProfileDeleteAction {
+export function deleteProfile(uuid: string | string[]): ProfileDeleteAction {
 	return {
 		type: PROFILE_DELETE,
 		uuid,
