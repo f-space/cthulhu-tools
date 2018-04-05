@@ -1,17 +1,6 @@
-import { Map } from 'immutable';
-import { Attribute } from "models/status";
+import { AttributeState, INITIAL_STATE } from "redux/states/attribute";
 import { Action } from "redux/actions/root";
-import { AttributeActionType, LoadState } from "redux/actions/attribute";
-
-export interface AttributeState {
-	attributes: Map<string, Attribute>;
-	loadState: LoadState;
-}
-
-export const INITIAL_STATE: AttributeState = {
-	attributes: Map(),
-	loadState: 'unloaded',
-};
+import { AttributeActionType } from "redux/actions/attribute";
 
 export function AttributeReducer(state: AttributeState = INITIAL_STATE, action: Action): AttributeState {
 	switch (action.type) {

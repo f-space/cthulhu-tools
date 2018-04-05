@@ -1,17 +1,6 @@
-import { Map } from 'immutable';
-import { CharacterView } from "models/status";
+import { ViewState, INITIAL_STATE } from "redux/states/view";
 import { Action } from "redux/actions/root";
-import { ViewActionType, LoadState } from "redux/actions/view";
-
-export interface ViewState {
-	views: Map<string, CharacterView>;
-	loadState: LoadState;
-}
-
-export const INITIAL_STATE: ViewState = {
-	views: Map(),
-	loadState: 'unloaded',
-};
+import { ViewActionType } from "redux/actions/view";
 
 export function ViewReducer(state: ViewState = INITIAL_STATE, action: Action): ViewState {
 	switch (action.type) {

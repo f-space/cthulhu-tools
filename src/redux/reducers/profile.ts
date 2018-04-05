@@ -1,19 +1,6 @@
-import { Map } from 'immutable';
-import { Profile } from "models/status";
+import { ProfileState, INITIAL_STATE } from "redux/states/profile";
 import { Action } from "redux/actions/root";
-import { ProfileActionType, LoadState } from "redux/actions/profile";
-
-export interface ProfileState {
-	profiles: Map<string, Profile>;
-	default: string | null;
-	loadState: LoadState;
-}
-
-export const INITIAL_STATE: ProfileState = {
-	profiles: Map(),
-	default: null,
-	loadState: 'unloaded',
-};
+import { ProfileActionType } from "redux/actions/profile";
 
 export function ProfileReducer(state: ProfileState = INITIAL_STATE, action: Action): ProfileState {
 	switch (action.type) {

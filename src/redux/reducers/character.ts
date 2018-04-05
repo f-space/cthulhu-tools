@@ -1,17 +1,6 @@
-import { Map } from 'immutable';
-import { Character } from "models/status";
+import { CharacterState, INITIAL_STATE } from "redux/states/character";
 import { Action } from "redux/actions/root";
-import { CharacterActionType, LoadState } from "redux/actions/character";
-
-export interface CharacterState {
-	characters: Map<string, Character>;
-	loadState: LoadState;
-}
-
-export const INITIAL_STATE: CharacterState = {
-	characters: Map(),
-	loadState: 'unloaded',
-};
+import { CharacterActionType } from "redux/actions/character";
 
 export function CharacterReducer(state: CharacterState = INITIAL_STATE, action: Action): CharacterState {
 	switch (action.type) {

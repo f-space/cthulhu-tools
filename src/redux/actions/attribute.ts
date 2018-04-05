@@ -1,6 +1,5 @@
 import { Attribute } from "models/status";
-
-export type LoadState = 'unloaded' | 'loading' | 'loaded';
+import { LoadState } from "redux/states/attribute";
 
 export enum AttributeActionType {
 	Set = '[attribute]::set',

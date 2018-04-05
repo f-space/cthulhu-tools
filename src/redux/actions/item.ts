@@ -1,6 +1,5 @@
 import { Item } from "models/status";
-
-export type LoadState = 'unloaded' | 'loading' | 'loaded';
+import { LoadState } from "redux/states/item";
 
 export enum ItemActionType {
 	Set = '[item]::set',

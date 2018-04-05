@@ -1,17 +1,6 @@
-import { Map } from 'immutable';
-import { Skill } from "models/status";
+import { SkillState, INITIAL_STATE } from "redux/states/skill";
 import { Action } from "redux/actions/root";
-import { SkillActionType, LoadState } from "redux/actions/skill";
-
-export interface SkillState {
-	skills: Map<string, Skill>;
-	loadState: LoadState;
-}
-
-export const INITIAL_STATE: SkillState = {
-	skills: Map(),
-	loadState: 'unloaded',
-};
+import { SkillActionType } from "redux/actions/skill";
 
 export function SkillReducer(state: SkillState = INITIAL_STATE, action: Action): SkillState {
 	switch (action.type) {

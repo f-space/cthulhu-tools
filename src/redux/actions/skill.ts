@@ -1,6 +1,5 @@
 import { Skill } from "models/status";
-
-export type LoadState = 'unloaded' | 'loading' | 'loaded';
+import { LoadState } from "redux/states/skill";
 
 export enum SkillActionType {
 	Set = '[skill]::set',

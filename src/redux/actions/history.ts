@@ -1,6 +1,5 @@
 import { History } from "models/status";
-
-export type LoadState = 'unloaded' | 'loading' | 'loaded';
+import { LoadState } from "redux/states/history";
 
 export enum HistoryActionType {
 	Set = '[history]::set',

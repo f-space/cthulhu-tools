@@ -1,17 +1,6 @@
-import { Map } from 'immutable';
-import { Item } from "models/status";
+import { ItemState, INITIAL_STATE } from "redux/states/item";
 import { Action } from "redux/actions/root";
-import { ItemActionType, LoadState } from "redux/actions/item";
-
-export interface ItemState {
-	items: Map<string, Item>;
-	loadState: LoadState;
-}
-
-export const INITIAL_STATE: ItemState = {
-	items: Map(),
-	loadState: 'unloaded',
-};
+import { ItemActionType } from "redux/actions/item";
 
 export function ItemReducer(state: ItemState = INITIAL_STATE, action: Action): ItemState {
 	switch (action.type) {

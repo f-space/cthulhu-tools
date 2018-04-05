@@ -1,6 +1,5 @@
 import { Character } from "models/status";
-
-export type LoadState = 'unloaded' | 'loading' | 'loaded';
+import { LoadState } from "redux/states/character";
 
 export enum CharacterActionType {
 	Set = '[character]::set',

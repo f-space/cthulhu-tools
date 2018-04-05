@@ -1,6 +1,5 @@
 import { Profile } from "models/status";
-
-export type LoadState = 'unloaded' | 'loading' | 'loaded';
+import { LoadState } from "redux/states/profile";
 
 export enum ProfileActionType {
 	Set = '[profile]::set',

@@ -1,6 +1,5 @@
 import { CharacterView } from "models/status";
-
-export type LoadState = 'unloaded' | 'loading' | 'loaded';
+import { LoadState } from "redux/states/view";
 
 export enum ViewActionType {
 	Set = '[view]::set',

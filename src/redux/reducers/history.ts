@@ -1,17 +1,6 @@
-import { Map } from 'immutable';
-import { History } from "models/status";
+import { HistoryState, INITIAL_STATE } from "redux/states/history";
 import { Action } from "redux/actions/root";
-import { HistoryActionType, LoadState } from "redux/actions/history";
-
-export interface HistoryState {
-	histories: Map<string, History>;
-	loadState: LoadState;
-}
-
-export const INITIAL_STATE: HistoryState = {
-	histories: Map(),
-	loadState: 'unloaded',
-};
+import { HistoryActionType } from "redux/actions/history";
 
 export function HistoryReducer(state: HistoryState = INITIAL_STATE, action: Action): HistoryState {
 	switch (action.type) {
