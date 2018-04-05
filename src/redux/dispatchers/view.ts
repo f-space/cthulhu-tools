@@ -19,12 +19,11 @@ export default class ViewDispatcher {
 			return DB.views.toArray();
 		}).then(views => {
 			this.dispatch(ViewAction.set(views.map(view => new CharacterView(view))));
+			this.setHook();
 		});
-
-		await this.setHook();
 	}
 
-	public async setHook(): Promise<void> {
+	public setHook(): void {
 		DB.views.hook("creating", (key, view, transaction) => {
 			transaction.on('complete', () => {
 				this.dispatch(ViewAction.set(new CharacterView(view)));
