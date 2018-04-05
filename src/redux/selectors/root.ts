@@ -1,6 +1,6 @@
 import { createStructuredSelector } from 'reselect';
 import { DataProvider } from "models/status";
-import { State } from "redux/reducers/root";
+import { State } from "redux/store";
 import { getCharacterProvider } from "redux/selectors/character";
 import { getProfileProvider } from "redux/selectors/profile";
 import { getAttributeProvider } from "redux/selectors/attribute";
