@@ -1,8 +1,11 @@
 import { CharacterView } from "models/status";
 
+export type LoadState = 'unloaded' | 'loading' | 'loaded';
+
 export enum ViewActionType {
 	Set = '[view]::set',
 	Delete = '[view]::delete',
+	SetLoadState = '[view]::setLoadState',
 }
 
 export interface ViewSetAction {
@@ -15,9 +18,15 @@ export interface ViewDeleteAction {
 	readonly target: string | string[];
 }
 
+export interface ViewSetLoadStateAction {
+	readonly type: ViewActionType.SetLoadState;
+	readonly state: LoadState;
+}
+
 export type ViewAction =
 	| ViewSetAction
 	| ViewDeleteAction
+	| ViewSetLoadStateAction
 
 export const ViewAction = {
 	set(view: CharacterView | CharacterView[]): ViewSetAction {
@@ -25,5 +34,8 @@ export const ViewAction = {
 	},
 	delete(target: string | string[]): ViewDeleteAction {
 		return { type: ViewActionType.Delete, target };
+	},
+	setLoadState(state: LoadState): ViewSetLoadStateAction {
+		return { type: ViewActionType.SetLoadState, state };
 	},
 }
