@@ -1,4 +1,4 @@
-import { createStructuredSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 import { DataProvider } from "models/status";
 import { State } from "redux/store";
 import { getCharacterProvider } from "redux/selectors/character";
@@ -7,6 +7,10 @@ import { getAttributeProvider } from "redux/selectors/attribute";
 import { getSkillProvider } from "redux/selectors/skill";
 import { getItemProvider } from "redux/selectors/item";
 import { getHistoryProvider } from "redux/selectors/history";
+
+export const getStatusState = (state: State) => state.status;
+
+export const getLoadState = createSelector(getStatusState, state => state.loadState);
 
 export const getDataProvider = createStructuredSelector<State, DataProvider>({
 	character: getCharacterProvider,

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State } from "redux/store";
-import { getDataProvider } from "redux/selectors/root";
+import { getDataProvider } from "redux/selectors/status";
 import Page from "components/templates/page";
 import style from "styles/pages/status.scss";
 
@@ -15,7 +15,7 @@ export interface StatusPageProps {
 
 const mapStateToProps = (state: State) => {
 	const provider = getDataProvider(state);
-	const { views } = state.view;
+	const { views } = state.status.view;
 	const characters = views
 		.filter(view => view.visible)
 		.keySeq()

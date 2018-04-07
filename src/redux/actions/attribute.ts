@@ -1,10 +1,8 @@
 import { Attribute } from "models/status";
-import { LoadState } from "redux/states/attribute";
 
 export enum AttributeActionType {
 	Set = '[attribute]::set',
 	Delete = '[attribute]::delete',
-	SetLoadState = '[attribute]::setLoadState',
 }
 
 export interface AttributeSetAction {
@@ -17,15 +15,9 @@ export interface AttributeDeleteAction {
 	readonly uuid: string | string[];
 }
 
-export interface AttributeSetLoadStateAction {
-	readonly type: AttributeActionType.SetLoadState;
-	readonly state: LoadState;
-}
-
 export type AttributeAction =
 	| AttributeSetAction
 	| AttributeDeleteAction
-	| AttributeSetLoadStateAction
 
 export const AttributeAction = {
 	set(attribute: Attribute | Attribute[]): AttributeSetAction {
@@ -33,8 +25,5 @@ export const AttributeAction = {
 	},
 	delete(uuid: string | string[]): AttributeDeleteAction {
 		return { type: AttributeActionType.Delete, uuid };
-	},
-	setLoadState(state: LoadState): AttributeSetLoadStateAction {
-		return { type: AttributeActionType.SetLoadState, state };
 	},
 }

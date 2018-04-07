@@ -1,8 +1,8 @@
-import { AttributeState, INITIAL_STATE } from "redux/states/attribute";
+import { AttributeState, INITIAL_ATTRIBUTE_STATE } from "redux/states/attribute";
 import { Action } from "redux/actions/root";
 import { AttributeActionType } from "redux/actions/attribute";
 
-export function AttributeReducer(state: AttributeState = INITIAL_STATE, action: Action): AttributeState {
+export function AttributeReducer(state: AttributeState = INITIAL_ATTRIBUTE_STATE, action: Action): AttributeState {
 	switch (action.type) {
 		case AttributeActionType.Set:
 			{
@@ -22,15 +22,6 @@ export function AttributeReducer(state: AttributeState = INITIAL_STATE, action: 
 				return {
 					...state,
 					attributes: state.attributes.withMutations(s => array.forEach(uuid => s.delete(uuid))),
-				};
-			}
-		case AttributeActionType.SetLoadState:
-			{
-				const { state: loadState } = action;
-
-				return {
-					...state,
-					loadState,
 				};
 			}
 		default:

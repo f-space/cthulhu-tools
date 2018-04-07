@@ -17,7 +17,7 @@ class Provider implements ItemProvider {
 	public list(): Item[] { return [...this.items.values()]; }
 }
 
-export const getItemState = (state: State) => state.item;
+export const getItemState = (state: State) => state.status.item;
 
 export const getItems = createSelector(getItemState, state => state.items);
 

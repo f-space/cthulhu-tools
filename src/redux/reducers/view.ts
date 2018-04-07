@@ -1,8 +1,8 @@
-import { ViewState, INITIAL_STATE } from "redux/states/view";
+import { ViewState, INITIAL_VIEW_STATE } from "redux/states/view";
 import { Action } from "redux/actions/root";
 import { ViewActionType } from "redux/actions/view";
 
-export function ViewReducer(state: ViewState = INITIAL_STATE, action: Action): ViewState {
+export function ViewReducer(state: ViewState = INITIAL_VIEW_STATE, action: Action): ViewState {
 	switch (action.type) {
 		case ViewActionType.Set:
 			{
@@ -22,15 +22,6 @@ export function ViewReducer(state: ViewState = INITIAL_STATE, action: Action): V
 				return {
 					...state,
 					views: state.views.withMutations(s => array.forEach(target => s.delete(target))),
-				};
-			}
-		case ViewActionType.SetLoadState:
-			{
-				const { state: loadState } = action;
-
-				return {
-					...state,
-					loadState,
 				};
 			}
 		default:

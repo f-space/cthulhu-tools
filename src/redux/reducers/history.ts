@@ -1,8 +1,8 @@
-import { HistoryState, INITIAL_STATE } from "redux/states/history";
+import { HistoryState, INITIAL_HISTORY_STATE } from "redux/states/history";
 import { Action } from "redux/actions/root";
 import { HistoryActionType } from "redux/actions/history";
 
-export function HistoryReducer(state: HistoryState = INITIAL_STATE, action: Action): HistoryState {
+export function HistoryReducer(state: HistoryState = INITIAL_HISTORY_STATE, action: Action): HistoryState {
 	switch (action.type) {
 		case HistoryActionType.Set:
 			{
@@ -22,15 +22,6 @@ export function HistoryReducer(state: HistoryState = INITIAL_STATE, action: Acti
 				return {
 					...state,
 					histories: state.histories.withMutations(s => array.forEach(uuid => s.delete(uuid))),
-				};
-			}
-		case HistoryActionType.SetLoadState:
-			{
-				const { state: loadState } = action;
-
-				return {
-					...state,
-					loadState,
 				};
 			}
 		default:

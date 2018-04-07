@@ -1,8 +1,8 @@
-import { CharacterState, INITIAL_STATE } from "redux/states/character";
+import { CharacterState, INITIAL_CHARACTER_STATE } from "redux/states/character";
 import { Action } from "redux/actions/root";
 import { CharacterActionType } from "redux/actions/character";
 
-export function CharacterReducer(state: CharacterState = INITIAL_STATE, action: Action): CharacterState {
+export function CharacterReducer(state: CharacterState = INITIAL_CHARACTER_STATE, action: Action): CharacterState {
 	switch (action.type) {
 		case CharacterActionType.Set:
 			{
@@ -22,15 +22,6 @@ export function CharacterReducer(state: CharacterState = INITIAL_STATE, action: 
 				return {
 					...state,
 					characters: state.characters.withMutations(s => array.forEach(uuid => s.delete(uuid))),
-				};
-			}
-		case CharacterActionType.SetLoadState:
-			{
-				const { state: loadState } = action;
-
-				return {
-					...state,
-					loadState,
 				};
 			}
 		default:

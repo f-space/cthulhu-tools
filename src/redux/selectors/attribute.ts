@@ -17,7 +17,7 @@ class Provider implements AttributeProvider {
 	public list(): Attribute[] { return [...this.attributes.values()]; }
 }
 
-export const getAttributeState = (state: State) => state.attribute;
+export const getAttributeState = (state: State) => state.status.attribute;
 
 export const getAttributes = createSelector(getAttributeState, state => state.attributes);
 

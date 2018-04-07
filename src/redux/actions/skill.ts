@@ -1,10 +1,8 @@
 import { Skill } from "models/status";
-import { LoadState } from "redux/states/skill";
 
 export enum SkillActionType {
 	Set = '[skill]::set',
 	Delete = '[skill]::delete',
-	SetLoadState = '[skill]::setLoadState',
 }
 
 export interface SkillSetAction {
@@ -17,15 +15,9 @@ export interface SkillDeleteAction {
 	readonly id: string | string[];
 }
 
-export interface SkillSetLoadStateAction {
-	readonly type: SkillActionType.SetLoadState;
-	readonly state: LoadState;
-}
-
 export type SkillAction =
 	| SkillSetAction
 	| SkillDeleteAction
-	| SkillSetLoadStateAction
 
 export const SkillAction = {
 	set(skill: Skill | Skill[]): SkillSetAction {
@@ -33,8 +25,5 @@ export const SkillAction = {
 	},
 	delete(id: string | string[]): SkillDeleteAction {
 		return { type: SkillActionType.Delete, id };
-	},
-	setLoadState(state: LoadState): SkillSetLoadStateAction {
-		return { type: SkillActionType.SetLoadState, state };
 	},
 }

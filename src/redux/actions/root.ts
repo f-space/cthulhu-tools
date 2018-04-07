@@ -1,16 +1,3 @@
-import { ViewAction } from "redux/actions/view";
-import { CharacterAction } from "redux/actions/character";
-import { ProfileAction } from "redux/actions/profile";
-import { AttributeAction } from "redux/actions/attribute";
-import { SkillAction } from "redux/actions/skill";
-import { ItemAction } from "redux/actions/item";
-import { HistoryAction } from "redux/actions/history";
+import { StatusAction } from "redux/actions/status";
 
-export type Action =
-	| ViewAction
-	| CharacterAction
-	| ProfileAction
-	| AttributeAction
-	| SkillAction
-	| ItemAction
-	| HistoryAction
+export type Action = StatusAction;

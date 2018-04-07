@@ -6,8 +6,9 @@ import { Form, Field, FormSpy } from 'react-final-form';
 import { CharacterView, Character, DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
-import { getDataProvider } from "redux/selectors/root";
-import RootDispatcher from "redux/dispatchers/root";
+import { LoadState } from "redux/states/status";
+import { getLoadState, getDataProvider } from "redux/selectors/status";
+import StatusDispatcher from "redux/dispatchers/status";
 import ViewDispatcher from "redux/dispatchers/view";
 import { SubmitButton, ButtonProps } from "components/atoms/button";
 import { Toggle, ToggleProps } from "components/atoms/input";
@@ -16,10 +17,11 @@ import SelectableItem from "components/molecules/selectable-item";
 import style from "styles/pages/character-management.scss";
 
 export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
+	loadState: LoadState;
 	provider: DataProvider;
 	views: { [uuid: string]: CharacterView };
 	characters: Status[];
-	dispatcher: RootDispatcher;
+	dispatcher: StatusDispatcher;
 }
 
 type CommandType = "delete" | "clone" | "edit" | "import" | "export";
@@ -33,7 +35,7 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type VisibilityToggleProps = Omit<ToggleProps, 'checked' | 'onChange'> & { uuid: string };
 const VisibilityToggle = connect(
 	(state: State, { uuid }: VisibilityToggleProps) => {
-		const view = state.view.views.get(uuid);
+		const view = state.status.view.views.get(uuid);
 		return { view };
 	},
 	(dispatch: Dispatch, { uuid }: VisibilityToggleProps) => {
@@ -52,19 +54,20 @@ const VisibilityToggle = connect(
 )(Toggle);
 
 const mapStateToProps = (state: State) => {
+	const loadState = getLoadState(state);
 	const provider = getDataProvider(state);
-	const views = state.view.views.toObject();
+	const views = state.status.view.views.toObject();
 	const characters = Object.values(views)
 		.map(view => new EvaluationContext({ character: view.target }, provider))
 		.filter(context => context.guard())
 		.map(context => new Status(context as EvaluationContext))
 		.map(status => new Status(status.$context, new ExternalCache(CacheStorage, status.$hash)))
 		.sort((x, y) => String.prototype.localeCompare.call(x.name || "", y.name || ""))
-	return { provider, views, characters };
+	return { loadState, provider, views, characters };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-	const dispatcher = new RootDispatcher(dispatch);
+	const dispatcher = new StatusDispatcher(dispatch);
 	return { dispatcher };
 };
 
@@ -76,10 +79,14 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	}
 
 	public componentWillMount(): void {
-		this.props.dispatcher.load();
+		if (this.props.loadState === 'unloaded') {
+			this.props.dispatcher.load();
+		}
 	}
 
 	public render() {
+		if (this.props.loadState !== 'loaded') return null;
+
 		const { views } = this.props;
 		const initialValues = { selection: [] };
 

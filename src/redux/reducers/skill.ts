@@ -1,8 +1,8 @@
-import { SkillState, INITIAL_STATE } from "redux/states/skill";
+import { SkillState, INITIAL_SKILL_STATE } from "redux/states/skill";
 import { Action } from "redux/actions/root";
 import { SkillActionType } from "redux/actions/skill";
 
-export function SkillReducer(state: SkillState = INITIAL_STATE, action: Action): SkillState {
+export function SkillReducer(state: SkillState = INITIAL_SKILL_STATE, action: Action): SkillState {
 	switch (action.type) {
 		case SkillActionType.Set:
 			{
@@ -22,15 +22,6 @@ export function SkillReducer(state: SkillState = INITIAL_STATE, action: Action):
 				return {
 					...state,
 					skills: state.skills.withMutations(s => array.forEach(id => s.delete(id))),
-				};
-			}
-		case SkillActionType.SetLoadState:
-			{
-				const { state: loadState } = action;
-
-				return {
-					...state,
-					loadState,
 				};
 			}
 		default:

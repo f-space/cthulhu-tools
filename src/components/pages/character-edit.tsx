@@ -7,8 +7,9 @@ import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { Character, CharacterParams, AttributeParams, SkillParams, DataProvider, PropertyEvaluator, EvaluationContext, EvaluatorBuilder, SkillEvaluator } from "models/status";
 import { State, Dispatch } from "redux/store";
-import RootDispatcher from "redux/dispatchers/root";
-import { getDataProvider } from "redux/selectors/root";
+import { LoadState } from "redux/states/status";
+import { getLoadState, getDataProvider } from "redux/selectors/status";
+import StatusDispatcher from "redux/dispatchers/status";
 import { Button, SubmitButton } from "components/atoms/button";
 import AttributeInput from "components/molecules/attribute-input";
 import SkillInput, { SkillInputValue } from "components/molecules/skill-input";
@@ -16,9 +17,10 @@ import Page from "components/templates/page";
 import style from "styles/pages/character-edit.scss";
 
 export interface CharacterEditPageProps extends RouteComponentProps<{ uuid?: string }> {
+	loadState: LoadState;
 	provider: DataProvider;
 	context: Partial<EvaluationContext>;
-	dispatcher: RootDispatcher;
+	dispatcher: StatusDispatcher;
 }
 
 interface FormValues {
@@ -70,13 +72,14 @@ function EvaluationResult(props: { id: string, base?: boolean }) {
 }
 
 const mapStateToProps = (state: State) => {
+	const loadState = getLoadState(state);
 	const provider = getDataProvider(state);
 	const context: Partial<EvaluationContext> = new EvaluationContext({ profile: provider.profile.default }, provider);
-	return { provider, context };
+	return { loadState, provider, context };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-	const dispatcher = new RootDispatcher(dispatch);
+	const dispatcher = new StatusDispatcher(dispatch);
 	return { dispatcher };
 }
 
@@ -91,10 +94,14 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	public get uuid(): string | undefined { return this.props.match.params.uuid; }
 
 	public componentWillMount(): void {
-		this.props.dispatcher.load();
+		if (this.props.loadState === 'unloaded') {
+			this.props.dispatcher.load();
+		}
 	}
 
 	public render() {
+		if (this.props.loadState !== 'loaded') return null;
+
 		const { context: { attributes, skills } } = this.props;
 		const initialValues = this.makeInitialValues();
 		const decorators = [this.createEvaluationDecorator()];

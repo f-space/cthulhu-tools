@@ -1,11 +1,9 @@
 import { Profile } from "models/status";
-import { LoadState } from "redux/states/profile";
 
 export enum ProfileActionType {
 	Set = '[profile]::set',
 	Delete = '[profile]::delete',
 	SetDefault = '[profile]::setDefault',
-	SetLoadState = '[profile]::setLoadState',
 }
 
 export interface ProfileSetAction {
@@ -23,16 +21,10 @@ export interface ProfileSetDefaultAction {
 	readonly uuid: string;
 }
 
-export interface ProfileSetLoadStateAction {
-	readonly type: ProfileActionType.SetLoadState;
-	readonly state: LoadState;
-}
-
 export type ProfileAction =
 	| ProfileSetAction
 	| ProfileDeleteAction
 	| ProfileSetDefaultAction
-	| ProfileSetLoadStateAction
 
 export const ProfileAction = {
 	set(profile: Profile | Profile[]): ProfileSetAction {
@@ -43,8 +35,5 @@ export const ProfileAction = {
 	},
 	setDefault(uuid: string): ProfileSetDefaultAction {
 		return { type: ProfileActionType.SetDefault, uuid };
-	},
-	setLoadState(state: LoadState): ProfileSetLoadStateAction {
-		return { type: ProfileActionType.SetLoadState, state };
 	},
 }

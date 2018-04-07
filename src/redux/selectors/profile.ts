@@ -19,7 +19,7 @@ class Provider implements ProfileProvider {
 	public list(): Profile[] { return [...this.profiles.values()]; }
 }
 
-export const getProfileState = (state: State) => state.profile;
+export const getProfileState = (state: State) => state.status.profile;
 
 export const getProfiles = createSelector(getProfileState, state => state.profiles);
 

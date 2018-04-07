@@ -17,7 +17,7 @@ class Provider implements CharacterProvider {
 	public list(): Character[] { return [...this.characters.values()]; }
 }
 
-export const getCharacterState = (state: State) => state.character;
+export const getCharacterState = (state: State) => state.status.character;
 
 export const getCharacters = createSelector(getCharacterState, state => state.characters)
 

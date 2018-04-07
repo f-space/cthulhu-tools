@@ -17,7 +17,7 @@ class Provider implements HistoryProvider {
 	public list(): History[] { return [...this.histories.values()]; }
 }
 
-export const getHistoryState = (state: State) => state.history;
+export const getHistoryState = (state: State) => state.status.history;
 
 export const getHistories = createSelector(getHistoryState, state => state.histories);
 

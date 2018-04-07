@@ -17,7 +17,7 @@ class Provider implements SkillProvider {
 	public list(): Skill[] { return [...this.skills.values()]; }
 }
 
-export const getSkillState = (state: State) => state.skill;
+export const getSkillState = (state: State) => state.status.skill;
 
 export const getSkills = createSelector(getSkillState, state => state.skills);
 

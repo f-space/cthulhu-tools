@@ -1,5 +1,6 @@
 import CacheStorage from "models/idb-cache";
 import { Dispatch } from "redux/store";
+import { StatusAction } from "redux/actions/status";
 import ViewDispatcher from "redux/dispatchers/view";
 import CharacterDispatcher from "redux/dispatchers/character";
 import ProfileDispatcher from "redux/dispatchers/profile";
@@ -8,7 +9,7 @@ import SkillDispatcher from "redux/dispatchers/skill";
 import ItemDispatcher from "redux/dispatchers/item";
 import HistoryDispatcher from "redux/dispatchers/history";
 
-export default class RootDispatcher {
+export default class StatusDispatcher {
 	public readonly view: ViewDispatcher;
 	public readonly character: CharacterDispatcher;
 	public readonly profile: ProfileDispatcher;
@@ -28,6 +29,8 @@ export default class RootDispatcher {
 	}
 
 	public async load(): Promise<void> {
+		this.dispatch(StatusAction.setLoadState('loading'));
+
 		await Promise.all([
 			this.view.load(),
 			this.character.load(),
@@ -38,5 +41,7 @@ export default class RootDispatcher {
 			this.history.load(),
 			CacheStorage.load(),
 		]);
+
+		this.dispatch(StatusAction.setLoadState('loaded'));
 	}
 }

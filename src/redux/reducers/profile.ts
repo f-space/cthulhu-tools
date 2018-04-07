@@ -1,8 +1,8 @@
-import { ProfileState, INITIAL_STATE } from "redux/states/profile";
+import { ProfileState, INITIAL_PROFILE_STATE } from "redux/states/profile";
 import { Action } from "redux/actions/root";
 import { ProfileActionType } from "redux/actions/profile";
 
-export function ProfileReducer(state: ProfileState = INITIAL_STATE, action: Action): ProfileState {
+export function ProfileReducer(state: ProfileState = INITIAL_PROFILE_STATE, action: Action): ProfileState {
 	switch (action.type) {
 		case ProfileActionType.Set:
 			{
@@ -31,15 +31,6 @@ export function ProfileReducer(state: ProfileState = INITIAL_STATE, action: Acti
 				return {
 					...state,
 					default: uuid,
-				};
-			}
-		case ProfileActionType.SetLoadState:
-			{
-				const { state: loadState } = action;
-
-				return {
-					...state,
-					loadState,
 				};
 			}
 		default:

@@ -1,8 +1,8 @@
-import { ItemState, INITIAL_STATE } from "redux/states/item";
+import { ItemState, INITIAL_ITEM_STATE } from "redux/states/item";
 import { Action } from "redux/actions/root";
 import { ItemActionType } from "redux/actions/item";
 
-export function ItemReducer(state: ItemState = INITIAL_STATE, action: Action): ItemState {
+export function ItemReducer(state: ItemState = INITIAL_ITEM_STATE, action: Action): ItemState {
 	switch (action.type) {
 		case ItemActionType.Set:
 			{
@@ -22,15 +22,6 @@ export function ItemReducer(state: ItemState = INITIAL_STATE, action: Action): I
 				return {
 					...state,
 					items: state.items.withMutations(s => array.forEach(uuid => s.delete(uuid))),
-				};
-			}
-		case ItemActionType.SetLoadState:
-			{
-				const { state: loadState } = action;
-
-				return {
-					...state,
-					loadState,
 				};
 			}
 		default:
