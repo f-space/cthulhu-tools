@@ -12,7 +12,7 @@ import StatusDispatcher from "redux/dispatchers/status";
 import { SubmitButton, ButtonProps } from "components/atoms/button";
 import VisibilityToggle from "components/organisms/visibility-toggle";
 import Page from "components/templates/page";
-import SelectableItem from "components/molecules/selectable-item";
+import SelectableList from "components/molecules/selectable-list";
 import style from "styles/pages/character-management.scss";
 
 export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
@@ -82,21 +82,18 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	private renderCharacters() {
 		const { views, characters } = this.props;
 
-		return <div className={style['characters']}>
-			{
-				characters.map(character => {
-					const uuid = character.$uuid;
-					const { visible } = views[uuid];
+		return <SelectableList className={style['characters']} field="selection" items={characters} render={character => {
+			const uuid = character.$uuid;
+			const { visible } = views[uuid];
 
-					return <SelectableItem key={uuid} className={style['character']} checkbox={{ field: "selection", value: uuid }}>
-						<div className={style['content']}>
-							<div className={style['name']}>{character.name}</div>
-							<VisibilityToggle className={style['visibility']} uuid={uuid} on="表示" off="非表示" />
-						</div>
-					</SelectableItem>
-				})
-			}
-		</div>
+			return {
+				key: uuid,
+				content: <div className={style['character']}>
+					<div className={style['name']}>{character.name}</div>
+					<VisibilityToggle className={style['visibility']} uuid={uuid} on="表示" off="非表示" />
+				</div>
+			};
+		}} />
 	}
 
 	private renderCommands() {

@@ -5,24 +5,10 @@
 }
 
 .characters {
-	display: flex;
 	flex: 1 1 0;
-	flex-flow: column nowrap;
-	margin: 1ex 0;
-	border-top: solid 1px red;
-	border-bottom: solid 1px red;
-	padding: 2ex 0.5em;
-	overflow-x: hidden;
-	overflow-y: auto;
 }
 
 .character {
-	flex: 0 0 auto;
-	border-bottom: dashed 1px rgb(128, 0, 0);
-	padding-bottom: 0.5ex;
-}
-
-.content {
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: center;
