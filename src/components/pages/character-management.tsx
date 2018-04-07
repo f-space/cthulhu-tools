@@ -2,17 +2,17 @@ import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FormApi } from 'final-form';
-import { Form, Field, FormSpy } from 'react-final-form';
+import { Form, FormSpy } from 'react-final-form';
 import { CharacterView, Character, DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
 import { LoadState } from "redux/states/status";
 import { getLoadState, getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
-import { SubmitButton, ButtonProps } from "components/atoms/button";
 import VisibilityToggle from "components/organisms/visibility-toggle";
 import Page from "components/templates/page";
 import SelectableList from "components/molecules/selectable-list";
+import CommandList from "components/molecules/command-list";
 import style from "styles/pages/character-management.scss";
 
 export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
@@ -101,21 +101,13 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 			const some = (selection.length > 0);
 			const single = (selection.length === 1);
 
-			return <div className={style['commands']}>
-				<Field name="command" render={({ input: { onChange } }) => {
-					function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
-						onChange(event.currentTarget.value);
-					}
-
-					return <React.Fragment>
-						<SubmitButton className={style['command']} value="delete" disabled={!some} commit={false} onClick={handleClick} >削除</SubmitButton>
-						<SubmitButton className={style['command']} value="clone" disabled={!some} commit={false} onClick={handleClick}>複製</SubmitButton>
-						<SubmitButton className={style['command']} value="edit" disabled={!single} commit={false} onClick={handleClick}>編集</SubmitButton>
-						<SubmitButton className={style['command']} value="import" disabled={false} commit={false} onClick={handleClick}>読込み</SubmitButton>
-						<SubmitButton className={style['command']} value="export" disabled={!some} commit={false} onClick={handleClick}>書出し</SubmitButton>
-					</React.Fragment>
-				}} />
-			</div>
+			return <CommandList className={style['commands']} name="command" commands={[
+				{ value: "delete", disabled: !some, children: "削除" },
+				{ value: "clone", disabled: !some, children: "複製" },
+				{ value: "edit", disabled: !single, children: "編集" },
+				{ value: "import", disabled: false, children: "読込み" },
+				{ value: "export", disabled: !some, children: "書出し" },
+			]} />
 		}} />
 	}
 
