@@ -9,9 +9,8 @@ import { State, Dispatch } from "redux/store";
 import { LoadState } from "redux/states/status";
 import { getLoadState, getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
-import ViewDispatcher from "redux/dispatchers/view";
 import { SubmitButton, ButtonProps } from "components/atoms/button";
-import { Toggle, ToggleProps } from "components/atoms/input";
+import VisibilityToggle from "components/organisms/visibility-toggle";
 import Page from "components/templates/page";
 import SelectableItem from "components/molecules/selectable-item";
 import style from "styles/pages/character-management.scss";
@@ -30,28 +29,6 @@ interface FormValues {
 	command?: CommandType;
 	selection: string[];
 }
-
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-type VisibilityToggleProps = Omit<ToggleProps, 'checked' | 'onChange'> & { uuid: string };
-const VisibilityToggle = connect(
-	(state: State, { uuid }: VisibilityToggleProps) => {
-		const view = state.status.view.views.get(uuid);
-		return { view };
-	},
-	(dispatch: Dispatch, { uuid }: VisibilityToggleProps) => {
-		const dispatcher = new ViewDispatcher(dispatch);
-		return { dispatcher };
-	},
-	({ view }, { dispatcher }, props: VisibilityToggleProps) => {
-		const { uuid } = props;
-		const checked = Boolean(view && view.visible);
-		const onChange = view && ((event: React.ChangeEvent<HTMLInputElement>) => {
-			const { checked: visible } = event.currentTarget;
-			dispatcher.update(new CharacterView({ ...view.toJSON(), visible }));
-		});
-		return { ...props, checked, onChange };
-	}
-)(Toggle);
 
 const mapStateToProps = (state: State) => {
 	const loadState = getLoadState(state);
