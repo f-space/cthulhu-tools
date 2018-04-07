@@ -19,7 +19,7 @@ export default function CommandList(props: CommandListProps) {
 
 	return <div {...rest} className={classNames(className, style['commands'])}>
 		{
-			commands.map(item => <CommandButton key={item.value} {...item} className={style['command']} name={name} commit={false} />)
+			commands.map(item => <CommandButton key={item.value} {...item} className={style['command']} name={name} />)
 		}
 	</div>
 }

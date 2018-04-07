@@ -7,13 +7,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export function Button(props: ButtonProps) {
-	const { commit = false, className, ...rest } = props;
+	const { commit, className, ...rest } = props;
 
 	return <button {...rest} className={classNames(className, style['button'], { [style['commit']]: commit })} type="button" />
 }
 
 export function SubmitButton(props: ButtonProps) {
-	const { commit = true, className, ...rest } = props;
+	const { commit, className, ...rest } = props;
 
 	return <button {...rest} className={classNames(className, style['button'], { [style['commit']]: commit })} type="submit" />
 }

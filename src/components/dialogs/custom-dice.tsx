@@ -37,7 +37,7 @@ export default class CustomDiceDialog extends React.Component<CustomDiceDialogPr
 						<NumberInput field="max" className={style['number']} required min={1} max={1000} step={1} />
 					</div>
 					<div className={style['buttons']}>
-						<SubmitButton className={style['ok']} disabled={!valid}>OK</SubmitButton>
+						<SubmitButton className={style['ok']} disabled={!valid} commit>OK</SubmitButton>
 						<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
 					</div >
 				</form>

@@ -168,7 +168,7 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 						</section>
 						<div className={style['actions']}>
 							<FormSpy subscription={{ valid: true, submitting: true }} render={({ valid, submitting }) =>
-								<SubmitButton className={style['ok']} disabled={!valid || submitting}>OK</SubmitButton>
+								<SubmitButton className={style['ok']} disabled={!valid || submitting} commit>OK</SubmitButton>
 							} />
 							<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
 						</div>
