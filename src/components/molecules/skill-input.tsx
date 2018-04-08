@@ -23,7 +23,7 @@ export default function SkillInput(props: SkillInputProps) {
 
 	return <div {...rest} className={classNames(className, style['skill'])}>
 		<Select className={style['id']} field={`${name}.id`} required >
-			<option value="" disabled>未選択</option>
+			<option value="">未選択</option>
 			{skills.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
 		</Select>
 		<Field name={`${name}.id`} subscription={{ value: true }} render={({ input: { value: id } }) =>
