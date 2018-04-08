@@ -12,7 +12,7 @@ export interface SkillSetAction {
 
 export interface SkillDeleteAction {
 	readonly type: SkillActionType.Delete;
-	readonly id: string | string[];
+	readonly uuid: string | string[];
 }
 
 export type SkillAction =
@@ -23,7 +23,7 @@ export const SkillAction = {
 	set(skill: Skill | Skill[]): SkillSetAction {
 		return { type: SkillActionType.Set, skill };
 	},
-	delete(id: string | string[]): SkillDeleteAction {
-		return { type: SkillActionType.Delete, id };
+	delete(uuid: string | string[]): SkillDeleteAction {
+		return { type: SkillActionType.Delete, uuid };
 	},
 }

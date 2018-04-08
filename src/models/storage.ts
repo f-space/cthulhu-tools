@@ -25,7 +25,7 @@ export class StatusDatabase extends Dexie {
 			characters: "uuid",
 			profiles: "uuid",
 			attributes: "uuid",
-			skills: "id",
+			skills: "uuid",
 			items: "uuid",
 			histories: "uuid",
 			caches: "key, date",

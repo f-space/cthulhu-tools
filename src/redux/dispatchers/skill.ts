@@ -17,17 +17,17 @@ export default class SkillDispatcher {
 
 	public async update(skill: Skill): Promise<void> {
 		await DB.transaction("rw", DB.skills, () => {
-			return DB.skills.update(skill.id, skill.toJSON());
+			return DB.skills.update(skill.uuid, skill.toJSON());
 		}).then(() => {
 			this.dispatch(SkillAction.set(skill));
 		});
 	}
 
-	public async delete(id: string): Promise<void> {
+	public async delete(uuid: string): Promise<void> {
 		await DB.transaction("rw", DB.skills, () => {
-			return DB.skills.delete(id);
+			return DB.skills.delete(uuid);
 		}).then(() => {
-			this.dispatch(SkillAction.delete(id));
+			this.dispatch(SkillAction.delete(uuid));
 		});
 	}
 

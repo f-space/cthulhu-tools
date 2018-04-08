@@ -75,7 +75,7 @@ export class StatusPage extends React.Component<StatusPageProps> {
 			<dl className={style['skills']}>
 				{
 					skills.map(skill =>
-						<div key={skill.id} className={style['skill']}>
+						<div key={skill.uuid} className={style['skill']}>
 							<dt className={style['name']}>{skill.name}</dt>
 							<dd className={style['value']}>{character[skill.id]}</dd>
 						</div>

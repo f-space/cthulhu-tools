@@ -11,17 +11,17 @@ export function SkillReducer(state: SkillState = INITIAL_SKILL_STATE, action: Ac
 
 				return {
 					...state,
-					skills: state.skills.withMutations(s => array.forEach(skill => s.set(skill.id, skill))),
+					skills: state.skills.withMutations(s => array.forEach(skill => s.set(skill.uuid, skill))),
 				};
 			}
 		case SkillActionType.Delete:
 			{
-				const { id } = action;
-				const array = Array.isArray(id) ? id : [id];
+				const { uuid } = action;
+				const array = Array.isArray(uuid) ? uuid : [uuid];
 
 				return {
 					...state,
-					skills: state.skills.withMutations(s => array.forEach(id => s.delete(id))),
+					skills: state.skills.withMutations(s => array.forEach(uuid => s.delete(uuid))),
 				};
 			}
 		default:

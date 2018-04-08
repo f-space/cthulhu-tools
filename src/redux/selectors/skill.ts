@@ -6,12 +6,12 @@ import { State } from "redux/store";
 class Provider implements SkillProvider {
 	constructor(readonly skills: Map<string, Skill>) { }
 
-	public get(id: string): Skill | undefined;
-	public get(ids: string[]): Skill[];
-	public get(ids: string | string[]): Skill | Skill[] | undefined {
-		return Array.isArray(ids)
-			? ids.map(id => this.skills.get(id)).filter(x => x !== undefined) as Skill[]
-			: this.skills.get(ids);
+	public get(uuid: string): Skill | undefined;
+	public get(uuids: string[]): Skill[];
+	public get(uuids: string | string[]): Skill | Skill[] | undefined {
+		return Array.isArray(uuids)
+			? uuids.map(uuid => this.skills.get(uuid)).filter(x => x !== undefined) as Skill[]
+			: this.skills.get(uuids);
 	}
 
 	public list(): Skill[] { return [...this.skills.values()]; }

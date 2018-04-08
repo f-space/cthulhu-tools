@@ -12,6 +12,7 @@ export enum SkillCategory {
 };
 
 export interface SkillData {
+	readonly uuid?: string;
 	readonly id: string;
 	readonly name: string;
 	readonly category: SkillCategory;
@@ -20,6 +21,7 @@ export interface SkillData {
 }
 
 export class Skill implements SkillData {
+	public readonly uuid: string;
 	public readonly id: string;
 	public readonly name: string;
 	public readonly category: SkillCategory;
@@ -27,7 +29,8 @@ export class Skill implements SkillData {
 	public readonly base: number | string;
 	public readonly readonly: boolean;
 
-	public constructor({ id, name, category, dependencies, base }: SkillData, readonly?: boolean) {
+	public constructor({ uuid, id, name, category, dependencies, base }: SkillData, readonly?: boolean) {
+		this.uuid = validation.uuid(uuid);
 		this.id = validation.string(id);
 		this.name = validation.string(name);
 		this.category = validation.string_literal(SkillCategory[category] || SkillCategory.other);
@@ -38,6 +41,7 @@ export class Skill implements SkillData {
 
 	public toJSON(): SkillData {
 		return {
+			uuid: this.uuid,
 			id: this.id,
 			name: this.name,
 			category: this.category,

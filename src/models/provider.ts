@@ -20,15 +20,9 @@ interface UUIDKeyedProvider<T> {
 	list(): T[];
 }
 
-interface IDKeyedProvider<T> {
-	get(id: string): T | undefined;
-	get(ids: ReadonlyArray<string>): T[];
-	list(): T[];
-}
-
 export interface CharacterProvider extends UUIDKeyedProvider<Character> { }
 export interface ProfileProvider extends UUIDKeyedProvider<Profile> { readonly default: Profile | undefined; }
 export interface AttributeProvider extends UUIDKeyedProvider<Attribute> { }
-export interface SkillProvider extends IDKeyedProvider<Skill> { }
+export interface SkillProvider extends UUIDKeyedProvider<Skill> { }
 export interface ItemProvider extends UUIDKeyedProvider<Item> { }
 export interface HistoryProvider extends UUIDKeyedProvider<History> { }
