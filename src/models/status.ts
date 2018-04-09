@@ -78,7 +78,7 @@ export const EvaluationContext: EvaluationContextConstructor = (function () {
 		const character = opt(source.character, character => resolve(character, provider.character));
 		const profile = opt(or(source.profile, opt(character, x => x.profile)), profile => resolve(profile, provider.profile));
 		const attributes = map(or(source.attributes, opt(profile, x => x.attributes)), x => resolve(x, provider.attribute));
-		const skills = or(map(source.skills, x => resolve(x, provider.skill)), provider.skill.list());
+		const skills = map(or(source.skills, opt(profile, x => x.skills)), x => resolve(x, provider.skill));
 		const history = opt(or(source.history, opt(character, x => x.history)), history => resolve(history, provider.history));
 
 		return Object.assign(this, { character, profile, attributes, skills, history });
