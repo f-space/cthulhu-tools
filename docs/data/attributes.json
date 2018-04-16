@@ -11,7 +11,7 @@
 				"type": "text"
 			}
 		],
-		"expression": "x"
+		"expression": "${$x}"
 	},
 	{
 		"uuid": "44da26db-7c69-4016-a362-107b473313a7",
@@ -25,7 +25,7 @@
 				"type": "text"
 			}
 		],
-		"expression": "x"
+		"expression": "${$x}"
 	},
 	{
 		"uuid": "c96c7286-083f-438b-acab-bd0e6c2de1ea",
@@ -39,7 +39,7 @@
 				"type": "text"
 			}
 		],
-		"expression": "x"
+		"expression": "${$x}"
 	},
 	{
 		"uuid": "e5f07570-7ab4-470d-ab0c-a4fa60b52f37",
@@ -141,7 +141,7 @@
 				"max": 6
 			}
 		],
-		"expression": "x",
+		"expression": "$x",
 		"min": 0,
 		"max": 99
 	},
@@ -159,7 +159,7 @@
 				"max": 6
 			}
 		],
-		"expression": "x",
+		"expression": "$x",
 		"min": 0,
 		"max": 99
 	},
@@ -177,7 +177,7 @@
 				"max": 6
 			}
 		],
-		"expression": "x",
+		"expression": "$x",
 		"min": 0,
 		"max": 99
 	},
@@ -195,7 +195,7 @@
 				"max": 6
 			}
 		],
-		"expression": "x",
+		"expression": "$x",
 		"min": 0,
 		"max": 99
 	},
@@ -213,7 +213,7 @@
 				"max": 6
 			}
 		],
-		"expression": "x",
+		"expression": "$x",
 		"min": 0,
 		"max": 99
 	},
@@ -231,7 +231,7 @@
 				"max": 6
 			}
 		],
-		"expression": "x + 6",
+		"expression": "$x + 6",
 		"min": 0,
 		"max": 99
 	},
@@ -249,7 +249,7 @@
 				"max": 6
 			}
 		],
-		"expression": "x + 6",
+		"expression": "$x + 6",
 		"min": 0,
 		"max": 99
 	},
@@ -267,7 +267,7 @@
 				"max": 6
 			}
 		],
-		"expression": "x + 3",
+		"expression": "$x + 3",
 		"min": 0,
 		"max": 99
 	},

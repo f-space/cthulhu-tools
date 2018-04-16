@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Attribute, InputMethod } from "models/status";
-import { substitute } from "models/eval";
+import { Expression, ParseContext } from "models/expression";
 import DiceInput from "components/molecules/attribute-dice-input";
 import NumberInput from "components/molecules/attribute-number-input";
 import TextInput from "components/molecules/attribute-text-input";
@@ -41,18 +41,18 @@ export default class AttributeInput extends React.Component<AttributeInputProps>
 	}
 
 	private segment(attribute: Attribute): (string | InputMethod)[] {
-		const values = attribute.inputs.reduce((obj, { name }) => (obj[name] = `var(${name})`, obj), Object.create(null));
-		const expression = substitute(attribute.expression, values);
-		return [...split(expression)].filter(x => x);
+		const expression = getExpression(attribute);
+		const segments = expression ? expression.segment() : [];
+		return segments
+			.map(x => typeof x === 'string' ? x : attribute.inputs.find(input => input.name === x.name))
+			.filter(x => x) as (string | InputMethod)[];
 
-		function* split(expression: string) {
-			let regexp = /var\((.*?)\)/g, position = 0;
-			for (let match; match = regexp.exec(expression); position = regexp.lastIndex) {
-				const { index, 1: name } = match;
-				yield expression.slice(position, index);
-				yield attribute.inputs.find(input => input.name === name) || "";
+		function getExpression(attribute: Attribute): Expression | undefined {
+			switch (attribute.type) {
+				case 'integer': return Expression.parse(attribute.expression, ParseContext.Expression);
+				case 'number': return Expression.parse(attribute.expression, ParseContext.Expression);
+				case 'text': return Expression.parse(attribute.expression, ParseContext.Format);
 			}
-			yield expression.slice(position);
 		}
 	}
 }
