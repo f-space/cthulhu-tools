@@ -21,7 +21,6 @@
 		"@stablelib/utf8": "^0.10.1",
 		"classnames": "^2.2.5",
 		"dexie": "^2.0.2",
-		"expr-eval": "^1.2.1",
 		"fast-sha256": "^1.1.0",
 		"final-form": "^4.4.0",
 		"final-form-arrays": "^1.0.4",
