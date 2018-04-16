@@ -8,7 +8,7 @@ export interface ProfileData {
 	readonly skills?: ReadonlyArray<string>;
 }
 
-export class Profile implements ProfileData {
+export class Profile {
 	public readonly uuid: string;
 	public readonly version: number;
 	public readonly name: string;

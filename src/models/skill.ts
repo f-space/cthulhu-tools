@@ -20,7 +20,7 @@ export interface SkillData {
 	readonly base: number | string;
 }
 
-export class Skill implements SkillData {
+export class Skill {
 	public readonly uuid: string;
 	public readonly id: string;
 	public readonly name: string;

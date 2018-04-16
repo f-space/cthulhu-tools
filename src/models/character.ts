@@ -12,7 +12,7 @@ export interface CharacterData {
 	readonly params?: Partial<CharacterParams>;
 }
 
-export class CharacterView implements CharacterView {
+export class CharacterView {
 	public readonly target: string;
 	public readonly visible: boolean;
 
@@ -29,7 +29,7 @@ export class CharacterView implements CharacterView {
 	}
 }
 
-export class Character implements CharacterData {
+export class Character {
 	public readonly uuid: string;
 	public readonly profile: string;
 	public readonly history: string | null;

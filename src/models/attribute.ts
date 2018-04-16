@@ -44,7 +44,7 @@ export interface NumberAttributeData extends AttributeDataBase<'number'> {
 
 export interface TextAttributeData extends AttributeDataBase<'text'> { }
 
-abstract class AttributeBase<T extends AttributeType> implements AttributeDataBase<T>{
+abstract class AttributeBase<T extends AttributeType> {
 	public readonly type: T;
 	public readonly uuid: string;
 	public readonly id: string;
@@ -84,7 +84,7 @@ abstract class AttributeBase<T extends AttributeType> implements AttributeDataBa
 	}
 }
 
-export class IntegerAttribute extends AttributeBase<'integer'> implements IntegerAttributeData {
+export class IntegerAttribute extends AttributeBase<'integer'> {
 	public readonly min?: number | string;
 	public readonly max?: number | string;
 
@@ -103,7 +103,7 @@ export class IntegerAttribute extends AttributeBase<'integer'> implements Intege
 	}
 }
 
-export class NumberAttribute extends AttributeBase<'number'> implements NumberAttributeData {
+export class NumberAttribute extends AttributeBase<'number'> {
 	public readonly min?: number | string;
 	public readonly max?: number | string;
 
@@ -122,7 +122,7 @@ export class NumberAttribute extends AttributeBase<'number'> implements NumberAt
 	}
 }
 
-export class TextAttribute extends AttributeBase<'text'> implements TextAttributeData {
+export class TextAttribute extends AttributeBase<'text'> {
 	public constructor({ ...rest }: TextAttributeData, readonly?: boolean) {
 		super(rest, readonly);
 	}

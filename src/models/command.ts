@@ -36,7 +36,7 @@ export interface AddOperationData extends OperationDataBase<'add'> {
 	readonly value: number;
 }
 
-export class Command implements CommandData {
+export class Command {
 	public readonly parent: string | null;
 	public readonly time: number;
 	public readonly message: string;
@@ -73,7 +73,7 @@ export class Command implements CommandData {
 	}
 }
 
-abstract class OperationBase<T extends OperationType> implements OperationDataBase<T> {
+abstract class OperationBase<T extends OperationType> {
 	public readonly type: T;
 	public readonly target: string;
 
@@ -96,7 +96,7 @@ abstract class OperationBase<T extends OperationType> implements OperationDataBa
 	public toString(): string { return this.repr; }
 }
 
-export class SetOperation extends OperationBase<'set'> implements SetOperationData {
+export class SetOperation extends OperationBase<'set'> {
 	public readonly value: number | string;
 
 	public get repr(): string { return `${super.repr} ${JSON.stringify(this.value)}`; }
@@ -117,7 +117,7 @@ export class SetOperation extends OperationBase<'set'> implements SetOperationDa
 	}
 }
 
-export class AddOperation extends OperationBase<'add'> implements AddOperationData {
+export class AddOperation extends OperationBase<'add'> {
 	public readonly value: number;
 
 	public get repr(): string { return `${super.repr} ${JSON.stringify(this.value)}`; }

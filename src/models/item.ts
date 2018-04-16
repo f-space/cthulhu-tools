@@ -6,7 +6,7 @@ export interface ItemData {
 	readonly description?: string;
 }
 
-export class Item implements ItemData {
+export class Item {
 	public readonly uuid: string;
 	public readonly name: string;
 	public readonly description: string;

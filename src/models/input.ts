@@ -48,7 +48,7 @@ export interface NumberInputMethodData extends InputMethodDataBase<'number'> {
 
 export interface TextInputMethodData extends InputMethodDataBase<'text'> { }
 
-abstract class InputMethodBase<T extends InputType> implements InputMethodDataBase<T> {
+abstract class InputMethodBase<T extends InputType> {
 	public readonly type: T;
 	public readonly name: string;
 
@@ -70,7 +70,7 @@ abstract class InputMethodBase<T extends InputType> implements InputMethodDataBa
 	public abstract validate(data: any): data is InputMethodParamTypeMap[T];
 }
 
-export class DiceInputMethod extends InputMethodBase<'dice'> implements DiceInputMethodData {
+export class DiceInputMethod extends InputMethodBase<'dice'> {
 	public readonly count: number;
 	public readonly max: number;
 	public readonly dices: ReadonlyArray<Dice>
@@ -100,7 +100,7 @@ export class DiceInputMethod extends InputMethodBase<'dice'> implements DiceInpu
 	}
 }
 
-export class NumberInputMethod extends InputMethodBase<'number'> implements NumberInputMethodData {
+export class NumberInputMethod extends InputMethodBase<'number'> {
 	public readonly min?: number;
 	public readonly max?: number;
 	public readonly step?: number;
@@ -156,7 +156,7 @@ export class NumberInputMethod extends InputMethodBase<'number'> implements Numb
 	}
 }
 
-export class TextInputMethod extends InputMethodBase<'text'> implements TextInputMethodData {
+export class TextInputMethod extends InputMethodBase<'text'> {
 	public get default(): string { return ""; }
 
 	public constructor({ ...rest }: TextInputMethodData) {
