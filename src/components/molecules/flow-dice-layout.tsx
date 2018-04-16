@@ -16,7 +16,7 @@ export default function FlowDiceLayout({ width, height, dices, render, className
 	const count = dices.reduce((sum, group) => sum + group.length, 0);
 	const size = Math.floor(Math.sqrt((width * height) / count * 0.75));
 
-	return <div {...rest} className={classNames(className, style['layout'])} style={{ '--dice-size': `${size}px` }}>
+	return <div {...rest} className={classNames(className, style['layout'])} style={{ '--dice-size': `${size}px` } as any}>
 		{dices.map((group, index) => <Wrapper key={index}>{render(group)}</Wrapper>)}
 	</div>
 }

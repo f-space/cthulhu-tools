@@ -21,7 +21,7 @@ export default function CircleDiceLayout({ width, height, dices, render, classNa
 	const centerX = width / 2;
 	const centerY = height / 2;
 
-	return <div {...rest} className={classNames(className, style['layout'])} style={{ '--dice-size': `${innerRadius}px` }}>
+	return <div {...rest} className={classNames(className, style['layout'])} style={{ '--dice-size': `${innerRadius}px` } as any}>
 		{
 			dices.map((group, n) => {
 				const position = {

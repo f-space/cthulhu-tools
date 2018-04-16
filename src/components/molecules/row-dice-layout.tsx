@@ -34,7 +34,7 @@ export default class RowDiceLayout extends React.Component<RowDiceLayoutProps> {
 		const { width, height, dices, render, className, ...rest } = this.props;
 		const rows = this.offsets.map((_, i, offsets) => dices.slice(offsets[i], offsets[i + 1]));
 
-		return <div {...rest} className={classNames(className, style['layout'])} style={{ '--dice-size': `${this.diceSize}px` }}>
+		return <div {...rest} className={classNames(className, style['layout'])} style={{ '--dice-size': `${this.diceSize}px` } as any}>
 			{
 				rows.map((row, rowIndex) => {
 					return <div key={rowIndex} className={style['row']}>
