@@ -5,7 +5,7 @@ import { History } from "models/history";
 import { Property } from "models/property";
 import { PropertyResolver, AttributeResolver, SkillResolver, CompoundResolver, VoidResolver } from "models/resolver";
 import { Cache, ObjectCache } from "models/cache";
-import { Expression, ParseContext } from "models/expression";
+import { Expression } from "models/expression";
 
 export interface PropertyEvaluator {
 	readonly resolver: PropertyResolver;
@@ -44,9 +44,13 @@ export class AttributeEvaluator implements PropertyEvaluator {
 		const data = this.data[attribute.id] || Object.create(null);
 		const values = new Map<string, any>();
 
-		for (const dependency of attribute.dependencies) {
-			if (dependency) {
-				values.set(dependency, root.evaluate(dependency, hash, root));
+		let dependencies = ("expression" in attribute ? attribute.expression : attribute.format).refs;
+		if ("min" in attribute && attribute.min) dependencies = dependencies.concat(attribute.min.refs);
+		if ("max" in attribute && attribute.max) dependencies = dependencies.concat(attribute.max.refs);
+
+		for (const dependency of dependencies) {
+			if (dependency.key) {
+				values.set(dependency.key, root.evaluate(dependency.key, hash, root));
 			}
 		}
 
@@ -60,12 +64,10 @@ export class AttributeEvaluator implements PropertyEvaluator {
 	}
 
 	private evaluateInteger(attribute: IntegerAttribute, values: Map<string, any>): number | undefined {
-		const value = Expression.evaluate(attribute.expression, ParseContext.Expression, values);
+		const value = attribute.expression.evaluate(values);
 		if (value !== undefined) {
-			const minExpr = attribute.min !== undefined ? attribute.min : Number.MIN_SAFE_INTEGER;
-			const maxExpr = attribute.max !== undefined ? attribute.max : Number.MAX_SAFE_INTEGER;
-			const min = typeof minExpr === 'number' ? minExpr : Expression.evaluate(minExpr, ParseContext.Expression, values);
-			const max = typeof maxExpr === 'number' ? maxExpr : Expression.evaluate(maxExpr, ParseContext.Expression, values);
+			const min = attribute.min ? attribute.min.evaluate(values) : Number.MIN_SAFE_INTEGER;
+			const max = attribute.max ? attribute.max.evaluate(values) : Number.MAX_SAFE_INTEGER;
 
 			if (min !== undefined && max !== undefined) return Math.max(Math.min(value, max), min);
 		}
@@ -74,12 +76,10 @@ export class AttributeEvaluator implements PropertyEvaluator {
 	}
 
 	private evaluateNumber(attribute: NumberAttribute, values: Map<string, any>): number | undefined {
-		const value = Expression.evaluate(attribute.expression, ParseContext.Expression, values);
+		const value = attribute.expression.evaluate(values);
 		if (value !== undefined) {
-			const minExpr = attribute.min !== undefined ? attribute.min : -Infinity;
-			const maxExpr = attribute.max !== undefined ? attribute.max : Infinity;
-			const min = typeof minExpr === 'number' ? minExpr : Expression.evaluate(minExpr, ParseContext.Expression, values)
-			const max = typeof maxExpr === 'number' ? maxExpr : Expression.evaluate(maxExpr, ParseContext.Expression, values)
+			const min = attribute.min ? attribute.min.evaluate(values) : -Infinity;
+			const max = attribute.max ? attribute.max.evaluate(values) : Infinity;
 
 			if (min !== undefined && max !== undefined) return Math.max(Math.min(value, max), min);
 		}
@@ -88,7 +88,7 @@ export class AttributeEvaluator implements PropertyEvaluator {
 	}
 
 	private evaluateText(attribute: TextAttribute, values: Map<string, any>): string | undefined {
-		const value = Expression.evaluate(attribute.expression, ParseContext.Format, values);
+		const value = attribute.format.evaluate(values);
 
 		return value !== undefined ? String(value) : undefined;
 	}
@@ -124,9 +124,9 @@ export class SkillEvaluator implements PropertyEvaluator {
 
 	private evaluateValues(skill: Skill, hash: string | null, root: PropertyEvaluator): any {
 		const values = new Map<string, any>();
-		for (const dependency of skill.dependencies) {
-			if (dependency) {
-				values.set(dependency, root.evaluate(dependency, hash, root));
+		for (const ref of skill.base.refs) {
+			if (ref.key) {
+				values.set(ref.key, root.evaluate(ref.key, hash, root));
 			}
 		}
 
@@ -134,7 +134,7 @@ export class SkillEvaluator implements PropertyEvaluator {
 	}
 
 	private evaluateBase(skill: Skill, values: Map<string, any>): number | undefined {
-		const value = typeof skill.base === 'number' ? skill.base : Expression.evaluate(skill.base, ParseContext.Expression, values);
+		const value = skill.base.evaluate(values);
 
 		return value !== undefined ? Math.trunc(value) : undefined;
 	}

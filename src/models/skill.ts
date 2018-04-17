@@ -1,3 +1,4 @@
+import { Expression } from "models/expression";
 import * as validation from "models/validation";
 
 export enum SkillCategory {
@@ -16,7 +17,6 @@ export interface SkillData {
 	readonly id: string;
 	readonly name: string;
 	readonly category: SkillCategory;
-	readonly dependencies?: ReadonlyArray<string>;
 	readonly base: number | string;
 }
 
@@ -25,17 +25,15 @@ export class Skill {
 	public readonly id: string;
 	public readonly name: string;
 	public readonly category: SkillCategory;
-	public readonly dependencies: ReadonlyArray<string>;
-	public readonly base: number | string;
+	public readonly base: Expression;
 	public readonly readonly: boolean;
 
-	public constructor({ uuid, id, name, category, dependencies, base }: SkillData, readonly?: boolean) {
+	public constructor({ uuid, id, name, category, base }: SkillData, readonly?: boolean) {
 		this.uuid = validation.uuid(uuid);
 		this.id = validation.string(id);
 		this.name = validation.string(name);
 		this.category = validation.string_literal(SkillCategory[category] || SkillCategory.other);
-		this.dependencies = validation.array(dependencies, validation.string);
-		this.base = validation.or(validation.int_string(base), 0);
+		this.base = validation.expression(base);
 		this.readonly = Boolean(readonly);
 	}
 
@@ -45,8 +43,7 @@ export class Skill {
 			id: this.id,
 			name: this.name,
 			category: this.category,
-			dependencies: this.dependencies,
-			base: this.base,
+			base: this.base.toJSON(),
 		};
 	}
 }

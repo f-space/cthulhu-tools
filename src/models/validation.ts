@@ -1,3 +1,4 @@
+import { Expression, Format } from "models/expression";
 import { deepClone, generateUUID } from "models/utility";
 
 const MIN_INT32 = (1 << 31);
@@ -5,12 +6,6 @@ const MAX_INT32 = (1 << 31) ^ -1;
 
 export function int(value: number, min: number = MIN_INT32, max: number = MAX_INT32): number {
 	return Math.max(Math.min(Math.trunc(value), max), min);
-}
-
-export function int_string(value: number | string | undefined): number | string | undefined {
-	if (typeof value === 'number') return int(value);
-	if (typeof value === 'string') return string(value);
-	return undefined;
 }
 
 export function number(value: number, min: number = -Infinity, max: number = Infinity): number {
@@ -81,6 +76,14 @@ export function time(value: number | undefined): number {
 
 export function uuid(value: string | undefined): string {
 	return (value !== undefined ? String(value) : generateUUID());
+}
+
+export function expression(value: number | string): Expression {
+	return (typeof value === 'number' ? Expression.value(value) : Expression.parse(String(value)) || Expression.value(NaN));
+}
+
+export function format(value: string): Format {
+	return Format.parse(String(value)) || Format.value("<< Parse Error >>");
 }
 
 export function or<T>(value: T | undefined, defaultValue: T): T {

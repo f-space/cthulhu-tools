@@ -1,4 +1,5 @@
 import { InputMethodData, InputMethod } from "models/input";
+import { Expression, Format } from "models/expression";
 import * as validation from "models/validation";
 
 export * from "models/input";
@@ -25,45 +26,43 @@ interface AttributeDataBase<T extends AttributeType> {
 	readonly uuid?: string;
 	readonly id: string;
 	readonly name: string;
-	readonly dependencies?: ReadonlyArray<string>;
 	readonly inputs?: ReadonlyArray<InputMethodData>;
-	readonly expression: string;
 	readonly view?: boolean;
 	readonly hidden?: boolean;
 }
 
 export interface IntegerAttributeData extends AttributeDataBase<'integer'> {
+	readonly expression: number | string;
 	readonly min?: number | string;
 	readonly max?: number | string;
 }
 
 export interface NumberAttributeData extends AttributeDataBase<'number'> {
+	readonly expression: number | string;
 	readonly min?: number | string;
 	readonly max?: number | string;
 }
 
-export interface TextAttributeData extends AttributeDataBase<'text'> { }
+export interface TextAttributeData extends AttributeDataBase<'text'> {
+	readonly format: string;
+}
 
 abstract class AttributeBase<T extends AttributeType> {
 	public readonly type: T;
 	public readonly uuid: string;
 	public readonly id: string;
 	public readonly name: string;
-	public readonly dependencies: ReadonlyArray<string>;
 	public readonly inputs: ReadonlyArray<InputMethod>;
-	public readonly expression: string;
 	public readonly view: boolean;
 	public readonly hidden: boolean;
 	public readonly readonly: boolean;
 
-	public constructor({ type, uuid, id, name, dependencies, inputs, expression, view, hidden }: AttributeDataBase<T>, readonly?: boolean) {
+	public constructor({ type, uuid, id, name, inputs, view, hidden }: AttributeDataBase<T>, readonly?: boolean) {
 		this.type = validation.string_literal(type);
 		this.uuid = validation.uuid(uuid);
 		this.id = validation.string(id);
 		this.name = validation.string(name);
-		this.dependencies = validation.array(dependencies, validation.string);
 		this.inputs = validation.array(inputs, InputMethod.from);
-		this.expression = validation.string(expression);
 		this.view = validation.boolean(validation.or(view, false));
 		this.hidden = validation.boolean(validation.or(hidden, false));
 		this.readonly = Boolean(readonly);
@@ -75,9 +74,7 @@ abstract class AttributeBase<T extends AttributeType> {
 			uuid: this.uuid,
 			id: this.id,
 			name: this.name,
-			dependencies: this.dependencies,
 			inputs: this.inputs,
-			expression: this.expression,
 			view: this.view || undefined,
 			hidden: this.hidden || undefined,
 		};
@@ -85,50 +82,62 @@ abstract class AttributeBase<T extends AttributeType> {
 }
 
 export class IntegerAttribute extends AttributeBase<'integer'> {
-	public readonly min?: number | string;
-	public readonly max?: number | string;
+	public readonly expression: Expression;
+	public readonly min?: Expression;
+	public readonly max?: Expression;
 
-	public constructor({ min, max, ...rest }: IntegerAttributeData, readonly?: boolean) {
+	public constructor({ expression, min, max, ...rest }: IntegerAttributeData, readonly?: boolean) {
 		super(rest, readonly);
 
-		this.min = validation.int_string(min);
-		this.max = validation.int_string(max);
+		this.expression = validation.expression(expression);
+		this.min = validation.opt(min, validation.expression);
+		this.max = validation.opt(max, validation.expression);
 	}
 
 	public toJSON(): IntegerAttributeData {
 		return Object.assign(super.toJSON(), {
-			min: this.min,
-			max: this.max,
+			expression: this.expression.toJSON(),
+			min: this.min && this.min.toJSON(),
+			max: this.max && this.max.toJSON(),
 		});
 	}
 }
 
 export class NumberAttribute extends AttributeBase<'number'> {
-	public readonly min?: number | string;
-	public readonly max?: number | string;
+	public readonly expression: Expression;
+	public readonly min?: Expression;
+	public readonly max?: Expression;
 
-	public constructor({ min, max, ...rest }: NumberAttributeData, readonly?: boolean) {
+	public constructor({ expression, min, max, ...rest }: NumberAttributeData, readonly?: boolean) {
 		super(rest, readonly);
 
-		this.min = validation.number_string(min);
-		this.max = validation.number_string(max);
+		this.expression = validation.expression(expression);
+		this.min = validation.opt(min, validation.expression);
+		this.max = validation.opt(max, validation.expression);
 	}
 
 	public toJSON(): NumberAttributeData {
 		return Object.assign(super.toJSON(), {
-			min: this.min,
-			max: this.max,
+			expression: this.expression.toJSON(),
+			min: this.min && this.min.toJSON(),
+			max: this.max && this.max.toJSON(),
 		});
 	}
 }
 
 export class TextAttribute extends AttributeBase<'text'> {
-	public constructor({ ...rest }: TextAttributeData, readonly?: boolean) {
+	public readonly format: Format;
+
+	public constructor({ format, ...rest }: TextAttributeData, readonly?: boolean) {
 		super(rest, readonly);
+
+		this.format = validation.format(format);
 	}
 
 	public toJSON(): TextAttributeData {
-		return super.toJSON();
+		return Object.assign(super.toJSON(), {
+			format: this.format.toJSON(),
+		});
 	}
 }
 

@@ -1,55 +1,48 @@
-[
+﻿[
 	{
 		"uuid": "a29e11a0-f7fa-4287-a54d-28d258cec5cb",
 		"id": "name",
 		"name": "名前",
 		"type": "text",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
 				"type": "text"
 			}
 		],
-		"expression": "${$x}"
+		"format": "${$x}"
 	},
 	{
 		"uuid": "44da26db-7c69-4016-a362-107b473313a7",
 		"id": "age",
 		"name": "年齢",
 		"type": "text",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
 				"type": "text"
 			}
 		],
-		"expression": "${$x}"
+		"format": "${$x}"
 	},
 	{
 		"uuid": "c96c7286-083f-438b-acab-bd0e6c2de1ea",
 		"id": "occupation",
 		"name": "職業",
 		"type": "text",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
 				"type": "text"
 			}
 		],
-		"expression": "${$x}"
+		"format": "${$x}"
 	},
 	{
 		"uuid": "e5f07570-7ab4-470d-ab0c-a4fa60b52f37",
 		"id": "max_hp",
 		"name": "MAX HP",
 		"type": "integer",
-		"dependencies": [
-			"con",
-			"siz"
-		],
 		"inputs": [],
 		"expression": "ceil((con + siz) / 2)",
 		"view": true,
@@ -62,9 +55,6 @@
 		"id": "hp",
 		"name": "HP",
 		"type": "integer",
-		"dependencies": [
-			"max_hp"
-		],
 		"inputs": [],
 		"expression": "max_hp",
 		"min": 0,
@@ -75,9 +65,6 @@
 		"id": "max_mp",
 		"name": "MAX MP",
 		"type": "integer",
-		"dependencies": [
-			"pow"
-		],
 		"inputs": [],
 		"expression": "pow",
 		"view": true,
@@ -90,9 +77,6 @@
 		"id": "mp",
 		"name": "MP",
 		"type": "integer",
-		"dependencies": [
-			"max_mp"
-		],
 		"inputs": [],
 		"expression": "max_mp",
 		"min": 0,
@@ -103,9 +87,6 @@
 		"id": "max_sp",
 		"name": "MAX SP",
 		"type": "integer",
-		"dependencies": [
-			"cthulhu_mythos"
-		],
 		"inputs": [],
 		"expression": "99 - cthulhu_mythos",
 		"view": true,
@@ -118,10 +99,6 @@
 		"id": "sp",
 		"name": "SP",
 		"type": "integer",
-		"dependencies": [
-			"san",
-			"max_sp"
-		],
 		"inputs": [],
 		"expression": "san",
 		"min": 0,
@@ -132,7 +109,6 @@
 		"id": "str",
 		"name": "STR",
 		"type": "integer",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
@@ -150,7 +126,6 @@
 		"id": "con",
 		"name": "CON",
 		"type": "integer",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
@@ -168,7 +143,6 @@
 		"id": "pow",
 		"name": "POW",
 		"type": "integer",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
@@ -186,7 +160,6 @@
 		"id": "dex",
 		"name": "DEX",
 		"type": "integer",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
@@ -204,7 +177,6 @@
 		"id": "app",
 		"name": "APP",
 		"type": "integer",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
@@ -222,7 +194,6 @@
 		"id": "siz",
 		"name": "SIZ",
 		"type": "integer",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
@@ -240,7 +211,6 @@
 		"id": "int",
 		"name": "INT",
 		"type": "integer",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
@@ -258,7 +228,6 @@
 		"id": "edu",
 		"name": "EDU",
 		"type": "integer",
-		"dependencies": [],
 		"inputs": [
 			{
 				"name": "x",
@@ -276,9 +245,6 @@
 		"id": "san",
 		"name": "SAN",
 		"type": "integer",
-		"dependencies": [
-			"pow"
-		],
 		"inputs": [],
 		"expression": "pow * 5",
 		"view": true,
@@ -290,9 +256,6 @@
 		"id": "idea",
 		"name": "アイデア",
 		"type": "integer",
-		"dependencies": [
-			"int"
-		],
 		"inputs": [],
 		"expression": "int * 5",
 		"min": 0,
@@ -303,9 +266,6 @@
 		"id": "luck",
 		"name": "幸運",
 		"type": "integer",
-		"dependencies": [
-			"pow"
-		],
 		"inputs": [],
 		"expression": "pow * 5",
 		"min": 0,
@@ -316,9 +276,6 @@
 		"id": "knowledge",
 		"name": "知識",
 		"type": "integer",
-		"dependencies": [
-			"edu"
-		],
 		"inputs": [],
 		"expression": "edu * 5",
 		"min": 0,
@@ -329,10 +286,6 @@
 		"id": "damage_bonus",
 		"name": "ダメージボーナス",
 		"type": "integer",
-		"dependencies": [
-			"str",
-			"siz"
-		],
 		"inputs": [],
 		"expression": "str + siz",
 		"min": 0,
@@ -343,9 +296,6 @@
 		"id": "occupation_skill_points",
 		"name": "職業技能ポイント",
 		"type": "integer",
-		"dependencies": [
-			"edu"
-		],
 		"inputs": [],
 		"expression": "edu * 20",
 		"min": 0,
@@ -356,9 +306,6 @@
 		"id": "hobby_skill_points",
 		"name": "趣味技能ポイント",
 		"type": "integer",
-		"dependencies": [
-			"int"
-		],
 		"inputs": [],
 		"expression": "int * 10",
 		"min": 0,

@@ -1,10 +1,9 @@
-[
+﻿[
 	{
 		"uuid": "acedbfbc-bbb1-4af7-850d-985521f429e0",
 		"id": "accounting",
 		"name": "経理",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 10
 	},
 	{
@@ -12,7 +11,6 @@
 		"id": "anthropology",
 		"name": "人類学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -20,7 +18,6 @@
 		"id": "arabic",
 		"name": "アラビア語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -28,7 +25,6 @@
 		"id": "archaeology",
 		"name": "考古学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -36,7 +32,6 @@
 		"id": "art",
 		"name": "芸術",
 		"category": "communication",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -44,7 +39,6 @@
 		"id": "astronomy",
 		"name": "天文学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -52,7 +46,6 @@
 		"id": "bargain",
 		"name": "値切り",
 		"category": "communication",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -60,7 +53,6 @@
 		"id": "biology",
 		"name": "生物学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -68,7 +60,6 @@
 		"id": "chemistry",
 		"name": "化学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -76,7 +67,6 @@
 		"id": "chinese",
 		"name": "中国語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -84,7 +74,6 @@
 		"id": "climb",
 		"name": "登攀",
 		"category": "locomotion",
-		"dependencies": [],
 		"base": 40
 	},
 	{
@@ -92,7 +81,6 @@
 		"id": "conceal",
 		"name": "隠す",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 15
 	},
 	{
@@ -100,7 +88,6 @@
 		"id": "computer_use",
 		"name": "コンピューター",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -108,7 +95,6 @@
 		"id": "craft",
 		"name": "製作",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -116,7 +102,6 @@
 		"id": "credit_rating",
 		"name": "信用",
 		"category": "communication",
-		"dependencies": [],
 		"base": 15
 	},
 	{
@@ -124,7 +109,6 @@
 		"id": "cthulhu_mythos",
 		"name": "クトゥルフ神話",
 		"category": "special",
-		"dependencies": [],
 		"base": 0
 	},
 	{
@@ -132,7 +116,6 @@
 		"id": "disguise",
 		"name": "変装",
 		"category": "communication",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -140,9 +123,6 @@
 		"name": "回避",
 		"uuid": "50e33942-5d35-4ec1-bb99-d55e530db907",
 		"category": "combat",
-		"dependencies": [
-			"dex"
-		],
 		"base": "dex * 2"
 	},
 	{
@@ -150,7 +130,6 @@
 		"id": "drive_automobile",
 		"name": "運転",
 		"category": "locomotion",
-		"dependencies": [],
 		"base": 20
 	},
 	{
@@ -158,7 +137,6 @@
 		"id": "electrical_repair",
 		"name": "電気修理",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 10
 	},
 	{
@@ -166,7 +144,6 @@
 		"id": "electronics",
 		"name": "電子工学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -174,7 +151,6 @@
 		"id": "english",
 		"name": "英語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -182,7 +158,6 @@
 		"id": "fast_talk",
 		"name": "言いくるめ",
 		"category": "communication",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -190,7 +165,6 @@
 		"id": "first_aid",
 		"name": "応急手当",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 30
 	},
 	{
@@ -198,7 +172,6 @@
 		"id": "fist_punch",
 		"name": "こぶし/パンチ",
 		"category": "combat",
-		"dependencies": [],
 		"base": 50
 	},
 	{
@@ -206,7 +179,6 @@
 		"id": "french",
 		"name": "フランス語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -214,7 +186,6 @@
 		"id": "geology",
 		"name": "地質学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -222,7 +193,6 @@
 		"id": "german",
 		"name": "ドイツ語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -230,7 +200,6 @@
 		"id": "grapple",
 		"name": "組みつき",
 		"category": "combat",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -238,7 +207,6 @@
 		"id": "handgun",
 		"name": "拳銃",
 		"category": "combat",
-		"dependencies": [],
 		"base": 20
 	},
 	{
@@ -246,7 +214,6 @@
 		"id": "head_butt",
 		"name": "頭突き",
 		"category": "combat",
-		"dependencies": [],
 		"base": 10
 	},
 	{
@@ -254,7 +221,6 @@
 		"id": "hide",
 		"name": "隠れる",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 10
 	},
 	{
@@ -262,7 +228,6 @@
 		"id": "history",
 		"name": "歴史",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 20
 	},
 	{
@@ -270,7 +235,6 @@
 		"id": "italian",
 		"name": "イタリア語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -278,7 +242,6 @@
 		"id": "japanese",
 		"name": "日本語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -286,7 +249,6 @@
 		"id": "jump",
 		"name": "跳躍",
 		"category": "locomotion",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -294,7 +256,6 @@
 		"id": "kick",
 		"name": "キック",
 		"category": "combat",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -302,7 +263,6 @@
 		"id": "korean",
 		"name": "韓国語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -310,7 +270,6 @@
 		"id": "law",
 		"name": "法律",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -318,7 +277,6 @@
 		"id": "library_use",
 		"name": "図書館",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -326,7 +284,6 @@
 		"id": "listen",
 		"name": "聞き耳",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -334,7 +291,6 @@
 		"id": "locksmith",
 		"name": "鍵開け",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -342,7 +298,6 @@
 		"id": "machine_gun",
 		"name": "マシンガン",
 		"category": "combat",
-		"dependencies": [],
 		"base": 15
 	},
 	{
@@ -350,7 +305,6 @@
 		"id": "martial_arts",
 		"name": "マーシャルアーツ",
 		"category": "combat",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -358,7 +312,6 @@
 		"id": "mechanical_repair",
 		"name": "機械修理",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 20
 	},
 	{
@@ -366,7 +319,6 @@
 		"id": "medicine",
 		"name": "医学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -374,7 +326,6 @@
 		"id": "natural_history",
 		"name": "博物学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 10
 	},
 	{
@@ -382,7 +333,6 @@
 		"id": "navigate",
 		"name": "ナビゲート",
 		"category": "locomotion",
-		"dependencies": [],
 		"base": 10
 	},
 	{
@@ -390,7 +340,6 @@
 		"id": "occult",
 		"name": "オカルト",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -398,7 +347,6 @@
 		"id": "operate_heavy_machine",
 		"name": "重機械操作",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -406,9 +354,6 @@
 		"name": "母国語",
 		"uuid": "7c0a191b-82e6-4ec2-b84d-da6f1554c4d3",
 		"category": "language",
-		"dependencies": [
-			"edu"
-		],
 		"base": "edu * 5"
 	},
 	{
@@ -416,7 +361,6 @@
 		"id": "persuade",
 		"name": "説得",
 		"category": "communication",
-		"dependencies": [],
 		"base": 15
 	},
 	{
@@ -424,7 +368,6 @@
 		"id": "pharmacy",
 		"name": "薬学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -432,7 +375,6 @@
 		"id": "photography",
 		"name": "写真術",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 10
 	},
 	{
@@ -440,7 +382,6 @@
 		"id": "physics",
 		"name": "物理学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -448,7 +389,6 @@
 		"id": "pilot",
 		"name": "操縦",
 		"category": "locomotion",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -456,7 +396,6 @@
 		"id": "portuguese",
 		"name": "ポルトガル語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -464,7 +403,6 @@
 		"id": "psychoanalysis",
 		"name": "精神分析",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -472,7 +410,6 @@
 		"id": "psychology",
 		"name": "心理学",
 		"category": "knowledge",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -480,7 +417,6 @@
 		"id": "ride",
 		"name": "乗馬",
 		"category": "locomotion",
-		"dependencies": [],
 		"base": 5
 	},
 	{
@@ -488,7 +424,6 @@
 		"id": "rifle",
 		"name": "ライフル",
 		"category": "combat",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -496,7 +431,6 @@
 		"id": "russian",
 		"name": "ロシア語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -504,7 +438,6 @@
 		"id": "shotgun",
 		"name": "ショットガン",
 		"category": "combat",
-		"dependencies": [],
 		"base": 30
 	},
 	{
@@ -512,7 +445,6 @@
 		"id": "sneak",
 		"name": "忍び歩き",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 10
 	},
 	{
@@ -520,7 +452,6 @@
 		"id": "spanish",
 		"name": "スペイン語",
 		"category": "language",
-		"dependencies": [],
 		"base": 1
 	},
 	{
@@ -528,7 +459,6 @@
 		"id": "spot_hidden",
 		"name": "目星",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -536,7 +466,6 @@
 		"id": "submachine_gun",
 		"name": "サブマシンガン",
 		"category": "combat",
-		"dependencies": [],
 		"base": 15
 	},
 	{
@@ -544,7 +473,6 @@
 		"id": "swim",
 		"name": "水泳",
 		"category": "locomotion",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -552,7 +480,6 @@
 		"id": "throw",
 		"name": "投擲",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 25
 	},
 	{
@@ -560,7 +487,6 @@
 		"id": "track",
 		"name": "追跡",
 		"category": "investigation",
-		"dependencies": [],
 		"base": 10
 	}
 ]

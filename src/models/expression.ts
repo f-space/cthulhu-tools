@@ -1,5 +1,4 @@
 import * as AST from "models/ast";
-export { ParseContext } from "models/ast";
 
 export class Input {
 	public readonly key: string;
@@ -15,60 +14,85 @@ export class Reference {
 	}
 }
 
+function collectDependencies(ast: AST.Node): { inputs: Input[], refs: Reference[] } {
+	const inputs: Map<string, Input> = new Map();
+	const refs: Map<string, Reference> = new Map();
+	const visitor = (node: AST.Node) => {
+		switch (node.type) {
+			case AST.NodeType.InputVariable:
+				const input = new Input(node.name);
+				if (!inputs.has(input.key)) inputs.set(input.key, input);
+				break;
+			case AST.NodeType.Reference:
+				const ref = new Reference(node.id, node.modifier);
+				if (!refs.has(ref.key)) refs.set(ref.key, ref);
+				break;
+		}
+
+		node.visitChildren(visitor);
+	}
+	visitor(ast);
+
+	return { inputs: [...inputs.values()], refs: [...refs.values()] };
+}
+
 export class Expression {
-	readonly inputs: ReadonlyArray<Input>;
-	readonly refs: ReadonlyArray<Reference>;
+	protected constructor(readonly ast: AST.Node, readonly inputs: ReadonlyArray<Input>, readonly refs: ReadonlyArray<Reference>) { }
 
-	public constructor(readonly ast: AST.Node) {
-		const { inputs, refs } = this.collectVariables(ast);
-		this.inputs = inputs;
-		this.refs = refs;
+	public static value(value: number): Expression {
+		return new Expression(new AST.Literal(value), [], []);
 	}
 
-	public static parse(source: string, context?: AST.ParseContext): Expression | undefined {
-		const result = AST.Parser.parse(source, context);
-
-		return result.root && new Expression(result.root);
+	public static parse(source: string): Expression | undefined {
+		const { root: ast } = AST.Parser.parse(source, AST.ParseContext.Expression);
+		const deps = ast && collectDependencies(ast);
+		return ast ? new Expression(ast, deps!.inputs, deps!.refs) : undefined;
 	}
 
-	public static evaluate(source: string, context?: AST.ParseContext, values?: Map<string, number | string | undefined>): any {
-		const expression = this.parse(source, context);
-
-		return expression && expression.evaluate(values);
-	}
-
-	public evaluate(values?: Map<string, number | string | undefined>): any {
-		const evaluator = new ASTEvaluator(values);
-
-		return evaluator.evaluate(this.ast);
+	public evaluate(values?: Map<string, number | undefined>): number | undefined {
+		return (new ASTEvaluator(values)).evaluate(this.ast) as number | undefined;
 	}
 
 	public segment(): (string | Input)[] {
-		const segmenter = new ASTSegmenter();
-
-		return segmenter.segment(this.ast);
+		return (new ASTSegmenter()).segment(this.ast);
 	}
 
-	private collectVariables(ast: AST.Node): { inputs: Input[], refs: Reference[] } {
-		const inputs: Map<string, Input> = new Map();
-		const refs: Map<string, Reference> = new Map();
-		const visitor = (node: AST.Node) => {
-			switch (node.type) {
-				case AST.NodeType.InputVariable:
-					const input = new Input(node.name);
-					if (!inputs.has(input.key)) inputs.set(input.key, input);
-					break;
-				case AST.NodeType.Reference:
-					const ref = new Reference(node.id, node.modifier);
-					if (!refs.has(ref.key)) refs.set(ref.key, ref);
-					break;
-			}
+	public toJSON(): number | string {
+		return (this.ast.type === AST.NodeType.Literal ? this.ast.value : this.ast.toString());
+	}
 
-			node.visitChildren(visitor);
-		}
-		visitor(ast);
+	public toString(): string {
+		return this.ast.toString();
+	}
+}
 
-		return { inputs: [...inputs.values()], refs: [...refs.values()] };
+export class Format {
+	protected constructor(readonly ast: AST.Node, readonly inputs: ReadonlyArray<Input>, readonly refs: ReadonlyArray<Reference>) { }
+
+	public static value(value: string): Format {
+		return new Format(new AST.Text(value), [], []);
+	}
+
+	public static parse(source: string): Format | undefined {
+		const { root: ast } = AST.Parser.parse(source, AST.ParseContext.Format);
+		const deps = ast && collectDependencies(ast);
+		return ast ? new Format(ast, deps!.inputs, deps!.refs) : undefined;
+	}
+
+	public evaluate(values?: Map<string, number | string | undefined>): string | undefined {
+		return (new ASTEvaluator(values)).evaluate(this.ast) as string | undefined;
+	}
+
+	public segment(): (string | Input)[] {
+		return (new ASTSegmenter()).segment(this.ast);
+	}
+
+	public toJSON(): string {
+		return this.ast.toString();
+	}
+
+	public toString(): string {
+		return this.ast.toString();
 	}
 }
 

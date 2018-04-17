@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Attribute, InputMethod } from "models/status";
-import { Expression, ParseContext } from "models/expression";
+import { Expression, Format } from "models/expression";
 import DiceInput from "components/molecules/attribute-dice-input";
 import NumberInput from "components/molecules/attribute-number-input";
 import TextInput from "components/molecules/attribute-text-input";
@@ -47,11 +47,11 @@ export default class AttributeInput extends React.Component<AttributeInputProps>
 			.map(x => typeof x === 'string' ? x : attribute.inputs.find(input => input.name === x.name))
 			.filter(x => x) as (string | InputMethod)[];
 
-		function getExpression(attribute: Attribute): Expression | undefined {
+		function getExpression(attribute: Attribute): Expression | Format {
 			switch (attribute.type) {
-				case 'integer': return Expression.parse(attribute.expression, ParseContext.Expression);
-				case 'number': return Expression.parse(attribute.expression, ParseContext.Expression);
-				case 'text': return Expression.parse(attribute.expression, ParseContext.Format);
+				case 'integer': return attribute.expression;
+				case 'number': return attribute.expression;
+				case 'text': return attribute.format;
 			}
 		}
 	}
