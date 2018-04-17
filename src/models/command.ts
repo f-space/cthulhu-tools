@@ -80,7 +80,7 @@ abstract class OperationBase<T extends OperationType> {
 	public get repr(): string { return `$${this.type}[${this.target}]`; }
 
 	public constructor({ type, target }: OperationDataBase<T>) {
-		this.type = validation.string_literal(type);
+		this.type = validation.string_enum(type);
 		this.target = validation.string(target);
 	}
 

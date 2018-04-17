@@ -32,7 +32,7 @@ export class Skill {
 		this.uuid = validation.uuid(uuid);
 		this.id = validation.string(id);
 		this.name = validation.string(name);
-		this.category = validation.string_literal(SkillCategory[category] || SkillCategory.other);
+		this.category = validation.string_enum(SkillCategory[category] || SkillCategory.other);
 		this.base = validation.expression(base);
 		this.readonly = Boolean(readonly);
 	}

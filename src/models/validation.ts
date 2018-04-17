@@ -34,7 +34,7 @@ export function string_null(value: string | null | undefined): string | null {
 	return (value != null ? String(value) : null);
 }
 
-export function string_literal<T extends string>(value: T): T {
+export function string_enum<T extends string>(value: T): T {
 	return String(value) as T;
 }
 
@@ -62,7 +62,7 @@ export function plainObject<T>(value: T | undefined): T {
 	}
 }
 
-export function props<T, U extends T>(value: T | undefined, maps: {[P in keyof T]: (value: T[P]) => U[P]}): U {
+export function props<T, U extends T>(value: T | undefined, maps: { [P in keyof T]: (value: T[P]) => U[P] }): U {
 	if (typeof value === 'object' && value !== null) {
 		return (Object.keys(maps) as (keyof T)[]).reduce((obj, key) => (obj[key] = maps[key](value[key]), obj), Object.create(null));
 	} else {
@@ -90,8 +90,6 @@ export function or<T>(value: T | undefined, defaultValue: T): T {
 	return (value !== undefined ? value : defaultValue);
 }
 
-export function opt<T, U>(value: T, map: (value: T) => U): U;
-export function opt<T, U>(value: T | undefined, map: (value: T) => U): U | undefined;
 export function opt<T, U>(value: T | undefined, map: (value: T) => U): U | undefined {
 	return (value !== undefined ? map(value) : undefined);
 }

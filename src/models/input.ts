@@ -55,7 +55,7 @@ abstract class InputMethodBase<T extends InputType> {
 	public abstract get default(): InputMethodParamTypeMap[T];
 
 	public constructor({ type, name }: InputMethodDataBase<T>) {
-		this.type = validation.string_literal(type);
+		this.type = validation.string_enum(type);
 		this.name = validation.string(name);
 	}
 

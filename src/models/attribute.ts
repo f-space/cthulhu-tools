@@ -58,7 +58,7 @@ abstract class AttributeBase<T extends AttributeType> {
 	public readonly readonly: boolean;
 
 	public constructor({ type, uuid, id, name, inputs, view, hidden }: AttributeDataBase<T>, readonly?: boolean) {
-		this.type = validation.string_literal(type);
+		this.type = validation.string_enum(type);
 		this.uuid = validation.uuid(uuid);
 		this.id = validation.string(id);
 		this.name = validation.string(name);
