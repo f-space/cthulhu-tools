@@ -184,7 +184,7 @@ export class Reference implements NodeInterface {
 	public get type(): NodeType.Reference { return NodeType.Reference; }
 	public get priority(): number { return PriorityLevel.Terminal; }
 
-	public constructor(readonly id: string, readonly modifier: string) { }
+	public constructor(readonly id: string, readonly modifier: string | null = null) { }
 
 	public visitChildren(visitor: (node: Node) => void): void { }
 

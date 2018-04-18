@@ -9,7 +9,7 @@ export class Input {
 
 export class Reference {
 	public readonly key: string;
-	public constructor(readonly id: string, readonly modifier: string) {
+	public constructor(readonly id: string, readonly modifier: string | null = null) {
 		this.key = id + (modifier ? `:${modifier}` : "");
 	}
 }
