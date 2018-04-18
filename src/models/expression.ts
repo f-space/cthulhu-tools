@@ -2,15 +2,25 @@ import * as AST from "models/ast";
 
 export class Input {
 	public readonly key: string;
+
 	public constructor(readonly name: string) {
-		this.key = `\$${name}`;
+		this.key = Input.key(name);
+	}
+
+	public static key(name: string): string {
+		return `\$${name}`;
 	}
 }
 
 export class Reference {
 	public readonly key: string;
+
 	public constructor(readonly id: string, readonly modifier: string | null = null) {
-		this.key = id + (modifier ? `:${modifier}` : "");
+		this.key = Reference.key(id, modifier);
+	}
+
+	public static key(id: string, modifier: string | null = null): string {
+		return (modifier ? `${id}:${modifier}` : id);
 	}
 }
 
@@ -191,15 +201,11 @@ class ASTEvaluator extends ASTVisitor {
 	}
 
 	protected onInputVariable(node: AST.InputVariable): number | string | undefined {
-		const input = new Input(node.name);
-
-		return this.values.get(input.key);
+		return this.values.get(Input.key(node.name));
 	}
 
 	protected onReference(node: AST.Reference): number | string | undefined {
-		const ref = new Reference(node.id, node.modifier);
-
-		return this.values.get(ref.key);
+		return this.values.get(Reference.key(node.id, node.modifier));
 	}
 
 	protected onFormat(node: AST.Format): string | undefined {
