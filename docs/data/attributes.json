@@ -247,7 +247,7 @@
 	},
 	{
 		"uuid": "eb2ec402-fbe2-46bc-9dcc-9b171bc7d080",
-		"id": "damage_bonus",
+		"id": "db",
 		"name": "ダメージボーナス",
 		"type": "integer",
 		"inputs": [],
@@ -257,7 +257,7 @@
 	},
 	{
 		"uuid": "01e9829a-6353-4278-bbde-bd572a852dd5",
-		"id": "occupation_skill_points",
+		"id": "oskp",
 		"name": "職業技能ポイント",
 		"type": "integer",
 		"inputs": [],
@@ -267,7 +267,7 @@
 	},
 	{
 		"uuid": "61d7fbac-01e2-4b6e-acad-d676402bfdf3",
-		"id": "hobby_skill_points",
+		"id": "hskp",
 		"name": "趣味技能ポイント",
 		"type": "integer",
 		"inputs": [],

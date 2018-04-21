@@ -134,8 +134,8 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 									/
 									<Field name="evaluator" subscription={{ value: true }} render={({ input: { value } }) => {
 										const evaluator = value as PropertyEvaluator;
-										const osp = evalID(resolver, evaluator, 'occupation_skill_points');
-										const hsp = evalID(resolver, evaluator, 'hobby_skill_points');
+										const osp = evalID(resolver, evaluator, 'oskp');
+										const hsp = evalID(resolver, evaluator, 'hskp');
 										const available = osp + hsp;
 
 										return <span className={style['available']}>{available}</span>
