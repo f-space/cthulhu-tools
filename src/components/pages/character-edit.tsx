@@ -5,7 +5,7 @@ import { FormApi, Decorator, getIn } from 'final-form';
 import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
-import { Character, CharacterParams, AttributeParams, SkillParams, DataProvider, PropertyEvaluator, EvaluationContext, EvaluatorBuilder, SkillEvaluator } from "models/status";
+import { Reference, Character, CharacterParams, AttributeParams, SkillParams, DataProvider, PropertyResolver, PropertyEvaluator, DataContext, ResolverBuilder, EvaluatorBuilder } from "models/status";
 import { State, Dispatch } from "redux/store";
 import { LoadState } from "redux/states/status";
 import { getLoadState, getDataProvider } from "redux/selectors/status";
@@ -19,7 +19,7 @@ import style from "styles/pages/character-edit.scss";
 export interface CharacterEditPageProps extends RouteComponentProps<{ uuid?: string }> {
 	loadState: LoadState;
 	provider: DataProvider;
-	context: Partial<EvaluationContext>;
+	context: Partial<DataContext>;
 	dispatcher: StatusDispatcher;
 }
 
@@ -52,29 +52,25 @@ function throttle<T extends (...args: any[]) => void>(interval: number, fn: T): 
 	return wrapper as T;
 }
 
-function EvaluationResult(props: { id: string, base?: boolean }) {
-	return <Field name="evaluator" subscription={{ value: true }} render={({ input: { value: evaluator } }) => {
-		const actualEvaluator = props.base ? getBaseEvaluator(evaluator, props.id) : evaluator;
-		const value = actualEvaluator.evaluate(props.id, null);
+function evalID(resolver: PropertyResolver, evaluator: PropertyEvaluator, id: string, modifier?: string | null): any {
+	const property = resolver.resolve(new Reference(id, modifier));
+	return property && evaluator.evaluate({ property, hash: null, resolver, evaluator });
+}
 
-		return value !== undefined ? value : "-";
+function EvaluationResult(props: { resolver: PropertyResolver, id: string, base?: boolean }) {
+	return <Field name="evaluator" subscription={{ value: true }} render={({ input: { value } }) => {
+		const { resolver, id, base } = props;
+		const evaluator = value as PropertyEvaluator;
+		const result = evalID(resolver, evaluator, id, base ? 'base' : null);
+
+		return result !== undefined ? result : "-";
 	}} />
-
-	function getBaseEvaluator(evaluator: PropertyEvaluator, id: string) {
-		return evaluator.replace(evaluator => {
-			if (evaluator instanceof SkillEvaluator) {
-				const data = { ...evaluator.data, [id]: 0 };
-				return new SkillEvaluator(evaluator.resolver, data, evaluator.min, evaluator.max);
-			}
-			return null;
-		});
-	}
 }
 
 const mapStateToProps = (state: State) => {
 	const loadState = getLoadState(state);
 	const provider = getDataProvider(state);
-	const context: Partial<EvaluationContext> = new EvaluationContext({ profile: provider.profile.default }, provider);
+	const context: Partial<DataContext> = new DataContext({ profile: provider.profile.default }, provider);
 	return { loadState, provider, context };
 };
 
@@ -103,9 +99,10 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 		if (this.props.loadState !== 'loaded') return null;
 
 		const { context: { attributes, skills } } = this.props;
+		const resolver = ResolverBuilder.build(this.props.context);
 		const initialValues = this.makeInitialValues();
 		const decorators = [this.createEvaluationDecorator()];
-		const evaluate = (id: string, base?: boolean) => <EvaluationResult id={id} base={base} />
+		const evaluate = (id: string, base?: boolean) => <EvaluationResult resolver={resolver} id={id} base={base} />
 
 		return <Page id="character-edit" heading={<h2>キャラクター編集</h2>}>
 			<Form initialValues={initialValues}
@@ -137,8 +134,8 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 									/
 									<Field name="evaluator" subscription={{ value: true }} render={({ input: { value } }) => {
 										const evaluator = value as PropertyEvaluator;
-										const osp = evaluator.evaluate('occupation_skill_points', null);
-										const hsp = evaluator.evaluate('hobby_skill_points', null);
+										const osp = evalID(resolver, evaluator, 'occupation_skill_points');
+										const hsp = evalID(resolver, evaluator, 'hobby_skill_points');
 										const available = osp + hsp;
 
 										return <span className={style['available']}>{available}</span>

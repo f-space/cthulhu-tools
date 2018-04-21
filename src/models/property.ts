@@ -1,32 +1,53 @@
+import { Reference } from "models/expression";
 import { Attribute } from "models/attribute";
 import { Skill } from "models/skill";
 
 export type PropertyType = 'attribute' | 'skill';
 
-interface EntityMap {
-	'attribute': Attribute;
-	'skill': Skill;
-}
-
 interface IProperty<T extends PropertyType> {
 	readonly type: T;
-	readonly entity: EntityMap[T];
-	readonly id: string;
+	readonly ref: Reference;
 	readonly view: boolean;
 }
 
 export class AttributeProperty implements IProperty<'attribute'> {
 	public get type(): 'attribute' { return 'attribute'; }
-	public get id(): string { return this.entity.id; }
-	public get view(): boolean { return this.entity.view; }
-	public constructor(readonly entity: Attribute) { }
+	public get key(): string { return this.ref.key; }
+	public get modifier(): string | null { return this.ref.modifier; }
+
+	public constructor(readonly attribute: Attribute, readonly ref: Reference, readonly view: boolean) { }
+
+	public static value(attribute: Attribute): AttributeProperty {
+		return new AttributeProperty(attribute, new Reference(attribute.id), attribute.view);
+	}
+
+	public static min(attribute: Attribute): AttributeProperty {
+		return new AttributeProperty(attribute, new Reference(attribute.id, 'min'), true);
+	}
+
+	public static max(attribute: Attribute): AttributeProperty {
+		return new AttributeProperty(attribute, new Reference(attribute.id, 'max'), true);
+	}
 }
 
-export class SkillProperty implements IProperty<'skill'>{
+export class SkillProperty implements IProperty<'skill'> {
 	public get type(): 'skill' { return 'skill'; }
-	public get id(): string { return this.entity.id; }
-	public get view(): false { return false; }
-	public constructor(readonly entity: Skill) { }
+	public get key(): string { return this.ref.key; }
+	public get modifier(): string | null { return this.ref.modifier; }
+
+	public constructor(readonly skill: Skill, readonly ref: Reference, readonly view: boolean) { }
+
+	public static value(skill: Skill): SkillProperty {
+		return new SkillProperty(skill, new Reference(skill.id), true);
+	}
+
+	public static base(skill: Skill): SkillProperty {
+		return new SkillProperty(skill, new Reference(skill.id, 'base'), true);
+	}
+
+	public static points(skill: Skill): SkillProperty {
+		return new SkillProperty(skill, new Reference(skill.id, 'points'), false);
+	}
 }
 
 export type Property = AttributeProperty | SkillProperty;

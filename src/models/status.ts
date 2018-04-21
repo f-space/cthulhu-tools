@@ -1,3 +1,4 @@
+import { Reference } from "models/expression";
 import { Character, CharacterParams } from "models/character";
 import { Profile } from "models/profile";
 import { Attribute } from "models/attribute";
@@ -9,6 +10,7 @@ import { PropertyResolver, AttributeResolver, SkillResolver, CompoundResolver, V
 import { PropertyEvaluator, AttributeEvaluator, SkillEvaluator, CompoundEvaluator, HistoryEvaluator, CacheEvaluator, VoidEvaluator } from "models/evaluator";
 import { getSHA256 } from "models/utility";
 
+export * from "models/expression";
 export * from "models/character";
 export * from "models/profile";
 export * from "models/attribute";
@@ -31,7 +33,7 @@ interface ResolutionMap {
 	history: 'history';
 }
 
-export interface UnresolvedEvaluationContext {
+export interface UnresolvedDataContext {
 	readonly character: Character | string;
 	readonly profile: Profile | string;
 	readonly attributes: ReadonlyArray<Attribute | string>;
@@ -39,7 +41,7 @@ export interface UnresolvedEvaluationContext {
 	readonly history: History | string | null;
 }
 
-export interface EvaluationContext extends UnresolvedEvaluationContext {
+export interface DataContext extends UnresolvedDataContext {
 	readonly character: Character;
 	readonly profile: Profile;
 	readonly attributes: ReadonlyArray<Attribute>;
@@ -47,24 +49,24 @@ export interface EvaluationContext extends UnresolvedEvaluationContext {
 	readonly history: History | null;
 }
 
-type UnresolvedPartialContext<K extends ContextKey> = Pick<Partial<UnresolvedEvaluationContext>, K>;
-type PartialContext<K extends ContextKey> = Pick<Partial<EvaluationContext>, K>;
-type ResolvedPartialContext<K extends ContextKey> = PartialContext<ResolutionMap[K]> & EvaluationContextPrototype;
+type UnresolvedPartialContext<K extends ContextKey> = Pick<Partial<UnresolvedDataContext>, K>;
+type PartialContext<K extends ContextKey> = Pick<Partial<DataContext>, K>;
+type ResolvedPartialContext<K extends ContextKey> = PartialContext<ResolutionMap[K]> & DataContextPrototype;
 
-export interface EvaluationContextPrototype {
-	guard(): this is EvaluationContext;
+export interface DataContextPrototype {
+	guard(): this is DataContext;
 }
 
-export interface EvaluationContextConstructor {
+export interface DataContextConstructor {
 	new <K extends ContextKey>(source: UnresolvedPartialContext<K>, provider: DataProvider): ResolvedPartialContext<K | 'skills'>;
-	readonly prototype: EvaluationContextPrototype;
+	readonly prototype: DataContextPrototype;
 }
 
-export interface CharacterEvaluationContext extends ResolvedPartialContext<'character'> { }
-export interface ProfileEvaluationContext extends ResolvedPartialContext<'profile'> { }
-export interface AttributeEvaluationContext extends ResolvedPartialContext<'attributes'> { }
-export interface SkillEvaluationContext extends ResolvedPartialContext<'skills'> { }
-export interface HistoryEvaluationContext extends ResolvedPartialContext<'history'> { }
+export interface CharacterDataContext extends ResolvedPartialContext<'character'> { }
+export interface ProfileDataContext extends ResolvedPartialContext<'profile'> { }
+export interface AttributeDataContext extends ResolvedPartialContext<'attributes'> { }
+export interface SkillDataContext extends ResolvedPartialContext<'skills'> { }
+export interface HistoryDataContext extends ResolvedPartialContext<'history'> { }
 
 export interface ResolverBuilderOptions extends PartialContext<'attributes' | 'skills'> { }
 
@@ -73,8 +75,8 @@ export interface EvaluatorBuilderOptions extends PartialContext<'character' | 'a
 	readonly cache?: Cache;
 }
 
-export const EvaluationContext: EvaluationContextConstructor = (function () {
-	function EvaluationContext(this: any, source: UnresolvedEvaluationContext, provider: DataProvider): Partial<EvaluationContextPrototype> {
+export const DataContext: DataContextConstructor = (function () {
+	function DataContext(this: any, source: UnresolvedDataContext, provider: DataProvider): Partial<DataContextPrototype> {
 		const character = opt(source.character, character => resolve(character, provider.character));
 		const profile = opt(or(source.profile, opt(character, x => x.profile)), profile => resolve(profile, provider.profile));
 		const attributes = map(or(source.attributes, opt(profile, x => x.attributes)), x => resolve(x, provider.attribute));
@@ -100,7 +102,7 @@ export const EvaluationContext: EvaluationContextConstructor = (function () {
 		}
 	}
 
-	EvaluationContext.prototype.guard = function (this: EvaluationContext): boolean {
+	DataContext.prototype.guard = function (this: DataContext): boolean {
 		return (this.character !== undefined
 			&& this.profile !== undefined
 			&& this.attributes !== undefined
@@ -108,7 +110,7 @@ export const EvaluationContext: EvaluationContextConstructor = (function () {
 			&& this.history !== undefined);
 	}
 
-	return EvaluationContext as any;
+	return DataContext as any;
 })();
 
 export class ResolverBuilder {
@@ -200,18 +202,16 @@ export class EvaluatorBuilder {
 
 	private createAttributeEvaluator(): AttributeEvaluator | null {
 		if (this.attributes) {
-			const resolver = new AttributeResolver(this.attributes);
 			const data = (this.params && this.params.attribute) || Object.create(null);
-			return new AttributeEvaluator(resolver, data);
+			return new AttributeEvaluator(data);
 		}
 		return null;
 	}
 
 	private createSkillEvaluator(): SkillEvaluator | null {
 		if (this.skills) {
-			const resolver = new SkillResolver(this.skills);
 			const data = (this.params && this.params.skill) || Object.create(null);
-			return new SkillEvaluator(resolver, data);
+			return new SkillEvaluator(data);
 		}
 		return null;
 	}
@@ -220,44 +220,57 @@ export class EvaluatorBuilder {
 export class Status {
 	readonly [id: string]: any;
 
-	private readonly context: EvaluationContext;
+	private readonly context: DataContext;
+	private readonly resolver: PropertyResolver;
 	private readonly evaluator: PropertyEvaluator;
 
-	public constructor(context: EvaluationContext, cache?: Cache) {
+	public constructor(context: DataContext, cache?: Cache) {
 		this.context = Object.assign({}, context, { cache });
+		this.resolver = ResolverBuilder.build(this.context);
 		this.evaluator = EvaluatorBuilder.build(this.context);
 
 		return new Proxy(this, {
 			get(target, key) {
 				if (typeof key === 'string' && !key.startsWith("$")) {
-					const id = key;
-					const hash = target.$history && target.$history.head;
-					return target.$evaluator.evaluate(id, hash);
+					const { context, resolver, evaluator } = target;
+					const property = resolver.resolve(new Reference(key, null));
+					const hash = context.history && context.history.head;
+					return property && evaluator.evaluate({ property, hash, resolver, evaluator });
 				}
 				return target[key];
 			}
 		});
 	}
 
-	public get $context(): EvaluationContext { return this.context; }
+	public get $context(): DataContext { return this.context; }
 	public get $uuid(): string { return this.context.character.uuid; }
 	public get $character(): Character { return this.context.character; }
 	public get $profile(): Profile { return this.context.profile; }
 	public get $attributes(): ReadonlyArray<Attribute> { return this.context.attributes; }
 	public get $skills(): ReadonlyArray<Skill> { return this.context.skills; }
 	public get $history(): History | null { return this.context.history; }
-	public get $resolver(): PropertyResolver { return this.evaluator.resolver; }
+	public get $resolver(): PropertyResolver { return this.resolver; }
 	public get $evaluator(): PropertyEvaluator { return this.evaluator; }
-	public get $hash(): string { return Status.basicsHash(this.evaluator); }
+	public get $hash(): string { return Status.basicsHash(this); }
 
-	public static basics(evaluator: PropertyEvaluator): any {
-		return evaluator.resolver.list()
-			.filter(property => !property.view)
-			.reduce((values, { id }) => (values[id] = evaluator.evaluate(id, null), values), Object.create(null));
+	public static basics(status: Status): any {
+		const { context: { attributes, skills }, resolver, evaluator } = status;
+		return [...attributes.filter(x => !x.view), ...skills]
+			.map(({ id }) => resolver.resolve(new Reference(id))!)
+			.filter(property => property)
+			.reduce((values, property) => {
+				values[property.ref.id] = evaluator.evaluate({
+					property,
+					hash: null,
+					resolver,
+					evaluator,
+				});
+				return values;
+			}, Object.create(null));
 	}
 
-	public static basicsHash(evaluator: PropertyEvaluator): any {
-		const values = this.basics(evaluator);
+	public static basicsHash(status: Status): any {
+		const values = this.basics(status);
 		const json = JSON.stringify(values, Object.keys(values).sort());
 		return getSHA256(json);
 	}

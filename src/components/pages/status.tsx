@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
+import { DataProvider, ExternalCache, DataContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
@@ -19,9 +19,9 @@ const mapStateToProps = (state: State) => {
 	const characters = views
 		.filter(view => view.visible)
 		.keySeq()
-		.map(uuid => new EvaluationContext({ character: uuid }, provider))
+		.map(uuid => new DataContext({ character: uuid }, provider))
 		.filter(context => context.guard())
-		.map(context => new Status(context as EvaluationContext))
+		.map(context => new Status(context as DataContext))
 		.map(status => new Status(status.$context, new ExternalCache(CacheStorage, status.$hash)))
 		.sort((x, y) => String.prototype.localeCompare.call(x.name, y.name))
 		.toArray();

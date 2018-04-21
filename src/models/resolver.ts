@@ -1,61 +1,58 @@
+import { Reference } from "models/expression";
 import { Attribute } from "models/attribute";
 import { Skill } from "models/skill";
 import { Property, AttributeProperty, SkillProperty } from "models/property";
 
 export interface PropertyResolver {
-	list(): Property[];
-	resolve(id: string): Property | undefined;
+	resolve(ref: Reference): Property | undefined;
 }
 
 export class AttributeResolver implements PropertyResolver {
-	public readonly attributes: { readonly [id: string]: Attribute };
+	public readonly attributes: ReadonlyMap<string, Attribute>;
 
 	public constructor(attributes: ReadonlyArray<Attribute>) {
-		this.attributes = attributes.reduce((map, attr) => (map[attr.id] = attr, map), Object.create(null));
+		this.attributes = attributes.reduce((map, attr) => map.set(attr.id, attr), new Map<string, Attribute>());
 	}
 
-	public list(): AttributeProperty[] {
-		return Object.values(this.attributes).map(attribute => new AttributeProperty(attribute));
-	}
-
-	public resolve(id: string): AttributeProperty | undefined {
-		return (id in this.attributes) ? new AttributeProperty(this.attributes[id]) : undefined;
+	public resolve(ref: Reference): AttributeProperty | undefined {
+		const attribute = this.attributes.get(ref.id);
+		if (attribute) {
+			switch (ref.modifier) {
+				case null: return AttributeProperty.value(attribute);
+				case 'min': return AttributeProperty.min(attribute);
+				case 'max': return AttributeProperty.max(attribute);
+			}
+		}
+		return undefined;
 	}
 }
 
 export class SkillResolver implements PropertyResolver {
-	public readonly skills: { readonly [id: string]: Skill };
+	public readonly skills: ReadonlyMap<string, Skill>;
 
 	public constructor(skills: ReadonlyArray<Skill>) {
-		this.skills = skills.reduce((map, skill) => (map[skill.id] = skill, map), Object.create(null));
+		this.skills = skills.reduce((map, skill) => map.set(skill.id, skill), new Map<string, Skill>());
 	}
 
-	public list(): SkillProperty[] {
-		return Object.values(this.skills).map(skill => new SkillProperty(skill));
-	}
-
-	public resolve(id: string): SkillProperty | undefined {
-		return (id in this.skills) ? new SkillProperty(this.skills[id]) : undefined;
+	public resolve(ref: Reference): SkillProperty | undefined {
+		const skill = this.skills.get(ref.id);
+		if (skill) {
+			switch (ref.modifier) {
+				case null: return SkillProperty.value(skill);
+				case 'base': return SkillProperty.base(skill);
+				case 'points': return SkillProperty.points(skill);
+			}
+		}
+		return undefined;
 	}
 }
 
 export class CompoundResolver implements PropertyResolver {
 	public constructor(readonly resolvers: ReadonlyArray<PropertyResolver>) { }
 
-	public list(): Property[] {
-		const map = Object.create(null);
+	public resolve(ref: Reference): Property | undefined {
 		for (const resolver of this.resolvers) {
-			for (const property of resolver.list()) {
-				if (!(property.id in map)) map[property.id] = property;
-			}
-		}
-
-		return Array.from(Object.values(map));
-	}
-
-	public resolve(id: string): Property | undefined {
-		for (const resolver of this.resolvers) {
-			const result = resolver.resolve(id);
+			const result = resolver.resolve(ref);
 
 			if (result !== undefined) return result;
 		}
@@ -67,6 +64,5 @@ export class CompoundResolver implements PropertyResolver {
 export class VoidResolver implements PropertyResolver {
 	private constructor() { }
 	public static readonly instance: VoidResolver = new VoidResolver();
-	public list(): Property[] { return []; }
-	public resolve(id: string): Property | undefined { return undefined; }
+	public resolve(ref: Reference): undefined { return undefined; }
 }

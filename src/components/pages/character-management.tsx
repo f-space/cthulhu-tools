@@ -3,7 +3,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FormApi } from 'final-form';
 import { Form, FormSpy } from 'react-final-form';
-import { CharacterView, Character, DataProvider, ExternalCache, EvaluationContext, Status } from "models/status";
+import { CharacterView, Character, DataProvider, ExternalCache, DataContext, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
 import { LoadState } from "redux/states/status";
@@ -35,9 +35,9 @@ const mapStateToProps = (state: State) => {
 	const provider = getDataProvider(state);
 	const views = state.status.view.views.toObject();
 	const characters = Object.values(views)
-		.map(view => new EvaluationContext({ character: view.target }, provider))
+		.map(view => new DataContext({ character: view.target }, provider))
 		.filter(context => context.guard())
-		.map(context => new Status(context as EvaluationContext))
+		.map(context => new Status(context as DataContext))
 		.map(status => new Status(status.$context, new ExternalCache(CacheStorage, status.$hash)))
 		.sort((x, y) => String.prototype.localeCompare.call(x.name || "", y.name || ""))
 	return { loadState, provider, views, characters };

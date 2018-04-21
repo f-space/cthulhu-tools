@@ -59,7 +59,7 @@ export class Expression {
 		return ast ? new Expression(ast, deps!.inputs, deps!.refs) : undefined;
 	}
 
-	public evaluate(values?: Map<string, number | undefined>): number | undefined {
+	public evaluate(values?: Map<string, any>): number | undefined {
 		return (new ASTEvaluator(values)).evaluate(this.ast) as number | undefined;
 	}
 
@@ -89,7 +89,7 @@ export class Format {
 		return ast ? new Format(ast, deps!.inputs, deps!.refs) : undefined;
 	}
 
-	public evaluate(values?: Map<string, number | string | undefined>): string | undefined {
+	public evaluate(values?: Map<string, any>): string | undefined {
 		return (new ASTEvaluator(values)).evaluate(this.ast) as string | undefined;
 	}
 
