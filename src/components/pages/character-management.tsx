@@ -3,7 +3,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FormApi } from 'final-form';
 import { Form, FormSpy } from 'react-final-form';
-import { CharacterView, Character, DataProvider, ExternalCache, DataContext, Status } from "models/status";
+import { CharacterView, Character, DataProvider, ExternalCache, DataCollector, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
 import { LoadState } from "redux/states/status";
@@ -19,7 +19,7 @@ export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
 	loadState: LoadState;
 	provider: DataProvider;
 	views: { [uuid: string]: CharacterView };
-	characters: Status[];
+	statusList: Status[];
 	dispatcher: StatusDispatcher;
 }
 
@@ -33,14 +33,15 @@ interface FormValues {
 const mapStateToProps = (state: State) => {
 	const loadState = getLoadState(state);
 	const provider = getDataProvider(state);
+	const collector = new DataCollector(provider);
 	const views = state.status.view.views.toObject();
-	const characters = Object.values(views)
-		.map(view => new DataContext({ character: view.target }, provider))
-		.filter(context => context.guard())
-		.map(context => new Status(context as DataContext))
-		.map(status => new Status(status.$context, new ExternalCache(CacheStorage, status.$hash)))
-		.sort((x, y) => String.prototype.localeCompare.call(x.name || "", y.name || ""))
-	return { loadState, provider, views, characters };
+	const statusList = Object.values(views)
+		.map(view => collector.resolveCharacter(view.target))
+		.filter(result => !result.error)
+		.map(result => new Status(result.value!))
+		.map(status => new Status(status.context, new ExternalCache(CacheStorage, status.hash)))
+		.sort((x, y) => String.prototype.localeCompare.call(x.get("name"), y.get("name")))
+	return { loadState, provider, views, statusList };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -64,7 +65,6 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	public render() {
 		if (this.props.loadState !== 'loaded') return null;
 
-		const { views } = this.props;
 		const initialValues = { selection: [] };
 
 		return <Page id="character-management" heading={<h2>キャラクター管理</h2>} navs={
@@ -80,16 +80,16 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	}
 
 	private renderCharacters() {
-		const { views, characters } = this.props;
+		const { views, statusList } = this.props;
 
-		return <SelectableList className={style['characters']} field="selection" items={characters} render={character => {
-			const uuid = character.$uuid;
+		return <SelectableList className={style['characters']} field="selection" items={statusList} render={status => {
+			const uuid = status.context.character.uuid;
 			const { visible } = views[uuid];
 
 			return {
 				key: uuid,
 				content: <div className={style['character']}>
-					<div className={style['name']}>{character.name}</div>
+					<div className={style['name']}>{status.get("name")}</div>
 					<VisibilityToggle className={style['visibility']} uuid={uuid} on="表示" off="非表示" />
 				</div>
 			};

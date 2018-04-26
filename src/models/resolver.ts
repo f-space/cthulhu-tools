@@ -1,11 +1,11 @@
-import { Reference } from "models/expression";
 import { Attribute } from "models/attribute";
 import { Skill } from "models/skill";
-import { Property, AttributeProperty, SkillProperty } from "models/property";
-
-export interface PropertyResolver {
-	resolve(ref: Reference): Property | undefined;
-}
+import {
+	Property, AttributeProperty, SkillProperty,
+	AttributeValueProperty, AttributeMinProperty, AttributeMaxProperty,
+	SkillValueProperty, SkillBaseProperty, SkillPointsProperty,
+} from "models/property";
+import { ResolutionContext, PropertyResolver } from "models/evaluation";
 
 export class AttributeResolver implements PropertyResolver {
 	public readonly attributes: ReadonlyMap<string, Attribute>;
@@ -14,13 +14,14 @@ export class AttributeResolver implements PropertyResolver {
 		this.attributes = attributes.reduce((map, attr) => map.set(attr.id, attr), new Map<string, Attribute>());
 	}
 
-	public resolve(ref: Reference): AttributeProperty | undefined {
+	public resolve(context: ResolutionContext): AttributeProperty | undefined {
+		const { ref } = context;
 		const attribute = this.attributes.get(ref.id);
 		if (attribute) {
 			switch (ref.modifier) {
-				case null: return AttributeProperty.value(attribute);
-				case 'min': return AttributeProperty.min(attribute);
-				case 'max': return AttributeProperty.max(attribute);
+				case null: return new AttributeValueProperty(attribute);
+				case 'min': return new AttributeMinProperty(attribute);
+				case 'max': return new AttributeMaxProperty(attribute);
 			}
 		}
 		return undefined;
@@ -34,25 +35,26 @@ export class SkillResolver implements PropertyResolver {
 		this.skills = skills.reduce((map, skill) => map.set(skill.id, skill), new Map<string, Skill>());
 	}
 
-	public resolve(ref: Reference): SkillProperty | undefined {
+	public resolve(context: ResolutionContext): SkillProperty | undefined {
+		const { ref } = context;
 		const skill = this.skills.get(ref.id);
 		if (skill) {
 			switch (ref.modifier) {
-				case null: return SkillProperty.value(skill);
-				case 'base': return SkillProperty.base(skill);
-				case 'points': return SkillProperty.points(skill);
+				case null: return new SkillValueProperty(skill);
+				case 'base': return new SkillBaseProperty(skill);
+				case 'points': return new SkillPointsProperty(skill);
 			}
 		}
 		return undefined;
 	}
 }
 
-export class CompoundResolver implements PropertyResolver {
+export class CompositeResolver implements PropertyResolver {
 	public constructor(readonly resolvers: ReadonlyArray<PropertyResolver>) { }
 
-	public resolve(ref: Reference): Property | undefined {
+	public resolve(context: ResolutionContext): Property | undefined {
 		for (const resolver of this.resolvers) {
-			const result = resolver.resolve(ref);
+			const result = resolver.resolve(context);
 
 			if (result !== undefined) return result;
 		}
@@ -62,7 +64,23 @@ export class CompoundResolver implements PropertyResolver {
 }
 
 export class VoidResolver implements PropertyResolver {
-	private constructor() { }
-	public static readonly instance: VoidResolver = new VoidResolver();
-	public resolve(ref: Reference): undefined { return undefined; }
+	public resolve(): undefined { return undefined; }
+}
+
+export interface ResolverConfig {
+	readonly attributes?: ReadonlyArray<Attribute>;
+	readonly skills?: ReadonlyArray<Skill>;
+}
+
+export function buildResolver(config: ResolverConfig): PropertyResolver {
+	const resolvers = [] as PropertyResolver[];
+
+	if (config.attributes) resolvers.push(new AttributeResolver(config.attributes));
+	if (config.skills) resolvers.push(new SkillResolver(config.skills));
+
+	switch (resolvers.length) {
+		case 0: return new VoidResolver();
+		case 1: return resolvers[0];
+		default: return new CompositeResolver(resolvers);
+	}
 }

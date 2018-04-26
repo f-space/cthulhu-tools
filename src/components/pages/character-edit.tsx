@@ -5,7 +5,7 @@ import { FormApi, Decorator, getIn } from 'final-form';
 import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
-import { Reference, Character, CharacterParams, AttributeParams, SkillParams, DataProvider, PropertyResolver, PropertyEvaluator, DataContext, ResolverBuilder, EvaluatorBuilder } from "models/status";
+import { Reference, Character, CharacterParams, AttributeParams, SkillParams, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
 import { State, Dispatch } from "redux/store";
 import { LoadState } from "redux/states/status";
 import { getLoadState, getDataProvider } from "redux/selectors/status";
@@ -19,12 +19,11 @@ import style from "styles/pages/character-edit.scss";
 export interface CharacterEditPageProps extends RouteComponentProps<{ uuid?: string }> {
 	loadState: LoadState;
 	provider: DataProvider;
-	context: Partial<DataContext>;
 	dispatcher: StatusDispatcher;
 }
 
 interface FormValues {
-	evaluator: PropertyEvaluator;
+	chain: EvaluationChain;
 	attributes: AttributeParams;
 	skills: SkillInputValue[];
 }
@@ -52,16 +51,11 @@ function throttle<T extends (...args: any[]) => void>(interval: number, fn: T): 
 	return wrapper as T;
 }
 
-function evalID(resolver: PropertyResolver, evaluator: PropertyEvaluator, id: string, modifier?: string | null): any {
-	const property = resolver.resolve(new Reference(id, modifier));
-	return property && evaluator.evaluate({ property, hash: null, resolver, evaluator });
-}
-
-function EvaluationResult(props: { resolver: PropertyResolver, id: string, base?: boolean }) {
-	return <Field name="evaluator" subscription={{ value: true }} render={({ input: { value } }) => {
-		const { resolver, id, base } = props;
-		const evaluator = value as PropertyEvaluator;
-		const result = evalID(resolver, evaluator, id, base ? 'base' : null);
+function EvaluationResult(props: { id: string, base?: boolean }) {
+	return <Field name="chain" subscription={{ value: true }} render={({ input: { value } }) => {
+		const { id, base } = props;
+		const chain = value as EvaluationChain;
+		const result = chain.evaluate(new Reference(id, base ? 'base' : null), null);
 
 		return result !== undefined ? result : "-";
 	}} />
@@ -70,8 +64,7 @@ function EvaluationResult(props: { resolver: PropertyResolver, id: string, base?
 const mapStateToProps = (state: State) => {
 	const loadState = getLoadState(state);
 	const provider = getDataProvider(state);
-	const context: Partial<DataContext> = new DataContext({ profile: provider.profile.default }, provider);
-	return { loadState, provider, context };
+	return { loadState, provider };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -98,11 +91,13 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	public render() {
 		if (this.props.loadState !== 'loaded') return null;
 
-		const { context: { attributes, skills } } = this.props;
-		const resolver = ResolverBuilder.build(this.props.context);
+		const { provider } = this.props;
+		const profile = provider.profile.default;
+		const attributes = profile && provider.attribute.get(profile.attributes);
+		const skills = profile && provider.skill.get(profile.skills);
 		const initialValues = this.makeInitialValues();
 		const decorators = [this.createEvaluationDecorator()];
-		const evaluate = (id: string, base?: boolean) => <EvaluationResult resolver={resolver} id={id} base={base} />
+		const evaluate = (id: string, base?: boolean) => <EvaluationResult id={id} base={base} />
 
 		return <Page id="character-edit" heading={<h2>キャラクター編集</h2>}>
 			<Form initialValues={initialValues}
@@ -132,13 +127,13 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 								return <div className={style['point-stats']}>
 									<span className={style['consumed']}>{consumed}</span>
 									/
-									<Field name="evaluator" subscription={{ value: true }} render={({ input: { value } }) => {
-										const evaluator = value as PropertyEvaluator;
-										const osp = evalID(resolver, evaluator, 'oskp');
-										const hsp = evalID(resolver, evaluator, 'hskp');
-										const available = osp + hsp;
+									<Field name="chain" subscription={{ value: true }} render={({ input: { value } }) => {
+										const chain = value as EvaluationChain;
+										const oskp = chain.evaluate(new Reference('oskp'), null);
+										const hskp = chain.evaluate(new Reference('hskp'), null);
+										const available = oskp + hskp;
 
-										return <span className={style['available']}>{available}</span>
+										return <span className={style['available']}>{String(available)}</span>
 									}} />
 								</div>
 							}} />
@@ -187,10 +182,17 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 		this.toCharacterManagementPage();
 	}
 
-	private buildEvaluator(params: CharacterParams): PropertyEvaluator {
-		const { context: { attributes, skills } } = this.props;
+	private buildChain(params: CharacterParams) {
+		const { provider } = this.props;
+		const profile = provider.profile.default;
+		const resolver = buildResolver({
+			attributes: profile && provider.attribute.get(profile.attributes),
+			skills: profile && provider.skill.get(profile.skills),
+		});
+		const evaluator = buildEvaluator({ params });
+		const validator = buildValidator({ attribute: true, skill: true });
 
-		return EvaluatorBuilder.build({ attributes, skills, params });
+		return new EvaluationChain({ resolver, evaluator, validator });
 	}
 
 	private makeInitialValues(): FormValues {
@@ -199,11 +201,11 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 			const character = provider.character.get(this.uuid);
 			const params = character && character.params;
 			if (params) {
-				const evaluator = this.buildEvaluator(params);
+				const chain = this.buildChain(params);
 				const skills = Object.entries(params.skill).map(([id, points]) => ({ id, points }));
 
 				return {
-					evaluator,
+					chain,
 					attributes: params.attribute,
 					skills,
 				};
@@ -217,10 +219,10 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 		const attribute = Object.create(null);
 		const skill = Object.create(null);
 		const params = { attribute, skill, item: Object.create(null) };
-		const evaluator = this.buildEvaluator(params);
+		const chain = this.buildChain(params);
 
 		return {
-			evaluator,
+			chain,
 			attributes: attribute,
 			skills: [],
 		};
@@ -236,9 +238,9 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 					const attribute = values.attributes;
 					const skill = values.skills.reduce((obj, { id, points }) => (obj[id] = points, obj), Object.create(null));
 					const params = { attribute, skill, item: Object.create(null) };
-					const evaluator = this.buildEvaluator(params);
+					const chain = this.buildChain(params);
 
-					form.change("evaluator", evaluator);
+					form.change("chain", chain);
 				}
 
 				prev = values;
@@ -253,7 +255,8 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	}
 
 	private async saveCharacter(params: CharacterParams): Promise<void> {
-		const { context: { profile }, dispatcher } = this.props;
+		const { provider, dispatcher } = this.props;
+		const profile = provider.profile.default;
 		if (profile) {
 			const character = new Character({
 				uuid: this.uuid,

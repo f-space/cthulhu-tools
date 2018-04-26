@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { DataProvider, ExternalCache, DataContext, Status } from "models/status";
+import { DataProvider, DataCollector, ExternalCache, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
@@ -10,38 +10,38 @@ import style from "styles/pages/status.scss";
 
 export interface StatusPageProps {
 	provider: DataProvider;
-	characters: Status[];
+	statusList: Status[];
 }
 
 const mapStateToProps = (state: State) => {
 	const provider = getDataProvider(state);
+	const collector = new DataCollector(provider);
 	const { views } = state.status.view;
-	const characters = views
+	const statusList = views.valueSeq()
 		.filter(view => view.visible)
-		.keySeq()
-		.map(uuid => new DataContext({ character: uuid }, provider))
-		.filter(context => context.guard())
-		.map(context => new Status(context as DataContext))
-		.map(status => new Status(status.$context, new ExternalCache(CacheStorage, status.$hash)))
-		.sort((x, y) => String.prototype.localeCompare.call(x.name, y.name))
+		.map(view => collector.resolveCharacter(view.target))
+		.filter(result => !result.error)
+		.map(result => new Status(result.value!))
+		.map(status => new Status(status.context, new ExternalCache(CacheStorage, status.hash)))
+		.sort((x, y) => String.prototype.localeCompare.call(x.get("name"), y.get("name")))
 		.toArray();
-	return { provider, characters };
+	return { provider, statusList };
 };
 
 export class StatusPage extends React.Component<StatusPageProps> {
 	public render() {
-		const { characters } = this.props;
+		const { statusList } = this.props;
 
 		return <Page id="status" heading={<h2>ステータス</h2>} navs={
 			<Link to="/status/character-management">管理</Link>
 		}>
 			<div className={style['characters']}>
 				{
-					characters.map(character =>
-						<section key={character.$uuid} className={style['character']}>
-							{this.renderAttributes(character)}
-							{this.renderSkills(character)}
-							{this.renderItems(character)}
+					statusList.map(status =>
+						<section key={status.context.character.uuid} className={style['character']}>
+							{this.renderAttributes(status)}
+							{this.renderSkills(status)}
+							{this.renderItems(status)}
 						</section>
 					)
 				}
@@ -49,8 +49,8 @@ export class StatusPage extends React.Component<StatusPageProps> {
 		</Page>
 	}
 
-	private renderAttributes(character: Status) {
-		const attributes = character.$attributes;
+	private renderAttributes(status: Status) {
+		const attributes = status.context.profile.attributes;
 
 		return <section>
 			<header><h3>人物/能力</h3></header>
@@ -59,7 +59,7 @@ export class StatusPage extends React.Component<StatusPageProps> {
 					attributes.map(attribute =>
 						<div key={attribute.uuid} className={style['attribute']}>
 							<dt className={style['name']}>{attribute.name}</dt>
-							<dd className={style['value']}>{character[attribute.id]}</dd>
+							<dd className={style['value']}>{status.get(attribute.id)}</dd>
 						</div>
 					)
 				}
@@ -67,8 +67,8 @@ export class StatusPage extends React.Component<StatusPageProps> {
 		</section>
 	}
 
-	private renderSkills(character: Status) {
-		const skills = character.$skills;
+	private renderSkills(status: Status) {
+		const skills = status.context.profile.skills;
 
 		return <section>
 			<header><h3>技能</h3></header>
@@ -77,7 +77,7 @@ export class StatusPage extends React.Component<StatusPageProps> {
 					skills.map(skill =>
 						<div key={skill.uuid} className={style['skill']}>
 							<dt className={style['name']}>{skill.name}</dt>
-							<dd className={style['value']}>{character[skill.id]}</dd>
+							<dd className={style['value']}>{status.get(skill.id)}</dd>
 						</div>
 					)
 				}
@@ -85,9 +85,9 @@ export class StatusPage extends React.Component<StatusPageProps> {
 		</section>
 	}
 
-	private renderItems(character: Status) {
+	private renderItems(status: Status) {
 		const { provider } = this.props;
-		const items = provider.item.get(Object.keys(character.$character.params.item));
+		const items = provider.item.get(Object.keys(status.context.character.params.item));
 
 		return <section>
 			<header><h3>所持品</h3></header>

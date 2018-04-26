@@ -1,98 +1,71 @@
-import { Expression, Format } from "models/expression";
-import { Character, AttributeParams, SkillParams } from "models/character";
+import { Reference, Expression, Format } from "models/expression";
+import { CharacterParams, AttributeParams, SkillParams } from "models/character";
 import { Attribute, IntegerAttribute, NumberAttribute, TextAttribute } from "models/attribute";
 import { Skill } from "models/skill";
 import { History } from "models/history";
-import { Property, AttributeProperty, SkillProperty } from "models/property";
-import { PropertyResolver } from "models/resolver";
-import { Cache, ObjectCache } from "models/cache";
+import { AttributeProperty, SkillProperty } from "models/property";
+import { EvaluationContext, PropertyEvaluator } from "models/evaluation";
 
-export interface EvaluationContext {
-	readonly property: Property;
-	readonly hash: string | null;
-	readonly resolver: PropertyResolver;
-	readonly evaluator: PropertyEvaluator;
+export interface TerminalEvaluator extends PropertyEvaluator {
+	supports(context: EvaluationContext): boolean;
 }
 
-interface AttributeEvaluationContext extends EvaluationContext {
-	readonly property: AttributeProperty;
-}
-
-interface SkillEvaluationContext extends EvaluationContext {
-	readonly property: SkillProperty;
-}
-
-export interface PropertyEvaluator {
-	supports(property: Property): boolean;
-	evaluate(context: EvaluationContext): any;
-	validate(context: EvaluationContext, value: any): any;
-}
-
-export class AttributeEvaluator implements PropertyEvaluator {
+export class AttributeEvaluator implements TerminalEvaluator {
 	public constructor(readonly data: AttributeParams) { }
 
-	public supports(property: Property): boolean {
-		return property.type === 'attribute';
+	public supports(context: EvaluationContext): boolean {
+		return ('attribute' in context.property);
 	}
 
 	public evaluate(context: EvaluationContext): any {
-		return this.validate(context, this.evaluateInternal(context));
-	}
-
-	public validate(context: EvaluationContext, value: any): any {
-		return value !== undefined ? this.validateInternal(context, value) : undefined;
-	}
-
-	private evaluateInternal(context: EvaluationContext): any {
 		const { property } = context;
-		if (property.type === 'attribute') {
-			const ctx = context as AttributeEvaluationContext;
-			const { attribute } = property;
+		if (this.supports(context)) {
+			const { attribute } = property as AttributeProperty;
 			switch (attribute.type) {
-				case 'integer': return this.evaluateInteger(ctx, attribute);
-				case 'number': return this.evaluateNumber(ctx, attribute);
-				case 'text': return this.evaluateText(ctx, attribute);
+				case 'integer': return this.evaluateInteger(context, attribute);
+				case 'number': return this.evaluateNumber(context, attribute);
+				case 'text': return this.evaluateText(context, attribute);
 			}
 		}
 		return undefined;
 	}
 
-	private evaluateInteger(context: AttributeEvaluationContext, attribute: IntegerAttribute): number | undefined {
-		switch (context.property.modifier) {
-			case null: return this.evaluateExpression(context, attribute.expression);
-			case 'min': return attribute.min ? this.evaluateExpression(context, attribute.min) : Number.MIN_SAFE_INTEGER;
-			case 'max': return attribute.max ? this.evaluateExpression(context, attribute.max) : Number.MAX_SAFE_INTEGER;
+	private evaluateInteger(context: EvaluationContext, attribute: IntegerAttribute): number | undefined {
+		const { property } = context;
+		switch (property.type) {
+			case 'attribute': return this.evaluateExpression(context, attribute, attribute.expression);
+			case 'attribute:min': return attribute.min ? this.evaluateExpression(context, attribute, attribute.min) : Number.MIN_SAFE_INTEGER;
+			case 'attribute:max': return attribute.max ? this.evaluateExpression(context, attribute, attribute.max) : Number.MAX_SAFE_INTEGER;
 			default: return undefined;
 		}
 	}
 
-	private evaluateNumber(context: AttributeEvaluationContext, attribute: NumberAttribute): number | undefined {
-		switch (context.property.modifier) {
-			case null: return this.evaluateExpression(context, attribute.expression);
-			case 'min': return attribute.min ? this.evaluateExpression(context, attribute.min) : Number.NEGATIVE_INFINITY;
-			case 'max': return attribute.max ? this.evaluateExpression(context, attribute.max) : Number.POSITIVE_INFINITY;
+	private evaluateNumber(context: EvaluationContext, attribute: NumberAttribute): number | undefined {
+		const { property } = context;
+		switch (property.type) {
+			case 'attribute': return this.evaluateExpression(context, attribute, attribute.expression);
+			case 'attribute:min': return attribute.min ? this.evaluateExpression(context, attribute, attribute.min) : Number.NEGATIVE_INFINITY;
+			case 'attribute:max': return attribute.max ? this.evaluateExpression(context, attribute, attribute.max) : Number.POSITIVE_INFINITY;
 			default: return undefined;
 		}
 	}
 
-	private evaluateText(context: AttributeEvaluationContext, attribute: TextAttribute): string | undefined {
-		switch (context.property.modifier) {
-			case null: return this.evaluateExpression(context, attribute.format);
+	private evaluateText(context: EvaluationContext, attribute: TextAttribute): string | undefined {
+		const { property } = context;
+		switch (property.type) {
+			case 'attribute': return this.evaluateExpression(context, attribute, attribute.format);
 			default: return undefined;
 		}
 	}
 
-	private evaluateExpression(context: AttributeEvaluationContext, expression: Expression | Format): any {
-		const { property: { attribute }, resolver, evaluator } = context;
+	private evaluateExpression(context: EvaluationContext, attribute: Attribute, expression: Expression | Format): any {
+		const { chain, hash } = context;
 		const data = this.data[attribute.id] || Object.create(null);
 		const values = new Map<string, any>();
 
 		for (const ref of expression.refs) {
-			const property = resolver.resolve(ref);
-			if (property) {
-				const value = evaluator.evaluate({ ...context, property });
-				values.set(ref.key, value);
-			}
+			const value = chain.evaluate(ref, hash);
+			values.set(ref.key, value);
 		}
 
 		for (const input of expression.inputs) {
@@ -105,209 +78,110 @@ export class AttributeEvaluator implements PropertyEvaluator {
 
 		return expression.evaluate(values);
 	}
-
-	private validateInternal(context: EvaluationContext, value: any): any {
-		const { property } = context;
-		if (property.type === 'attribute') {
-			const ctx = context as AttributeEvaluationContext;
-			const { attribute } = property;
-			switch (attribute.type) {
-				case 'integer': return this.validateInteger(ctx, attribute, value);
-				case 'number': return this.validateNumber(ctx, attribute, value);
-				case 'text': return this.validateText(ctx, attribute, value);
-			}
-		}
-		return undefined;
-	}
-
-	private validateInteger(context: AttributeEvaluationContext, attribute: IntegerAttribute, value: number): number | undefined {
-		switch (context.property.modifier) {
-			case null:
-				const { property, evaluator } = context;
-				const min = attribute.min && evaluator.evaluate({ ...context, property: AttributeProperty.min(attribute) });
-				const max = attribute.max && evaluator.evaluate({ ...context, property: AttributeProperty.max(attribute) });
-				if (max !== undefined) value = Math.min(value, max);
-				if (min !== undefined) value = Math.max(value, min);
-				return Math.round(value);
-			case 'min': return Math.round(value);
-			case 'max': return Math.round(value);
-			default: return undefined;
-		}
-	}
-
-	private validateNumber(context: AttributeEvaluationContext, attribute: NumberAttribute, value: number): number | undefined {
-		switch (context.property.modifier) {
-			case null:
-				const { property, evaluator } = context;
-				const min = attribute.min && evaluator.evaluate({ ...context, property: AttributeProperty.min(attribute) });
-				const max = attribute.max && evaluator.evaluate({ ...context, property: AttributeProperty.max(attribute) });
-				if (max !== undefined) value = Math.min(value, max);
-				if (min !== undefined) value = Math.max(value, min);
-				return Number(value);
-			case 'min': return Number(value);
-			case 'max': return Number(value);
-			default: return undefined;
-		}
-	}
-
-	private validateText(context: AttributeEvaluationContext, attribute: TextAttribute, value: string): string | undefined {
-		switch (context.property.modifier) {
-			case null: return String(value);
-			default: return undefined;
-		}
-	}
 }
 
-export class SkillEvaluator implements PropertyEvaluator {
-	public readonly min: number;
-	public readonly max: number;
+export class SkillEvaluator implements TerminalEvaluator {
+	public constructor(readonly data: SkillParams) { }
 
-	public constructor(readonly data: SkillParams, min: number = 0, max: number = 99) {
-		this.min = Number.isSafeInteger(min) ? min : Number.MIN_SAFE_INTEGER;
-		this.max = Number.isSafeInteger(max) ? max : Number.MAX_SAFE_INTEGER;
-	}
-
-	public supports(property: Property): boolean {
-		return property.type === 'skill';
+	public supports(context: EvaluationContext): boolean {
+		return ('skill' in context.property);
 	}
 
 	public evaluate(context: EvaluationContext): any {
-		return this.validate(context, this.evaluateInternal(context));
-	}
-
-	public validate(context: EvaluationContext, value: any): any {
-		return value !== undefined ? this.validateInternal(context, value) : undefined;
-	}
-
-	private evaluateInternal(context: EvaluationContext): any {
 		const { property } = context;
-		if (property.type === 'skill') {
-			const ctx = context as SkillEvaluationContext;
-			switch (property.modifier) {
-				case null: return this.evaluateSum(ctx);
-				case 'base': return this.evaluateBase(ctx);
-				case 'points': return this.evaluatePoints(ctx);
+		if (this.supports(context)) {
+			const { skill } = property as SkillProperty;
+			switch (property.type) {
+				case 'skill': return this.evaluateSum(context);
+				case 'skill:base': return this.evaluateBase(context, skill);
+				case 'skill:points': return this.evaluatePoints(context, skill);
 			}
 		}
 		return undefined;
 	}
 
-	private evaluateSum(context: SkillEvaluationContext): number | undefined {
-		const { property: { skill }, evaluator } = context;
-		const base = evaluator.evaluate({ ...context, property: SkillProperty.base(skill) });
-		const points = evaluator.evaluate({ ...context, property: SkillProperty.points(skill) });
+	private evaluateSum(context: EvaluationContext): number | undefined {
+		const { chain, ref, hash } = context;
+		const base = chain.evaluate(new Reference(ref.id, 'base'), hash);
+		const points = chain.evaluate(new Reference(ref.id, 'points'), hash);
 		return (base !== undefined && points !== undefined) ? (base + points) : undefined;
 	}
 
-	private evaluateBase(context: SkillEvaluationContext): number | undefined {
-		const { property: { skill }, resolver, evaluator } = context;
+	private evaluateBase(context: EvaluationContext, skill: Skill): number | undefined {
+		const { chain, hash } = context;
 		const expression = skill.base;
 		const values = new Map<string, any>();
 
 		for (const ref of expression.refs) {
-			const property = resolver.resolve(ref);
-			if (property) {
-				const value = evaluator.evaluate({ ...context, property });
-				values.set(ref.key, value);
-			}
+			const value = chain.evaluate(ref, hash);
+			values.set(ref.key, value);
 		}
 
 		return skill.base.evaluate(values);
 	}
 
-	private evaluatePoints(context: SkillEvaluationContext): number | undefined {
-		const { property: { skill } } = context;
+	private evaluatePoints(context: EvaluationContext, skill: Skill): number | undefined {
 		const points = this.data[skill.id];
 		return points !== undefined ? points : 0;
 	}
-
-	private validateInternal(context: EvaluationContext, value: any): any {
-		const { property } = context;
-		if (property.type === 'skill') {
-			return Math.round(Math.max(Math.min(value, this.max), this.min));
-		}
-		return undefined;
-	}
 }
 
-export class CompoundEvaluator implements PropertyEvaluator {
-	public constructor(readonly evaluators: ReadonlyArray<PropertyEvaluator>) { }
+export class HistoryEvaluator implements TerminalEvaluator {
+	public constructor(readonly history: History) { }
 
-	public supports(property: Property): boolean {
-		return this.evaluators.some(evaluator => evaluator.supports(property));
+	public supports(context: EvaluationContext): boolean {
+		return context.hash !== null && !context.property.view;
 	}
 
 	public evaluate(context: EvaluationContext): any {
-		const evaluator = this.evaluators.find(evaluator => evaluator.supports(context.property));
-
-		return evaluator && evaluator.evaluate(context);;
-	}
-
-	public validate(context: EvaluationContext, value: any): any {
-		const evaluator = this.evaluators.find(evaluator => evaluator.supports(context.property));
-
-		return evaluator && evaluator.validate(context, value);
-	}
-}
-
-export class HistoryEvaluator implements PropertyEvaluator {
-	public constructor(readonly base: PropertyEvaluator, readonly history: History) { }
-
-	public supports(property: Property): any {
-		return this.base.supports(property);
-	}
-
-	public evaluate(context: EvaluationContext): any {
-		const { property, hash, evaluator } = context;
-		if (hash === null || property.view) {
-			return this.base.evaluate(context);
-		} else if (this.history && hash in this.history.commands) {
-			const command = this.history.commands[hash];
-			const prevValue = evaluator.evaluate({ ...context, hash: command.parent });
+		const { chain, ref, property, hash } = context;
+		if (this.supports(context) && hash! in this.history.commands) {
+			const command = this.history.commands[hash!];
+			const prevValue = chain.evaluate(ref, command.parent);
 			if (prevValue !== undefined) {
-				const related = command.operations.filter(x => x.target === property.key);
-				if (related.length > 0) {
-					const value = related.reduce((value, op) => op.apply(value), prevValue);
-					const validated = evaluator.validate(context, value);
-					return validated;
-				}
+				return command.operations
+					.filter(x => x.target === ref.key)
+					.reduce((value, op) => op.apply(value), prevValue);
 			}
 		}
 
 		return undefined;
 	}
-
-	public validate(context: EvaluationContext, value: any): any {
-		return this.base.validate(context, value);
-	}
 }
 
-export class CacheEvaluator implements PropertyEvaluator {
-	public constructor(readonly base: PropertyEvaluator, readonly cache: Cache = new ObjectCache()) { }
-
-	public supports(property: Property): boolean {
-		return this.base.supports(property);
-	}
+export class CompositeEvaluator implements PropertyEvaluator {
+	public constructor(readonly evaluators: ReadonlyArray<TerminalEvaluator>) { }
 
 	public evaluate(context: EvaluationContext): any {
-		const { property: { key }, hash } = context;
-		if (!this.cache.has(hash, key)) {
-			this.cache.set(hash, key, undefined);
-			const value = this.base.evaluate(context);
-			this.cache.set(hash, key, value);
-		}
-		return this.cache.get(hash, key);
-	}
+		const evaluator = this.evaluators.find(evaluator => evaluator.supports(context));
 
-	public validate(context: EvaluationContext, value: any): any {
-		return this.base.validate(context, value);
+		return evaluator && evaluator.evaluate(context);
 	}
 }
 
 export class VoidEvaluator implements PropertyEvaluator {
-	public static readonly instance: VoidEvaluator = new VoidEvaluator();
-	private constructor() { }
-	public supports(): false { return false; }
 	public evaluate(): undefined { return undefined; }
-	public validate(): undefined { return undefined; }
+}
+
+export interface EvaluatorConfig {
+	readonly params?: Partial<CharacterParams>;
+	readonly history?: History | null;
+}
+
+export function buildEvaluator(config: EvaluatorConfig): PropertyEvaluator {
+	const evaluators = [] as TerminalEvaluator[];
+
+	if (config.history) evaluators.push(new HistoryEvaluator(config.history));
+
+	if (config.params) {
+		const { attribute, skill } = config.params;
+		if (attribute) evaluators.push(new AttributeEvaluator(attribute));
+		if (skill) evaluators.push(new SkillEvaluator(skill));
+	}
+
+	switch (evaluators.length) {
+		case 0: return new VoidEvaluator();
+		case 1: return evaluators[0];
+		default: return new CompositeEvaluator(evaluators);
+	}
 }
