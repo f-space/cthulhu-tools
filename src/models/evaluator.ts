@@ -3,8 +3,18 @@ import { CharacterParams, AttributeParams, SkillParams } from "models/character"
 import { Attribute, IntegerAttribute, NumberAttribute, TextAttribute } from "models/attribute";
 import { Skill } from "models/skill";
 import { History } from "models/history";
-import { AttributeProperty, SkillProperty } from "models/property";
-import { EvaluationContext, PropertyEvaluator } from "models/evaluation";
+import { Property, AttributeProperty, SkillProperty } from "models/property";
+
+export interface EvaluationContext {
+	readonly ref: Reference;
+	readonly hash: string | null;
+	readonly property: Property;
+	request(ref: Reference, hash: string | null): any;
+}
+
+export interface PropertyEvaluator {
+	evaluate(context: EvaluationContext): any;
+}
 
 export interface TerminalEvaluator extends PropertyEvaluator {
 	supports(context: EvaluationContext): boolean;
@@ -59,12 +69,12 @@ export class AttributeEvaluator implements TerminalEvaluator {
 	}
 
 	private evaluateExpression(context: EvaluationContext, attribute: Attribute, expression: Expression | Format): any {
-		const { chain, hash } = context;
+		const { hash, request } = context;
 		const data = this.data[attribute.id] || Object.create(null);
 		const values = new Map<string, any>();
 
 		for (const ref of expression.refs) {
-			const value = chain.evaluate(ref, hash);
+			const value = request(ref, hash);
 			values.set(ref.key, value);
 		}
 
@@ -101,19 +111,19 @@ export class SkillEvaluator implements TerminalEvaluator {
 	}
 
 	private evaluateSum(context: EvaluationContext): number | undefined {
-		const { chain, ref, hash } = context;
-		const base = chain.evaluate(new Reference(ref.id, 'base'), hash);
-		const points = chain.evaluate(new Reference(ref.id, 'points'), hash);
+		const { ref, hash, request } = context;
+		const base = request(new Reference(ref.id, 'base'), hash);
+		const points = request(new Reference(ref.id, 'points'), hash);
 		return (base !== undefined && points !== undefined) ? (base + points) : undefined;
 	}
 
 	private evaluateBase(context: EvaluationContext, skill: Skill): number | undefined {
-		const { chain, hash } = context;
+		const { hash, request } = context;
 		const expression = skill.base;
 		const values = new Map<string, any>();
 
 		for (const ref of expression.refs) {
-			const value = chain.evaluate(ref, hash);
+			const value = request(ref, hash);
 			values.set(ref.key, value);
 		}
 
@@ -134,10 +144,10 @@ export class HistoryEvaluator implements TerminalEvaluator {
 	}
 
 	public evaluate(context: EvaluationContext): any {
-		const { chain, ref, property, hash } = context;
+		const { ref, hash, property, request } = context;
 		if (this.supports(context) && hash! in this.history.commands) {
 			const command = this.history.commands[hash!];
-			const prevValue = chain.evaluate(ref, command.parent);
+			const prevValue = request(ref, command.parent);
 			if (prevValue !== undefined) {
 				return command.operations
 					.filter(x => x.target === ref.key)

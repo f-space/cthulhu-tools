@@ -1,3 +1,4 @@
+import { Reference } from "models/expression";
 import { Attribute } from "models/attribute";
 import { Skill } from "models/skill";
 import {
@@ -5,7 +6,14 @@ import {
 	AttributeValueProperty, AttributeMinProperty, AttributeMaxProperty,
 	SkillValueProperty, SkillBaseProperty, SkillPointsProperty,
 } from "models/property";
-import { ResolutionContext, PropertyResolver } from "models/evaluation";
+
+export interface ResolutionContext {
+	readonly ref: Reference;
+}
+
+export interface PropertyResolver {
+	resolve(context: ResolutionContext): Property | undefined;
+}
 
 export class AttributeResolver implements PropertyResolver {
 	public readonly attributes: ReadonlyMap<string, Attribute>;

@@ -1,32 +1,13 @@
 import { Reference } from "models/expression";
 import { Property } from "models/property";
 import { Cache, ObjectCache } from "models/cache";
+import { PropertyResolver, VoidResolver } from "models/resolver";
+import { PropertyEvaluator, VoidEvaluator } from "models/evaluator";
+import { PropertyValidator, VoidValidator } from "models/validator";
 
-export interface ResolutionContext {
-	readonly chain: EvaluationChain;
-	readonly ref: Reference;
-}
-
-export interface EvaluationContext extends ResolutionContext {
-	readonly property: Property;
-	readonly hash: string | null;
-}
-
-export interface ValidationContext extends EvaluationContext {
-	readonly value: any;
-}
-
-export interface PropertyResolver {
-	resolve(context: ResolutionContext): Property | undefined;
-}
-
-export interface PropertyEvaluator {
-	evaluate(context: EvaluationContext): any;
-}
-
-export interface PropertyValidator {
-	validate(context: ValidationContext): any;
-}
+export * from "models/resolver";
+export * from "models/evaluator";
+export * from "models/validator";
 
 export interface EvaluationConfig {
 	resolver?: PropertyResolver;
@@ -42,21 +23,22 @@ export class EvaluationChain {
 	public readonly cache: Cache;
 
 	public constructor(config: EvaluationConfig) {
-		this.resolver = config.resolver || { resolve: ctx => undefined };
-		this.evaluator = config.evaluator || { evaluate: ctx => undefined };
-		this.validator = config.validator || { validate: ctx => ctx.value };
+		this.resolver = config.resolver || new VoidResolver();
+		this.evaluator = config.evaluator || new VoidEvaluator();
+		this.validator = config.validator || new VoidValidator();
 		this.cache = config.cache || new ObjectCache();
+		this.evaluate = this.evaluate.bind(this);
 	}
 
 	public evaluate(ref: Reference, hash: string | null): any {
 		if (!this.cache.has(hash, ref.key)) {
 			this.cache.set(hash, ref.key, undefined);
 
-			const chain = this;
-			const property = this.resolver.resolve({ chain, ref });
+			const request = this.evaluate;
+			const property = this.resolver.resolve({ ref });
 			if (property !== undefined) {
-				const value = this.evaluator.evaluate({ chain, ref, property, hash });
-				const result = this.validator.validate({ chain, ref, property, hash, value });
+				const value = this.evaluator.evaluate({ ref, hash, property, request });
+				const result = this.validator.validate({ ref, hash, property, value, request });
 
 				this.cache.set(hash, ref.key, result);
 			}

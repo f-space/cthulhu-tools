@@ -2,7 +2,18 @@ import { Reference } from "models/expression";
 import { Attribute, IntegerAttribute, NumberAttribute, TextAttribute } from "models/attribute";
 import { Skill } from "models/skill";
 import { Property, AttributeProperty, SkillProperty } from "models/property";
-import { ValidationContext, PropertyValidator } from "models/evaluation";
+
+export interface ValidationContext {
+	readonly ref: Reference;
+	readonly hash: string | null;
+	readonly property: Property;
+	readonly value: any;
+	request(ref: Reference, hash: string | null): any;
+}
+
+export interface PropertyValidator {
+	validate(context: ValidationContext): any;
+}
 
 export interface TerminalValidator extends PropertyValidator {
 	supports(context: ValidationContext): boolean;
@@ -27,11 +38,11 @@ export class AttributeValidator implements TerminalValidator {
 	}
 
 	private validateInteger(context: ValidationContext): number | undefined {
-		const { chain, ref, property, hash, value } = context;
+		const { ref, hash, property, value, request } = context;
 		switch (property.type) {
 			case 'attribute':
-				const min = chain.evaluate(new Reference(ref.id, 'min'), hash);
-				const max = chain.evaluate(new Reference(ref.id, 'max'), hash);
+				const min = request(new Reference(ref.id, 'min'), hash);
+				const max = request(new Reference(ref.id, 'max'), hash);
 				return (min !== undefined && max !== undefined) ? Math.round(Math.max(Math.min(value, max), min)) : undefined;
 			case 'attribute:min': return Math.round(value);
 			case 'attribute:max': return Math.round(value);
@@ -40,11 +51,11 @@ export class AttributeValidator implements TerminalValidator {
 	}
 
 	private validateNumber(context: ValidationContext): number | undefined {
-		const { chain, ref, property, hash, value } = context;
+		const { ref, hash, property, value, request } = context;
 		switch (property.type) {
 			case 'attribute':
-				const min = chain.evaluate(new Reference(ref.id, 'min'), hash);
-				const max = chain.evaluate(new Reference(ref.id, 'max'), hash);
+				const min = request(new Reference(ref.id, 'min'), hash);
+				const max = request(new Reference(ref.id, 'max'), hash);
 				return (min !== undefined && max !== undefined) ? Number(Math.max(Math.min(value, max), min)) : undefined;
 			case 'attribute:min': return Number(value);
 			case 'attribute:max': return Number(value);
