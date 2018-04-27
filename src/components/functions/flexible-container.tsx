@@ -12,8 +12,8 @@ export interface FlexibleContainerState {
 export default class FlexibleContainer extends React.Component<FlexibleContainerProps, FlexibleContainerState> {
 	private ref: React.RefObject<HTMLDivElement> = React.createRef();
 
-	public constructor(props: FlexibleContainerProps, context: any) {
-		super(props, context);
+	public constructor(props: FlexibleContainerProps) {
+		super(props);
 
 		this.state = { width: 0, height: 0 };
 		this.handleResize = this.handleResize.bind(this);

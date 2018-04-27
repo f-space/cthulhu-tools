@@ -18,8 +18,8 @@ export interface CustomDiceDialogProps {
 }
 
 export default class CustomDiceDialog extends React.Component<CustomDiceDialogProps> {
-	public constructor(props: CustomDiceDialogProps, context: any) {
-		super(props, context);
+	public constructor(props: CustomDiceDialogProps) {
+		super(props);
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleClick = this.handleClick.bind(this);

@@ -9,8 +9,8 @@ export interface DiceTypeSelectorProps extends React.HTMLAttributes<HTMLDivEleme
 }
 
 export default class DiceTypeSelector extends React.Component<DiceTypeSelectorProps> {
-	public constructor(props: DiceTypeSelectorProps, context: any) {
-		super(props, context);
+	public constructor(props: DiceTypeSelectorProps) {
+		super(props);
 
 		this.handleClick = this.handleClick.bind(this);
 	}

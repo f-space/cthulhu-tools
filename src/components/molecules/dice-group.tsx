@@ -10,8 +10,8 @@ export interface DiceGroupProps {
 export default class DiceGroup extends React.Component<DiceGroupProps> {
 	private elements: React.RefObject<HTMLImageElement>[];
 
-	public constructor(props: DiceGroupProps, context: any) {
-		super(props, context);
+	public constructor(props: DiceGroupProps) {
+		super(props);
 
 		this.elements = [...Array(props.dices.length)].map(() => React.createRef());
 	}

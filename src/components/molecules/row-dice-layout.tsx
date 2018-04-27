@@ -18,8 +18,8 @@ export default class RowDiceLayout extends React.Component<RowDiceLayoutProps> {
 	private diceSize!: number;
 	private offsets!: number[];
 
-	public constructor(props: RowDiceLayoutProps, context: any) {
-		super(props, context);
+	public constructor(props: RowDiceLayoutProps) {
+		super(props);
 
 		this.precompute(props);
 	}

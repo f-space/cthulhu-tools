@@ -21,8 +21,8 @@ interface NumberInputInternalProps extends NumberInputProps {
 }
 
 class NumberInputInternal extends React.Component<NumberInputInternalProps, NumberInputState> {
-	public constructor(props: NumberInputInternalProps, context: any) {
-		super(props, context);
+	public constructor(props: NumberInputInternalProps) {
+		super(props);
 
 		this.state = { value: this.format(props.value) };
 		this.handleChange = this.handleChange.bind(this);

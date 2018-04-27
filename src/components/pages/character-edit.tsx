@@ -51,8 +51,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	private decorators: Decorator[];
 
-	public constructor(props: CharacterEditPageProps, context: any) {
-		super(props, context);
+	public constructor(props: CharacterEditPageProps) {
+		super(props);
 
 		this.decorators = [this.createEvaluationDecorator()];
 		this.handleSubmit = this.handleSubmit.bind(this);

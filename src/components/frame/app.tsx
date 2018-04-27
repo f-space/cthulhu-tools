@@ -3,7 +3,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Header from "components/frame/header";
 import Navigation from "components/frame/navigation";
-import { DialogProvider, DialogSlot } from "components/frame/dialog";
+import Dialog from "components/frame/dialog";
 import Home from "components/pages/home";
 import Dice from "components/pages/dice";
 import Status from "components/pages/status";
@@ -15,12 +15,12 @@ import style from "styles/frame/app.scss";
 export default class App extends React.Component {
 	public render() {
 		return <Provider store={store as any}>
-			<HashRouter>
-				<div className={style['app']}>
-					<DialogProvider>
-						<DialogSlot>
-							<div className={style['overlay']} />
-						</DialogSlot>
+			<Dialog.Provider>
+				<HashRouter>
+					<div className={style['app']}>
+						<Dialog.Slot>
+							{ref => <div className={style['overlay']} ref={ref} />}
+						</Dialog.Slot>
 						<div className={style['container']}>
 							<Header className={style['header']} />
 							<main className={style['content']}>
@@ -34,9 +34,9 @@ export default class App extends React.Component {
 							</main>
 							<Navigation className={style['navigation']} />
 						</div>
-					</DialogProvider>
-				</div>
-			</HashRouter>
+					</div>
+				</HashRouter>
+			</Dialog.Provider>
 		</Provider>
 	}
 }

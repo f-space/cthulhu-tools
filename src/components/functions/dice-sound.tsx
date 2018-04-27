@@ -4,8 +4,8 @@ import { DiceSoundManager } from "models/resource";
 export default class DiceSound extends React.Component {
 	private element?: HTMLAudioElement;
 
-	public constructor(props: any, context: any) {
-		super(props, context);
+	public constructor(props: {}) {
+		super(props);
 
 		DiceSoundManager.load()
 			.then(() => DiceSoundManager.player())

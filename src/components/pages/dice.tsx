@@ -22,8 +22,8 @@ export default class DicePage extends React.Component<{}, DicePageState> {
 	private readonly roller: DiceRollManager;
 	private soundRef: React.RefObject<DiceSound> = React.createRef();
 
-	public constructor(props: {}, context: any) {
-		super(props, context);
+	public constructor(props: {}) {
+		super(props);
 
 		this.state = {
 			type: undefined,

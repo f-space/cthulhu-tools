@@ -48,8 +48,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 export class CharacterManagementPage extends React.Component<CharacterManagementPageProps> {
-	public constructor(props: CharacterManagementPageProps, context: any) {
-		super(props, context);
+	public constructor(props: CharacterManagementPageProps) {
+		super(props);
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
