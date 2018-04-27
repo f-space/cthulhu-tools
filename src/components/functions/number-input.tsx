@@ -3,7 +3,6 @@ import React from 'react';
 export interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	type?: 'number';
 	value?: number;
-	refDOM?: React.Ref<HTMLInputElement>;
 	onChange?(value: React.ChangeEvent<HTMLInputElement> | number): void;
 }
 
@@ -11,15 +10,25 @@ export interface NumberInputState {
 	value?: string;
 }
 
-export class NumberInput extends React.Component<NumberInputProps, NumberInputState> {
-	public constructor(props: NumberInputProps, context: any) {
+export const NumberInput = React.forwardRef(
+	function NumberInput(props: NumberInputProps, ref?: React.Ref<HTMLInputElement>) {
+		return <NumberInputInternal {...props} refDOM={ref} />
+	}
+);
+
+interface NumberInputInternalProps extends NumberInputProps {
+	refDOM?: React.Ref<HTMLInputElement>;
+}
+
+class NumberInputInternal extends React.Component<NumberInputInternalProps, NumberInputState> {
+	public constructor(props: NumberInputInternalProps, context: any) {
 		super(props, context);
 
 		this.state = { value: this.format(props.value) };
 		this.handleChange = this.handleChange.bind(this);
 	}
 
-	public componentWillReceiveProps(nextProps: NumberInputProps): void {
+	public componentWillReceiveProps(nextProps: NumberInputInternalProps): void {
 		if (!this.eq(this.props.value, nextProps.value)) {
 			if (!this.eq(nextProps.value, this.parse(this.state.value))) {
 				this.setState({ value: this.format(nextProps.value) });

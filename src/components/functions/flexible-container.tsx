@@ -10,7 +10,7 @@ export interface FlexibleContainerState {
 }
 
 export default class FlexibleContainer extends React.Component<FlexibleContainerProps, FlexibleContainerState> {
-	private container?: HTMLDivElement | null;
+	private ref: React.RefObject<HTMLDivElement> = React.createRef();
 
 	public constructor(props: FlexibleContainerProps, context: any) {
 		super(props, context);
@@ -32,7 +32,7 @@ export default class FlexibleContainer extends React.Component<FlexibleContainer
 	public render() {
 		const { render, ...rest } = this.props;
 
-		return <div {...rest} ref={el => { this.container = el; }}>
+		return <div {...rest} ref={this.ref}>
 			{
 				this.state.width !== 0 && this.state.height !== 0
 					? render(this.state)
@@ -44,9 +44,10 @@ export default class FlexibleContainer extends React.Component<FlexibleContainer
 	private handleResize(): void { this.updateSize(); }
 
 	private updateSize(): void {
-		if (this.container) {
-			const width = this.container.clientWidth;
-			const height = this.container.clientHeight;
+		const container = this.ref.current;
+		if (container) {
+			const width = container.clientWidth;
+			const height = container.clientHeight;
 			this.setState({ width, height });
 		}
 	}

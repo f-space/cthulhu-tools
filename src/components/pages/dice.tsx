@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Dice, DiceRoll, DiceRollManager } from "models/dice-roll";
 import DiceSound from "components/functions/dice-sound";
@@ -20,7 +20,7 @@ const PRESETS = ['custom', '1D10', '1D100', '1D6', '2D6', '3D6', '1D3', '2D3', '
 export default class DicePage extends React.Component<{}, DicePageState> {
 	private dices?: Dice[];
 	private readonly roller: DiceRollManager;
-	private sound: DiceSound | null = null;
+	private soundRef: React.RefObject<DiceSound> = React.createRef();
 
 	public constructor(props: {}, context: any) {
 		super(props, context);
@@ -49,7 +49,7 @@ export default class DicePage extends React.Component<{}, DicePageState> {
 		const faces = this.state.faces;
 
 		return <Page id="dice" heading={<h2>ダイスロール</h2>}>
-			<DiceSound ref={sound => this.sound = sound} />
+			<DiceSound ref={this.soundRef} />
 			<DiceView className={style['view']} dices={dices} faces={faces} />
 			<DiceTypeSelector className={style['selector']} types={PRESETS} selected={this.state.type} onTypeChange={this.handleTypeChange} />
 			<button className={style['roll']} onClick={this.handleRollClick}>
@@ -97,7 +97,8 @@ export default class DicePage extends React.Component<{}, DicePageState> {
 
 	private async roll(): Promise<void> {
 		if (this.dices) {
-			if (this.sound) this.sound.play();
+			const sound = this.soundRef.current;
+			if (sound) sound.play();
 
 			for (const roll of this.roller.start(new DiceRoll(this.dices, this.state.faces))) {
 				const result = await roll;

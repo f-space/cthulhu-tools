@@ -17,7 +17,7 @@ export default class DiceNumberDisplay extends React.Component<DiceNumberDisplay
 		scale: 0.5,
 	};
 
-	private canvas: HTMLCanvasElement | null = null;
+	private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
 	private textAspectRatio?: number;
 
 	public componentDidMount(): void {
@@ -36,7 +36,7 @@ export default class DiceNumberDisplay extends React.Component<DiceNumberDisplay
 		const fontSize = this.getFontSize();
 
 		return <div {...rest} className={classNames(className, style['display'], { critical, fumble })} style={{ fontSize }}>
-			<canvas className={style['canvas']} width={0} height={0} hidden ref={canvas => { this.canvas = canvas; }} />
+			<canvas className={style['canvas']} width={0} height={0} hidden ref={this.canvasRef} />
 			{value}
 		</div>
 	}
@@ -53,10 +53,11 @@ export default class DiceNumberDisplay extends React.Component<DiceNumberDisplay
 	}
 
 	private measureAspectRatio(text: string): number | undefined {
-		if (this.canvas) {
-			const context = this.canvas.getContext('2d');
+		const canvas = this.canvasRef.current;
+		if (canvas) {
+			const context = canvas.getContext('2d');
 			if (context) {
-				const style = window.getComputedStyle(this.canvas);
+				const style = window.getComputedStyle(canvas);
 				const font = style.getPropertyValue('font');
 				const fontSize = style.getPropertyValue('font-size');
 

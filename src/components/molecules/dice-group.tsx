@@ -8,7 +8,13 @@ export interface DiceGroupProps {
 }
 
 export default class DiceGroup extends React.Component<DiceGroupProps> {
-	private elements: (HTMLImageElement | null)[] = [];
+	private elements: React.RefObject<HTMLImageElement>[];
+
+	public constructor(props: DiceGroupProps, context: any) {
+		super(props, context);
+
+		this.elements = [...Array(props.dices.length)].map(() => React.createRef());
+	}
 
 	public componentWillMount(): void {
 		DiceImageManager.load();
@@ -28,8 +34,8 @@ export default class DiceGroup extends React.Component<DiceGroupProps> {
 		return (this.props.dices.length !== nextProps.dices.length);
 	}
 
-	public componentWillUpdate(): void {
-		this.elements = Array(this.props.dices.length);
+	public componentWillUpdate(nextProps: DiceGroupProps): void {
+		this.elements = [...Array(nextProps.dices.length)].map(() => React.createRef());
 	}
 
 	public componentDidUpdate(): void {
@@ -38,16 +44,17 @@ export default class DiceGroup extends React.Component<DiceGroupProps> {
 
 	public render() {
 		return <div className={style['group']}>
-			{this.props.dices.map((dice, n) => <img key={n} className={style['dice']} ref={el => { this.elements[n] = el; }} />)}
+			{this.props.dices.map((dice, n) => <img key={n} className={style['dice']} ref={this.elements[n]} />)}
 		</div>
 	}
 
 	private updateDiceImages(dices: DiceDisplay[]) {
 		DiceImageManager.load().then(() => {
 			for (const [index, element] of this.elements.entries()) {
-				if (element) {
+				const img = element.current;
+				if (img) {
 					const { type, face } = dices[index];
-					element.src = DiceImageManager.get(type, face);
+					img.src = DiceImageManager.get(type, face);
 				}
 			}
 		});

@@ -57,11 +57,11 @@ export function NInput({ field, ...props }: NInputProps) {
 }
 
 interface FieldWrapperProps extends FieldProps {
-	inner: 'input' | 'textarea' | 'select' | React.ComponentType<NumberInputProps>;
+	inner: 'input' | 'textarea' | 'select' | typeof NumberInput;
 }
 
 class FieldWrapper extends React.Component<FieldWrapperProps> {
-	private element: FieldElement | null = null;
+	private ref: React.RefObject<FieldElement> = React.createRef();
 
 	public constructor(props: FieldWrapperProps, context: any) {
 		super(props, context);
@@ -75,18 +75,16 @@ class FieldWrapper extends React.Component<FieldWrapperProps> {
 
 	public render() {
 		const { inner, ...props } = this.props;
-		const ref: React.Ref<FieldElement> = el => { this.element = el; };
 
 		return <Field {...props} subscription={{ value: true }} validate={this.validate} render={({ input, meta, ...rest }) =>
-			typeof inner === 'string'
-				? React.createElement(inner, { ...input, ...rest, ref })
-				: React.createElement(inner, { ...input, ...rest, refDOM: ref })
+			React.createElement(inner, { ...input, ...rest, ref: this.ref } as any)
 		} />
 	}
 
 	private validate(): any {
 		const { validate } = this.props;
+		const element = this.ref.current;
 
-		return (this.element && this.element.validationMessage) || (validate && validate.apply(this, arguments));
+		return (element && element.validationMessage) || (validate && validate.apply(this, arguments));
 	}
 }
