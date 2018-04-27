@@ -6,6 +6,7 @@ import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { Reference, Character, CharacterParams, AttributeParams, SkillParams, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
+import { throttle } from "models/utility";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
@@ -25,29 +26,6 @@ interface FormValues {
 	chain: EvaluationChain;
 	attributes: AttributeParams;
 	skills: SkillInputValue[];
-}
-
-function throttle<T extends (...args: any[]) => void>(interval: number, fn: T): T {
-	let id = undefined as number | undefined;
-	let last = -Infinity;
-
-	function wrapper(this: any, ...args: any[]): void {
-		const elapsed = performance.now() - last;
-		const exec = () => {
-			id = undefined;
-			last = performance.now();
-			fn.apply(this, args);
-		}
-
-		window.clearTimeout(id);
-		if (elapsed > interval) {
-			exec();
-		} else {
-			id = window.setTimeout(exec, interval - elapsed);
-		}
-	}
-
-	return wrapper as T;
 }
 
 function EvaluationResult(props: { id: string, base?: boolean }) {

@@ -37,3 +37,26 @@ export function getFNV1a(data: string): number {
 	}
 	return (hash >>> 0);
 }
+
+export function throttle<T extends (...args: any[]) => void>(interval: number, fn: T): T {
+	let id = undefined as number | undefined;
+	let last = -Infinity;
+
+	function wrapper(this: any, ...args: any[]): void {
+		const elapsed = performance.now() - last;
+		const exec = () => {
+			id = undefined;
+			last = performance.now();
+			fn.apply(this, args);
+		}
+
+		clearTimeout(id);
+		if (elapsed > interval) {
+			exec();
+		} else {
+			id = setTimeout(exec, interval - elapsed) as any;
+		}
+	}
+
+	return wrapper as T;
+}
