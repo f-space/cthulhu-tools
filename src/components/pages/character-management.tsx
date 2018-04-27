@@ -6,9 +6,9 @@ import { Form, FormSpy } from 'react-final-form';
 import { CharacterView, Character, DataProvider, ExternalCache, DataCollector, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
-import { LoadState } from "redux/states/status";
-import { getLoadState, getDataProvider } from "redux/selectors/status";
+import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
+import { loadState } from "components/functions/status-loader";
 import VisibilityToggle from "components/organisms/visibility-toggle";
 import Page from "components/templates/page";
 import SelectableList from "components/molecules/selectable-list";
@@ -16,7 +16,6 @@ import CommandList from "components/molecules/command-list";
 import style from "styles/pages/character-management.scss";
 
 export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
-	loadState: LoadState;
 	provider: DataProvider;
 	views: { [uuid: string]: CharacterView };
 	statusList: Status[];
@@ -31,7 +30,6 @@ interface FormValues {
 }
 
 const mapStateToProps = (state: State) => {
-	const loadState = getLoadState(state);
 	const provider = getDataProvider(state);
 	const collector = new DataCollector(provider);
 	const views = state.status.view.views.toObject();
@@ -41,7 +39,7 @@ const mapStateToProps = (state: State) => {
 		.map(result => new Status(result.value!))
 		.map(status => new Status(status.context, new ExternalCache(CacheStorage, status.hash)))
 		.sort((x, y) => String.prototype.localeCompare.call(x.get("name"), y.get("name")))
-	return { loadState, provider, views, statusList };
+	return { provider, views, statusList };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -56,15 +54,7 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	public componentWillMount(): void {
-		if (this.props.loadState === 'unloaded') {
-			this.props.dispatcher.load();
-		}
-	}
-
 	public render() {
-		if (this.props.loadState !== 'loaded') return null;
-
 		const initialValues = { selection: [] };
 
 		return <Page id="character-management" heading={<h2>キャラクター管理</h2>} navs={
@@ -180,4 +170,4 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CharacterManagementPage);
+export default loadState(connect(mapStateToProps, mapDispatchToProps)(CharacterManagementPage));

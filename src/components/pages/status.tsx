@@ -5,6 +5,7 @@ import { DataProvider, DataCollector, ExternalCache, Status } from "models/statu
 import CacheStorage from "models/idb-cache";
 import { State } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
+import { loadState } from "components/functions/status-loader";
 import Page from "components/templates/page";
 import style from "styles/pages/status.scss";
 
@@ -105,4 +106,4 @@ export class StatusPage extends React.Component<StatusPageProps> {
 	}
 }
 
-export default connect(mapStateToProps)(StatusPage);
+export default loadState(connect(mapStateToProps)(StatusPage));

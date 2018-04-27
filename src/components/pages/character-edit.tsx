@@ -7,9 +7,9 @@ import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { Reference, Character, CharacterParams, AttributeParams, SkillParams, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
 import { State, Dispatch } from "redux/store";
-import { LoadState } from "redux/states/status";
-import { getLoadState, getDataProvider } from "redux/selectors/status";
+import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
+import { loadState } from "components/functions/status-loader";
 import { Button, SubmitButton } from "components/atoms/button";
 import AttributeInput from "components/molecules/attribute-input";
 import SkillInput, { SkillInputValue } from "components/molecules/skill-input";
@@ -17,7 +17,6 @@ import Page from "components/templates/page";
 import style from "styles/pages/character-edit.scss";
 
 export interface CharacterEditPageProps extends RouteComponentProps<{ uuid?: string }> {
-	loadState: LoadState;
 	provider: DataProvider;
 	dispatcher: StatusDispatcher;
 }
@@ -62,9 +61,8 @@ function EvaluationResult(props: { id: string, base?: boolean }) {
 }
 
 const mapStateToProps = (state: State) => {
-	const loadState = getLoadState(state);
 	const provider = getDataProvider(state);
-	return { loadState, provider };
+	return { provider };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -82,15 +80,7 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 
 	public get uuid(): string | undefined { return this.props.match.params.uuid; }
 
-	public componentWillMount(): void {
-		if (this.props.loadState === 'unloaded') {
-			this.props.dispatcher.load();
-		}
-	}
-
 	public render() {
-		if (this.props.loadState !== 'loaded') return null;
-
 		const { provider } = this.props;
 		const profile = provider.profile.default;
 		const attributes = profile && provider.attribute.get(profile.attributes);
@@ -273,4 +263,4 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	}
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CharacterEditPage));
+export default loadState(withRouter(connect(mapStateToProps, mapDispatchToProps)(CharacterEditPage)));
