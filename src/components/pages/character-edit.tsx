@@ -71,9 +71,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 }
 
 export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
+	private decorators: Decorator[];
+
 	public constructor(props: CharacterEditPageProps, context: any) {
 		super(props, context);
 
+		this.decorators = [this.createEvaluationDecorator()];
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
@@ -86,12 +89,11 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 		const attributes = profile && provider.attribute.get(profile.attributes);
 		const skills = profile && provider.skill.get(profile.skills);
 		const initialValues = this.makeInitialValues();
-		const decorators = [this.createEvaluationDecorator()];
 		const evaluate = (id: string, base?: boolean) => <EvaluationResult id={id} base={base} />
 
 		return <Page id="character-edit" heading={<h2>キャラクター編集</h2>}>
 			<Form initialValues={initialValues}
-				decorators={decorators}
+				decorators={this.decorators}
 				mutators={{ ...arrayMutators }}
 				onSubmit={this.handleSubmit}
 				render={({ handleSubmit }) =>
