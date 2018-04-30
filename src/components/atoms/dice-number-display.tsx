@@ -12,22 +12,30 @@ export interface DiceNumberDisplayProps extends React.HtmlHTMLAttributes<HTMLDiv
 	fumble?: boolean;
 }
 
-export default class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps> {
+export interface DiceNumberDisplayState {
+	textAspectRatio?: number;
+}
+
+export default class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, DiceNumberDisplayState> {
 	public static defaultProps = {
 		scale: 0.5,
 	};
 
 	private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
-	private textAspectRatio?: number;
+
+	public constructor(props: DiceNumberDisplayProps) {
+		super(props);
+
+		this.state = {};
+	}
 
 	public componentDidMount(): void {
 		this.updateTextAspectRatio(this.props);
-		this.forceUpdate();
 	}
 
-	public componentWillUpdate(nextProps: DiceNumberDisplayProps): void {
-		if (this.props.digits !== nextProps.digits) {
-			this.updateTextAspectRatio(nextProps);
+	public componentDidUpdate(prevProps: DiceNumberDisplayProps): void {
+		if (this.props.digits !== prevProps.digits) {
+			this.updateTextAspectRatio(this.props);
 		}
 	}
 
@@ -42,14 +50,16 @@ export default class DiceNumberDisplay extends React.Component<DiceNumberDisplay
 	}
 
 	private getFontSize(): number {
-		const ratio = this.textAspectRatio || Infinity;
+		const ratio = this.state.textAspectRatio || Infinity;
 		const maxHeight = this.props.height * (this.props.scale as number);
 		const preferredHeight = this.props.width / ratio;
 		return Math.min(maxHeight, preferredHeight);
 	}
 
 	private updateTextAspectRatio({ digits }: DiceNumberDisplayProps): void {
-		this.textAspectRatio = this.measureAspectRatio("0".repeat(digits));
+		const textAspectRatio = this.measureAspectRatio("0".repeat(digits));
+
+		this.setState({ textAspectRatio });
 	}
 
 	private measureAspectRatio(text: string): number | undefined {

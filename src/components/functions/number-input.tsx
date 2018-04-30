@@ -7,6 +7,7 @@ export interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputEle
 }
 
 export interface NumberInputState {
+	props: NumberInputProps;
 	value?: string;
 }
 
@@ -24,16 +25,17 @@ class NumberInputInternal extends React.Component<NumberInputInternalProps, Numb
 	public constructor(props: NumberInputInternalProps) {
 		super(props);
 
-		this.state = { value: this.format(props.value) };
+		this.state = { props, value: format(props.value) };
 		this.handleChange = this.handleChange.bind(this);
 	}
 
-	public componentWillReceiveProps(nextProps: NumberInputInternalProps): void {
-		if (!this.eq(this.props.value, nextProps.value)) {
-			if (!this.eq(nextProps.value, this.parse(this.state.value))) {
-				this.setState({ value: this.format(nextProps.value) });
+	static getDerivedStateFromProps(nextProps: NumberInputInternalProps, prevState: NumberInputState): Partial<NumberInputState> | null {
+		if (!eq(prevState.props.value, nextProps.value)) {
+			if (!eq(nextProps.value, parse(prevState.value))) {
+				return { props: nextProps, value: format(nextProps.value) };
 			}
 		}
+		return { props: nextProps };
 	}
 
 	public render() {
@@ -48,19 +50,19 @@ class NumberInputInternal extends React.Component<NumberInputInternalProps, Numb
 		const { name, value } = event.currentTarget;
 
 		this.setState({ value }, () => {
-			this.props.onChange!(value ? Number(value) : NaN);
+			this.props.onChange!(parse(value)!);
 		});
 	}
+}
 
-	private eq(x: number | undefined, y: number | undefined): boolean {
-		return (x === y || (Number.isNaN(x as number) && Number.isNaN(y as number)));
-	}
+function eq(x: number | undefined, y: number | undefined): boolean {
+	return (x === y || (Number.isNaN(x as number) && Number.isNaN(y as number)));
+}
 
-	private parse(x: string | undefined): number | undefined {
-		return x !== undefined ? (x !== "" ? Number(x) : NaN) : undefined;
-	}
+function parse(x: string | undefined): number | undefined {
+	return x !== undefined ? (x !== "" ? Number(x) : NaN) : undefined;
+}
 
-	private format(x: number | undefined): string | undefined {
-		return x !== undefined ? (!Number.isNaN(x) ? String(x) : "") : undefined;
-	}
+function format(x: number | undefined): string | undefined {
+	return x !== undefined ? (!Number.isNaN(x) ? String(x) : "") : undefined;
 }

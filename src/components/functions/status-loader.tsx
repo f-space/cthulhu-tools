@@ -11,7 +11,7 @@ export interface StatusLoaderProps {
 }
 
 export class StatusLoader extends React.Component<StatusLoaderProps> {
-	public componentWillMount(): void {
+	public componentDidMount(): void {
 		const { state, dispatcher } = this.props;
 
 		if (state === 'unloaded') {

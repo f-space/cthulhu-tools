@@ -16,15 +16,13 @@ export default class DiceGroup extends React.Component<DiceGroupProps> {
 		this.elements = [...Array(props.dices.length)].map(() => React.createRef());
 	}
 
-	public componentWillMount(): void {
-		DiceImageManager.load();
-	}
-
 	public componentDidMount(): void {
+		DiceImageManager.load();
+
 		this.updateDiceImages(this.props.dices);
 	}
 
-	public componentWillReceiveProps(nextProps: DiceGroupProps): void {
+	public UNSAFE_componentWillReceiveProps(nextProps: DiceGroupProps): void {
 		if (this.props.dices.length === nextProps.dices.length) {
 			this.updateDiceImages(nextProps.dices);
 		}
@@ -34,7 +32,7 @@ export default class DiceGroup extends React.Component<DiceGroupProps> {
 		return (this.props.dices.length !== nextProps.dices.length);
 	}
 
-	public componentWillUpdate(nextProps: DiceGroupProps): void {
+	public UNSAFE_componentWillUpdate(nextProps: DiceGroupProps): void {
 		this.elements = [...Array(nextProps.dices.length)].map(() => React.createRef());
 	}
 

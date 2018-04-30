@@ -37,7 +37,7 @@ export default class DicePage extends React.Component<{}, DicePageState> {
 		this.handleClose = this.handleClose.bind(this);
 	}
 
-	public componentWillUpdate(nextProps: {}, nextState: DicePageState): void {
+	public UNSAFE_componentWillUpdate(nextProps: {}, nextState: DicePageState): void {
 		if (this.checkDiceChanged(nextState)) {
 			this.dices = this.getDices(nextState);
 			this.roller.stop();

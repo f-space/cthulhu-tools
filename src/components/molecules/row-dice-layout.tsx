@@ -24,7 +24,7 @@ export default class RowDiceLayout extends React.Component<RowDiceLayoutProps> {
 		this.precompute(props);
 	}
 
-	public componentWillUpdate(nextProps: RowDiceLayoutProps) {
+	public UNSAFE_componentWillUpdate(nextProps: RowDiceLayoutProps) {
 		if (this.isInvalid(nextProps)) {
 			this.precompute(nextProps);
 		}
