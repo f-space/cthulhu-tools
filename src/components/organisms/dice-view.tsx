@@ -1,11 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
+import memoize from 'memoize-one';
 import { Dice, DiceDisplay } from "models/dice";
+import { DiceLayout as Layout } from "models/layout/layout";
+import HorizontalLayout from "models/layout/horizontal-layout";
+import CircleLayout from "models/layout/circle-layout";
+import RowLayout from "models/layout/row-layout";
 import FlexibleContainer from "components/functions/flexible-container";
-import DiceImage from "components/atoms/dice-image";
 import DiceNumberDisplay from "components/atoms/dice-number-display";
-import DiceGroup from "components/molecules/dice-group";
-import DiceLayout, { DiceLayoutType } from "components/molecules/dice-layout";
+import DiceLayout from "components/molecules/dice-layout";
 import style from "styles/organisms/dice-view.scss";
 
 export interface DiceViewProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -14,6 +17,12 @@ export interface DiceViewProps extends React.HtmlHTMLAttributes<HTMLDivElement> 
 }
 
 export default class DiceView extends React.Component<DiceViewProps> {
+	public constructor(props: DiceViewProps) {
+		super(props);
+
+		this.selectLayout = memoize(this.selectLayout);
+	}
+
 	public render() {
 		const { dices, faces, className, ...rest } = this.props;
 
@@ -26,9 +35,7 @@ export default class DiceView extends React.Component<DiceViewProps> {
 				const state = this.getState(dices, value);
 
 				return <React.Fragment>
-					<DiceLayout {...size} className={style['layout']} type={layout} dices={display} render={group =>
-						<DiceGroup dices={group} />
-					} />
+					<DiceLayout {...size} className={style['layout']} layout={layout} dices={display} />
 					<DiceNumberDisplay {...size} {...state} className={style['number']} digits={digits} value={value} />
 				</React.Fragment>
 			}
@@ -37,16 +44,18 @@ export default class DiceView extends React.Component<DiceViewProps> {
 		}} />
 	}
 
-	private selectLayout(dices: ReadonlyArray<Dice>): DiceLayoutType {
-		const count = dices.length;
+	private selectLayout(dices: ReadonlyArray<Dice>): Layout {
 		const uniform = !dices.some(dice => dice.type !== dices[0].type);
-		if (count <= 3 || !uniform) return 'flow';
-
-		const sample = dices[0];
-		const length = sample.display(sample.default).length;
-		if (count <= 10 && length === 1) return 'circle';
-
-		return 'row';
+		if (uniform) {
+			const sample = dices[0];
+			const length = sample.display(sample.default).length;
+			if (length === 1) {
+				const count = dices.length;
+				if (count <= 3) return new HorizontalLayout();
+				if (count <= 10) return new CircleLayout();
+			}
+		}
+		return new RowLayout();
 	}
 
 	private getValue(dices: ReadonlyArray<Dice>, faces: ReadonlyArray<number>): number {
