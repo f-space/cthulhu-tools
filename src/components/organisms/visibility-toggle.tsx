@@ -21,15 +21,15 @@ function mapDispatchToProps(dispatch: Dispatch) {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = ReturnType<typeof mapDispatchToProps>;
-function mergeProps({ view }: StateProps, { dispatcher }: DispatchProps, props: VisibilityToggleProps) {
-	const { uuid } = props;
+function mergeProps({ view }: StateProps, { dispatcher }: DispatchProps, props: VisibilityToggleProps): ToggleProps {
+	const { uuid, ...rest } = props;
 	const checked = Boolean(view && view.visible);
 	const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { checked: visible } = event.currentTarget;
 		if (view) dispatcher.update(new CharacterView({ ...view.toJSON(), visible }));
 	};
 
-	return { ...props, checked, onChange };
+	return { ...rest, checked, onChange };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Toggle);
