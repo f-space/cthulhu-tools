@@ -12,7 +12,7 @@ export interface AttributeDiceInputProps {
 export default function AttributeDiceInput(props: AttributeDiceInputProps) {
 	const { method, name } = props;
 
-	return <Field name={name} render={({ input: { value, onChange } }) => {
+	return <Field name={name} subscription={{ value: true }} render={({ input: { value, onChange } }) => {
 		const faces = method.validate(value) ? value : method.default;
 		const dices = method.dices.map((dice, index) => dice.display(faces[index]));
 

@@ -4,16 +4,16 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import { FormApi, Decorator, getIn } from 'final-form';
 import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
-import { FieldArray } from 'react-final-form-arrays';
-import { Reference, Character, CharacterParams, AttributeParams, SkillParams, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
+import { Character, CharacterParams, AttributeParams, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
 import { throttle } from "models/utility";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
 import { loadState } from "components/functions/status-loader";
+import { EvaluationProvider } from "components/functions/evaluation";
 import { Button, SubmitButton } from "components/atoms/button";
-import AttributeInput from "components/molecules/attribute-input";
-import SkillInput, { SkillInputValue } from "components/molecules/skill-input";
+import AttributeParamsEdit from "components/organisms/attribute-params-edit";
+import SkillParamsEdit, { SkillParamsEditValue } from "components/organisms/skill-params-edit";
 import Page from "components/templates/page";
 import style from "styles/pages/character-edit.scss";
 
@@ -25,17 +25,7 @@ export interface CharacterEditPageProps extends RouteComponentProps<{ uuid?: str
 interface FormValues {
 	chain: EvaluationChain;
 	attributes: AttributeParams;
-	skills: SkillInputValue[];
-}
-
-function EvaluationResult(props: { id: string, base?: boolean }) {
-	return <Field name="chain" subscription={{ value: true }} render={({ input: { value } }) => {
-		const { id, base } = props;
-		const chain = value as EvaluationChain;
-		const result = chain.evaluate(new Reference(id, base ? 'base' : null), null);
-
-		return result !== undefined ? result : "-";
-	}} />
+	skills: SkillParamsEditValue;
 }
 
 const mapStateToProps = (state: State) => {
@@ -64,76 +54,43 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	public render() {
 		const { provider } = this.props;
 		const profile = provider.profile.default;
-		const attributes = profile && provider.attribute.get(profile.attributes);
-		const skills = profile && provider.skill.get(profile.skills);
+		const attributes = profile ? provider.attribute.get(profile.attributes) : [];
+		const skills = profile ? provider.skill.get(profile.skills) : [];
 		const initialValues = this.makeInitialValues();
-		const evaluate = (id: string, base?: boolean) => <EvaluationResult id={id} base={base} />
 
 		return <Page id="character-edit" heading={<h2>キャラクター編集</h2>}>
 			<Form initialValues={initialValues}
 				decorators={this.decorators}
 				mutators={{ ...arrayMutators }}
+				subscription={{}}
 				onSubmit={this.handleSubmit}
 				render={({ handleSubmit }) =>
 					<form className={style['entry']} onSubmit={handleSubmit}>
-						<section className={style['attributes']}>
-							<header><h3>能力値</h3></header>
-							{
-								attributes && attributes.map(attribute =>
-									<AttributeInput
-										key={attribute.uuid}
-										name={`attributes.${attribute.id}`}
-										attribute={attribute}
-										evaluate={evaluate} />
-								)
-							}
-						</section>
-						<section className={style['skills']}>
-							<header><h3>技能</h3></header>
-							<Field name="skills" subscription={{ value: true }} render={({ input: { value } }) => {
-								const skills = value as SkillInputValue[];
-								const consumed = skills.reduce((sum, skill) => sum + skill.points, 0);
-
-								return <div className={style['point-stats']}>
-									<span className={style['consumed']}>{consumed}</span>
-									/
-									<Field name="chain" subscription={{ value: true }} render={({ input: { value } }) => {
-										const chain = value as EvaluationChain;
-										const oskp = chain.evaluate(new Reference('oskp'), null);
-										const hskp = chain.evaluate(new Reference('hskp'), null);
-										const available = oskp + hskp;
-
-										return <span className={style['available']}>{String(available)}</span>
-									}} />
-								</div>
-							}} />
-							<FieldArray name="skills" render={({ fields }) =>
-								<React.Fragment>
+						<Field name="chain" subscription={{ value: true }} render={({ input: { value } }) =>
+							<EvaluationProvider value={value}>
+								<section className={style['attributes']}>
+									<header><h3>能力値</h3></header>
+									<AttributeParamsEdit name="attributes" attributes={attributes} />
+								</section>
+								<section className={style['skills']}>
+									<header><h3>技能</h3></header>
+									<SkillParamsEdit name="skills" skills={skills} />
+								</section>
+								<section className={style['items']}>
+									<header><h3>所持品</h3></header>
 									<div className={style['commands']}>
-										<Button onClick={() => fields.push({ id: "", points: 0 })}>追加</Button>
-										<Button onClick={() => fields.pop()}>削除</Button>
+										<Button>追加</Button>
+										<Button>削除</Button>
 									</div>
-									{
-										fields.map((name, index) =>
-											<SkillInput key={name} name={name} skills={skills || []} evaluate={evaluate} />
-										)
-									}
-								</React.Fragment>
-							} />
-						</section>
-						<section className={style['items']}>
-							<header><h3>所持品</h3></header>
-							<div className={style['commands']}>
-								<Button>追加</Button>
-								<Button>削除</Button>
-							</div>
-						</section>
-						<div className={style['actions']}>
-							<FormSpy subscription={{ valid: true, submitting: true }} render={({ valid, submitting }) =>
-								<SubmitButton className={style['ok']} disabled={!valid || submitting} commit>OK</SubmitButton>
-							} />
-							<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
-						</div>
+								</section>
+								<div className={style['actions']}>
+									<FormSpy subscription={{ valid: true, submitting: true }} render={({ valid, submitting }) =>
+										<SubmitButton className={style['ok']} disabled={!valid || submitting} commit>OK</SubmitButton>
+									} />
+									<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
+								</div>
+							</EvaluationProvider>
+						} />
 					</form>
 				} />
 		</Page>

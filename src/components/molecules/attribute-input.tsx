@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Attribute, InputMethod } from "models/status";
 import { Expression, Format } from "models/expression";
+import EvaluationText from "components/atoms/evaluation-text";
 import DiceInput from "components/molecules/attribute-dice-input";
 import NumberInput from "components/molecules/attribute-number-input";
 import TextInput from "components/molecules/attribute-text-input";
@@ -10,12 +11,11 @@ import style from "styles/molecules/attribute-input.scss";
 export interface AttributeInputProps extends React.HTMLAttributes<HTMLElement> {
 	name: string;
 	attribute: Attribute;
-	evaluate(id: string): React.ReactNode;
 }
 
-export default class AttributeInput extends React.Component<AttributeInputProps> {
+export default class AttributeInput extends React.PureComponent<AttributeInputProps> {
 	public render() {
-		const { name, attribute, evaluate, className, ...rest } = this.props;
+		const { name, attribute, className, ...rest } = this.props;
 		const segments = this.segment(attribute);
 
 		return <div {...rest} className={classNames(className, style['attribute'])}>
@@ -23,7 +23,9 @@ export default class AttributeInput extends React.Component<AttributeInputProps>
 			<div className={style['input']}>
 				{segments.map(segment => typeof segment === 'string' ? segment : this.renderInput(segment))}
 			</div>
-			<div className={style['value']}>{evaluate(attribute.id)}</div>
+			<div className={style['value']}>
+				<EvaluationText id={attribute.id} hash={null} />
+			</div>
 		</div>
 	}
 

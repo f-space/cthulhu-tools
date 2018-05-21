@@ -2,9 +2,9 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import classNames from 'classnames';
 import { Skill } from 'models/status';
-import { deepClone } from 'models/utility';
 import { NumberInput } from "components/atoms/input";
 import { Select } from "components/atoms/select";
+import EvaluationText from "components/atoms/evaluation-text";
 import style from "styles/molecules/skill-input.scss";
 
 export interface SkillInputValue {
@@ -15,11 +15,10 @@ export interface SkillInputValue {
 export interface SkillInputProps extends React.HTMLAttributes<HTMLElement> {
 	name: string;
 	skills: ReadonlyArray<Skill>;
-	evaluate(id: string, base?: boolean): React.ReactNode;
 }
 
 export default function SkillInput(props: SkillInputProps) {
-	const { name, skills, evaluate, className, ...rest } = props;
+	const { name, skills, className, ...rest } = props;
 
 	return <div {...rest} className={classNames(className, style['skill'])}>
 		<Select className={style['id']} field={`${name}.id`} required >
@@ -28,9 +27,13 @@ export default function SkillInput(props: SkillInputProps) {
 		</Select>
 		<Field name={`${name}.id`} subscription={{ value: true }} render={({ input: { value: id } }) =>
 			<React.Fragment>
-				<div className={style['base']}>{evaluate(id, true)}</div>
+				<div className={style['base']}>
+					<EvaluationText id={id} modifier="base" hash={null} />
+				</div>
 				<NumberInput className={style['points']} field={`${name}.points`} required min={0} max={99} step={1} />
-				<div className={style['value']}>{evaluate(id)}</div>
+				<div className={style['value']}>
+					<EvaluationText id={id} hash={null} />
+				</div>
 			</React.Fragment>
 		} />
 	</div>
