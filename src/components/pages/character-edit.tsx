@@ -9,15 +9,15 @@ import { throttle } from "models/utility";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
-import { loadState } from "components/functions/status-loader";
+import { loadStatus } from "components/functions/status-loader";
 import { EvaluationProvider } from "components/functions/evaluation";
 import { Button, SubmitButton } from "components/atoms/button";
-import AttributeParamsEdit from "components/organisms/attribute-params-edit";
-import SkillParamsEdit, { SkillParamsEditValue } from "components/organisms/skill-params-edit";
-import Page from "components/templates/page";
+import { AttributeParamsEdit } from "components/organisms/attribute-params-edit";
+import { SkillParamsEdit, SkillParamsEditValue } from "components/organisms/skill-params-edit";
+import { Page } from "components/templates/page";
 import style from "styles/pages/character-edit.scss";
 
-export interface CharacterEditPageProps extends RouteComponentProps<{ uuid?: string }> {
+interface CharacterEditPageInternalProps extends RouteComponentProps<{ uuid?: string }> {
 	provider: DataProvider;
 	dispatcher: StatusDispatcher;
 }
@@ -38,10 +38,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 	return { dispatcher };
 }
 
-export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
+class CharacterEditPageInternal extends React.Component<CharacterEditPageInternalProps> {
 	private decorators: Decorator[];
 
-	public constructor(props: CharacterEditPageProps) {
+	public constructor(props: CharacterEditPageInternalProps) {
 		super(props);
 
 		this.decorators = [this.createEvaluationDecorator()];
@@ -200,4 +200,4 @@ export class CharacterEditPage extends React.Component<CharacterEditPageProps> {
 	}
 }
 
-export default loadState(withRouter(connect(mapStateToProps, mapDispatchToProps)(CharacterEditPage)));
+export const CharacterEditPage = loadStatus(withRouter(connect(mapStateToProps, mapDispatchToProps)(CharacterEditPageInternal)));

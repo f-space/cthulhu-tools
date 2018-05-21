@@ -5,11 +5,11 @@ import { DataProvider, DataCollector, ExternalCache, Status } from "models/statu
 import CacheStorage from "models/idb-cache";
 import { State } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
-import { loadState } from "components/functions/status-loader";
-import Page from "components/templates/page";
+import { loadStatus } from "components/functions/status-loader";
+import { Page } from "components/templates/page";
 import style from "styles/pages/status.scss";
 
-export interface StatusPageProps {
+interface StatusPageInternalProps {
 	provider: DataProvider;
 	statusList: Status[];
 }
@@ -29,7 +29,7 @@ const mapStateToProps = (state: State) => {
 	return { provider, statusList };
 };
 
-export class StatusPage extends React.Component<StatusPageProps> {
+class StatusPageInternal extends React.Component<StatusPageInternalProps> {
 	public render() {
 		const { statusList } = this.props;
 
@@ -106,4 +106,4 @@ export class StatusPage extends React.Component<StatusPageProps> {
 	}
 }
 
-export default loadState(connect(mapStateToProps)(StatusPage));
+export const StatusPage = loadStatus(connect(mapStateToProps)(StatusPageInternal));

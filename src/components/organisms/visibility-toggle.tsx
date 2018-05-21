@@ -7,7 +7,7 @@ import { Toggle, ToggleProps } from "components/atoms/input";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-interface VisibilityToggleProps extends Omit<ToggleProps, 'checked' | 'onChange'> {
+export interface VisibilityToggleProps extends Omit<ToggleProps, 'checked' | 'onChange'> {
 	uuid: string;
 }
 
@@ -32,4 +32,4 @@ function mergeProps({ view }: StateProps, { dispatcher }: DispatchProps, props: 
 	return { ...rest, checked, onChange };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Toggle);
+export const VisibilityToggle = connect(mapStateToProps, mapDispatchToProps, mergeProps)(Toggle);

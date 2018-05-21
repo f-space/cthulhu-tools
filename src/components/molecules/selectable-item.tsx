@@ -7,7 +7,7 @@ export interface SelectableItemProps extends React.HTMLAttributes<HTMLElement> {
 	checkbox: CheckboxProps;
 }
 
-export default function SelectableItem(props: SelectableItemProps) {
+export function SelectableItem(props: SelectableItemProps) {
 	const { checkbox, className, children, ...rest } = props;
 
 	return <div {...rest} className={classNames(className, style['container'])}>

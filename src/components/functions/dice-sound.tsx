@@ -1,7 +1,7 @@
 import React from 'react';
 import { DiceSoundManager } from "models/resource";
 
-export default class DiceSound extends React.Component {
+export class DiceSound extends React.Component {
 	private element?: HTMLAudioElement;
 
 	public constructor(props: {}) {

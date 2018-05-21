@@ -4,12 +4,12 @@ export interface FlexibleContainerProps extends React.HtmlHTMLAttributes<HTMLDiv
 	render(size: { width: number, height: number }): ReactNode;
 }
 
-export interface FlexibleContainerState {
+interface FlexibleContainerState {
 	width: number;
 	height: number;
 }
 
-export default class FlexibleContainer extends React.Component<FlexibleContainerProps, FlexibleContainerState> {
+export class FlexibleContainer extends React.Component<FlexibleContainerProps, FlexibleContainerState> {
 	private ref: React.RefObject<HTMLDivElement> = React.createRef();
 
 	public constructor(props: FlexibleContainerProps) {

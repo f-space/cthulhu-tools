@@ -8,14 +8,14 @@ import CacheStorage from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
-import { loadState } from "components/functions/status-loader";
-import VisibilityToggle from "components/organisms/visibility-toggle";
-import Page from "components/templates/page";
-import SelectableList from "components/molecules/selectable-list";
-import CommandList from "components/molecules/command-list";
+import { loadStatus } from "components/functions/status-loader";
+import { SelectableList } from "components/molecules/selectable-list";
+import { CommandList } from "components/molecules/command-list";
+import { VisibilityToggle } from "components/organisms/visibility-toggle";
+import { Page } from "components/templates/page";
 import style from "styles/pages/character-management.scss";
 
-export interface CharacterManagementPageProps extends RouteComponentProps<{}> {
+interface CharacterManagementPageInternalProps extends RouteComponentProps<{}> {
 	provider: DataProvider;
 	views: { [uuid: string]: CharacterView };
 	statusList: Status[];
@@ -47,8 +47,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 	return { dispatcher };
 };
 
-export class CharacterManagementPage extends React.Component<CharacterManagementPageProps> {
-	public constructor(props: CharacterManagementPageProps) {
+class CharacterManagementPageInternal extends React.Component<CharacterManagementPageInternalProps> {
+	public constructor(props: CharacterManagementPageInternalProps) {
 		super(props);
 
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -170,4 +170,4 @@ export class CharacterManagementPage extends React.Component<CharacterManagement
 	}
 }
 
-export default loadState(connect(mapStateToProps, mapDispatchToProps)(CharacterManagementPage));
+export const CharacterManagementPage = loadStatus(connect(mapStateToProps, mapDispatchToProps)(CharacterManagementPageInternal));

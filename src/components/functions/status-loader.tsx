@@ -5,12 +5,12 @@ import { LoadState } from "redux/states/status";
 import { getLoadState } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
 
-export interface StatusLoaderProps {
+interface StatusLoaderInternalProps {
 	state: LoadState;
 	dispatcher: StatusDispatcher;
 }
 
-export class StatusLoader extends React.Component<StatusLoaderProps> {
+class StatusLoaderInternal extends React.Component<StatusLoaderInternalProps> {
 	public componentDidMount(): void {
 		const { state, dispatcher } = this.props;
 
@@ -34,14 +34,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 	return { dispatcher: new StatusDispatcher(dispatch) };
 }
 
-const ReduxStatusLoader = connect(mapStateToProps, mapDispatchToProps)(StatusLoader);
+export const StatusLoader = connect(mapStateToProps, mapDispatchToProps)(StatusLoaderInternal);
 
-export default ReduxStatusLoader;
-
-export function loadState<P>(Component: React.ComponentType<P>): React.ComponentType<P> {
+export function loadStatus<P>(Component: React.ComponentType<P>): React.ComponentType<P> {
 	return function (props: P) {
-		return <ReduxStatusLoader>
+		return <StatusLoader>
 			<Component {...props} />
-		</ReduxStatusLoader>
+		</StatusLoader>
 	}
 }

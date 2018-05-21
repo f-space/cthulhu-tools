@@ -10,7 +10,7 @@ type ContainerSetter = (value: Element | null) => void;
 const Container = React.createContext<Element | null>(null);
 const Setter = React.createContext<ContainerSetter>(() => { });
 
-class Provider extends React.Component<{}, DialogContext> {
+export class DialogProvider extends React.Component<{}, DialogContext> {
 	private setter: ContainerSetter;
 
 	public constructor(props: {}) {
@@ -27,16 +27,20 @@ class Provider extends React.Component<{}, DialogContext> {
 	}
 }
 
-function Slot(props: { children: (ref: (instance: Element | null) => void) => React.ReactNode }) {
+export function DialogSlot(props: { children: (ref: (instance: Element | null) => void) => React.ReactNode }) {
 	return <Setter.Consumer>
 		{value => props.children(value)}
 	</Setter.Consumer>
 }
 
-function Portal(props: { children: React.ReactNode }) {
+export function DialogPortal(props: { children: React.ReactNode }) {
 	return <Container.Consumer>
 		{value => value && ReactDOM.createPortal(props.children, value)}
 	</Container.Consumer>
 }
 
-export default { Provider, Slot, Portal };
+export default {
+	Provider: DialogProvider,
+	Slot: DialogSlot,
+	Portal: DialogPortal,
+};

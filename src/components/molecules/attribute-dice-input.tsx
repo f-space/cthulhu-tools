@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'react-final-form';
 import { DiceInputMethod } from "models/status";
-import DiceImage from "components/atoms/dice-image";
+import { DiceImage } from "components/atoms/dice-image";
 import style from "styles/molecules/attribute-dice-input.scss";
 
 export interface AttributeDiceInputProps {
@@ -9,7 +9,7 @@ export interface AttributeDiceInputProps {
 	method: DiceInputMethod;
 }
 
-export default function AttributeDiceInput(props: AttributeDiceInputProps) {
+export function AttributeDiceInput(props: AttributeDiceInputProps) {
 	const { method, name } = props;
 
 	return <Field name={name} subscription={{ value: true }} render={({ input: { value, onChange } }) => {

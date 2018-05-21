@@ -9,7 +9,7 @@ export interface AttributeTextInputProps extends NonField<TextInputProps> {
 	method: TextInputMethod;
 }
 
-export default function AttributeTextInput(props: AttributeTextInputProps) {
+export function AttributeTextInput(props: AttributeTextInputProps) {
 	const { name, method, ...rest } = props;
 
 	return <TextInput {...rest} field={name} />

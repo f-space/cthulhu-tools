@@ -10,7 +10,7 @@ export interface DiceLayoutProps extends React.CanvasHTMLAttributes<HTMLCanvasEl
 	dices: DiceDisplay[][];
 }
 
-export default class DiceLayout extends React.Component<DiceLayoutProps>{
+export class DiceLayout extends React.Component<DiceLayoutProps>{
 	private ref: React.RefObject<HTMLCanvasElement> = React.createRef();
 	private cache: Map<string, Promise<HTMLImageElement>> = new Map();
 

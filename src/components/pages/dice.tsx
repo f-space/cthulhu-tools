@@ -1,14 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Dice, DiceRoll, DiceRollManager } from "models/dice-roll";
-import DiceSound from "components/functions/dice-sound";
-import DiceView from "components/organisms/dice-view";
-import DiceTypeSelector from "components/organisms/dice-type-selector";
-import Page from "components/templates/page";
-import CustomDiceDialog, { CustomDiceDialogResult } from "components/dialogs/custom-dice";
+import { DiceSound } from "components/functions/dice-sound";
+import { DiceView } from "components/organisms/dice-view";
+import { DiceTypeSelector } from "components/organisms/dice-type-selector";
+import { Page } from "components/templates/page";
+import { CustomDiceDialog, CustomDiceDialogResult } from "components/dialogs/custom-dice";
 import style from "styles/pages/dice.scss";
 
-export interface DicePageState {
+interface DicePageState {
 	type?: string;
 	faces: ReadonlyArray<number>;
 	custom: { count: number, max: number };
@@ -17,7 +17,7 @@ export interface DicePageState {
 
 const PRESETS = ['custom', '1D10', '1D100', '1D6', '2D6', '3D6', '1D3', '2D3', '1D4'];
 
-export default class DicePage extends React.Component<{}, DicePageState> {
+export class DicePage extends React.Component<{}, DicePageState> {
 	private dices?: Dice[];
 	private readonly roller: DiceRollManager;
 	private soundRef: React.RefObject<DiceSound> = React.createRef();

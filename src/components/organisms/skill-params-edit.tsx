@@ -3,8 +3,8 @@ import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 import { Skill } from "models/status";
 import { Button } from "components/atoms/button";
-import EvaluationText from "components/atoms/evaluation-text";
-import SkillInput, { SkillInputValue } from "components/molecules/skill-input";
+import { EvaluationText } from "components/atoms/evaluation-text";
+import { SkillInput, SkillInputValue } from "components/molecules/skill-input";
 import style from "styles/organisms/skill-params-edit.scss";
 
 export interface SkillParamsEditValue extends Array<SkillInputValue> { }
@@ -14,7 +14,7 @@ export interface SkillParamsEditProps {
 	skills: ReadonlyArray<Skill>;
 }
 
-export default class SkillParamsEdit extends React.PureComponent<SkillParamsEditProps> {
+export class SkillParamsEdit extends React.PureComponent<SkillParamsEditProps> {
 	public render() {
 		const { name, skills } = this.props;
 

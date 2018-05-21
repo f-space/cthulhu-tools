@@ -12,11 +12,11 @@ export interface DiceNumberDisplayProps extends React.HtmlHTMLAttributes<HTMLDiv
 	fumble?: boolean;
 }
 
-export interface DiceNumberDisplayState {
+interface DiceNumberDisplayState {
 	textAspectRatio?: number;
 }
 
-export default class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, DiceNumberDisplayState> {
+export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, DiceNumberDisplayState> {
 	public static defaultProps = {
 		scale: 0.5,
 	};

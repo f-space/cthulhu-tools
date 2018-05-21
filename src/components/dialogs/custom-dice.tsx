@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import { NumberInput } from "components/atoms/input";
 import { Button, SubmitButton } from "components/atoms/button";
-import Dialog from "components/templates/dialog";
+import { Dialog } from "components/templates/dialog";
 import style from "styles/dialogs/custom-dice-dialog.scss";
 
 export interface CustomDiceDialogResult {
@@ -17,7 +17,7 @@ export interface CustomDiceDialogProps {
 	onClose(result?: CustomDiceDialogResult): void;
 }
 
-export default class CustomDiceDialog extends React.Component<CustomDiceDialogProps> {
+export class CustomDiceDialog extends React.Component<CustomDiceDialogProps> {
 	public constructor(props: CustomDiceDialogProps) {
 		super(props);
 

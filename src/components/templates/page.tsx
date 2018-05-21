@@ -7,7 +7,7 @@ export interface PageProps extends React.HTMLAttributes<HTMLElement> {
 	navs?: React.ReactNode;
 }
 
-export default function Page({ id, className, heading, navs, children, ...rest }: PageProps) {
+export function Page({ id, className, heading, navs, children, ...rest }: PageProps) {
 	return <div id={id} className={classNames(className, style['page'])}>
 		<header className={style['heading']}>
 			{heading}

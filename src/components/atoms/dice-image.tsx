@@ -9,7 +9,7 @@ export interface DiceImageProps extends React.ImgHTMLAttributes<HTMLImageElement
 	face: number;
 }
 
-export default class DiceImage extends React.Component<DiceImageProps> {
+export class DiceImage extends React.Component<DiceImageProps> {
 	private mounted: boolean = false;
 
 	public componentDidMount(): void {

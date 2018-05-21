@@ -6,9 +6,9 @@ import { DiceLayout as Layout } from "models/layout/layout";
 import HorizontalLayout from "models/layout/horizontal-layout";
 import CircleLayout from "models/layout/circle-layout";
 import RowLayout from "models/layout/row-layout";
-import FlexibleContainer from "components/functions/flexible-container";
-import DiceNumberDisplay from "components/atoms/dice-number-display";
-import DiceLayout from "components/molecules/dice-layout";
+import { FlexibleContainer } from "components/functions/flexible-container";
+import { DiceNumberDisplay } from "components/atoms/dice-number-display";
+import { DiceLayout } from "components/molecules/dice-layout";
 import style from "styles/organisms/dice-view.scss";
 
 export interface DiceViewProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -16,7 +16,7 @@ export interface DiceViewProps extends React.HtmlHTMLAttributes<HTMLDivElement> 
 	faces: ReadonlyArray<number>;
 }
 
-export default class DiceView extends React.Component<DiceViewProps> {
+export class DiceView extends React.Component<DiceViewProps> {
 	public constructor(props: DiceViewProps) {
 		super(props);
 

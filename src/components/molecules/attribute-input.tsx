@@ -2,10 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import { Attribute, InputMethod } from "models/status";
 import { Expression, Format } from "models/expression";
-import EvaluationText from "components/atoms/evaluation-text";
-import DiceInput from "components/molecules/attribute-dice-input";
-import NumberInput from "components/molecules/attribute-number-input";
-import TextInput from "components/molecules/attribute-text-input";
+import { EvaluationText } from "components/atoms/evaluation-text";
+import { AttributeDiceInput } from "components/molecules/attribute-dice-input";
+import { AttributeNumberInput } from "components/molecules/attribute-number-input";
+import { AttributeTextInput } from "components/molecules/attribute-text-input";
 import style from "styles/molecules/attribute-input.scss";
 
 export interface AttributeInputProps extends React.HTMLAttributes<HTMLElement> {
@@ -13,7 +13,7 @@ export interface AttributeInputProps extends React.HTMLAttributes<HTMLElement> {
 	attribute: Attribute;
 }
 
-export default class AttributeInput extends React.PureComponent<AttributeInputProps> {
+export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 	public render() {
 		const { name, attribute, className, ...rest } = this.props;
 		const segments = this.segment(attribute);
@@ -36,9 +36,9 @@ export default class AttributeInput extends React.PureComponent<AttributeInputPr
 		}
 
 		switch (method.type) {
-			case 'dice': return <DiceInput {...props} method={method} />
-			case 'number': return <NumberInput {...props} method={method} />
-			case 'text': return <TextInput {...props} method={method} />
+			case 'dice': return <AttributeDiceInput {...props} method={method} />
+			case 'number': return <AttributeNumberInput {...props} method={method} />
+			case 'text': return <AttributeTextInput {...props} method={method} />
 		}
 	}
 

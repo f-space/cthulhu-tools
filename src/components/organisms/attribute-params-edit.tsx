@@ -1,13 +1,13 @@
 import React from 'react';
 import { Attribute } from "models/status";
-import AttributeInput from "components/molecules/attribute-input";
+import { AttributeInput } from "components/molecules/attribute-input";
 
 export interface AttributeParamsEditProps {
 	name: string;
 	attributes: ReadonlyArray<Attribute>;
 }
 
-export default class AttributeParamsEdit extends React.PureComponent<AttributeParamsEditProps> {
+export class AttributeParamsEdit extends React.PureComponent<AttributeParamsEditProps> {
 	public render() {
 		const { name, attributes } = this.props;
 

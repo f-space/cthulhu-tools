@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import SelectableItem from "components/molecules/selectable-item";
+import { SelectableItem } from "components/molecules/selectable-item";
 import style from "styles/molecules/selectable-list.scss";
 
 export interface SelectableListProps<T> extends React.HTMLAttributes<HTMLElement> {
@@ -14,7 +14,7 @@ export interface SelectableListRenderResult {
 	content: React.ReactNode;
 }
 
-export default function SelectableList<T>(props: SelectableListProps<T>) {
+export function SelectableList<T>(props: SelectableListProps<T>) {
 	const { field, items, render, className, ...rest } = props;
 
 	return <div {...rest} className={classNames(className, style['list'])}>

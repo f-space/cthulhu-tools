@@ -5,15 +5,15 @@ import style from "styles/frame/navigation.scss";
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLElement> { }
 
-export interface NavigationLinkProps extends NavLinkProps {
+interface NavigationLinkProps extends NavLinkProps {
 	to: string;
 }
 
-export interface NavigationIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
+interface NavigationIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
 	path: string;
 }
 
-export default function Navigation(props: NavigationProps) {
+export function Navigation(props: NavigationProps) {
 	const { className, ...rest } = props;
 
 	return <nav {...rest} className={classNames(className, style['navigation'])}>

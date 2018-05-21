@@ -8,7 +8,7 @@ export interface DialogProps extends React.HTMLAttributes<HTMLElement> {
 	header: React.ReactNode;
 }
 
-export default function Dialog(props: DialogProps) {
+export function Dialog(props: DialogProps) {
 	const { when, header, className, children, ...rest } = props;
 
 	if (when) {

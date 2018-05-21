@@ -7,7 +7,7 @@ export interface CommandButtonProps extends ButtonProps {
 	value: string;
 }
 
-export default function CommandButton(props: CommandButtonProps) {
+export function CommandButton(props: CommandButtonProps) {
 	const { name, onClick, ...rest } = props;
 
 	return <Field name={name} subscription={{}} render={({ input }) =>

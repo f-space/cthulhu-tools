@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import CommandButton from "components/molecules/command-button";
+import { CommandButton } from "components/molecules/command-button";
 import style from "styles/molecules/command-list.scss";
 
 export interface CommandListProps extends React.HTMLAttributes<HTMLElement> {
@@ -14,7 +14,7 @@ export interface CommandListItem {
 	children: React.ReactNode;
 }
 
-export default function CommandList(props: CommandListProps) {
+export function CommandList(props: CommandListProps) {
 	const { name, commands, className, ...rest } = props;
 
 	return <div {...rest} className={classNames(className, style['commands'])}>

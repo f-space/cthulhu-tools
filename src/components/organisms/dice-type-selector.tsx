@@ -8,7 +8,7 @@ export interface DiceTypeSelectorProps extends React.HTMLAttributes<HTMLDivEleme
 	onTypeChange(type: string): void;
 }
 
-export default class DiceTypeSelector extends React.Component<DiceTypeSelectorProps> {
+export class DiceTypeSelector extends React.Component<DiceTypeSelectorProps> {
 	public constructor(props: DiceTypeSelectorProps) {
 		super(props);
 

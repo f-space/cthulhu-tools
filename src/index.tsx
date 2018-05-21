@@ -1,7 +1,7 @@
 import "index.scss";
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from "components/frame/app";
+import { App } from "components/frame/app";
 
 if (document.readyState !== 'loading') {
 	mount();

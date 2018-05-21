@@ -6,7 +6,7 @@ export interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputEle
 	onChange?(value: React.ChangeEvent<HTMLInputElement> | number): void;
 }
 
-export interface NumberInputState {
+interface NumberInputState {
 	props: NumberInputProps;
 	value?: string;
 }

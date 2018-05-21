@@ -5,7 +5,7 @@ import style from "styles/frame/header.scss";
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> { }
 
-export default function Header(props: HeaderProps) {
+export function Header(props: HeaderProps) {
 	const { className, ...rest } = props;
 	const HOME_PATH = "/";
 

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Skill } from 'models/status';
 import { NumberInput } from "components/atoms/input";
 import { Select } from "components/atoms/select";
-import EvaluationText from "components/atoms/evaluation-text";
+import { EvaluationText } from "components/atoms/evaluation-text";
 import style from "styles/molecules/skill-input.scss";
 
 export interface SkillInputValue {
@@ -17,7 +17,7 @@ export interface SkillInputProps extends React.HTMLAttributes<HTMLElement> {
 	skills: ReadonlyArray<Skill>;
 }
 
-export default function SkillInput(props: SkillInputProps) {
+export function SkillInput(props: SkillInputProps) {
 	const { name, skills, className, ...rest } = props;
 
 	return <div {...rest} className={classNames(className, style['skill'])}>

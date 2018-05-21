@@ -9,7 +9,7 @@ export interface AttributeNumberInputProps extends NonField<NumberInputProps> {
 	method: NumberInputMethod;
 }
 
-export default function AttributeNumberInput(props: AttributeNumberInputProps) {
+export function AttributeNumberInput(props: AttributeNumberInputProps) {
 	const { name, method, ...rest } = props;
 	const { min, max, step } = method;
 
