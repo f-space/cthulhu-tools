@@ -4,7 +4,6 @@ import { Profile } from "models/profile";
 import { Attribute } from "models/attribute";
 import { Skill } from "models/skill";
 import { History } from "models/history";
-import { DataProvider } from "models/provider";
 import { Cache } from "models/cache";
 import { CharacterContext } from "models/collector";
 import { EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/evaluation";
