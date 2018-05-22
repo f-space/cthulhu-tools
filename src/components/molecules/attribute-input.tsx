@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Attribute, InputMethod } from "models/status";
-import { Expression, Format } from "models/expression";
+import { Expression, Format, Attribute, InputMethod } from "models/status";
 import { EvaluationText } from "components/atoms/evaluation-text";
 import { AttributeDiceInput } from "components/molecules/attribute-dice-input";
 import { AttributeNumberInput } from "components/molecules/attribute-number-input";
