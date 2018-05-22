@@ -1,5 +1,5 @@
 import { Dice } from "models/dice";
-import * as validation from "models/validation";
+import * as validation from "./validation";
 
 type InputType = 'dice' | 'number' | 'text';
 

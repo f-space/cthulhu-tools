@@ -1,5 +1,5 @@
-import * as validation from "models/validation";
 import { getSHA256 } from "models/utility";
+import * as validation from "./validation";
 
 export interface CommandData {
 	readonly parent?: string | null;

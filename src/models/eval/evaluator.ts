@@ -1,9 +1,10 @@
-import { Reference, Expression, Format } from "models/expression";
-import { CharacterParams, AttributeParams, SkillParams } from "models/character";
-import { Attribute, IntegerAttribute, NumberAttribute, TextAttribute } from "models/attribute";
-import { Skill } from "models/skill";
-import { History } from "models/history";
-import { Property, AttributeProperty, SkillProperty } from "models/property";
+import {
+	Reference, Expression, Format,
+	CharacterParams, AttributeParams, SkillParams,
+	Attribute, IntegerAttribute, NumberAttribute, TextAttribute,
+	Skill, History
+} from "models/data";
+import { Property, AttributeProperty, SkillProperty } from "./property";
 
 export interface EvaluationContext {
 	readonly ref: Reference;

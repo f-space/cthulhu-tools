@@ -1,7 +1,5 @@
-import { CommandData, Command } from "models/command";
-import * as validation from "models/validation";
-
-export * from "models/command";
+import { CommandData, Command } from "./command";
+import * as validation from "./validation";
 
 type BranchTable = { [name: string]: string | null };
 type CommandDataMap = { [hash: string]: CommandData };

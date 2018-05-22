@@ -1,9 +1,9 @@
-import { Character } from "models/character";
-import { Profile } from "models/profile";
-import { Attribute } from "models/attribute";
-import { Skill } from "models/skill";
-import { Item } from "models/item";
-import { History } from "models/history";
+import { Character } from "./character";
+import { Profile } from "./profile";
+import { Attribute } from "./attribute";
+import { Skill } from "./skill";
+import { Item } from "./item";
+import { History } from "./history";
 
 export interface DataProvider {
 	readonly character: CharacterProvider;

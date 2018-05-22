@@ -1,5 +1,5 @@
 import DB from "models/storage";
-import { ValueTable, CacheEntry, CacheStorage } from "models/cache";
+import { ValueTable, CacheEntry, CacheStorage } from "models/eval";
 
 const SAVE_DELAY_TIME = 1000;
 const MAX_CACHE_SIZE = 1000;

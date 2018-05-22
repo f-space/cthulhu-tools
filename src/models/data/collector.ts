@@ -1,9 +1,9 @@
-import { Character } from "models/character";
-import { Profile } from "models/profile";
-import { Attribute } from "models/attribute";
-import { Skill } from "models/skill";
-import { History } from "models/history";
-import { DataProvider } from "models/provider";
+import { Character } from "./character";
+import { Profile } from "./profile";
+import { Attribute } from "./attribute";
+import { Skill } from "./skill";
+import { History } from "./history";
+import { DataProvider } from "./provider";
 
 export interface CharacterContext {
 	readonly character: Character;

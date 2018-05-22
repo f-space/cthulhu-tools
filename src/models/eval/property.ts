@@ -1,5 +1,4 @@
-import { Attribute } from "models/attribute";
-import { Skill } from "models/skill";
+import { Attribute, Skill } from "models/data";
 
 interface PropertyInterface {
 	readonly type: string;

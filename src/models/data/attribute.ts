@@ -1,8 +1,6 @@
-import { InputMethodData, InputMethod } from "models/input";
-import { Expression, Format } from "models/expression";
-import * as validation from "models/validation";
-
-export * from "models/input";
+import { InputMethodData, InputMethod } from "./input";
+import { Expression, Format } from "./expression";
+import * as validation from "./validation";
 
 type AttributeType = 'integer' | 'number' | 'text';
 

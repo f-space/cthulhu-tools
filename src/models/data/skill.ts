@@ -1,5 +1,5 @@
-import { Expression } from "models/expression";
-import * as validation from "models/validation";
+import { Expression } from "./expression";
+import * as validation from "./validation";
 
 export enum SkillCategory {
 	locomotion = 'locomotion',

@@ -1,5 +1,5 @@
-import { Expression, Format } from "models/expression";
 import { deepClone, generateUUID } from "models/utility";
+import { Expression, Format } from "./expression";
 
 const MIN_INT32 = (1 << 31);
 const MAX_INT32 = (1 << 31) ^ -1;

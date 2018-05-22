@@ -1,4 +1,4 @@
-import * as AST from "models/ast";
+import * as AST from "./ast";
 
 export class Input {
 	public readonly key: string;

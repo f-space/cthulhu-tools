@@ -1,4 +1,4 @@
-import * as validation from "models/validation";
+import * as validation from "./validation";
 
 export interface CharacterViewData {
 	readonly target: string;

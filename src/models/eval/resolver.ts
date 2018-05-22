@@ -1,11 +1,9 @@
-import { Reference } from "models/expression";
-import { Attribute } from "models/attribute";
-import { Skill } from "models/skill";
+import { Reference, Attribute, Skill } from "models/data";
 import {
 	Property, AttributeProperty, SkillProperty,
 	AttributeValueProperty, AttributeMinProperty, AttributeMaxProperty,
 	SkillValueProperty, SkillBaseProperty, SkillPointsProperty,
-} from "models/property";
+} from "./property";
 
 export interface ResolutionContext {
 	readonly ref: Reference;

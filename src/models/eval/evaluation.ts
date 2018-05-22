@@ -1,13 +1,13 @@
-import { Reference, Expression, Format } from "models/expression";
-import { Property } from "models/property";
-import { Cache, ObjectCache } from "models/cache";
-import { PropertyResolver, VoidResolver } from "models/resolver";
-import { PropertyEvaluator, VoidEvaluator } from "models/evaluator";
-import { PropertyValidator, VoidValidator } from "models/validator";
+import { Reference, Expression, Format } from "models/data";
+import { Property } from "./property";
+import { Cache, ObjectCache } from "./cache";
+import { PropertyResolver, VoidResolver } from "./resolver";
+import { PropertyEvaluator, VoidEvaluator } from "./evaluator";
+import { PropertyValidator, VoidValidator } from "./validator";
 
-export * from "models/resolver";
-export * from "models/evaluator";
-export * from "models/validator";
+export * from "./resolver";
+export * from "./evaluator";
+export * from "./validator";
 
 export interface EvaluationConfig {
 	resolver?: PropertyResolver;

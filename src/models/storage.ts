@@ -1,11 +1,6 @@
 import Dexie from 'dexie';
-import { CharacterViewData, CharacterData } from 'models/character';
-import { ProfileData } from 'models/profile';
-import { AttributeData } from 'models/attribute';
-import { SkillData } from 'models/skill';
-import { ItemData } from 'models/item';
-import { HistoryData } from 'models/history';
-import { CacheEntry } from 'models/cache';
+import { CharacterViewData, CharacterData, ProfileData, AttributeData, SkillData, ItemData, HistoryData } from 'models/data';
+import { CacheEntry } from 'models/eval';
 
 export class StatusDatabase extends Dexie {
 	public readonly views!: Dexie.Table<CharacterViewData, string>;
