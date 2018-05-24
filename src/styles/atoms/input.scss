@@ -20,11 +20,11 @@
 }
 
 .checkbox {
+	appearance: none;
 	border-radius: 0.25em;
 	padding: 0;
 	width: 1em;
 	height: 1em;
-	appearance: none;
 	text-align: center;
 	line-height: 1;
 
@@ -42,9 +42,9 @@
 }
 
 .toggle {
+	appearance: none;
 	border-radius: calc(1ex + 1em);
 	text-align: center;
-	appearance: none;
 	white-space: nowrap;
 
 	&::before {
