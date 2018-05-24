@@ -1,5 +1,7 @@
 export * from "./expression";
+export * from "./view";
 export * from "./character";
+export * from "./params";
 export * from "./profile";
 export * from "./attribute";
 export * from "./input";

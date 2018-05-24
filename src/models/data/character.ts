@@ -1,32 +1,11 @@
+import { CharacterParams } from "./params";
 import * as validation from "./validation";
-
-export interface CharacterViewData {
-	readonly target: string;
-	readonly visible?: boolean;
-}
 
 export interface CharacterData {
 	readonly uuid?: string;
 	readonly profile: string;
 	readonly history?: string | null;
 	readonly params?: Partial<CharacterParams>;
-}
-
-export class CharacterView {
-	public readonly target: string;
-	public readonly visible: boolean;
-
-	public constructor({ target, visible }: CharacterViewData) {
-		this.target = validation.string(target);
-		this.visible = validation.boolean(validation.or(visible, true));
-	}
-
-	public toJSON(): CharacterViewData {
-		return {
-			target: this.target,
-			visible: this.visible && undefined,
-		}
-	}
 }
 
 export class Character {
@@ -56,26 +35,4 @@ export class Character {
 			params: this.params,
 		};
 	}
-}
-
-export interface CharacterParams {
-	readonly attribute: AttributeParams;
-	readonly skill: SkillParams;
-	readonly item: ItemParams;
-}
-
-export interface AttributeParams {
-	readonly [id: string]: InputParams
-}
-
-export interface InputParams {
-	readonly [name: string]: any;
-}
-
-export interface SkillParams {
-	readonly [id: string]: number;
-}
-
-export interface ItemParams {
-	readonly [uuid: string]: number;
 }
