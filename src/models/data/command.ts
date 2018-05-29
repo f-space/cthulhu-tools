@@ -1,4 +1,4 @@
-import { getSHA256 } from "models/utility";
+import { sha256 } from "./hash";
 import * as validation from "./validation";
 
 export interface CommandData {
@@ -68,7 +68,7 @@ export class Command {
 		this.time = time;
 		this.message = message !== undefined ? message : "";
 		this.operations = operations !== undefined ? operations : [];
-		this.hash = getSHA256(this.repr);
+		this.hash = sha256(this.repr);
 	}
 
 	public static from({ parent, time, message, operations }: CommandData): Command {

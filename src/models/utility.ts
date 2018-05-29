@@ -1,6 +1,3 @@
-import sha256 from "fast-sha256";
-import { encode } from "@stablelib/utf8";
-
 export function deepClone<T>(value: T): T {
 	return JSON.parse(JSON.stringify(value), (k, v) => {
 		if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
@@ -16,14 +13,6 @@ export function generateUUID(): string {
 		const value = (ch === 'x' ? random : (random & 0x03 | 0x08));
 		return value.toString(16);
 	});
-}
-
-export function toHexString(bytes: Uint8Array): string {
-	return Array.from(bytes).map(x => x.toString(16).padStart(2, "0")).join('');
-}
-
-export function getSHA256(data: string): string {
-	return toHexString(sha256(encode(data)));
 }
 
 export function getFNV1a(data: string): number {
