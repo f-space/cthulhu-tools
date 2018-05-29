@@ -1,7 +1,7 @@
 import { DiceDisplay } from "models/dice";
 import { DiceRect, DiceLayout } from "./layout";
 
-const DICE_SPACE = 0.25;
+const DICE_SPACE = 0.1;
 const MAX_SIZE_PROPORTION = 0.05;
 
 export default class CircleDiceLayout implements DiceLayout {

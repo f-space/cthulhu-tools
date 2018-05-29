@@ -2,9 +2,9 @@ import memoize from 'memoize-one';
 import { DiceDisplay } from "models/dice";
 import { DiceRect, DiceLayout } from "./layout";
 
-const DICE_SPACE = 0.25;
+const DICE_SPACE = 0.1;
 const GROUP_SPACE = 0.5;
-const ROW_SPACE = 0.1;
+const ROW_SPACE = 0.2;
 const MAX_SIZE_PROPORTION = 0.05;
 
 export default class RowDiceLayout implements DiceLayout {
