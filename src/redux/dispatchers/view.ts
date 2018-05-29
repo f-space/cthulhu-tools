@@ -18,7 +18,7 @@ export default class ViewDispatcher {
 		await DB.transaction("r", DB.views, () => {
 			return DB.views.toArray();
 		}).then(views => {
-			this.dispatch(ViewAction.set(views.map(view => new CharacterView(view))));
+			this.dispatch(ViewAction.set(views.map(view => CharacterView.from(view))));
 			this.setHook();
 		});
 	}
@@ -26,7 +26,7 @@ export default class ViewDispatcher {
 	public setHook(): void {
 		DB.views.hook("creating", (key, view, transaction) => {
 			transaction.on('complete', () => {
-				this.dispatch(ViewAction.set(new CharacterView(view)));
+				this.dispatch(ViewAction.set(CharacterView.from(view)));
 			});
 		});
 		DB.views.hook("deleting", (key, view, transaction) => {

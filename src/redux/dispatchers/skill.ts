@@ -36,7 +36,7 @@ export default class SkillDispatcher {
 		await DB.transaction("r", DB.skills, () => {
 			return DB.skills.toArray();
 		}).then(skills => {
-			this.dispatch(SkillAction.set(skills.map(skill => new Skill(skill))));
+			this.dispatch(SkillAction.set(skills.map(skill => Skill.from(skill))));
 		});
 	}
 
@@ -49,7 +49,7 @@ export default class SkillDispatcher {
 			}
 		}).then(data => {
 			const skills = (Array.isArray(data) ? data : [data]) as SkillData[];
-			this.dispatch(SkillAction.set(skills.map(skill => new Skill(skill, true))));
+			this.dispatch(SkillAction.set(skills.map(skill => Skill.from(skill, true))));
 		});
 	}
 }

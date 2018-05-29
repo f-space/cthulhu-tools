@@ -1,4 +1,3 @@
-import { deepClone, generateUUID } from "models/utility";
 import { Expression, Format } from "./expression";
 
 const MIN_INT32 = (1 << 31);
@@ -54,19 +53,15 @@ export function table<T, U>(value: { readonly [key: string]: T } | undefined, ma
 	}
 }
 
-export function plainObject<T>(value: T | undefined): T {
+export function map<T, U = T>(value: { readonly [key: string]: T } | undefined, map?: (value: T) => U): Map<string, U> {
 	if (typeof value === 'object' && value !== null) {
-		return deepClone(value);
+		if (map === undefined) {
+			return new Map(Object.entries(value) as any);
+		} else {
+			return new Map(Object.entries(value).map(([k, v]) => [k, map(v)] as [string, U]));
+		}
 	} else {
-		return Object.create(null);
-	}
-}
-
-export function props<T, U extends T>(value: T | undefined, maps: { [P in keyof T]: (value: T[P]) => U[P] }): U {
-	if (typeof value === 'object' && value !== null) {
-		return (Object.keys(maps) as (keyof T)[]).reduce((obj, key) => (obj[key] = maps[key](value[key]), obj), Object.create(null));
-	} else {
-		return Object.create(null);
+		return new Map();
 	}
 }
 
@@ -74,8 +69,8 @@ export function time(value: number | undefined): number {
 	return Number.isSafeInteger(value as number) ? value as number : Date.now();
 }
 
-export function uuid(value: string | undefined): string {
-	return (value !== undefined ? String(value) : generateUUID());
+export function uuid(value: string): string {
+	return String(value);
 }
 
 export function expression(value: number | string): Expression {

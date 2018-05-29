@@ -5,6 +5,7 @@ import { FormApi } from 'final-form';
 import { Form, FormSpy } from 'react-final-form';
 import { CharacterView, Character, DataProvider, ExternalCache, DataCollector, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
+import { generateUUID } from "models/utility";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
@@ -132,7 +133,7 @@ class CharacterManagementPageInternal extends React.Component<CharacterManagemen
 
 		const sources = provider.character.get(selection);
 		for (const source of sources) {
-			const character = new Character(Object.assign(source.toJSON(), { uuid: undefined }));
+			const character = source.set({uuid: generateUUID()});
 			dispatcher.character.create(character);
 		}
 
@@ -152,13 +153,6 @@ class CharacterManagementPageInternal extends React.Component<CharacterManagemen
 
 	private importCommand(selection: string[]): boolean {
 		// TODO: implementation
-
-		const { provider, dispatcher } = this.props;
-		const profile = provider.profile.default;
-		if (profile) {
-			const character = new Character({ profile: profile.uuid, params: { attribute: { name: { x: "XXX" } } } });
-			dispatcher.character.create(character);
-		}
 
 		return true;
 	}

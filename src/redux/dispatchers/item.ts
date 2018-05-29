@@ -34,7 +34,7 @@ export default class ItemDispatcher {
 		await DB.transaction("r", DB.items, () => {
 			return DB.items.toArray();
 		}).then(items => {
-			this.dispatch(ItemAction.set(items.map(item => new Item(item))));
+			this.dispatch(ItemAction.set(items.map(item => Item.from(item))));
 		});
 	}
 }

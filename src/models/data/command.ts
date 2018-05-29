@@ -5,34 +5,46 @@ export interface CommandData {
 	readonly parent?: string | null;
 	readonly time?: number;
 	readonly message?: string;
-	readonly operations: ReadonlyArray<OperationData>;
+	readonly operations?: ReadonlyArray<OperationData>;
 }
 
-type OperationType = 'set' | 'add';
-
-interface OperationDataMap {
-	'set': SetOperationData;
-	'add': AddOperationData;
+export interface CommandConfig {
+	readonly parent: string | null;
+	readonly time: number;
+	readonly message?: string;
+	readonly operations?: ReadonlyArray<Operation>;
 }
 
-interface OperationMap {
-	'set': SetOperation;
-	'add': AddOperation;
+export enum OperationType {
+	Set = 'set',
+	Add = 'add',
 }
 
-export type OperationData = OperationDataMap[OperationType];
-export type Operation = OperationMap[OperationType];
+export type OperationData = SetOperationData | AddOperationData;
+export type Operation = SetOperation | AddOperation;
 
-interface OperationDataBase<T extends OperationType> {
+interface OperationCommonData<T extends OperationType> {
 	readonly type: T;
 	readonly target: string;
 }
 
-export interface SetOperationData extends OperationDataBase<'set'> {
+export interface SetOperationData extends OperationCommonData<OperationType.Set> {
 	readonly value: number | string;
 }
 
-export interface AddOperationData extends OperationDataBase<'add'> {
+export interface AddOperationData extends OperationCommonData<OperationType.Add> {
+	readonly value: number;
+}
+
+interface OperationCommonConfig {
+	readonly target: string;
+}
+
+export interface SetOperationConfig extends OperationCommonConfig {
+	readonly value: number | string;
+}
+
+export interface AddOperationConfig extends OperationCommonConfig {
 	readonly value: number;
 }
 
@@ -40,7 +52,7 @@ export class Command {
 	public readonly parent: string | null;
 	public readonly time: number;
 	public readonly message: string;
-	public readonly operations: Operation[];
+	public readonly operations: ReadonlyArray<Operation>;
 	public readonly hash: string;
 
 	public get repr(): string {
@@ -51,12 +63,21 @@ export class Command {
 		].join("\n");
 	}
 
-	public constructor({ parent, time, message, operations }: CommandData) {
-		this.parent = validation.string_null(parent);
-		this.time = validation.time(time);
-		this.message = validation.string(validation.or(message, ""));
-		this.operations = validation.array(operations, Operation.from);
+	public constructor({ parent, time, message, operations }: CommandConfig) {
+		this.parent = parent;
+		this.time = time;
+		this.message = message !== undefined ? message : "";
+		this.operations = operations !== undefined ? operations : [];
 		this.hash = getSHA256(this.repr);
+	}
+
+	public static from({ parent, time, message, operations }: CommandData): Command {
+		return new Command({
+			parent: validation.string_null(parent),
+			time: validation.time(time),
+			message: validation.string(validation.or(message, "")),
+			operations: validation.array(operations, Operation.from),
+		});
 	}
 
 	public toJSON(): CommandData {
@@ -64,8 +85,14 @@ export class Command {
 			parent: this.parent,
 			time: this.time,
 			message: this.message || undefined,
-			operations: this.operations,
+			operations: this.operations.length !== 0 ? this.operations : undefined,
 		};
+	}
+
+	public set(config: Partial<CommandConfig>): Command {
+		const { parent, time, message, operations } = this;
+
+		return new Command({ parent, time, message, operations, ...config });
 	}
 
 	public toString(): string {
@@ -74,17 +101,17 @@ export class Command {
 }
 
 abstract class OperationBase<T extends OperationType> {
-	public readonly type: T;
 	public readonly target: string;
+
+	public abstract get type(): T;
 
 	public get repr(): string { return `$${this.type}[${this.target}]`; }
 
-	public constructor({ type, target }: OperationDataBase<T>) {
-		this.type = validation.string_enum(type);
-		this.target = validation.string(target);
+	public constructor({ target }: OperationCommonConfig) {
+		this.target = target;
 	}
 
-	public toJSON(): OperationDataBase<T> {
+	public toJSON(): OperationCommonData<T> {
 		return {
 			type: this.type,
 			target: this.target,
@@ -94,16 +121,32 @@ abstract class OperationBase<T extends OperationType> {
 	public abstract apply(value: any): any;
 
 	public toString(): string { return this.repr; }
+
+	protected static import({ target }: OperationCommonData<OperationType>): OperationCommonConfig {
+		return { target: validation.string(target) };
+	}
+
+	protected config(): OperationCommonConfig {
+		const { target } = this;
+
+		return { target };
+	}
 }
 
-export class SetOperation extends OperationBase<'set'> {
+export class SetOperation extends OperationBase<OperationType.Set> {
 	public readonly value: number | string;
+
+	public get type(): OperationType.Set { return OperationType.Set; }
 
 	public get repr(): string { return `${super.repr} ${JSON.stringify(this.value)}`; }
 
-	public constructor({ value, ...rest }: SetOperationData) {
+	public constructor({ value, ...rest }: SetOperationConfig) {
 		super(rest);
-		this.value = validation.or(validation.number_string(value), String(undefined));
+		this.value = value;
+	}
+
+	public static from(data: SetOperationData): SetOperation {
+		return new SetOperation(this.import(data));
 	}
 
 	public toJSON(): SetOperationData {
@@ -112,19 +155,41 @@ export class SetOperation extends OperationBase<'set'> {
 		});
 	}
 
+	public set(config: Partial<SetOperationConfig>): SetOperation {
+		return new SetOperation(Object.assign(this.config(), config));
+	}
+
 	public apply(value: any): number | string {
 		return this.value;
 	}
+
+	protected static import({ value, ...rest }: SetOperationData): SetOperationConfig {
+		return Object.assign(OperationBase.import(rest), {
+			value: validation.or(validation.number_string(value), String(undefined)),
+		});
+	}
+
+	protected config(): SetOperationConfig {
+		const { value } = this;
+
+		return Object.assign(super.config(), { value });
+	}
 }
 
-export class AddOperation extends OperationBase<'add'> {
+export class AddOperation extends OperationBase<OperationType.Add> {
 	public readonly value: number;
+
+	public get type(): OperationType.Add { return OperationType.Add; }
 
 	public get repr(): string { return `${super.repr} ${JSON.stringify(this.value)}`; }
 
-	public constructor({ value, ...rest }: AddOperationData) {
+	public constructor({ value, ...rest }: AddOperationConfig) {
 		super(rest);
-		this.value = validation.number(value);
+		this.value = value;
+	}
+
+	public static from(data: AddOperationData): AddOperation {
+		return new AddOperation(this.import(data));
 	}
 
 	public toJSON(): AddOperationData {
@@ -133,16 +198,32 @@ export class AddOperation extends OperationBase<'add'> {
 		});
 	}
 
+	public set(config: Partial<AddOperationConfig>): AddOperation {
+		return new AddOperation(Object.assign(this.config(), config));
+	}
+
 	public apply(value: any): number {
 		return Number(value) + this.value;
+	}
+
+	protected static import({ value, ...rest }: AddOperationData): AddOperationConfig {
+		return Object.assign(OperationBase.import(rest), {
+			value: validation.number(value),
+		});
+	}
+
+	protected config(): AddOperationConfig {
+		const { value } = this;
+
+		return Object.assign(super.config(), { value });
 	}
 }
 
 export namespace Operation {
 	export function from(data: any): Operation {
 		switch (data.type) {
-			case 'set': return new SetOperation(data);
-			case 'add': return new AddOperation(data);
+			case OperationType.Set: return SetOperation.from(data);
+			case OperationType.Add: return AddOperation.from(data);
 			default: throw new Error("Invalid opearation type.");
 		}
 	}

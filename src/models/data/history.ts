@@ -6,11 +6,19 @@ type CommandDataMap = { [hash: string]: CommandData };
 type CommandMap = { [hash: string]: Command };
 
 export interface HistoryData {
-	readonly uuid?: string;
+	readonly uuid: string;
 	readonly name: string;
 	readonly active?: string | null;
 	readonly branches?: Readonly<BranchTable>;
 	readonly commands?: Readonly<CommandDataMap>;
+}
+
+export interface HistoryConfig {
+	readonly uuid: string;
+	readonly name: string;
+	readonly active?: string | null;
+	readonly branches?: Readonly<BranchTable>;
+	readonly commands?: Readonly<CommandMap>;
 }
 
 export class History {
@@ -34,15 +42,25 @@ export class History {
 
 	public get head(): string | null { return this.active !== null ? this.branches[this.active] : null; }
 
-	public constructor({ uuid, name, active, branches, commands }: HistoryData, readonly?: boolean) {
-		this.uuid = validation.uuid(uuid);
-		this.name = validation.string(name);
-		this._active = validation.string_null(active);
-		this._branches = validation.table(branches, validation.string_null);
-		this._commands = validation.table(commands, data => new Command(data));
+	public constructor({ uuid, name, active, branches, commands }: HistoryConfig, readonly?: boolean) {
+		this.uuid = uuid;
+		this.name = name;
+		this._active = active !== undefined ? active : null;
+		this._branches = branches !== undefined ? branches : Object.create(null);
+		this._commands = commands !== undefined ? commands : Object.create(null);
 		this.readonly = Boolean(readonly);
 
 		this.validate();
+	}
+
+	public static from({ uuid, name, active, branches, commands }: HistoryData, readonly?: boolean): History {
+		return new History({
+			uuid: validation.uuid(uuid),
+			name: validation.string(name),
+			active: validation.string_null(active),
+			branches: validation.table(branches, validation.string_null),
+			commands: validation.table(commands, Command.from),
+		});
 	}
 
 	public toJSON(): HistoryData {
@@ -53,6 +71,12 @@ export class History {
 			branches: this.branches,
 			commands: this.commands,
 		};
+	}
+
+	public set(config: Partial<HistoryConfig>): History {
+		const { uuid, name, active, branches, commands } = this;
+
+		return new History({ uuid, name, active, branches, commands, ...config });
 	}
 
 	public trace(hash: string | null = this.head): IterableIterator<Command> {

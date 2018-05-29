@@ -7,7 +7,7 @@ export default class CharacterDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
 
 	public async create(character: Character): Promise<void> {
-		const view = new CharacterView({ target: character.uuid });
+		const view = new CharacterView({ target: character.uuid, visible: true });
 		await DB.transaction("rw", DB.characters, DB.views, () => {
 			return DB.characters.add(character.toJSON()).then(() => {
 				return DB.views.add(view.toJSON());
@@ -39,7 +39,7 @@ export default class CharacterDispatcher {
 		await DB.transaction("r", DB.characters, () => {
 			return DB.characters.toArray();
 		}).then(characters => {
-			this.dispatch(CharacterAction.set(characters.map(character => new Character(character))));
+			this.dispatch(CharacterAction.set(characters.map(character => Character.from(character))));
 		});
 	}
 }

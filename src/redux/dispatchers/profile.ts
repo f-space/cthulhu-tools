@@ -36,7 +36,7 @@ export default class ProfileDispatcher {
 		await DB.transaction("r", DB.profiles, () => {
 			return DB.profiles.toArray();
 		}).then(profiles => {
-			this.dispatch(ProfileAction.set(profiles.map(profile => new Profile(profile))));
+			this.dispatch(ProfileAction.set(profiles.map(profile => Profile.from(profile))));
 		});
 	}
 
@@ -49,7 +49,7 @@ export default class ProfileDispatcher {
 			}
 		}).then(data => {
 			const profiles = (Array.isArray(data) ? data : [data]) as (ProfileData & { default?: boolean })[];
-			this.dispatch(ProfileAction.set(profiles.map(profile => new Profile(profile, true))));
+			this.dispatch(ProfileAction.set(profiles.map(profile => Profile.from(profile, true))));
 
 			const defaultProfile = profiles.find(profile => Boolean(profile.default));
 			if (defaultProfile && defaultProfile.uuid) {

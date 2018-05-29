@@ -71,7 +71,7 @@ export class AttributeEvaluator implements TerminalEvaluator {
 
 	private evaluateExpression(context: EvaluationContext, attribute: Attribute, expression: Expression | Format): any {
 		const { hash, request } = context;
-		const data = this.data[attribute.id] || Object.create(null);
+		const data = this.data.get(attribute.id) || new Map<string, any>();
 		const values = new Map<string, any>();
 
 		for (const ref of expression.refs) {
@@ -82,7 +82,7 @@ export class AttributeEvaluator implements TerminalEvaluator {
 		for (const input of expression.inputs) {
 			const method = attribute.inputs.find(x => x.name === input.name);
 			if (method) {
-				const value = method.evaluate(data[method.name]);
+				const value = method.evaluate(data.get(method.name));
 				values.set(input.key, value);
 			}
 		}
@@ -132,7 +132,7 @@ export class SkillEvaluator implements TerminalEvaluator {
 	}
 
 	private evaluatePoints(context: EvaluationContext, skill: Skill): number | undefined {
-		const points = this.data[skill.id];
+		const points = this.data.get(skill.id);
 		return points !== undefined ? points : 0;
 	}
 }
@@ -175,7 +175,7 @@ export class VoidEvaluator implements PropertyEvaluator {
 }
 
 export interface EvaluatorConfig {
-	readonly params?: Partial<CharacterParams>;
+	readonly params?: CharacterParams;
 	readonly history?: History | null;
 }
 

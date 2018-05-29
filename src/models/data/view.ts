@@ -5,19 +5,37 @@ export interface CharacterViewData {
 	readonly visible?: boolean;
 }
 
+export interface CharacterViewConfig {
+	readonly target: string;
+	readonly visible?: boolean;
+}
+
 export class CharacterView {
 	public readonly target: string;
 	public readonly visible: boolean;
 
-	public constructor({ target, visible }: CharacterViewData) {
-		this.target = validation.string(target);
-		this.visible = validation.boolean(validation.or(visible, true));
+	public constructor({ target, visible }: CharacterViewConfig) {
+		this.target = target;
+		this.visible = Boolean(visible);
+	}
+
+	public static from({ target, visible }: CharacterViewData) {
+		return new CharacterView({
+			target: validation.string(target),
+			visible: validation.boolean(validation.or(visible, false)),
+		});
 	}
 
 	public toJSON(): CharacterViewData {
 		return {
 			target: this.target,
-			visible: this.visible && undefined,
+			visible: this.visible || undefined,
 		}
+	}
+
+	public set(config: Partial<CharacterViewConfig>): CharacterView {
+		const { target, visible } = this;
+
+		return new CharacterView({ target, visible, ...config });
 	}
 }

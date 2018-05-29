@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Expression, Format, Attribute, InputMethod } from "models/status";
+import { Expression, Format, AttributeType, Attribute, InputType, InputMethod } from "models/status";
 import { EvaluationText } from "components/atoms/evaluation-text";
 import { AttributeDiceInput } from "components/molecules/attribute-dice-input";
 import { AttributeNumberInput } from "components/molecules/attribute-number-input";
@@ -35,9 +35,9 @@ export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 		}
 
 		switch (method.type) {
-			case 'dice': return <AttributeDiceInput {...props} method={method} />
-			case 'number': return <AttributeNumberInput {...props} method={method} />
-			case 'text': return <AttributeTextInput {...props} method={method} />
+			case InputType.Dice: return <AttributeDiceInput {...props} method={method} />
+			case InputType.Number: return <AttributeNumberInput {...props} method={method} />
+			case InputType.Text: return <AttributeTextInput {...props} method={method} />
 		}
 	}
 
@@ -50,9 +50,9 @@ export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 
 		function getExpression(attribute: Attribute): Expression | Format {
 			switch (attribute.type) {
-				case 'integer': return attribute.expression;
-				case 'number': return attribute.expression;
-				case 'text': return attribute.format;
+				case AttributeType.Integer: return attribute.expression;
+				case AttributeType.Number: return attribute.expression;
+				case AttributeType.Text: return attribute.format;
 			}
 		}
 	}

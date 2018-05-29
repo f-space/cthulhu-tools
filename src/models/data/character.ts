@@ -1,11 +1,18 @@
-import { CharacterParams } from "./params";
+import { CharacterParamsData, CharacterParams } from "./params";
 import * as validation from "./validation";
 
 export interface CharacterData {
-	readonly uuid?: string;
+	readonly uuid: string;
 	readonly profile: string;
 	readonly history?: string | null;
-	readonly params?: Partial<CharacterParams>;
+	readonly params?: CharacterParamsData;
+}
+
+export interface CharacterConfig {
+	readonly uuid: string;
+	readonly profile: string;
+	readonly history: string | null;
+	readonly params: CharacterParams;
 }
 
 export class Character {
@@ -15,16 +22,21 @@ export class Character {
 	public readonly params: CharacterParams;
 	public readonly readonly: boolean;
 
-	public constructor({ uuid, profile, history, params }: CharacterData, readonly?: boolean) {
-		this.uuid = validation.uuid(uuid);
-		this.profile = validation.string(profile);
-		this.history = validation.string_null(history);
-		this.params = validation.props(params, {
-			attribute: validation.plainObject,
-			skill: validation.plainObject,
-			item: validation.plainObject,
-		});
+	public constructor({ uuid, profile, history, params }: CharacterConfig, readonly?: boolean) {
+		this.uuid = uuid;
+		this.profile = profile;
+		this.history = history;
+		this.params = params;
 		this.readonly = Boolean(readonly);
+	}
+
+	public static from({ uuid, profile, history, params }: CharacterData, readonly?: boolean) {
+		return new Character({
+			uuid: validation.uuid(uuid),
+			profile: validation.string(profile),
+			history: validation.string_null(history),
+			params: CharacterParams.from(validation.or(params, {})),
+		}, readonly);
 	}
 
 	public toJSON(): CharacterData {
@@ -32,7 +44,13 @@ export class Character {
 			uuid: this.uuid,
 			profile: this.profile,
 			history: this.history,
-			params: this.params,
+			params: this.params.toJSON(),
 		};
+	}
+
+	public set(config: Partial<CharacterConfig>): Character {
+		const { uuid, profile, history, params } = this;
+
+		return new Character({ uuid, profile, history, params, ...config });
 	}
 }

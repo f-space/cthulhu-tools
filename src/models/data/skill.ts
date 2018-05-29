@@ -2,22 +2,32 @@ import { Expression } from "./expression";
 import * as validation from "./validation";
 
 export enum SkillCategory {
-	locomotion = 'locomotion',
-	investigation = 'investigation',
-	knowledge = 'knowledge',
-	communication = 'communication',
-	language = 'language',
-	combat = 'combat',
-	special = 'special',
-	other = 'other',
+	Locomotion = 'locomotion',
+	Investigation = 'investigation',
+	Knowledge = 'knowledge',
+	Communication = 'communication',
+	Language = 'language',
+	Combat = 'combat',
+	Special = 'special',
+	Other = 'other',
 };
 
+const SKILL_CATEGORY_SET = new Set<SkillCategory>(Object.values(SkillCategory));
+
 export interface SkillData {
-	readonly uuid?: string;
+	readonly uuid: string;
 	readonly id: string;
 	readonly name: string;
 	readonly category: SkillCategory;
 	readonly base: number | string;
+}
+
+export interface SkillConfig {
+	readonly uuid: string;
+	readonly id: string;
+	readonly name: string;
+	readonly category: SkillCategory;
+	readonly base: Expression;
 }
 
 export class Skill {
@@ -28,13 +38,23 @@ export class Skill {
 	public readonly base: Expression;
 	public readonly readonly: boolean;
 
-	public constructor({ uuid, id, name, category, base }: SkillData, readonly?: boolean) {
-		this.uuid = validation.uuid(uuid);
-		this.id = validation.string(id);
-		this.name = validation.string(name);
-		this.category = validation.string_enum(SkillCategory[category] || SkillCategory.other);
-		this.base = validation.expression(base);
+	public constructor({ uuid, id, name, category, base }: SkillConfig, readonly?: boolean) {
+		this.uuid = uuid;
+		this.id = id;
+		this.name = name;
+		this.category = category;
+		this.base = base;
 		this.readonly = Boolean(readonly);
+	}
+
+	public static from({ uuid, id, name, category, base }: SkillData, readonly?: boolean) {
+		return new Skill({
+			uuid: validation.uuid(uuid),
+			id: validation.string(id),
+			name: validation.string(name),
+			category: validation.string_enum(SKILL_CATEGORY_SET.has(category) ? category : SkillCategory.Other),
+			base: validation.expression(base),
+		}, readonly);
 	}
 
 	public toJSON(): SkillData {
@@ -45,5 +65,11 @@ export class Skill {
 			category: this.category,
 			base: this.base.toJSON(),
 		};
+	}
+
+	public set(config: Partial<SkillConfig>, readonly?: boolean): Skill {
+		const { uuid, id, name, category, base } = this;
+
+		return new Skill({ uuid, id, name, category, base, ...config }, readonly);
 	}
 }
