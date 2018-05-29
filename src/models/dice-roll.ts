@@ -1,45 +1,34 @@
 import { Dice } from "models/dice";
 
-export { Dice };
-
-export interface DiceRollResult {
-	readonly faces: ReadonlyArray<number>;
-	readonly time: number;
-}
-
 export class DiceRoll {
 	public readonly dices: ReadonlyArray<Dice>;
-	private faces: number[];
-	private time: number;
+	private faces: ReadonlyArray<number>;
 
-	private get result(): DiceRollResult {
-		return {
-			faces: this.faces,
-			time: this.time,
-		};
-	}
-
-	public constructor(dices: ReadonlyArray<Dice>, faces: ReadonlyArray<number>) {
-		if (dices.length !== faces.length) throw new Error("'dices' and 'faces' must have the same length.");
+	public constructor(dices: ReadonlyArray<Dice>) {
 		this.dices = dices;
+		this.faces = dices.map(dice => dice.default);
+	}
+
+	public set(faces: ReadonlyArray<number>): this {
+		if (faces.length !== this.dices.length) {
+			throw new Error("'faces' must have the same length of 'dices'.");
+		}
+
 		this.faces = Array.from(faces);
-		this.time = 0;
+
+		return this;
 	}
 
-	public next(interval: number): Promise<DiceRollResult> {
-		return new Promise(resolve => {
-			setTimeout(() => {
-				this.faces = this.generateNextFaces();
-				this.time += interval;
-				resolve(this.result);
-			}, interval);
-		});
+	public next(): ReadonlyArray<number> {
+		return this.faces = this.generateNextFaces();
 	}
 
-	public stop(): DiceRollResult {
-		this.faces = this.generateRandomFaces();
+	public end(): ReadonlyArray<number> {
+		return this.faces = this.generateRandomFaces();
+	}
 
-		return this.result;
+	public run(callback: (faces: ReadonlyArray<number>) => void, interval?: number, duration?: number): DiceRollTask {
+		return new DiceRollTask(this, interval, duration).start(callback);
 	}
 
 	private generateNextFaces(): number[] {
@@ -55,31 +44,34 @@ export class DiceRoll {
 	}
 }
 
-export class DiceRollManager {
-	private version: number = 0;
+export class DiceRollTask {
+	private id?: number;
+	private elapsed: number = 0;
 
-	public constructor(readonly interval: number = 100, readonly duration: number = 1000) { }
+	public constructor(readonly roll: DiceRoll, readonly interval: number = 100, readonly duration: number = 1000) { }
 
-	public *start(roll: DiceRoll): IterableIterator<Promise<DiceRollResult | null>> {
-		this.stop();
-
-		const version = this.version;
-
-		let done = false;
-		while (!done) {
-			yield roll.next(this.interval).then(async result => {
-				if (version !== this.version) {
-					return (done = true), null;
-				} else if (result.time >= this.duration) {
-					return (done = true), roll.stop();
+	public start(callback: (faces: ReadonlyArray<number>) => void): this {
+		if (this.id === undefined) {
+			this.id = window.setInterval(() => {
+				this.elapsed += this.interval;
+				if (this.elapsed < this.duration) {
+					callback.call(null, this.roll.next());
 				} else {
-					return result;
+					callback.call(null, this.roll.end());
+					this.stop();
 				}
-			});
+			}, this.interval);
 		}
+
+		return this;
 	}
 
-	public stop(): void {
-		this.version++;
+	public stop(): this {
+		if (this.id !== undefined) {
+			window.clearInterval(this.id);
+			this.id = undefined;
+		}
+
+		return this;
 	}
 }

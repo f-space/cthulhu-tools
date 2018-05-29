@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Dice, DiceRoll, DiceRollManager } from "models/dice-roll";
+import { Dice } from "models/dice";
+import { DiceRoll, DiceRollTask } from "models/dice-roll";
 import { DiceSound } from "components/functions/dice-sound";
 import { DiceView } from "components/organisms/dice-view";
 import { DiceTypeSelector } from "components/organisms/dice-type-selector";
@@ -18,8 +19,7 @@ interface DicePageState {
 const PRESETS = ['custom', '1D10', '1D100', '1D6', '2D6', '3D6', '1D3', '2D3', '1D4'];
 
 export class DicePage extends React.Component<{}, DicePageState> {
-	private dices?: Dice[];
-	private readonly roller: DiceRollManager;
+	private task?: DiceRollTask;
 	private soundRef: React.RefObject<DiceSound> = React.createRef();
 
 	public constructor(props: {}) {
@@ -31,22 +31,18 @@ export class DicePage extends React.Component<{}, DicePageState> {
 			custom: { count: 1, max: 100 },
 			openCustomDiceDialog: false,
 		};
-		this.roller = new DiceRollManager();
 		this.handleTypeChange = this.handleTypeChange.bind(this);
 		this.handleRollClick = this.handleRollClick.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 	}
 
-	public UNSAFE_componentWillUpdate(nextProps: {}, nextState: DicePageState): void {
-		if (this.checkDiceChanged(nextState)) {
-			this.dices = this.getDices(nextState);
-			this.roller.stop();
-		}
+	public componentWillUnmount(): void {
+		this.stop();
 	}
 
 	public render() {
-		const dices = this.dices || [];
-		const faces = this.state.faces;
+		const { type, custom, faces } = this.state;
+		const dices = this.getDices(type, custom) || [];
 
 		return <Page id="dice" heading={<h2>ダイスロール</h2>}>
 			<DiceSound ref={this.soundRef} />
@@ -64,7 +60,7 @@ export class DicePage extends React.Component<{}, DicePageState> {
 			this.setState({ openCustomDiceDialog: true });
 		} else {
 			this.setState({ type });
-			this.setDefaultFaces();
+			this.reset();
 		}
 	}
 
@@ -81,42 +77,46 @@ export class DicePage extends React.Component<{}, DicePageState> {
 					max: result.max,
 				}
 			});
-			this.setDefaultFaces();
+			this.reset();
 		}
 
 		this.setState({ openCustomDiceDialog: false });
 	}
 
-	private setDefaultFaces(): void {
-		this.setState(current => {
-			const dices = this.getDices(current);
+	private reset(): void {
+		this.stop();
+
+		this.setState(({ type, custom }) => {
+			const dices = this.getDices(type, custom);
 			const faces = dices ? dices.map(dice => dice.default) : [];
 			return { faces };
 		});
 	}
 
-	private async roll(): Promise<void> {
-		if (this.dices) {
+	private roll(): void {
+		this.stop();
+
+		const { type, custom } = this.state;
+		const dices = this.getDices(type, custom);
+		if (dices) {
 			const sound = this.soundRef.current;
 			if (sound) sound.play();
 
-			for (const roll of this.roller.start(new DiceRoll(this.dices, this.state.faces))) {
-				const result = await roll;
-				if (result) {
-					this.setState({ faces: result.faces });
-				}
-			}
+			const roll = new DiceRoll(dices).set(this.state.faces);;
+			this.task = roll.run(faces => {
+				this.setState({ faces });
+			});
 		}
 	}
 
-	private checkDiceChanged({ type, custom }: DicePageState): boolean {
-		if (this.state.type !== type) return true;
-		if (this.state.custom.count !== custom.count) return true;
-		if (this.state.custom.max !== custom.max) return true;
-		return false;
+	private stop(): void {
+		if (this.task !== undefined) {
+			this.task.stop();
+			this.task = undefined;
+		}
 	}
 
-	private getDices({ type, custom }: DicePageState): Dice[] | undefined {
+	private getDices(type: string | undefined, custom: { count: number, max: number }): Dice[] | undefined {
 		if (type === undefined) {
 			return undefined;
 		} else if (type !== 'custom') {
