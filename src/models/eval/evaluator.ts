@@ -1,7 +1,7 @@
 import {
 	Reference, Expression, Format,
 	CharacterParams, AttributeParams, SkillParams,
-	Attribute, IntegerAttribute, NumberAttribute, TextAttribute,
+	AttributeType, Attribute, IntegerAttribute, NumberAttribute, TextAttribute,
 	Skill, History
 } from "models/data";
 import { Property, AttributeProperty, SkillProperty } from "./property";
@@ -33,9 +33,9 @@ export class AttributeEvaluator implements TerminalEvaluator {
 		if (this.supports(context)) {
 			const { attribute } = property as AttributeProperty;
 			switch (attribute.type) {
-				case 'integer': return this.evaluateInteger(context, attribute);
-				case 'number': return this.evaluateNumber(context, attribute);
-				case 'text': return this.evaluateText(context, attribute);
+				case AttributeType.Integer: return this.evaluateInteger(context, attribute);
+				case AttributeType.Number: return this.evaluateNumber(context, attribute);
+				case AttributeType.Text: return this.evaluateText(context, attribute);
 			}
 		}
 		return undefined;
