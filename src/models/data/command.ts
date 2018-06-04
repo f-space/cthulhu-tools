@@ -1,3 +1,4 @@
+import { Input, Expression, Format } from "./expression";
 import { sha256 } from "./hash";
 import * as validation from "./validation";
 
@@ -16,36 +17,20 @@ export interface CommandConfig {
 }
 
 export enum OperationType {
-	Set = 'set',
-	Add = 'add',
+	Expression = 'expression',
+	Format = 'format',
 }
 
-export type OperationData = SetOperationData | AddOperationData;
-export type Operation = SetOperation | AddOperation;
-
-interface OperationCommonData<T extends OperationType> {
-	readonly type: T;
+export interface OperationData {
+	readonly type: OperationType;
 	readonly target: string;
+	readonly value: string;
 }
 
-export interface SetOperationData extends OperationCommonData<OperationType.Set> {
-	readonly value: number | string;
-}
-
-export interface AddOperationData extends OperationCommonData<OperationType.Add> {
-	readonly value: number;
-}
-
-interface OperationCommonConfig {
+export interface OperationConfig {
+	readonly type: OperationType;
 	readonly target: string;
-}
-
-export interface SetOperationConfig extends OperationCommonConfig {
-	readonly value: number | string;
-}
-
-export interface AddOperationConfig extends OperationCommonConfig {
-	readonly value: number;
+	readonly value: Expression | Format;
 }
 
 export class Command {
@@ -57,9 +42,8 @@ export class Command {
 
 	public get repr(): string {
 		return [
-			`@${this.parent || "root"} ~${this.time}`,
+			`@${this.parent || "root"}`,
 			...this.operations.map(op => op.repr),
-			this.message,
 		].join("\n");
 	}
 
@@ -85,7 +69,7 @@ export class Command {
 			parent: this.parent,
 			time: this.time,
 			message: this.message || undefined,
-			operations: this.operations.length !== 0 ? this.operations : undefined,
+			operations: this.operations.length !== 0 ? this.operations.map(operation => operation.toJSON()) : undefined,
 		};
 	}
 
@@ -100,131 +84,54 @@ export class Command {
 	}
 }
 
-abstract class OperationBase<T extends OperationType> {
+export class Operation {
+	public readonly type: OperationType;
 	public readonly target: string;
+	public readonly value: Expression | Format;
 
-	public abstract get type(): T;
+	public get repr(): string { return `${this.target}:[${this.type}] ${this.value}`; }
 
-	public get repr(): string { return `$${this.type}[${this.target}]`; }
-
-	public constructor({ target }: OperationCommonConfig) {
+	public constructor({ type, target, value }: OperationConfig) {
+		this.type = type;
 		this.target = target;
-	}
-
-	public toJSON(): OperationCommonData<T> {
-		return {
-			type: this.type,
-			target: this.target,
-		};
-	}
-
-	public abstract apply(value: any): any;
-
-	public toString(): string { return this.repr; }
-
-	protected static import({ target }: OperationCommonData<OperationType>): OperationCommonConfig {
-		return { target: validation.string(target) };
-	}
-
-	protected config(): OperationCommonConfig {
-		const { target } = this;
-
-		return { target };
-	}
-}
-
-export class SetOperation extends OperationBase<OperationType.Set> {
-	public readonly value: number | string;
-
-	public get type(): OperationType.Set { return OperationType.Set; }
-
-	public get repr(): string { return `${super.repr} ${JSON.stringify(this.value)}`; }
-
-	public constructor({ value, ...rest }: SetOperationConfig) {
-		super(rest);
 		this.value = value;
 	}
 
-	public static from(data: SetOperationData): SetOperation {
-		return new SetOperation(this.import(data));
-	}
-
-	public toJSON(): SetOperationData {
-		return Object.assign(super.toJSON(), {
-			value: this.value,
-		});
-	}
-
-	public set(config: Partial<SetOperationConfig>): SetOperation {
-		return new SetOperation(Object.assign(this.config(), config));
-	}
-
-	public apply(value: any): number | string {
-		return this.value;
-	}
-
-	protected static import({ value, ...rest }: SetOperationData): SetOperationConfig {
-		return Object.assign(OperationBase.import(rest), {
-			value: validation.or(validation.number_string(value), String(undefined)),
-		});
-	}
-
-	protected config(): SetOperationConfig {
-		const { value } = this;
-
-		return Object.assign(super.config(), { value });
-	}
-}
-
-export class AddOperation extends OperationBase<OperationType.Add> {
-	public readonly value: number;
-
-	public get type(): OperationType.Add { return OperationType.Add; }
-
-	public get repr(): string { return `${super.repr} ${JSON.stringify(this.value)}`; }
-
-	public constructor({ value, ...rest }: AddOperationConfig) {
-		super(rest);
-		this.value = value;
-	}
-
-	public static from(data: AddOperationData): AddOperation {
-		return new AddOperation(this.import(data));
-	}
-
-	public toJSON(): AddOperationData {
-		return Object.assign(super.toJSON(), {
-			value: this.value,
-		});
-	}
-
-	public set(config: Partial<AddOperationConfig>): AddOperation {
-		return new AddOperation(Object.assign(this.config(), config));
-	}
-
-	public apply(value: any): number {
-		return Number(value) + this.value;
-	}
-
-	protected static import({ value, ...rest }: AddOperationData): AddOperationConfig {
-		return Object.assign(OperationBase.import(rest), {
-			value: validation.number(value),
-		});
-	}
-
-	protected config(): AddOperationConfig {
-		const { value } = this;
-
-		return Object.assign(super.config(), { value });
-	}
-}
-
-export namespace Operation {
-	export function from(data: any): Operation {
-		switch (data.type) {
-			case OperationType.Set: return SetOperation.from(data);
-			case OperationType.Add: return AddOperation.from(data);
+	public static from({ type, target, value }: OperationData): Operation {
+		switch (type) {
+			case OperationType.Expression: return new Operation({
+				type: OperationType.Expression,
+				target: validation.string(target),
+				value: validation.expression(value)
+			});
+			case OperationType.Format: return new Operation({
+				type: OperationType.Format,
+				target: validation.string(target),
+				value: validation.format(value),
+			});
 			default: throw new Error("Invalid opearation type.");
 		}
 	}
+
+	public toJSON(): OperationData {
+		return {
+			type: this.type,
+			target: this.target,
+			value: this.value.toJSON(),
+		};
+	}
+
+	public set(config: Partial<OperationConfig>): Operation {
+		const { type, target, value } = this;
+
+		return new Operation({ type, target, value, ...config });
+	}
+
+	public apply(value: any): any {
+		const values = new Map<string, any>([Input.key("_"), value]);
+
+		return this.value.evaluate(values);
+	}
+
+	public toString(): string { return this.repr; }
 }

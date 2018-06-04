@@ -146,13 +146,15 @@ export class HistoryEvaluator implements TerminalEvaluator {
 
 	public evaluate(context: EvaluationContext): any {
 		const { ref, hash, property, request } = context;
-		if (this.supports(context) && hash! in this.history.commands) {
-			const command = this.history.commands[hash!];
-			const prevValue = request(ref, command.parent);
-			if (prevValue !== undefined) {
-				return command.operations
-					.filter(x => x.target === ref.key)
-					.reduce((value, op) => op.apply(value), prevValue);
+		if (this.supports(context)) {
+			const command = this.history.commands.get(hash!);
+			if (command !== undefined) {
+				const prevValue = request(ref, command.parent);
+				if (prevValue !== undefined) {
+					return command.operations
+						.filter(x => x.target === ref.key)
+						.reduce((value, op) => op.apply(value), prevValue);
+				}
 			}
 		}
 
