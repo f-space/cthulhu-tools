@@ -19,7 +19,7 @@ export interface SkillData {
 	readonly id: string;
 	readonly name: string;
 	readonly category: SkillCategory;
-	readonly base: number | string;
+	readonly base: string;
 }
 
 export interface SkillConfig {

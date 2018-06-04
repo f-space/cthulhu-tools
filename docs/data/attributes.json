@@ -45,7 +45,7 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "hp:max",
-		"min": 0,
+		"min": "0",
 		"max": "ceil((con + siz) / 2)"
 	},
 	{
@@ -55,7 +55,7 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "mp:max",
-		"min": 0,
+		"min": "0",
 		"max": "pow"
 	},
 	{
@@ -65,7 +65,7 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "san",
-		"min": 0,
+		"min": "0",
 		"max": "99 - cthulhu_mythos"
 	},
 	{
@@ -82,8 +82,8 @@
 			}
 		],
 		"expression": "$x",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "8ffe4014-5576-48eb-9e06-d48daaec53a1",
@@ -99,8 +99,8 @@
 			}
 		],
 		"expression": "$x",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "0b094762-a053-4f45-8681-1922c31fa593",
@@ -116,8 +116,8 @@
 			}
 		],
 		"expression": "$x",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "a3a412d7-5bbf-40e0-bd97-48314904cd7d",
@@ -133,8 +133,8 @@
 			}
 		],
 		"expression": "$x",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "8ff10bfe-5799-4de0-a968-ec95720195ec",
@@ -150,8 +150,8 @@
 			}
 		],
 		"expression": "$x",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "32037bf0-0cef-458a-b89c-47427b6d9923",
@@ -167,8 +167,8 @@
 			}
 		],
 		"expression": "$x + 6",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "0db6cd21-b768-49d9-bdcd-36ac3192efae",
@@ -184,8 +184,8 @@
 			}
 		],
 		"expression": "$x + 6",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "e6a65b8c-90aa-4d55-80d1-7215a637dd20",
@@ -201,8 +201,8 @@
 			}
 		],
 		"expression": "$x + 3",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "9592d16e-fb0b-4e01-88fb-10a7f3d60dde",
@@ -212,8 +212,8 @@
 		"inputs": [],
 		"expression": "pow * 5",
 		"view": true,
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "1b019781-7587-4c29-89a0-178905d1d4fb",
@@ -222,8 +222,8 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "int * 5",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "17a74eab-616a-4b28-8bd2-ff90a403a26a",
@@ -232,8 +232,8 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "pow * 5",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "4cccd989-c6b5-41ab-a99b-f7331985e5bf",
@@ -242,8 +242,8 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "edu * 5",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "eb2ec402-fbe2-46bc-9dcc-9b171bc7d080",
@@ -252,8 +252,8 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "str + siz",
-		"min": 0,
-		"max": 99
+		"min": "0",
+		"max": "99"
 	},
 	{
 		"uuid": "01e9829a-6353-4278-bbde-bd572a852dd5",
@@ -262,8 +262,8 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "edu * 20",
-		"min": 0,
-		"max": 999
+		"min": "0",
+		"max": "999"
 	},
 	{
 		"uuid": "61d7fbac-01e2-4b6e-acad-d676402bfdf3",
@@ -272,7 +272,7 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "int * 10",
-		"min": 0,
-		"max": 999
+		"min": "0",
+		"max": "999"
 	}
 ]

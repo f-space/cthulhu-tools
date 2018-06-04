@@ -22,15 +22,15 @@ interface AttributeCommonData<T extends AttributeType> {
 }
 
 export interface IntegerAttributeData extends AttributeCommonData<AttributeType.Integer> {
-	readonly expression: number | string;
-	readonly min?: number | string;
-	readonly max?: number | string;
+	readonly expression: string;
+	readonly min?: string;
+	readonly max?: string;
 }
 
 export interface NumberAttributeData extends AttributeCommonData<AttributeType.Number> {
-	readonly expression: number | string;
-	readonly min?: number | string;
-	readonly max?: number | string;
+	readonly expression: string;
+	readonly min?: string;
+	readonly max?: string;
 }
 
 export interface TextAttributeData extends AttributeCommonData<AttributeType.Text> {

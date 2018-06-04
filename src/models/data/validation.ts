@@ -73,8 +73,8 @@ export function uuid(value: string): string {
 	return String(value);
 }
 
-export function expression(value: number | string): Expression {
-	return (typeof value === 'number' ? Expression.value(value) : Expression.parse(String(value)) || Expression.value(NaN));
+export function expression(value: string): Expression {
+	return Expression.parse(String(value)) || Expression.value(NaN);
 }
 
 export function format(value: string): Format {

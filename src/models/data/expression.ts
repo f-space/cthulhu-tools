@@ -67,8 +67,8 @@ export class Expression {
 		return (new ASTSegmenter()).segment(this.ast);
 	}
 
-	public toJSON(): number | string {
-		return (this.ast.type === AST.NodeType.Literal ? this.ast.value : this.ast.toString());
+	public toJSON(): string {
+		return this.ast.toString();
 	}
 
 	public toString(): string {
