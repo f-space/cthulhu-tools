@@ -1,20 +1,15 @@
 import parser from "pegjs/expression";
 
-export enum ParseContext {
-	Expression,
-	Format,
-}
-
 export enum NodeType {
 	BinaryOp = 'binary-op',
 	UnaryOp = 'unary-op',
 	FunctionCall = 'func-call',
 	Literal = 'literal',
-	InputVariable = 'input-var',
-	Reference = 'reference',
-	Format = 'format',
-	Interpolation = 'interpolation',
+	Template = 'template',
+	Substitution = 'substitution',
 	Text = 'text',
+	Variable = 'variable',
+	Reference = 'reference',
 }
 
 export enum BinaryOperatorType {
@@ -51,10 +46,10 @@ export type Node =
 	| UnaryOperator
 	| FunctionCall
 	| Reference
-	| InputVariable
+	| Variable
 	| Literal
-	| Format
-	| Interpolation
+	| Template
+	| Substitution
 	| Text
 
 interface NodeInterface {
@@ -163,42 +158,8 @@ export class Literal implements NodeInterface {
 	}
 }
 
-export class InputVariable implements NodeInterface {
-	public get type(): NodeType.InputVariable { return NodeType.InputVariable; }
-	public get priority(): number { return PriorityLevel.Terminal; }
-
-	public constructor(readonly name: string) { }
-
-	public visitChildren(visitor: (node: Node) => void): void { }
-
-	public replaceChildren(visitor: (node: never) => any): InputVariable {
-		return this;
-	}
-
-	public toString(): string {
-		return `\$${this.name}`;
-	}
-}
-
-export class Reference implements NodeInterface {
-	public get type(): NodeType.Reference { return NodeType.Reference; }
-	public get priority(): number { return PriorityLevel.Terminal; }
-
-	public constructor(readonly id: string, readonly modifier: string | null = null) { }
-
-	public visitChildren(visitor: (node: Node) => void): void { }
-
-	public replaceChildren(visitor: (node: never) => any): Reference {
-		return this;
-	}
-
-	public toString(): string {
-		return this.id + (this.modifier ? `:${this.modifier}` : "");
-	}
-}
-
-export class Format implements NodeInterface {
-	public get type(): NodeType.Format { return NodeType.Format; }
+export class Template implements NodeInterface {
+	public get type(): NodeType.Template { return NodeType.Template; }
 	public get priority(): number { return PriorityLevel.String; }
 
 	public constructor(readonly segments: ReadonlyArray<Node>) { }
@@ -207,19 +168,19 @@ export class Format implements NodeInterface {
 		this.segments.forEach(x => visitor(x));
 	}
 
-	public replaceChildren(visitor: (node: Node) => Node): Format {
+	public replaceChildren(visitor: (node: Node) => Node): Template {
 		const segments = this.segments.map(x => visitor(x));
 
-		return segments.every((x, i) => x === this.segments[i]) ? this : new Format(segments);
+		return segments.every((x, i) => x === this.segments[i]) ? this : new Template(segments);
 	}
 
 	public toString(): string {
-		return this.segments.join("");
+		return `\`${this.segments.join("")}\``;
 	}
 }
 
-export class Interpolation implements NodeInterface {
-	public get type(): NodeType.Interpolation { return NodeType.Interpolation; }
+export class Substitution implements NodeInterface {
+	public get type(): NodeType.Substitution { return NodeType.Substitution; }
 	public get priority(): number { return PriorityLevel.String; }
 
 	public constructor(readonly expression: Node) { }
@@ -228,14 +189,14 @@ export class Interpolation implements NodeInterface {
 		visitor(this.expression);
 	}
 
-	public replaceChildren(visitor: (node: Node) => Node): Interpolation {
+	public replaceChildren(visitor: (node: Node) => Node): Substitution {
 		const expression = visitor(this.expression);
 
-		return (expression === this.expression) ? this : new Interpolation(expression);
+		return (expression === this.expression) ? this : new Substitution(expression);
 	}
 
 	public toString(): string {
-		return `\${${this.expression}}`;
+		return `{${this.expression}}`;
 	}
 }
 
@@ -252,46 +213,59 @@ export class Text implements NodeInterface {
 	}
 
 	public toString(): string {
-		return this.value;
+		return this.value.replace(/[`{}\\]/g, "\\$&");
 	}
 }
 
-export interface ParseResult<T extends NodeInterface> {
-	root?: T;
-	error: any;
+export class Variable implements NodeInterface {
+	public get type(): NodeType.Variable { return NodeType.Variable; }
+	public get priority(): number { return PriorityLevel.Terminal; }
+
+	public constructor(readonly name: string) { }
+
+	public visitChildren(visitor: (node: Node) => void): void { }
+
+	public replaceChildren(visitor: (node: never) => any): Variable {
+		return this;
+	}
+
+	public toString(): string {
+		return `\$${this.name}`;
+	}
 }
 
-export class Parser {
-	public static parse(source: string, context: ParseContext = ParseContext.Expression): ParseResult<Node> {
-		try {
-			const entry = this.getEntry(context);
-			const node = parser.parse(source, { startRule: entry });
-			const root = this.walk(node);
-			return { root, error: undefined };
-		} catch (error) {
-			return { error };
-		}
+export class Reference implements NodeInterface {
+	public get type(): NodeType.Reference { return NodeType.Reference; }
+	public get priority(): number { return PriorityLevel.Terminal; }
+
+	public constructor(readonly id: string, readonly modifier: string | null = null, readonly scope: string | null = null) { }
+
+	public visitChildren(visitor: (node: Node) => void): void { }
+
+	public replaceChildren(visitor: (node: never) => any): Reference {
+		return this;
 	}
 
-	private static getEntry(context: ParseContext): string {
-		switch (context) {
-			case ParseContext.Expression: return 'Expression';
-			case ParseContext.Format: return 'Format';
-		}
+	public toString(): string {
+		return (this.scope ? `@${this.scope}:` : "") + this.id + (this.modifier ? `:${this.modifier}` : "");
 	}
+}
 
-	private static walk(node: any): Node {
-		switch (node.type) {
-			case NodeType.BinaryOp: return new BinaryOperator(node.op, this.walk(node.lhs), this.walk(node.rhs));
-			case NodeType.UnaryOp: return new UnaryOperator(node.op, this.walk(node.expr));
-			case NodeType.FunctionCall: return new FunctionCall(node.fn, node.args.map((x: any) => this.walk(x)))
-			case NodeType.Reference: return new Reference(node.id, node.modifier);
-			case NodeType.InputVariable: return new InputVariable(node.name);
-			case NodeType.Literal: return new Literal(node.value);
-			case NodeType.Format: return new Format(node.segments.map((x: any) => this.walk(x)));
-			case NodeType.Interpolation: return new Interpolation(this.walk(node.expr));
-			case NodeType.Text: return new Text(node.value);
-			default: throw new Error('unreachable code');
-		}
+export function parse(source: string): Node {
+	return walk(parser.parse(source));
+}
+
+function walk(node: any): Node {
+	switch (node.type) {
+		case NodeType.BinaryOp: return new BinaryOperator(node.op, walk(node.lhs), walk(node.rhs));
+		case NodeType.UnaryOp: return new UnaryOperator(node.op, walk(node.expr));
+		case NodeType.FunctionCall: return new FunctionCall(node.fn, node.args.map((x: any) => walk(x)))
+		case NodeType.Literal: return new Literal(node.value);
+		case NodeType.Template: return new Template(node.segments.map((x: any) => walk(x)));
+		case NodeType.Substitution: return new Substitution(walk(node.expr));
+		case NodeType.Text: return new Text(node.value);
+		case NodeType.Variable: return new Variable(node.name);
+		case NodeType.Reference: return new Reference(node.id, node.modifier, node.scope);
+		default: throw new Error('unreachable code');
 	}
 }

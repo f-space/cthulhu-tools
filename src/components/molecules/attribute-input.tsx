@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Expression, Format, AttributeType, Attribute, InputType, InputMethod } from "models/status";
+import { Expression, AttributeType, Attribute, InputType, InputMethod } from "models/status";
 import { EvaluationText } from "components/atoms/evaluation-text";
 import { AttributeDiceInput } from "components/molecules/attribute-dice-input";
 import { AttributeNumberInput } from "components/molecules/attribute-number-input";
@@ -23,7 +23,7 @@ export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 				{segments.map(segment => typeof segment === 'string' ? segment : this.renderInput(segment))}
 			</div>
 			<div className={style['value']}>
-				<EvaluationText id={attribute.id} hash={null} />
+				<EvaluationText expression={attribute.id} hash={null} />
 			</div>
 		</div>
 	}
@@ -48,11 +48,11 @@ export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 			.map(x => typeof x === 'string' ? x : attribute.inputs.find(input => input.name === x.name))
 			.filter(x => x) as (string | InputMethod)[];
 
-		function getExpression(attribute: Attribute): Expression | Format {
+		function getExpression(attribute: Attribute): Expression {
 			switch (attribute.type) {
 				case AttributeType.Integer: return attribute.expression;
 				case AttributeType.Number: return attribute.expression;
-				case AttributeType.Text: return attribute.format;
+				case AttributeType.Text: return attribute.expression;
 			}
 		}
 	}

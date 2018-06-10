@@ -10,7 +10,7 @@
 				"type": "text"
 			}
 		],
-		"format": "${$x}"
+		"expression": "$x"
 	},
 	{
 		"uuid": "44da26db-7c69-4016-a362-107b473313a7",
@@ -23,7 +23,7 @@
 				"type": "text"
 			}
 		],
-		"format": "${$x}"
+		"expression": "$x"
 	},
 	{
 		"uuid": "c96c7286-083f-438b-acab-bd0e6c2de1ea",
@@ -36,7 +36,7 @@
 				"type": "text"
 			}
 		],
-		"format": "${$x}"
+		"expression": "$x"
 	},
 	{
 		"uuid": "7e36889c-381c-446b-b35a-faddd79a3f6d",
@@ -66,7 +66,7 @@
 		"inputs": [],
 		"expression": "san",
 		"min": "0",
-		"max": "99 - cthulhu_mythos"
+		"max": "99 - @skill:cthulhu_mythos"
 	},
 	{
 		"uuid": "b9b840a7-9366-4a29-9d06-42a5263ab609",

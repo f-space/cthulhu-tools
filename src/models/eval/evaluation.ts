@@ -1,4 +1,4 @@
-import { Reference, Expression, Format } from "models/data";
+import { Reference, Expression } from "models/data";
 import { Property } from "./property";
 import { Cache, ObjectCache } from "./cache";
 import { PropertyResolver, VoidResolver } from "./resolver";
@@ -47,17 +47,10 @@ export class EvaluationChain {
 		return this.cache.get(hash, ref.key);
 	}
 
-	public evaluateExpression(expression: Expression, hash: string | null, inputs: any = {}): number | undefined {
+	public evaluateExpression(expression: Expression, hash: string | null, vars: any = {}): number | undefined {
 		const values = new Map<string, any>();
-		expression.refs.forEach(ref => values.set(ref.key, this.evaluate(ref, hash)));
-		expression.inputs.forEach(input => values.set(input.key, inputs[input.key]));
+		expression.refs.forEach(reference => values.set(reference.key, this.evaluate(reference, hash)));
+		expression.vars.forEach(variable => values.set(variable.key, vars[variable.key]));
 		return expression.evaluate(values);
-	}
-
-	public evaluateFormat(format: Format, hash: string | null, inputs: any = {}): string | undefined {
-		const values = new Map<string, any>();
-		format.refs.forEach(ref => values.set(ref.key, this.evaluate(ref, hash)));
-		format.inputs.forEach(input => values.set(input.key, inputs[input.key]));
-		return format.evaluate(values);
 	}
 }

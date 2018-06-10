@@ -11,7 +11,7 @@
 		"build": "npm run build:prod",
 		"build:dev": "webpack --mode development --devtool inline-source-map",
 		"build:prod": "webpack --mode production",
-		"pegjs": "pegjs --allowed-start-rules Expression,Format src/pegjs/expression.pegjs"
+		"pegjs": "pegjs --allowed-start-rules Expression src/pegjs/expression.pegjs"
 	},
 	"keywords": [
 		"Cthulhu"

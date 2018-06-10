@@ -1,4 +1,4 @@
-import { Input, Expression, Format } from "./expression";
+import { Variable, Expression } from "./expression";
 import { sha256 } from "./hash";
 import * as validation from "./validation";
 
@@ -16,21 +16,14 @@ export interface CommandConfig {
 	readonly operations?: ReadonlyArray<Operation>;
 }
 
-export enum OperationType {
-	Expression = 'expression',
-	Format = 'format',
-}
-
 export interface OperationData {
-	readonly type: OperationType;
 	readonly target: string;
 	readonly value: string;
 }
 
 export interface OperationConfig {
-	readonly type: OperationType;
 	readonly target: string;
-	readonly value: Expression | Format;
+	readonly value: Expression;
 }
 
 export class Command {
@@ -85,50 +78,38 @@ export class Command {
 }
 
 export class Operation {
-	public readonly type: OperationType;
 	public readonly target: string;
-	public readonly value: Expression | Format;
+	public readonly value: Expression;
 
-	public get repr(): string { return `${this.target}:[${this.type}] ${this.value}`; }
+	public get repr(): string { return `${this.target}: ${this.value}`; }
 
-	public constructor({ type, target, value }: OperationConfig) {
-		this.type = type;
+	public constructor({ target, value }: OperationConfig) {
 		this.target = target;
 		this.value = value;
 	}
 
-	public static from({ type, target, value }: OperationData): Operation {
-		switch (type) {
-			case OperationType.Expression: return new Operation({
-				type: OperationType.Expression,
-				target: validation.string(target),
-				value: validation.expression(value)
-			});
-			case OperationType.Format: return new Operation({
-				type: OperationType.Format,
-				target: validation.string(target),
-				value: validation.format(value),
-			});
-			default: throw new Error("Invalid opearation type.");
-		}
+	public static from({ target, value }: OperationData): Operation {
+		return new Operation({
+			target: validation.string(target),
+			value: validation.expression(value)
+		});
 	}
 
 	public toJSON(): OperationData {
 		return {
-			type: this.type,
 			target: this.target,
 			value: this.value.toJSON(),
 		};
 	}
 
 	public set(config: Partial<OperationConfig>): Operation {
-		const { type, target, value } = this;
+		const { target, value } = this;
 
-		return new Operation({ type, target, value, ...config });
+		return new Operation({ target, value, ...config });
 	}
 
 	public apply(value: any): any {
-		const values = new Map<string, any>([Input.key("_"), value]);
+		const values = new Map<string, any>([Variable.key("_"), value]);
 
 		return this.value.evaluate(values);
 	}

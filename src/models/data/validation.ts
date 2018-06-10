@@ -1,4 +1,4 @@
-import { Expression, Format } from "./expression";
+import { Expression } from "./expression";
 
 const MIN_INT32 = (1 << 31);
 const MAX_INT32 = (1 << 31) ^ -1;
@@ -75,10 +75,6 @@ export function uuid(value: string): string {
 
 export function expression(value: string): Expression {
 	return Expression.parse(String(value)) || Expression.value(NaN);
-}
-
-export function format(value: string): Format {
-	return Format.parse(String(value)) || Format.value("<< Parse Error >>");
 }
 
 export function or<T>(value: T | undefined, defaultValue: T): T {

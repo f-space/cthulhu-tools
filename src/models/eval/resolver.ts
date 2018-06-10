@@ -13,11 +13,19 @@ export interface PropertyResolver {
 	resolve(context: ResolutionContext): Property | undefined;
 }
 
-export class AttributeResolver implements PropertyResolver {
+export interface TerminalResolver extends PropertyResolver {
+	supports(context: ResolutionContext): boolean;
+}
+
+export class AttributeResolver implements TerminalResolver {
 	public readonly attributes: ReadonlyMap<string, Attribute>;
 
 	public constructor(attributes: ReadonlyArray<Attribute>) {
 		this.attributes = attributes.reduce((map, attr) => map.set(attr.id, attr), new Map<string, Attribute>());
+	}
+
+	public supports(context: ResolutionContext): boolean {
+		return (context.ref.scope === 'attr' || context.ref.scope === null);
 	}
 
 	public resolve(context: ResolutionContext): AttributeProperty | undefined {
@@ -34,11 +42,15 @@ export class AttributeResolver implements PropertyResolver {
 	}
 }
 
-export class SkillResolver implements PropertyResolver {
+export class SkillResolver implements TerminalResolver {
 	public readonly skills: ReadonlyMap<string, Skill>;
 
 	public constructor(skills: ReadonlyArray<Skill>) {
 		this.skills = skills.reduce((map, skill) => map.set(skill.id, skill), new Map<string, Skill>());
+	}
+
+	public supports(context: ResolutionContext): boolean {
+		return (context.ref.scope === 'skill');
 	}
 
 	public resolve(context: ResolutionContext): SkillProperty | undefined {
@@ -56,16 +68,12 @@ export class SkillResolver implements PropertyResolver {
 }
 
 export class CompositeResolver implements PropertyResolver {
-	public constructor(readonly resolvers: ReadonlyArray<PropertyResolver>) { }
+	public constructor(readonly resolvers: ReadonlyArray<TerminalResolver>) { }
 
 	public resolve(context: ResolutionContext): Property | undefined {
-		for (const resolver of this.resolvers) {
-			const result = resolver.resolve(context);
+		const resolver = this.resolvers.find(resolver => resolver.supports(context));
 
-			if (result !== undefined) return result;
-		}
-
-		return undefined;
+		return resolver && resolver.resolve(context);
 	}
 }
 
@@ -79,7 +87,7 @@ export interface ResolverConfig {
 }
 
 export function buildResolver(config: ResolverConfig): PropertyResolver {
-	const resolvers = [] as PropertyResolver[];
+	const resolvers = [] as TerminalResolver[];
 
 	if (config.attributes) resolvers.push(new AttributeResolver(config.attributes));
 	if (config.skills) resolvers.push(new SkillResolver(config.skills));

@@ -18,8 +18,10 @@ export class Status {
 	public get current(): string | null { return this.context.history && this.context.history.head; }
 	public get hash(): string { return Status.basicsHash(this); }
 
-	public get(id: string, hash?: string | null): any {
-		return this.getByRef(new Reference(id), hash);
+	public get(key: string, hash?: string | null): any {
+		const ref = Reference.parse(key);
+
+		return ref ? this.getByRef(ref, hash) : undefined;
 	}
 
 	public getByRef(ref: Reference, hash: string | null = this.current): any {

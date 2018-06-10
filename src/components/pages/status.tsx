@@ -60,7 +60,7 @@ class StatusPageInternal extends React.Component<StatusPageInternalProps> {
 					attributes.map(attribute =>
 						<div key={attribute.uuid} className={style['attribute']}>
 							<dt className={style['name']}>{attribute.name}</dt>
-							<dd className={style['value']}>{status.get(attribute.id)}</dd>
+							<dd className={style['value']}>{status.get(`@attr:${attribute.id}`)}</dd>
 						</div>
 					)
 				}
@@ -78,7 +78,7 @@ class StatusPageInternal extends React.Component<StatusPageInternalProps> {
 					skills.map(skill =>
 						<div key={skill.uuid} className={style['skill']}>
 							<dt className={style['name']}>{skill.name}</dt>
-							<dd className={style['value']}>{status.get(skill.id)}</dd>
+							<dd className={style['value']}>{status.get(`@skill:${skill.id}`)}</dd>
 						</div>
 					)
 				}

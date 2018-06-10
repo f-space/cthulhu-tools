@@ -1,5 +1,5 @@
 import { InputMethodData, InputMethod } from "./input";
-import { Expression, Format } from "./expression";
+import { Expression } from "./expression";
 import * as validation from "./validation";
 
 export enum AttributeType {
@@ -34,7 +34,7 @@ export interface NumberAttributeData extends AttributeCommonData<AttributeType.N
 }
 
 export interface TextAttributeData extends AttributeCommonData<AttributeType.Text> {
-	readonly format: string;
+	readonly expression: string;
 }
 
 interface AttributeCommonConfig {
@@ -59,7 +59,7 @@ export interface NumberAttributeConfig extends AttributeCommonConfig {
 }
 
 export interface TextAttributeConfig extends AttributeCommonConfig {
-	readonly format: Format;
+	readonly expression: Expression;
 }
 
 abstract class AttributeBase<T extends AttributeType> {
@@ -206,14 +206,14 @@ export class NumberAttribute extends AttributeBase<AttributeType.Number> {
 }
 
 export class TextAttribute extends AttributeBase<AttributeType.Text> {
-	public readonly format: Format;
+	public readonly expression: Expression;
 
 	public get type(): AttributeType.Text { return AttributeType.Text; }
 
-	public constructor({ format, ...rest }: TextAttributeConfig, readonly?: boolean) {
+	public constructor({ expression, ...rest }: TextAttributeConfig, readonly?: boolean) {
 		super(rest, readonly);
 
-		this.format = format;
+		this.expression = expression;
 	}
 
 	public static from(data: TextAttributeData, readonly?: boolean): TextAttribute {
@@ -222,7 +222,7 @@ export class TextAttribute extends AttributeBase<AttributeType.Text> {
 
 	public toJSON(): TextAttributeData {
 		return Object.assign(super.toJSON(), {
-			format: this.format.toJSON(),
+			expression: this.expression.toJSON(),
 		});
 	}
 
@@ -230,16 +230,16 @@ export class TextAttribute extends AttributeBase<AttributeType.Text> {
 		return new TextAttribute(Object.assign(this.config(), config), readonly);
 	}
 
-	protected static import({ format, ...rest }: TextAttributeData): TextAttributeConfig {
+	protected static import({ expression, ...rest }: TextAttributeData): TextAttributeConfig {
 		return Object.assign(super.import(rest), {
-			format: validation.format(format),
+			expression: validation.expression(expression),
 		});
 	}
 
 	protected config(): TextAttributeConfig {
-		const { format } = this;
+		const { expression } = this;
 
-		return Object.assign(super.config(), { format });
+		return Object.assign(super.config(), { expression });
 	}
 }
 

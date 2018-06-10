@@ -1,5 +1,5 @@
 import {
-	Reference, Expression, Format,
+	Reference, Expression,
 	CharacterParams, AttributeParams, SkillParams,
 	AttributeType, Attribute, IntegerAttribute, NumberAttribute, TextAttribute,
 	Skill, History
@@ -64,26 +64,26 @@ export class AttributeEvaluator implements TerminalEvaluator {
 	private evaluateText(context: EvaluationContext, attribute: TextAttribute): string | undefined {
 		const { property } = context;
 		switch (property.type) {
-			case 'attribute': return this.evaluateExpression(context, attribute, attribute.format);
+			case 'attribute': return this.evaluateExpression(context, attribute, attribute.expression);
 			default: return undefined;
 		}
 	}
 
-	private evaluateExpression(context: EvaluationContext, attribute: Attribute, expression: Expression | Format): any {
+	private evaluateExpression(context: EvaluationContext, attribute: Attribute, expression: Expression): any {
 		const { hash, request } = context;
 		const data = this.data.get(attribute.id) || new Map<string, any>();
 		const values = new Map<string, any>();
 
-		for (const ref of expression.refs) {
-			const value = request(ref, hash);
-			values.set(ref.key, value);
+		for (const reference of expression.refs) {
+			const value = request(reference, hash);
+			values.set(reference.key, value);
 		}
 
-		for (const input of expression.inputs) {
-			const method = attribute.inputs.find(x => x.name === input.name);
-			if (method) {
-				const value = method.evaluate(data.get(method.name));
-				values.set(input.key, value);
+		for (const variable of expression.vars) {
+			const input = attribute.inputs.find(x => x.name === variable.name);
+			if (input) {
+				const value = input.evaluate(data.get(input.name));
+				values.set(variable.key, value);
 			}
 		}
 
@@ -113,8 +113,8 @@ export class SkillEvaluator implements TerminalEvaluator {
 
 	private evaluateSum(context: EvaluationContext): number | undefined {
 		const { ref, hash, request } = context;
-		const base = request(new Reference(ref.id, 'base'), hash);
-		const points = request(new Reference(ref.id, 'points'), hash);
+		const base = request(ref.set({ modifier: 'base' }), hash);
+		const points = request(ref.set({ modifier: 'points' }), hash);
 		return (base !== undefined && points !== undefined) ? (base + points) : undefined;
 	}
 

@@ -1,41 +1,70 @@
 import * as AST from "./ast";
 
-export class Input {
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+export class Variable {
 	public readonly key: string;
 
 	public constructor(readonly name: string) {
-		this.key = Input.key(name);
+		this.key = Variable.key(name);
+	}
+
+	public static parse(key: string): Variable | null {
+		return /^\$[0-9a-z_]+$/.test(key) ? new Variable(key.slice(1)) : null;
 	}
 
 	public static key(name: string): string {
 		return `\$${name}`;
+	}
+
+	public toString(): string {
+		return this.key;
 	}
 }
 
 export class Reference {
 	public readonly key: string;
 
-	public constructor(readonly id: string, readonly modifier: string | null = null) {
-		this.key = Reference.key(id, modifier);
+	public constructor(readonly id: string, readonly modifier: string | null = null, readonly scope: string | null = null) {
+		this.key = Reference.key(id, modifier, scope);
 	}
 
-	public static key(id: string, modifier: string | null = null): string {
-		return (modifier ? `${id}:${modifier}` : id);
+	public static parse(key: string): Reference | null {
+		const matches = key.match(/^(?:@([0-9a-z_]+):)?([a-z_][0-9a-z_]*)(?::([0-9a-z_]+))?$/);
+		if (matches !== null) {
+			const [_, scope = null, id, modifier = null] = matches;
+			return new Reference(id, modifier, scope);
+		}
+		return null;
+	}
+
+	public static key(id: string, modifier: string | null = null, scope: string | null = null): string {
+		return (scope ? `@${scope}:` : "") + id + (modifier ? `:${modifier}` : "")
+	}
+
+	public set(config: Partial<Omit<Reference, 'key'>>): Reference {
+		const { id = this.id, modifier = this.modifier, scope = this.scope } = config;
+
+		return new Reference(id, modifier, scope);
+	}
+
+	public toString(): string {
+		return this.key;
 	}
 }
 
-function collectDependencies(ast: AST.Node): { inputs: Input[], refs: Reference[] } {
-	const inputs: Map<string, Input> = new Map();
-	const refs: Map<string, Reference> = new Map();
+function collectDependencies(ast: AST.Node): { vars: Variable[], refs: Reference[] } {
+	const vars = new Map<string, Variable>();
+	const refs = new Map<string, Reference>();
 	const visitor = (node: AST.Node) => {
 		switch (node.type) {
-			case AST.NodeType.InputVariable:
-				const input = new Input(node.name);
-				if (!inputs.has(input.key)) inputs.set(input.key, input);
+			case AST.NodeType.Variable:
+				const variable = new Variable(node.name);
+				if (!vars.has(variable.key)) vars.set(variable.key, variable);
 				break;
 			case AST.NodeType.Reference:
-				const ref = new Reference(node.id, node.modifier);
-				if (!refs.has(ref.key)) refs.set(ref.key, ref);
+				const reference = new Reference(node.id, node.modifier, node.scope);
+				if (!refs.has(reference.key)) refs.set(reference.key, reference);
 				break;
 		}
 
@@ -43,57 +72,31 @@ function collectDependencies(ast: AST.Node): { inputs: Input[], refs: Reference[
 	}
 	visitor(ast);
 
-	return { inputs: [...inputs.values()], refs: [...refs.values()] };
+	return { vars: [...vars.values()], refs: [...refs.values()] };
 }
 
 export class Expression {
-	protected constructor(readonly ast: AST.Node, readonly inputs: ReadonlyArray<Input>, readonly refs: ReadonlyArray<Reference>) { }
+	protected constructor(readonly ast: AST.Node, readonly vars: ReadonlyArray<Variable>, readonly refs: ReadonlyArray<Reference>) { }
 
 	public static value(value: number): Expression {
 		return new Expression(new AST.Literal(value), [], []);
 	}
 
-	public static parse(source: string): Expression | undefined {
-		const { root: ast } = AST.Parser.parse(source, AST.ParseContext.Expression);
-		const deps = ast && collectDependencies(ast);
-		return ast ? new Expression(ast, deps!.inputs, deps!.refs) : undefined;
+	public static parse(source: string): Expression | null {
+		try {
+			const ast = AST.parse(source);
+			const deps = collectDependencies(ast);
+			return new Expression(ast, deps.vars, deps.refs);
+		} catch {
+			return null;
+		}
 	}
 
 	public evaluate(values?: Map<string, any>): number | undefined {
 		return (new ASTEvaluator(values)).evaluate(this.ast) as number | undefined;
 	}
 
-	public segment(): (string | Input)[] {
-		return (new ASTSegmenter()).segment(this.ast);
-	}
-
-	public toJSON(): string {
-		return this.ast.toString();
-	}
-
-	public toString(): string {
-		return this.ast.toString();
-	}
-}
-
-export class Format {
-	protected constructor(readonly ast: AST.Node, readonly inputs: ReadonlyArray<Input>, readonly refs: ReadonlyArray<Reference>) { }
-
-	public static value(value: string): Format {
-		return new Format(new AST.Text(value), [], []);
-	}
-
-	public static parse(source: string): Format | undefined {
-		const { root: ast } = AST.Parser.parse(source, AST.ParseContext.Format);
-		const deps = ast && collectDependencies(ast);
-		return ast ? new Format(ast, deps!.inputs, deps!.refs) : undefined;
-	}
-
-	public evaluate(values?: Map<string, any>): string | undefined {
-		return (new ASTEvaluator(values)).evaluate(this.ast) as string | undefined;
-	}
-
-	public segment(): (string | Input)[] {
+	public segment(): (string | Variable)[] {
 		return (new ASTSegmenter()).segment(this.ast);
 	}
 
@@ -117,16 +120,16 @@ abstract class ASTVisitor {
 				return this.onFunctionCall(node);
 			case AST.NodeType.Literal:
 				return this.onLiteral(node);
-			case AST.NodeType.InputVariable:
-				return this.onInputVariable(node);
-			case AST.NodeType.Reference:
-				return this.onReference(node);
-			case AST.NodeType.Format:
-				return this.onFormat(node);
-			case AST.NodeType.Interpolation:
-				return this.onInterpolation(node);
+			case AST.NodeType.Template:
+				return this.onTemplate(node);
+			case AST.NodeType.Substitution:
+				return this.onSubstitution(node);
 			case AST.NodeType.Text:
 				return this.onText(node);
+			case AST.NodeType.Variable:
+				return this.onVariable(node);
+			case AST.NodeType.Reference:
+				return this.onReference(node);
 		}
 	}
 
@@ -134,10 +137,10 @@ abstract class ASTVisitor {
 	protected abstract onUnaryOperator(node: AST.UnaryOperator): any;
 	protected abstract onFunctionCall(node: AST.FunctionCall): any;
 	protected abstract onLiteral(node: AST.Literal): any;
-	protected abstract onInputVariable(node: AST.InputVariable): any;
+	protected abstract onVariable(node: AST.Variable): any;
 	protected abstract onReference(node: AST.Reference): any;
-	protected abstract onFormat(node: AST.Format): any;
-	protected abstract onInterpolation(node: AST.Interpolation): any;
+	protected abstract onTemplate(node: AST.Template): any;
+	protected abstract onSubstitution(node: AST.Substitution): any;
 	protected abstract onText(node: AST.Text): any;
 }
 
@@ -200,22 +203,14 @@ class ASTEvaluator extends ASTVisitor {
 		return node.value;
 	}
 
-	protected onInputVariable(node: AST.InputVariable): number | string | undefined {
-		return this.values.get(Input.key(node.name));
-	}
-
-	protected onReference(node: AST.Reference): number | string | undefined {
-		return this.values.get(Reference.key(node.id, node.modifier));
-	}
-
-	protected onFormat(node: AST.Format): string | undefined {
+	protected onTemplate(node: AST.Template): string | undefined {
 		const segments = node.segments.map(x => this.visit(x));
 		if (segments.some(seg => seg === undefined)) return undefined;
 
 		return segments.join("");
 	}
 
-	protected onInterpolation(node: AST.Interpolation): string | undefined {
+	protected onSubstitution(node: AST.Substitution): string | undefined {
 		const expression = this.visit(node.expression);
 		if (expression === undefined) return undefined;
 
@@ -225,11 +220,19 @@ class ASTEvaluator extends ASTVisitor {
 	protected onText(node: AST.Text): string {
 		return node.value;
 	}
+
+	protected onVariable(node: AST.Variable): number | string | undefined {
+		return this.values.get(Variable.key(node.name));
+	}
+
+	protected onReference(node: AST.Reference): number | string | undefined {
+		return this.values.get(Reference.key(node.id, node.modifier, node.scope));
+	}
 }
 
 class ASTSegmenter extends ASTVisitor {
-	public segment(node: AST.Node): (string | Input)[] {
-		function* flatten(segments: any[]): IterableIterator<string | Input> {
+	public segment(node: AST.Node): (string | Variable)[] {
+		function* flatten(segments: any[]): IterableIterator<string | Variable> {
 			for (const segment of segments) {
 				if (Array.isArray(segment)) {
 					yield* flatten(segment);
@@ -239,7 +242,7 @@ class ASTSegmenter extends ASTVisitor {
 			}
 		}
 
-		function* join(segments: IterableIterator<string | Input>) {
+		function* join(segments: IterableIterator<string | Variable>) {
 			let chunk = [];
 			for (const segment of segments) {
 				if (typeof segment === 'string') {
@@ -280,27 +283,27 @@ class ASTSegmenter extends ASTVisitor {
 		return [String(node)];
 	}
 
-	protected onInputVariable(node: AST.InputVariable): any[] {
-		return [new Input(node.name)];
-	}
-
-	protected onReference(node: AST.Reference): any[] {
-		return [String(node)];
-	}
-
-	protected onFormat(node: AST.Format): any[] {
+	protected onTemplate(node: AST.Template): any[] {
 		const segments = node.segments.map(x => this.visit(x));
 
 		return segments;
 	}
 
-	protected onInterpolation(node: AST.Interpolation): any[] {
+	protected onSubstitution(node: AST.Substitution): any[] {
 		const expression = this.visit(node.expression);
 
 		return expression;
 	}
 
 	protected onText(node: AST.Text): any[] {
+		return [String(node)];
+	}
+
+	protected onVariable(node: AST.Variable): any[] {
+		return [new Variable(node.name)];
+	}
+
+	protected onReference(node: AST.Reference): any[] {
 		return [String(node)];
 	}
 }

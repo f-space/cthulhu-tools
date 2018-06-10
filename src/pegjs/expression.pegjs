@@ -3,21 +3,21 @@
 	const UNARY_OP = 'unary-op';
 	const FUNCTION_CALL = 'func-call';
 	const LITERAL = 'literal';
-	const INPUT_VARIABLE = 'input-var';
-	const REFERENCE = 'reference';
-	const FORMAT = 'format';
-	const INTERPOLATION = 'interpolation';
+	const TEMPLATE = 'template';
+	const SUBSTITUTION = 'substitution';
 	const TEXT = 'text';
+	const VARIABLE = 'variable';
+	const REFERENCE = 'reference';
 
 	function newBinaryOp(op, lhs, rhs) { return { type: BINARY_OP, op, lhs, rhs }; }
 	function newUnaryOp(op, expr) { return { type: UNARY_OP, op, expr }; }
 	function newFunctionCall(fn, args) { return { type: FUNCTION_CALL, fn, args }; }
 	function newLiteral(value) { return { type: LITERAL, value }; }
-	function newInputVariable(name) { return { type: INPUT_VARIABLE, name, }; }
-	function newReference(id, modifier) { return { type: REFERENCE, id, modifier }; }
-	function newFormat(segments) { return { type: FORMAT, segments }; }
-	function newInterpolation(expr) { return { type: INTERPOLATION, expr }; }
+	function newTemplate(segments) { return { type: TEMPLATE, segments }; }
+	function newSubstitution(expr) { return { type: SUBSTITUTION, expr }; }
 	function newText(value) { return { type: TEXT, value }; }
+	function newVariable(name) { return { type: VARIABLE, name, }; }
+	function newReference(id, modifier, scope) { return { type: REFERENCE, id, modifier, scope }; }
 }
 
 Expression = _ expr:ExpressionTrim _ { return expr; }
@@ -39,40 +39,43 @@ BinaryOp2Rest
 	= _ op:("*" / "/" / "%") _ rhs:Other { return { op, rhs }; }
 	
 Other
-	= UnaryOp
-	/ Parenthses
+	= Literal
+	/ Template
+	/ Parentheses
+	/ UnaryOp
 	/ FunctionCall
-	/ Literal
-	/ InputVariable
+	/ Variable
 	/ Reference
+
+Literal = value:$([+-]? [0-9]+ ("." [0-9]+)?) { return newLiteral(Number(value)); }
+
+Template
+	=  "`" first:Text? rest:TemplateRest* "`" { return newTemplate([first].concat(...rest).filter(x => x)); }
+TemplateRest
+	=  substitution:Substitution successor:Text? { return [substitution, successor]; }
+Substitution
+	= "{" expr:Expression "}" { return newSubstitution(expr); }
+Text
+	= value:$(([^`{}\\] / "\\" .)+) { return newText(value.replace(/\\(.)/g, "$1")); }
+
+Parentheses
+	= "(" _ expr:ExpressionTrim _ ")" { return expr; }
 
 UnaryOp
 	= op:("+" / "-") expr:ExpressionTrim { return newUnaryOp(op, expr); }
 
-Parenthses
-	= "(" _ expr:ExpressionTrim _ ")" { return expr; }
-
 FunctionCall
-	= fn:$([a-z]+) _ "(" args:Arguments ")" { return newFunctionCall(fn, args); }
+	= fn:$([a-z]+) _ "(" args:Arguments? ")" { return newFunctionCall(fn, args || []); }
 Arguments
 	= _ first:ExpressionTrim _ rest:ArgumentsRest* { return [first, ...rest]; }
 ArgumentsRest
 	= "," _ expr:ExpressionTrim _ { return expr; }
 
-Literal = value:$([0-9]+ ("." [0-9]+)?) { return newLiteral(Number(value)); }
+Variable = "$" name:$([0-9a-z_]+) { return newVariable(name); }
 
-InputVariable = "$" name:$([0-9a-z_]i+) { return newInputVariable(name); }
-
-Reference = id:$([a-z_]i [0-9a-z_]i*) modifier:Modifier? { return newReference(id, modifier); }
-Modifier = ":" id:$([0-9a-z_]i+) { return id; }
-
-Format
-	=  first:Text? rest:FormatRest* { return newFormat([first].concat(...rest).filter(x => x)); }
-FormatRest
-	=  interp:Interpolation successor:Text? { return [interp, successor]; }
-Interpolation
-	= "${" expr:Expression "}" { return newInterpolation(expr); }
-Text
-	= value:$(([^$] / "$$")+) { return newText(value.replace(/\$\$/g, "$")); }
+Reference = scope:Scope? id:Identifier modifier:Modifier? { return newReference(id, modifier, scope); }
+Scope = "@" scope:$([0-9a-z_]+) ":" { return scope; }
+Identifier = id:$([a-z_] [0-9a-z_]*) { return id; }
+Modifier = ":" modifier:$([0-9a-z_]+) { return modifier; }
 
 _ = [ \t\r\n]*

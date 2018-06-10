@@ -39,8 +39,8 @@ export class AttributeValidator implements TerminalValidator {
 		const { ref, hash, property, value, request } = context;
 		switch (property.type) {
 			case 'attribute':
-				const min = request(new Reference(ref.id, 'min'), hash);
-				const max = request(new Reference(ref.id, 'max'), hash);
+				const min = request(ref.set({ modifier: 'min' }), hash);
+				const max = request(ref.set({ modifier: 'max' }), hash);
 				return (min !== undefined && max !== undefined) ? Math.round(Math.max(Math.min(value, max), min)) : undefined;
 			case 'attribute:min': return Math.round(value);
 			case 'attribute:max': return Math.round(value);
@@ -52,8 +52,8 @@ export class AttributeValidator implements TerminalValidator {
 		const { ref, hash, property, value, request } = context;
 		switch (property.type) {
 			case 'attribute':
-				const min = request(new Reference(ref.id, 'min'), hash);
-				const max = request(new Reference(ref.id, 'max'), hash);
+				const min = request(ref.set({ modifier: 'min' }), hash);
+				const max = request(ref.set({ modifier: 'max' }), hash);
 				return (min !== undefined && max !== undefined) ? Number(Math.max(Math.min(value, max), min)) : undefined;
 			case 'attribute:min': return Number(value);
 			case 'attribute:max': return Number(value);

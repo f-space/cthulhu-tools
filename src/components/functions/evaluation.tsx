@@ -1,4 +1,5 @@
 import React from 'react';
+import memoize from 'memoize-one';
 import { Reference, Expression, EvaluationChain } from "models/status";
 
 const EvaluationContext = React.createContext<EvaluationChain>(new EvaluationChain({}));
@@ -6,10 +7,7 @@ const EvaluationContext = React.createContext<EvaluationChain>(new EvaluationCha
 export const EvaluationProvider = EvaluationContext.Provider;
 
 export interface EvaluationProps {
-	id?: string;
-	modifier?: string | null;
-	reference?: Reference;
-	expression?: string;
+	expression: string;
 	hash: string | null;
 	children: (value: any, complete: boolean) => React.ReactNode;
 }
@@ -36,6 +34,7 @@ class EvaluationInternal extends React.Component<EvaluationInternalProps, Evalua
 		super(props);
 
 		this.state = { complete: false, value: undefined };
+		this.getEvaluator = memoize(this.getEvaluator);
 	}
 
 	public componentDidMount(): void {
@@ -60,12 +59,7 @@ class EvaluationInternal extends React.Component<EvaluationInternalProps, Evalua
 	}
 
 	private isEqual(a: EvaluationInternalProps, b: EvaluationInternalProps): boolean {
-		return a.id === b.id
-			&& a.modifier === b.modifier
-			&& a.reference === b.reference
-			&& a.expression === b.expression
-			&& a.hash === b.hash
-			&& a.chain === b.chain;
+		return a.expression === b.expression && a.hash === b.hash && a.chain === b.chain;
 	}
 
 	private updateValue(): void {
@@ -89,16 +83,22 @@ class EvaluationInternal extends React.Component<EvaluationInternalProps, Evalua
 	}
 
 	private evaluate(): any {
-		const { id, modifier, reference, expression, hash, chain } = this.props;
-		if (id !== undefined) {
-			const ref = new Reference(id, modifier);
-			return chain.evaluate(ref, hash);
-		} else if (reference !== undefined) {
-			return chain.evaluate(reference, hash);
-		} else if (expression !== undefined) {
-			const expr = Expression.parse(expression);
-			return expr && chain.evaluateExpression(expr, hash);
+		const { expression, hash, chain } = this.props;
+
+		return this.getEvaluator(expression)(chain, hash);
+	}
+
+	private getEvaluator(expression: string): (chain: EvaluationChain, hash: string | null) => any {
+		const ref = Reference.parse(expression);
+		if (ref) {
+			return (chain, hash) => chain.evaluate(ref, hash);
 		}
-		return undefined;
+
+		const expr = Expression.parse(expression);
+		if (expr) {
+			return (chain, hash) => chain.evaluateExpression(expr, hash);
+		}
+
+		return () => undefined;
 	}
 }
