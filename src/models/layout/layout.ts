@@ -1,4 +1,3 @@
-import memoize from 'memoize-one';
 import { DiceDisplay } from "models/dice";
 
 export interface DiceRect {
