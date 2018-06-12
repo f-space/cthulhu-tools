@@ -6,11 +6,11 @@
 		"type": "text",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "text"
 			}
 		],
-		"expression": "$x"
+		"expression": "$_"
 	},
 	{
 		"uuid": "44da26db-7c69-4016-a362-107b473313a7",
@@ -19,11 +19,11 @@
 		"type": "text",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "text"
 			}
 		],
-		"expression": "$x"
+		"expression": "$_"
 	},
 	{
 		"uuid": "c96c7286-083f-438b-acab-bd0e6c2de1ea",
@@ -32,11 +32,11 @@
 		"type": "text",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "text"
 			}
 		],
-		"expression": "$x"
+		"expression": "$_"
 	},
 	{
 		"uuid": "7e36889c-381c-446b-b35a-faddd79a3f6d",
@@ -75,13 +75,13 @@
 		"type": "integer",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "dice",
 				"count": 3,
 				"max": 6
 			}
 		],
-		"expression": "$x",
+		"expression": "$_",
 		"min": "0",
 		"max": "99"
 	},
@@ -92,13 +92,13 @@
 		"type": "integer",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "dice",
 				"count": 3,
 				"max": 6
 			}
 		],
-		"expression": "$x",
+		"expression": "$_",
 		"min": "0",
 		"max": "99"
 	},
@@ -109,13 +109,13 @@
 		"type": "integer",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "dice",
 				"count": 3,
 				"max": 6
 			}
 		],
-		"expression": "$x",
+		"expression": "$_",
 		"min": "0",
 		"max": "99"
 	},
@@ -126,13 +126,13 @@
 		"type": "integer",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "dice",
 				"count": 3,
 				"max": 6
 			}
 		],
-		"expression": "$x",
+		"expression": "$_",
 		"min": "0",
 		"max": "99"
 	},
@@ -143,13 +143,13 @@
 		"type": "integer",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "dice",
 				"count": 3,
 				"max": 6
 			}
 		],
-		"expression": "$x",
+		"expression": "$_",
 		"min": "0",
 		"max": "99"
 	},
@@ -160,13 +160,13 @@
 		"type": "integer",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "dice",
 				"count": 2,
 				"max": 6
 			}
 		],
-		"expression": "$x + 6",
+		"expression": "$_ + 6",
 		"min": "0",
 		"max": "99"
 	},
@@ -177,13 +177,13 @@
 		"type": "integer",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "dice",
 				"count": 2,
 				"max": 6
 			}
 		],
-		"expression": "$x + 6",
+		"expression": "$_ + 6",
 		"min": "0",
 		"max": "99"
 	},
@@ -194,13 +194,13 @@
 		"type": "integer",
 		"inputs": [
 			{
-				"name": "x",
+				"name": "_",
 				"type": "dice",
 				"count": 3,
 				"max": 6
 			}
 		],
-		"expression": "$x + 3",
+		"expression": "$_ + 3",
 		"min": "0",
 		"max": "99"
 	},
