@@ -1,4 +1,4 @@
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export interface CharacterViewData {
 	readonly target: string;
@@ -21,8 +21,8 @@ export class CharacterView {
 
 	public static from({ target, visible }: CharacterViewData) {
 		return new CharacterView({
-			target: validation.string(target),
-			visible: validation.boolean(validation.or(visible, false)),
+			target: validate("target", target).string().uuid().value,
+			visible: validate("visible", visible).optional(v => v.bool()).value,
 		});
 	}
 

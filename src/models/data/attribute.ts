@@ -1,6 +1,6 @@
 import { InputMethodData, InputMethod } from "./input";
 import { Expression } from "./expression";
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export enum AttributeType {
 	Integer = 'integer',
@@ -97,12 +97,12 @@ abstract class AttributeBase<T extends AttributeType> {
 
 	protected static import({ uuid, id, name, inputs, view, hidden }: AttributeCommonData<AttributeType>): AttributeCommonConfig {
 		return {
-			uuid: validation.uuid(uuid),
-			id: validation.string(id),
-			name: validation.string(name),
-			inputs: validation.array(inputs, InputMethod.from),
-			view: validation.boolean(validation.or(view, false)),
-			hidden: validation.boolean(validation.or(hidden, false)),
+			uuid: validate("uuid", uuid).string().uuid().value,
+			id: validate("id", id).string().id().value,
+			name: validate("name", name).string().nonempty().value,
+			inputs: validate("inputs", inputs).optional(v => v.array(v => v.object<InputMethodData>().map(InputMethod.from))).value,
+			view: validate("view", view).optional(v => v.bool()).value,
+			hidden: validate("hidden", hidden).optional(v => v.bool()).value,
 		};
 	}
 
@@ -146,9 +146,9 @@ export class IntegerAttribute extends AttributeBase<AttributeType.Integer> {
 
 	protected static import({ expression, min, max, ...rest }: IntegerAttributeData): IntegerAttributeConfig {
 		return Object.assign(super.import(rest), {
-			expression: validation.expression(expression),
-			min: validation.opt(min, validation.expression),
-			max: validation.opt(max, validation.expression),
+			expression: validate("expression", expression).string().expr().value,
+			min: validate("min", min).optional(v => v.string().expr()).value,
+			max: validate("max", max).optional(v => v.string().expr()).value,
 		});
 	}
 
@@ -192,9 +192,9 @@ export class NumberAttribute extends AttributeBase<AttributeType.Number> {
 
 	protected static import({ expression, min, max, ...rest }: NumberAttributeData): NumberAttributeConfig {
 		return Object.assign(super.import(rest), {
-			expression: validation.expression(expression),
-			min: validation.opt(min, validation.expression),
-			max: validation.opt(max, validation.expression),
+			expression: validate("expression", expression).string().expr().value,
+			min: validate("min", min).optional(v => v.string().expr()).value,
+			max: validate("max", max).optional(v => v.string().expr()).value,
 		});
 	}
 
@@ -232,7 +232,7 @@ export class TextAttribute extends AttributeBase<AttributeType.Text> {
 
 	protected static import({ expression, ...rest }: TextAttributeData): TextAttributeConfig {
 		return Object.assign(super.import(rest), {
-			expression: validation.expression(expression),
+			expression: validate("expression", expression).string().expr().value,
 		});
 	}
 
@@ -244,12 +244,12 @@ export class TextAttribute extends AttributeBase<AttributeType.Text> {
 }
 
 export namespace Attribute {
-	export function from(data: any, readonly?: boolean): Attribute {
+	export function from(data: AttributeData, readonly?: boolean): Attribute {
 		switch (data.type) {
 			case AttributeType.Integer: return IntegerAttribute.from(data, readonly);
 			case AttributeType.Number: return NumberAttribute.from(data, readonly);
 			case AttributeType.Text: return TextAttribute.from(data, readonly);
-			default: throw new Error(`Invalid attribute type: ${data.type}`);
+			default: throw new Error(`Invalid attribute type: ${(data as any).type}`);
 		}
 	}
 }

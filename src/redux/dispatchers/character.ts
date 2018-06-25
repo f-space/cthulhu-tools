@@ -1,4 +1,4 @@
-import { CharacterView, Character } from "models/status";
+import { CharacterView, CharacterData, Character } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { CharacterAction } from "redux/actions/character";
@@ -39,7 +39,21 @@ export default class CharacterDispatcher {
 		await DB.transaction("r", DB.characters, () => {
 			return DB.characters.toArray();
 		}).then(characters => {
-			this.dispatch(CharacterAction.set(characters.map(character => Character.from(character))));
+			this.dispatch(CharacterAction.set(this.validate(characters)));
 		});
+	}
+
+	private validate(characters: ReadonlyArray<CharacterData>, readonly?: boolean): Character[] {
+		const result = [] as Character[];
+		for (const character of characters) {
+			try {
+				result.push(Character.from(character, readonly));
+			} catch (e) {
+				if (e instanceof Error) {
+					console.error(`Failed to load a character: ${e.message}`);
+				} else throw e;
+			}
+		}
+		return result;
 	}
 }

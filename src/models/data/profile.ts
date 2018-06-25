@@ -1,4 +1,4 @@
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export interface ProfileData {
 	readonly uuid: string;
@@ -31,10 +31,10 @@ export class Profile {
 
 	public static from({ uuid, name, attributes, skills }: ProfileData, readonly?: boolean) {
 		return new Profile({
-			uuid: validation.uuid(uuid),
-			name: validation.string(name),
-			attributes: validation.array(attributes, validation.string),
-			skills: validation.array(skills, validation.string),
+			uuid: validate("uuid", uuid).string().uuid().value,
+			name: validate("name", name).string().nonempty().value,
+			attributes: validate("attributes", attributes).optional(v => v.array(v => v.string().uuid())).value,
+			skills: validate("skills", skills).optional(v => v.array(v => v.string().uuid())).value,
 		}, readonly);
 	}
 

@@ -1,10 +1,10 @@
 import { Variable, Expression } from "./expression";
 import { sha256 } from "./hash";
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export interface CommandData {
-	readonly parent?: string | null;
-	readonly time?: number;
+	readonly parent: string | null;
+	readonly time: number;
 	readonly message?: string;
 	readonly operations?: ReadonlyArray<OperationData>;
 }
@@ -50,10 +50,10 @@ export class Command {
 
 	public static from({ parent, time, message, operations }: CommandData): Command {
 		return new Command({
-			parent: validation.string_null(parent),
-			time: validation.time(time),
-			message: validation.string(validation.or(message, "")),
-			operations: validation.array(operations, Operation.from),
+			parent: validate("parent", parent).nullable(v => v.string()).value,
+			time: validate("time", time).time().value,
+			message: validate("message", message).optional(v => v.string()).value,
+			operations: validate("operations", operations).optional(v => v.array(v => v.object<OperationData>().map(Operation.from))).value,
 		});
 	}
 
@@ -90,8 +90,8 @@ export class Operation {
 
 	public static from({ target, value }: OperationData): Operation {
 		return new Operation({
-			target: validation.string(target),
-			value: validation.expression(value)
+			target: validate("target", target).string().id().value,
+			value: validate("value", value).string().expr().value,
 		});
 	}
 

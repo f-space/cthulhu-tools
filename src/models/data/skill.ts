@@ -1,5 +1,5 @@
 import { Expression } from "./expression";
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export enum SkillCategory {
 	Locomotion = 'locomotion',
@@ -49,11 +49,11 @@ export class Skill {
 
 	public static from({ uuid, id, name, category, base }: SkillData, readonly?: boolean) {
 		return new Skill({
-			uuid: validation.uuid(uuid),
-			id: validation.string(id),
-			name: validation.string(name),
-			category: validation.string_enum(SKILL_CATEGORY_SET.has(category) ? category : SkillCategory.Other),
-			base: validation.expression(base),
+			uuid: validate("uuid", uuid).string().uuid().value,
+			id: validate("id", id).string().id().value,
+			name: validate("name", name).string().nonempty().value,
+			category: validate("category", category).enum(SKILL_CATEGORY_SET).value,
+			base: validate("base", base).string().expr().value,
 		}, readonly);
 	}
 

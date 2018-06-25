@@ -36,7 +36,7 @@ export default class SkillDispatcher {
 		await DB.transaction("r", DB.skills, () => {
 			return DB.skills.toArray();
 		}).then(skills => {
-			this.dispatch(SkillAction.set(skills.map(skill => Skill.from(skill))));
+			this.dispatch(SkillAction.set(this.validate(skills)));
 		});
 	}
 
@@ -49,7 +49,21 @@ export default class SkillDispatcher {
 			}
 		}).then(data => {
 			const skills = (Array.isArray(data) ? data : [data]) as SkillData[];
-			this.dispatch(SkillAction.set(skills.map(skill => Skill.from(skill, true))));
+			this.dispatch(SkillAction.set(this.validate(skills, true)));
 		});
+	}
+
+	private validate(skills: ReadonlyArray<SkillData>, readonly?: boolean): Skill[] {
+		const result = [] as Skill[];
+		for (const skill of skills) {
+			try {
+				result.push(Skill.from(skill, readonly));
+			} catch (e) {
+				if (e instanceof Error) {
+					console.error(`Failed to load a skill: ${e.message}`);
+				} else throw e;
+			}
+		}
+		return result;
 	}
 }

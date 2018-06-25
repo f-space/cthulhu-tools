@@ -1,4 +1,4 @@
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export interface CharacterParamsData {
 	readonly attribute?: AttributeParamsData;
@@ -41,9 +41,9 @@ export class CharacterParams implements CharacterParamsConfig {
 
 	public static from({ attribute, skill, item }: CharacterParamsData): CharacterParams {
 		return new CharacterParams({
-			attribute: validation.map(attribute, validation.map),
-			skill: validation.map(skill),
-			item: validation.map(item),
+			attribute: validate("attribute", attribute).optional(v => v.dict(v => v.dict(v => v.any()))).value,
+			skill: validate("skill", skill).optional(v => v.dict(v => v.number())).value,
+			item: validate("item", item).optional(v => v.dict(v => v.int())).value,
 		});
 	}
 

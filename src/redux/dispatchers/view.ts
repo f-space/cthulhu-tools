@@ -1,4 +1,4 @@
-import { CharacterView } from "models/status";
+import { CharacterViewData, CharacterView } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { ViewAction } from "redux/actions/view";
@@ -18,7 +18,7 @@ export default class ViewDispatcher {
 		await DB.transaction("r", DB.views, () => {
 			return DB.views.toArray();
 		}).then(views => {
-			this.dispatch(ViewAction.set(views.map(view => CharacterView.from(view))));
+			this.dispatch(ViewAction.set(this.validate(views)));
 			this.setHook();
 		});
 	}
@@ -34,5 +34,19 @@ export default class ViewDispatcher {
 				this.dispatch(ViewAction.delete(key));
 			});
 		});
+	}
+
+	private validate(views: ReadonlyArray<CharacterViewData>): CharacterView[] {
+		const result = [] as CharacterView[];
+		for (const view of views) {
+			try {
+				result.push(CharacterView.from(view));
+			} catch (e) {
+				if (e instanceof Error) {
+					console.error(`Failed to load a view: ${e.message}`);
+				} else throw e;
+			}
+		}
+		return result;
 	}
 }

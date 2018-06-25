@@ -1,4 +1,4 @@
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export interface ItemData {
 	readonly uuid: string;
@@ -25,9 +25,9 @@ export class Item {
 
 	public static from({ uuid, name, description }: ItemData): Item {
 		return new Item({
-			uuid: validation.uuid(uuid),
-			name: validation.string(name),
-			description: validation.string(validation.or(description, "")),
+			uuid: validate("uuid", uuid).string().uuid().value,
+			name: validate("name", name).string().nonempty().value,
+			description: validate("description", description).optional(v => v.string()).value,
 		});
 	}
 

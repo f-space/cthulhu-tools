@@ -1,4 +1,4 @@
-import { History } from "models/status";
+import { HistoryData, History } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { HistoryAction } from "redux/actions/history";
@@ -34,7 +34,21 @@ export default class HistoryDispatcher {
 		await DB.transaction("r", DB.histories, () => {
 			return DB.histories.toArray();
 		}).then(histories => {
-			this.dispatch(HistoryAction.set(histories.map(history => History.from(history))));
+			this.dispatch(HistoryAction.set(this.validate(histories)));
 		});
+	}
+
+	private validate(histories: ReadonlyArray<HistoryData>, readonly?: boolean): History[] {
+		const result = [] as History[];
+		for (const history of histories) {
+			try {
+				result.push(History.from(history, readonly));
+			} catch (e) {
+				if (e instanceof Error) {
+					console.error(`Failed to load a history: ${e.message}`);
+				} else throw e;
+			}
+		}
+		return result;
 	}
 }

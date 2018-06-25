@@ -1,5 +1,5 @@
 import { Dice } from "models/dice";
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export enum InputType {
 	Dice = 'dice',
@@ -62,7 +62,7 @@ abstract class InputMethodBase<T extends InputType> {
 	}
 
 	protected static import({ name }: InputMethodCommonData<InputType>): InputMethodCommonConfig {
-		return { name: validation.string(name) };
+		return { name: validate("name", name).string().nonempty().value };
 	}
 
 	protected config(): InputMethodCommonConfig {
@@ -114,8 +114,8 @@ export class DiceInputMethod extends InputMethodBase<InputType.Dice> {
 
 	protected static import({ count, max, ...rest }: DiceInputMethodData): DiceInputMethodConfig {
 		return Object.assign(InputMethodBase.import(rest), {
-			count: validation.int(count, 0),
-			max: validation.int(max, 1),
+			count: validate("count", count).int().min(0).value,
+			max: validate("max", max).int().min(1).value,
 		});
 	}
 
@@ -194,9 +194,9 @@ export class NumberInputMethod extends InputMethodBase<InputType.Number> {
 
 	protected static import({ min, max, step, ...rest }: NumberInputMethodData): NumberInputMethodConfig {
 		return Object.assign(super.import(rest), {
-			min: validation.finite(min),
-			max: validation.finite(max),
-			step: validation.positive(validation.finite(step)),
+			min: validate("min", min).optional(v => v.number()).value,
+			max: validate("max", max).optional(v => v.number()).value,
+			step: validate("step", step).optional(v => v.number().positive()).value,
 		});
 	}
 
@@ -246,12 +246,12 @@ export class TextInputMethod extends InputMethodBase<InputType.Text> {
 }
 
 export namespace InputMethod {
-	export function from(data: any): InputMethod {
+	export function from(data: InputMethodData): InputMethod {
 		switch (data.type) {
 			case InputType.Dice: return DiceInputMethod.from(data);
 			case InputType.Number: return NumberInputMethod.from(data);
 			case InputType.Text: return TextInputMethod.from(data);
-			default: throw new Error(`Invalid input type: ${data.type}`);
+			default: throw new Error(`Invalid input type: ${(data as any).type}`);
 		}
 	}
 }

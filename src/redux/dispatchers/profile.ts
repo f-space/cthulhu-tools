@@ -36,7 +36,7 @@ export default class ProfileDispatcher {
 		await DB.transaction("r", DB.profiles, () => {
 			return DB.profiles.toArray();
 		}).then(profiles => {
-			this.dispatch(ProfileAction.set(profiles.map(profile => Profile.from(profile))));
+			this.dispatch(ProfileAction.set(this.validate(profiles)));
 		});
 	}
 
@@ -49,12 +49,26 @@ export default class ProfileDispatcher {
 			}
 		}).then(data => {
 			const profiles = (Array.isArray(data) ? data : [data]) as (ProfileData & { default?: boolean })[];
-			this.dispatch(ProfileAction.set(profiles.map(profile => Profile.from(profile, true))));
+			this.dispatch(ProfileAction.set(this.validate(profiles, true)));
 
 			const defaultProfile = profiles.find(profile => Boolean(profile.default));
 			if (defaultProfile && defaultProfile.uuid) {
 				this.dispatch(ProfileAction.setDefault(defaultProfile.uuid));
 			}
 		});
+	}
+
+	private validate(profiles: ReadonlyArray<ProfileData>, readonly?: boolean): Profile[] {
+		const result = [] as Profile[];
+		for (const profile of profiles) {
+			try {
+				result.push(Profile.from(profile, readonly));
+			} catch (e) {
+				if (e instanceof Error) {
+					console.error(`Failed to load a profile: ${e.message}`);
+				} else throw e;
+			}
+		}
+		return result;
 	}
 }

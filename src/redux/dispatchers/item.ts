@@ -1,4 +1,4 @@
-import { Item } from "models/status";
+import { ItemData, Item } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { ItemAction } from "redux/actions/item";
@@ -34,7 +34,21 @@ export default class ItemDispatcher {
 		await DB.transaction("r", DB.items, () => {
 			return DB.items.toArray();
 		}).then(items => {
-			this.dispatch(ItemAction.set(items.map(item => Item.from(item))));
+			this.dispatch(ItemAction.set(this.validate(items)));
 		});
+	}
+
+	private validate(items: ReadonlyArray<ItemData>): Item[] {
+		const result = [] as Item[];
+		for (const item of items) {
+			try {
+				result.push(Item.from(item));
+			} catch (e) {
+				if (e instanceof Error) {
+					console.error(`Failed to load an item: ${e.message}`);
+				} else throw e;
+			}
+		}
+		return result;
 	}
 }

@@ -36,7 +36,7 @@ export default class AttributeDispatcher {
 		await DB.transaction("r", DB.attributes, () => {
 			return DB.attributes.toArray();
 		}).then(attributes => {
-			this.dispatch(AttributeAction.set(attributes.map(attr => Attribute.from(attr))));
+			this.dispatch(AttributeAction.set(this.validate(attributes)));
 		});
 	}
 
@@ -49,7 +49,21 @@ export default class AttributeDispatcher {
 			}
 		}).then(data => {
 			const attributes = (Array.isArray(data) ? data : [data]) as AttributeData[];
-			this.dispatch(AttributeAction.set(attributes.map(attribute => Attribute.from(attribute, true))));
+			this.dispatch(AttributeAction.set(this.validate(attributes, true)));
 		});
+	}
+
+	private validate(attributes: ReadonlyArray<AttributeData>, readonly?: boolean): Attribute[] {
+		const result = [] as Attribute[];
+		for (const attribute of attributes) {
+			try {
+				result.push(Attribute.from(attribute, readonly));
+			} catch (e) {
+				if (e instanceof Error) {
+					console.error(`Failed to load an attribute: ${e.message}`);
+				} else throw e;
+			}
+		}
+		return result;
 	}
 }

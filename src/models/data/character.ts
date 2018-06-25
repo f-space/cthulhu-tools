@@ -1,5 +1,5 @@
 import { CharacterParamsData, CharacterParams } from "./params";
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export interface CharacterData {
 	readonly uuid: string;
@@ -32,10 +32,10 @@ export class Character {
 
 	public static from({ uuid, profile, history, params }: CharacterData, readonly?: boolean) {
 		return new Character({
-			uuid: validation.uuid(uuid),
-			profile: validation.string(profile),
-			history: validation.string_null(history),
-			params: CharacterParams.from(validation.or(params, {})),
+			uuid: validate("uuid", uuid).string().uuid().value,
+			profile: validate("profile", profile).string().uuid().value,
+			history: validate("history", history).or(null).nullable(v => v.string().uuid()).value,
+			params: validate("params", params).or({}).object().map(CharacterParams.from).value,
 		}, readonly);
 	}
 

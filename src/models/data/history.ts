@@ -1,5 +1,5 @@
 import { CommandData, Command } from "./command";
-import * as validation from "./validation";
+import { validate } from "./validation";
 
 export interface HistoryData {
 	readonly uuid: string;
@@ -37,10 +37,10 @@ export class History {
 
 	public static from({ uuid, name, head, commands }: HistoryData, readonly?: boolean): History {
 		return new History({
-			uuid: validation.uuid(uuid),
-			name: validation.string(name),
-			head: validation.string_null(head),
-			commands: validation.array(commands, Command.from),
+			uuid: validate("uuid", uuid).string().uuid().value,
+			name: validate("name", name).string().nonempty().value,
+			head: validate("head", head).nullable(v => v.string()).value,
+			commands: validate("commands", commands).optional(v => v.array(v => v.object<CommandData>().map(Command.from))).value,
 		}, readonly);
 	}
 
