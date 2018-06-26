@@ -1,6 +1,6 @@
 import { Reference, CharacterContext } from "models/data";
 import { Cache, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/eval";
-import { sha256 } from "models/data/hash";
+import { Hash } from "models/data/hash";
 
 export * from "models/data";
 export * from "models/eval";
@@ -37,6 +37,6 @@ export class Status {
 	public static basicsHash(status: Status): any {
 		const values = this.basics(status);
 		const json = JSON.stringify(values, Object.keys(values).sort());
-		return sha256(json);
+		return Hash.from(json).hex();
 	}
 }

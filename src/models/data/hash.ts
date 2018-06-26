@@ -1,10 +1,17 @@
-import toSHA256 from "fast-sha256";
-import { encode } from "@stablelib/utf8";
+import murmur128 from "murmur-128";
 
-export function sha256(data: string): string {
-	return toHexString(toSHA256(encode(data)));
-}
+export class Hash {
+	private constructor(readonly buffer: ArrayBuffer) { }
 
-function toHexString(bytes: Uint8Array): string {
-	return Array.from(bytes).map(x => x.toString(16).padStart(2, "0")).join('');
+	public static from(data: ArrayBuffer | string): Hash {
+		return new Hash(murmur128(data));
+	}
+
+	public bytes(): Uint8Array {
+		return new Uint8Array(this.buffer);
+	}
+
+	public hex(): string {
+		return Array.from(this.bytes()).map(x => x.toString(16).padStart(2, "0")).join('');
+	}
 }

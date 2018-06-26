@@ -1,5 +1,5 @@
 import { Variable, Expression } from "./expression";
-import { sha256 } from "./hash";
+import { Hash } from "./hash";
 import { validate } from "./validation";
 
 export interface CommandData {
@@ -45,7 +45,7 @@ export class Command {
 		this.time = time;
 		this.message = message !== undefined ? message : "";
 		this.operations = operations !== undefined ? operations : [];
-		this.hash = sha256(this.repr);
+		this.hash = Hash.from(this.repr).hex();
 	}
 
 	public static from({ parent, time, message, operations }: CommandData): Command {
