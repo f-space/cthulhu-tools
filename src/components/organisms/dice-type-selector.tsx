@@ -16,14 +16,14 @@ export class DiceTypeSelector extends React.Component<DiceTypeSelectorProps> {
 	}
 
 	public render() {
-		const { className, ...rest } = this.props;
+		const { types, selected, onTypeChange, className, ...rest } = this.props;
 
-		return <div className={classNames(className, style['dice-sets'])}>
+		return <div {...rest} className={classNames(className, style['dice-sets'])}>
 			{
-				this.props.types.map(type => {
+				types.map(type => {
 					const className = classNames(
 						style['dice-set'],
-						{ [style['active']]: type === this.props.selected }
+						{ [style['active']]: type === selected }
 					);
 
 					return <div key={type} className={className} onClick={this.handleClick} data-type={type}>{type}</div>

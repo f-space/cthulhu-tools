@@ -1,5 +1,5 @@
-import { Reference, Attribute, IntegerAttribute, NumberAttribute, TextAttribute, Skill } from "models/data";
-import { Property, AttributeProperty, SkillProperty } from "./property";
+import { Reference } from "models/data";
+import { Property, AttributeProperty } from "./property";
 
 export interface ValidationContext {
 	readonly ref: Reference;

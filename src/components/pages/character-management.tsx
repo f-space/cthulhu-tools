@@ -3,7 +3,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FormApi } from 'final-form';
 import { Form, FormSpy } from 'react-final-form';
-import { CharacterView, Character, DataProvider, ExternalCache, DataCollector, Status } from "models/status";
+import { DataProvider, ExternalCache, DataCollector, Status } from "models/status";
 import CacheStorage from "models/idb-cache";
 import { generateUUID } from "models/utility";
 import { State, Dispatch } from "redux/store";
@@ -18,7 +18,6 @@ import style from "styles/pages/character-management.scss";
 
 interface CharacterManagementPageInternalProps extends RouteComponentProps<{}> {
 	provider: DataProvider;
-	views: { [uuid: string]: CharacterView };
 	statusList: Status[];
 	dispatcher: StatusDispatcher;
 }
@@ -40,7 +39,7 @@ const mapStateToProps = (state: State) => {
 		.map(result => new Status(result.value!))
 		.map(status => new Status(status.context, new ExternalCache(CacheStorage, status.hash)))
 		.sort((x, y) => String.prototype.localeCompare.call(x.get("name"), y.get("name")))
-	return { provider, views, statusList };
+	return { provider, statusList };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -71,11 +70,10 @@ class CharacterManagementPageInternal extends React.Component<CharacterManagemen
 	}
 
 	private renderCharacters() {
-		const { views, statusList } = this.props;
+		const { statusList } = this.props;
 
 		return <SelectableList className={style['characters']} field="selection" items={statusList} render={status => {
 			const uuid = status.context.character.uuid;
-			const { visible } = views[uuid];
 
 			return {
 				key: uuid,
@@ -133,7 +131,7 @@ class CharacterManagementPageInternal extends React.Component<CharacterManagemen
 
 		const sources = provider.character.get(selection);
 		for (const source of sources) {
-			const character = source.set({uuid: generateUUID()});
+			const character = source.set({ uuid: generateUUID() });
 			dispatcher.character.create(character);
 		}
 

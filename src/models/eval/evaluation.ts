@@ -1,5 +1,4 @@
 import { Reference, Expression } from "models/data";
-import { Property } from "./property";
 import { Cache, ObjectCache } from "./cache";
 import { PropertyResolver, VoidResolver } from "./resolver";
 import { PropertyEvaluator, VoidEvaluator } from "./evaluator";

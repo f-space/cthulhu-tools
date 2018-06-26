@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { FormApi, Decorator, getIn } from 'final-form';
+import { Decorator, getIn } from 'final-form';
 import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { Character, CharacterParams, AttributeParamsData, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
