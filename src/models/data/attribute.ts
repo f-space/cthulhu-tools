@@ -89,7 +89,7 @@ abstract class AttributeBase<T extends AttributeType> {
 			uuid: this.uuid,
 			id: this.id,
 			name: this.name,
-			inputs: this.inputs.length !== 0 ? this.inputs : undefined,
+			inputs: this.inputs.length !== 0 ? this.inputs.map(input => input.toJSON()) : undefined,
 			view: this.view || undefined,
 			hidden: this.hidden || undefined,
 		};
