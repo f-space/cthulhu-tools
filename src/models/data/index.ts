@@ -1,3 +1,4 @@
+export * from "./hash";
 export * from "./expression";
 export * from "./view";
 export * from "./character";

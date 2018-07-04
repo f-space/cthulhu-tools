@@ -37,6 +37,6 @@ export class Status {
 	public static basicsHash(status: Status): any {
 		const values = this.basics(status);
 		const json = JSON.stringify(values, Object.keys(values).sort());
-		return Hash.from(json).hex();
+		return Hash.from(json).hex;
 	}
 }

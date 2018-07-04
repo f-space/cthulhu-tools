@@ -1,5 +1,5 @@
-import { Variable, Expression } from "./expression";
 import { Hash } from "./hash";
+import { Variable, Expression } from "./expression";
 import { validate } from "./validation";
 
 export interface CommandData {
@@ -31,7 +31,6 @@ export class Command {
 	public readonly time: number;
 	public readonly message: string;
 	public readonly operations: ReadonlyArray<Operation>;
-	public readonly hash: string;
 
 	public get repr(): string {
 		return [
@@ -40,12 +39,13 @@ export class Command {
 		].join("\n");
 	}
 
+	public get hash(): string { return Hash.get(this, command => command.repr).hex; }
+
 	public constructor({ parent, time, message, operations }: CommandConfig) {
 		this.parent = parent;
 		this.time = time;
 		this.message = message !== undefined ? message : "";
 		this.operations = operations !== undefined ? operations : [];
-		this.hash = Hash.from(this.repr).hex();
 	}
 
 	public static from({ parent, time, message, operations }: CommandData): Command {
