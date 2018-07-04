@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import { FormState, Decorator, getIn } from 'final-form';
 import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
-import { Character, CharacterParams, AttributeParamsData, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
+import { Character, CharacterParams, AttributeParams, AttributeParamsData, SkillParams, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
 import { generateUUID, throttle } from "models/utility";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
@@ -98,8 +98,8 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 
 	private handleSubmit(values: object): Promise<void> {
 		const { attributes, skills } = values as FormValues;
-		const attribute = CharacterParams.from({ attribute: attributes }).attribute;
-		const skill = skills.reduce((map, { id, points }) => map.set(id, points), new Map<string, number>());
+		const attribute = AttributeParams.from(attributes);
+		const skill = new SkillParams(skills.reduce((map, { id, points }) => map.set(id, points), new Map<string, number>()));
 		const params = new CharacterParams({ attribute, skill });
 
 		return this.saveCharacter(params).then(() => this.toCharacterManagementPage());
@@ -129,8 +129,8 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 			const params = character && character.params;
 			if (params) {
 				const chain = this.buildChain(params);
-				const attributes = params.toJSON().attribute || {};
-				const skills = Array.from(params.skill).map(([id, points]) => ({ id, points }));
+				const attributes = params.attribute.toJSON() || {};
+				const skills = Object.entries(params.skill.toJSON()).map(([id, points]) => ({ id, points }));
 
 				return { chain, attributes, skills };
 			}
@@ -154,8 +154,8 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 				const values = state.values as FormValues;
 
 				if (["attributes", "skills"].some(key => getIn(values, key) !== getIn(prev, key))) {
-					const attribute = CharacterParams.from({ attribute: values.attributes }).attribute;
-					const skill = values.skills.reduce((map, { id, points }) => map.set(id, points), new Map<string, number>());
+					const attribute = AttributeParams.from(values.attributes);
+					const skill = new SkillParams(values.skills.reduce((map, { id, points }) => map.set(id, points), new Map<string, number>()));
 					const params = new CharacterParams({ attribute, skill });
 					const chain = this.buildChain(params);
 

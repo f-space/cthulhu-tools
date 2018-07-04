@@ -34,24 +34,24 @@ export class CharacterParams implements CharacterParamsConfig {
 	public readonly item: ItemParams;
 
 	public constructor({ attribute, skill, item }: CharacterParamsConfig) {
-		this.attribute = attribute !== undefined ? attribute : new Map();
-		this.skill = skill !== undefined ? skill : new Map();
-		this.item = item !== undefined ? item : new Map();
+		this.attribute = attribute !== undefined ? attribute : new AttributeParams();
+		this.skill = skill !== undefined ? skill : new SkillParams();
+		this.item = item !== undefined ? item : new ItemParams();
 	}
 
 	public static from({ attribute, skill, item }: CharacterParamsData): CharacterParams {
 		return new CharacterParams({
-			attribute: validate("attribute", attribute).optional(v => v.dict(v => v.dict(v => v.any()))).value,
-			skill: validate("skill", skill).optional(v => v.dict(v => v.number())).value,
-			item: validate("item", item).optional(v => v.dict(v => v.int())).value,
+			attribute: validate("attribute", attribute).optional(v => v.object<AttributeParamsData>().map(AttributeParams.from)).value,
+			skill: validate("skill", skill).optional(v => v.object<SkillParamsData>().map(SkillParams.from)).value,
+			item: validate("item", item).optional(v => v.object<ItemParamsData>().map(ItemParams.from)).value,
 		});
 	}
 
 	public toJSON(): CharacterParamsData {
 		return {
-			attribute: toObject(this.attribute, toObject),
-			skill: toObject(this.skill),
-			item: toObject(this.item),
+			attribute: this.attribute.toJSON(),
+			skill: this.skill.toJSON(),
+			item: this.item.toJSON(),
 		};
 	}
 
@@ -62,13 +62,85 @@ export class CharacterParams implements CharacterParamsConfig {
 	}
 }
 
-export interface AttributeParams extends ReadonlyMap<string, InputParams> { }
+export class AttributeParams {
+	public readonly inputs: ReadonlyMap<string, InputParams>;
 
-export interface InputParams extends ReadonlyMap<string, any> { }
+	public constructor(inputs?: ReadonlyMap<string, InputParams>) {
+		this.inputs = inputs !== undefined ? inputs : new Map();
+	}
 
-export interface SkillParams extends ReadonlyMap<string, number> { }
+	public static from(data: AttributeParamsData): AttributeParams {
+		return new AttributeParams(validate("data", data).dict(v => v.or({}).map(InputParams.from)).value);
+	}
 
-export interface ItemParams extends ReadonlyMap<string, number> { }
+	public toJSON(): AttributeParamsData {
+		return toObject(this.inputs, input => input.toJSON());
+	}
+
+	public get(id: string): InputParams | undefined {
+		return this.inputs.get(id);
+	}
+}
+
+export class InputParams {
+	public readonly data: ReadonlyMap<string, any>;
+
+	public constructor(data?: ReadonlyMap<string, any>) {
+		this.data = data !== undefined ? data : new Map();
+	}
+
+	public static from(data: InputParamsData): InputParams {
+		return new InputParams(validate("data", data).dict(v => v.any()).value);
+	}
+
+	public toJSON(): InputParamsData {
+		return toObject(this.data);
+	}
+
+	public get(name: string): any {
+		return this.data.get(name);
+	}
+}
+
+export class SkillParams {
+	public readonly data: ReadonlyMap<string, number>;
+
+	public constructor(data?: ReadonlyMap<string, number>) {
+		this.data = data !== undefined ? data : new Map();
+	}
+
+	public static from(data: SkillParamsData): SkillParams {
+		return new SkillParams(validate("data", data).dict(v => v.number()).value);
+	}
+
+	public toJSON(): SkillParamsData {
+		return toObject(this.data);
+	}
+
+	public get(id: string): number | undefined {
+		return this.data.get(id);
+	}
+}
+
+export class ItemParams {
+	public readonly data: ReadonlyMap<string, number>;
+
+	public constructor(data?: ReadonlyMap<string, number>) {
+		this.data = data !== undefined ? data : new Map();
+	}
+
+	public static from(data: ItemParamsData): ItemParams {
+		return new ItemParams(validate("data", data).dict(v => v.int()).value);
+	}
+
+	public toJSON(): ItemParamsData {
+		return toObject(this.data);
+	}
+
+	public get(uuid: string): number | undefined {
+		return this.data.get(uuid);
+	}
+}
 
 function toObject<T, U = T>(source: ReadonlyMap<string, T>, map?: (value: T) => U): { [key: string]: U } {
 	const o = Object.create(null);
