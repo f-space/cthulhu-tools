@@ -1,3 +1,4 @@
+import { Hash } from "./hash";
 import { validate } from "./validation";
 
 export interface CharacterParamsData {
@@ -33,6 +34,8 @@ export class CharacterParams implements CharacterParamsConfig {
 	public readonly skill: SkillParams;
 	public readonly item: ItemParams;
 
+	public get hash(): string { return Hash.get(this).hex; }
+
 	public constructor({ attribute, skill, item }: CharacterParamsConfig) {
 		this.attribute = attribute !== undefined ? attribute : new AttributeParams();
 		this.skill = skill !== undefined ? skill : new SkillParams();
@@ -65,6 +68,8 @@ export class CharacterParams implements CharacterParamsConfig {
 export class AttributeParams {
 	public readonly inputs: ReadonlyMap<string, InputParams>;
 
+	public get hash(): string { return Hash.get(this).hex; }
+
 	public constructor(inputs?: ReadonlyMap<string, InputParams>) {
 		this.inputs = inputs !== undefined ? inputs : new Map();
 	}
@@ -84,6 +89,8 @@ export class AttributeParams {
 
 export class InputParams {
 	public readonly data: ReadonlyMap<string, any>;
+
+	public get hash(): string { return Hash.get(this).hex; }
 
 	public constructor(data?: ReadonlyMap<string, any>) {
 		this.data = data !== undefined ? data : new Map();
@@ -105,6 +112,8 @@ export class InputParams {
 export class SkillParams {
 	public readonly data: ReadonlyMap<string, number>;
 
+	public get hash(): string { return Hash.get(this).hex; }
+
 	public constructor(data?: ReadonlyMap<string, number>) {
 		this.data = data !== undefined ? data : new Map();
 	}
@@ -124,6 +133,8 @@ export class SkillParams {
 
 export class ItemParams {
 	public readonly data: ReadonlyMap<string, number>;
+
+	public get hash(): string { return Hash.get(this).hex; }
 
 	public constructor(data?: ReadonlyMap<string, number>) {
 		this.data = data !== undefined ? data : new Map();

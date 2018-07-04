@@ -1,3 +1,4 @@
+import { Hash } from "./hash";
 import { validate } from "./validation";
 
 export interface ItemData {
@@ -16,6 +17,8 @@ export class Item {
 	public readonly uuid: string;
 	public readonly name: string;
 	public readonly description: string;
+
+	public get hash(): string { return Hash.get(this).hex; }
 
 	public constructor({ uuid, name, description }: ItemConfig) {
 		this.uuid = uuid;

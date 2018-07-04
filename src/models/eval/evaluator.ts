@@ -1,5 +1,5 @@
 import {
-	Reference, Expression,
+	Hash, Reference, Expression,
 	CharacterParams, AttributeParams, SkillParams,
 	AttributeType, Attribute, IntegerAttribute, NumberAttribute, TextAttribute,
 	Skill, History
@@ -14,6 +14,7 @@ export interface EvaluationContext {
 }
 
 export interface PropertyEvaluator {
+	readonly hash: string;
 	evaluate(context: EvaluationContext): any;
 }
 
@@ -23,6 +24,10 @@ export interface TerminalEvaluator extends PropertyEvaluator {
 
 export class AttributeEvaluator implements TerminalEvaluator {
 	public constructor(readonly data: AttributeParams) { }
+
+	public get hash(): string {
+		return Hash.get(this, self => AttributeEvaluator.name + self.data.hash).hex;
+	}
 
 	public supports(context: EvaluationContext): boolean {
 		return ('attribute' in context.property);
@@ -94,6 +99,10 @@ export class AttributeEvaluator implements TerminalEvaluator {
 export class SkillEvaluator implements TerminalEvaluator {
 	public constructor(readonly data: SkillParams) { }
 
+	public get hash(): string {
+		return Hash.get(this, self => SkillEvaluator.name + self.data.hash).hex;
+	}
+
 	public supports(context: EvaluationContext): boolean {
 		return ('skill' in context.property);
 	}
@@ -140,6 +149,10 @@ export class SkillEvaluator implements TerminalEvaluator {
 export class HistoryEvaluator implements TerminalEvaluator {
 	public constructor(readonly history: History) { }
 
+	public get hash(): string {
+		return Hash.get(this, () => HistoryEvaluator.name).hex;
+	}
+
 	public supports(context: EvaluationContext): boolean {
 		return context.hash !== null && !context.property.view;
 	}
@@ -163,6 +176,10 @@ export class HistoryEvaluator implements TerminalEvaluator {
 }
 
 export class CompositeEvaluator implements PropertyEvaluator {
+	public get hash(): string {
+		return Hash.get(this, self => CompositeEvaluator.name + self.evaluators.map(evaluator => evaluator.hash).join('')).hex;
+	}
+
 	public constructor(readonly evaluators: ReadonlyArray<TerminalEvaluator>) { }
 
 	public evaluate(context: EvaluationContext): any {
@@ -173,6 +190,7 @@ export class CompositeEvaluator implements PropertyEvaluator {
 }
 
 export class VoidEvaluator implements PropertyEvaluator {
+	public get hash(): string { return Hash.get(this, () => VoidEvaluator.name).hex; }
 	public evaluate(): undefined { return undefined; }
 }
 

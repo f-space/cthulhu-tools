@@ -1,4 +1,4 @@
-import { Reference, Attribute, Skill } from "models/data";
+import { Hash, Reference, Attribute, Skill } from "models/data";
 import {
 	Property, AttributeProperty, SkillProperty,
 	AttributeValueProperty, AttributeMinProperty, AttributeMaxProperty,
@@ -10,6 +10,7 @@ export interface ResolutionContext {
 }
 
 export interface PropertyResolver {
+	readonly hash: string;
 	resolve(context: ResolutionContext): Property | undefined;
 }
 
@@ -19,6 +20,10 @@ export interface TerminalResolver extends PropertyResolver {
 
 export class AttributeResolver implements TerminalResolver {
 	public readonly attributes: ReadonlyMap<string, Attribute>;
+
+	public get hash(): string {
+		return Hash.get(this, self => AttributeResolver.name + Array.from(self.attributes.values()).map(attr => attr.hash).join('')).hex;
+	}
 
 	public constructor(attributes: ReadonlyArray<Attribute>) {
 		this.attributes = attributes.reduce((map, attr) => map.set(attr.id, attr), new Map<string, Attribute>());
@@ -45,6 +50,10 @@ export class AttributeResolver implements TerminalResolver {
 export class SkillResolver implements TerminalResolver {
 	public readonly skills: ReadonlyMap<string, Skill>;
 
+	public get hash(): string {
+		return Hash.get(this, self => SkillResolver.name + Array.from(self.skills.values()).map(skill => skill.hash).join('')).hex;
+	}
+
 	public constructor(skills: ReadonlyArray<Skill>) {
 		this.skills = skills.reduce((map, skill) => map.set(skill.id, skill), new Map<string, Skill>());
 	}
@@ -68,6 +77,10 @@ export class SkillResolver implements TerminalResolver {
 }
 
 export class CompositeResolver implements PropertyResolver {
+	public get hash(): string {
+		return Hash.get(this, self => CompositeResolver.name + self.resolvers.map(resolver => resolver.hash).join('')).hex;
+	}
+
 	public constructor(readonly resolvers: ReadonlyArray<TerminalResolver>) { }
 
 	public resolve(context: ResolutionContext): Property | undefined {
@@ -78,6 +91,7 @@ export class CompositeResolver implements PropertyResolver {
 }
 
 export class VoidResolver implements PropertyResolver {
+	public get hash(): string { return Hash.get(this, () => VoidResolver.name).hex; }
 	public resolve(): undefined { return undefined; }
 }
 

@@ -1,3 +1,4 @@
+import { Hash } from "./hash";
 import { Expression } from "./expression";
 import { validate } from "./validation";
 
@@ -37,6 +38,8 @@ export class Skill {
 	public readonly category: SkillCategory;
 	public readonly base: Expression;
 	public readonly readonly: boolean;
+
+	public get hash(): string { return Hash.get(this).hex; }
 
 	public constructor({ uuid, id, name, category, base }: SkillConfig, readonly?: boolean) {
 		this.uuid = uuid;

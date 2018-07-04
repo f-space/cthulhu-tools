@@ -1,4 +1,4 @@
-import { Reference } from "models/data";
+import { Hash, Reference } from "models/data";
 import { Property, AttributeProperty } from "./property";
 
 export interface ValidationContext {
@@ -10,6 +10,7 @@ export interface ValidationContext {
 }
 
 export interface PropertyValidator {
+	readonly hash: string;
 	validate(context: ValidationContext): any;
 }
 
@@ -18,6 +19,10 @@ export interface TerminalValidator extends PropertyValidator {
 }
 
 export class AttributeValidator implements TerminalValidator {
+	public get hash(): string {
+		return Hash.get(this, () => AttributeValidator.name).hex;
+	}
+
 	public supports(context: ValidationContext): boolean {
 		return ('attribute' in context.property);
 	}
@@ -74,6 +79,10 @@ export class SkillValidator implements TerminalValidator {
 	public readonly min: number;
 	public readonly max: number;
 
+	public get hash(): string {
+		return Hash.get(this, self => SkillValidator.name + Hash.stringify({ min: self.min, max: self.max })).hex;
+	}
+
 	public constructor(min: number = 0, max: number = 99) {
 		this.min = Number.isSafeInteger(min) ? Math.ceil(min) : Number.MIN_SAFE_INTEGER;
 		this.max = Number.isSafeInteger(max) ? Math.floor(max) : Number.MAX_SAFE_INTEGER;
@@ -98,6 +107,10 @@ export class SkillValidator implements TerminalValidator {
 }
 
 export class CompositeValidator implements PropertyValidator {
+	public get hash(): string {
+		return Hash.get(this, self => CompositeValidator.name + self.validators.map(validator => validator.hash).join('')).hex;
+	}
+
 	public constructor(readonly validators: ReadonlyArray<TerminalValidator>) { }
 
 	public validate(context: ValidationContext): any {
@@ -108,6 +121,7 @@ export class CompositeValidator implements PropertyValidator {
 }
 
 export class VoidValidator implements PropertyValidator {
+	public get hash(): string { return Hash.get(this, () => VoidValidator.name).hex; }
 	public validate(context: ValidationContext): any { return context.value; }
 }
 

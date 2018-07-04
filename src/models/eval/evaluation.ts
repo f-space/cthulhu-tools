@@ -1,4 +1,4 @@
-import { Reference, Expression } from "models/data";
+import { Hash, Reference, Expression } from "models/data";
 import { Cache, ObjectCache } from "./cache";
 import { PropertyResolver, VoidResolver } from "./resolver";
 import { PropertyEvaluator, VoidEvaluator } from "./evaluator";
@@ -20,6 +20,10 @@ export class EvaluationChain {
 	public readonly evaluator: PropertyEvaluator;
 	public readonly validator: PropertyValidator;
 	public readonly cache: Cache;
+
+	public get hash(): string {
+		return Hash.get(this, self => self.resolver.hash + self.evaluator.hash + self.validator.hash).hex;
+	}
 
 	public constructor(config: EvaluationConfig) {
 		this.resolver = config.resolver || new VoidResolver();

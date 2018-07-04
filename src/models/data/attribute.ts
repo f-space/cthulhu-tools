@@ -1,3 +1,4 @@
+import { Hash } from "./hash";
 import { InputMethodData, InputMethod } from "./input";
 import { Expression } from "./expression";
 import { validate } from "./validation";
@@ -72,6 +73,8 @@ abstract class AttributeBase<T extends AttributeType> {
 	public readonly readonly: boolean;
 
 	public abstract get type(): T;
+
+	public get hash(): string { return Hash.get(this).hex; }
 
 	public constructor({ uuid, id, name, inputs, view, hidden }: AttributeCommonConfig, readonly?: boolean) {
 		this.uuid = uuid;
