@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { Decorator, getIn } from 'final-form';
+import { FormState, Decorator, getIn } from 'final-form';
 import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { Character, CharacterParams, AttributeParamsData, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
@@ -150,7 +150,7 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 	private createEvaluationDecorator(): Decorator {
 		return form => {
 			let prev = {};
-			return form.subscribe(throttle(250, state => {
+			return form.subscribe(throttle(250, (state: FormState) => {
 				const values = state.values as FormValues;
 
 				if (["attributes", "skills"].some(key => getIn(values, key) !== getIn(prev, key))) {
