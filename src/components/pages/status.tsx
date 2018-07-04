@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { DataProvider, DataCollector, ExternalCache, Status } from "models/status";
-import CacheStorage from "models/idb-cache";
+import { DataProvider, DataCollector, Status } from "models/status";
+import IDBCache from "models/idb-cache";
 import { State } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import { loadStatus } from "components/functions/status-loader";
@@ -22,8 +22,7 @@ const mapStateToProps = (state: State) => {
 		.filter(view => view.visible)
 		.map(view => collector.resolveCharacter(view.target))
 		.filter(result => !result.error)
-		.map(result => new Status(result.value!))
-		.map(status => new Status(status.context, new ExternalCache(CacheStorage, status.hash)))
+		.map(result => new Status(result.value!, IDBCache))
 		.sort((x, y) => String.prototype.localeCompare.call(x.get("name"), y.get("name")))
 		.toArray();
 	return { provider, statusList };

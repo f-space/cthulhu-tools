@@ -1,5 +1,5 @@
 import { Hash, Reference, Expression } from "models/data";
-import { Cache, ObjectCache } from "./cache";
+import { Cache } from "./cache";
 import { PropertyResolver, VoidResolver } from "./resolver";
 import { PropertyEvaluator, VoidEvaluator } from "./evaluator";
 import { PropertyValidator, VoidValidator } from "./validator";
@@ -29,13 +29,14 @@ export class EvaluationChain {
 		this.resolver = config.resolver || new VoidResolver();
 		this.evaluator = config.evaluator || new VoidEvaluator();
 		this.validator = config.validator || new VoidValidator();
-		this.cache = config.cache || new ObjectCache();
+		this.cache = config.cache || new Map();
 		this.evaluate = this.evaluate.bind(this);
 	}
 
 	public evaluate(ref: Reference, hash: string | null): any {
-		if (!this.cache.has(hash, ref.key)) {
-			this.cache.set(hash, ref.key, undefined);
+		const key = Hash.from(this.hash + ref.key + hash || '').hex;
+		if (!this.cache.has(key)) {
+			this.cache.set(key, undefined);
 
 			const request = this.evaluate;
 			const property = this.resolver.resolve({ ref });
@@ -43,11 +44,11 @@ export class EvaluationChain {
 				const value = this.evaluator.evaluate({ ref, hash, property, request });
 				const result = this.validator.validate({ ref, hash, property, value, request });
 
-				this.cache.set(hash, ref.key, result);
+				this.cache.set(key, result);
 			}
 		}
 
-		return this.cache.get(hash, ref.key);
+		return this.cache.get(key);
 	}
 
 	public evaluateExpression(expression: Expression, hash: string | null, vars: any = {}): number | undefined {

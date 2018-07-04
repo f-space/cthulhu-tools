@@ -1,83 +1,77 @@
-import DB from "models/storage";
-import { ValueTable, CacheEntry, CacheStorage } from "models/eval";
+import Dexie from 'dexie';
+import { Cache, CacheEntry } from "models/eval";
+import { debounce } from "models/utility";
 
 const SAVE_DELAY_TIME = 1000;
-const MAX_CACHE_SIZE = 1000;
+const MAX_CACHE_SIZE = 10000;
 
-function sleep(time: number): Promise<void> {
-	return new Promise(resolve => { setTimeout(resolve, time); });
+export class StatusCacheDatabase extends Dexie {
+	public readonly entries!: Dexie.Table<CacheEntry, number>;
+
+	public constructor() {
+		super("status-cache");
+
+		this.version(1).stores({
+			entries: "key, date",
+		})
+	}
 }
 
-export class IDBCacheStorage implements CacheStorage {
-	private table: { [state: string]: ValueTable } = Object.create(null);
+export class IDBCache implements Cache {
+	private db: StatusCacheDatabase = new StatusCacheDatabase();
 	private queue: CacheEntry[] = [];
-	private saveTask: Promise<void> | null = null;
+	private requestSave = debounce(SAVE_DELAY_TIME, this.save);
 
-	public fetch(state: string) {
-		return this.table[state];
+	public constructor(readonly cache: Cache = new Map()) { }
+
+	public has(key: string): boolean {
+		return this.cache.has(key);
 	}
 
-	public touch(entry: CacheEntry, dontSave?: boolean): void {
-		this.putEntry(entry);
-
-		if (!dontSave) this.requestSave();
-	}
-
-	public set(entry: CacheEntry, dontSave?: boolean): void {
-		this.putEntry(entry);
-		this.putValue(entry);
-
-		if (!dontSave) this.requestSave();
-	}
-
-	public async requestSave(delay: number = SAVE_DELAY_TIME): Promise<void> {
-		if (this.saveTask === null) {
-			this.saveTask = sleep(delay).then(() => {
-				this.saveTask = null;
-				return this.save();
-			});
+	public get(key: string): any {
+		const value = this.cache.get(key);
+		if (value !== undefined) {
+			this.queue.push({ key, value, date: new Date() });
+			this.requestSave();
 		}
 
-		await this.saveTask;
+		return value;
+	}
+
+	public set(key: string, value: any): void {
+		if (value !== undefined) {
+			this.queue.push({ key, value, date: new Date() });
+			this.requestSave();
+		}
+
+		this.cache.set(key, value);
 	}
 
 	public async save(): Promise<void> {
 		const entries = this.queue;
 		this.queue = [];
 
-		await DB.transaction("rw", DB.caches, () => {
-			return DB.caches.bulkPut(entries).then(() => {
-				return DB.caches.count();
+		await this.db.transaction("rw", this.db.entries, () => {
+			return this.db.entries.bulkPut(entries).then(() => {
+				return this.db.entries.count();
 			}).then((n): any => {
 				if (n > MAX_CACHE_SIZE) {
 					const excess = MAX_CACHE_SIZE - n;
-					return DB.caches.orderBy("date").limit(excess).delete();
+					return this.db.entries.orderBy("date").limit(excess).delete();
 				}
 			});
 		});
 	}
 
 	public async load(): Promise<void> {
-		await DB.transaction("r", DB.caches, () => {
-			return DB.caches.orderBy("date").toArray();
+		await this.db.transaction("r", this.db.entries, () => {
+			return this.db.entries.toArray();
 		}).then(entries => {
 			for (const entry of entries) {
-				this.putValue(entry);
+				this.cache.set(entry.key, entry.value);
 			}
 		});
 	}
-
-	private putEntry(entry: CacheEntry): void {
-		this.queue.push(entry);
-	}
-
-	private putValue(entry: CacheEntry): void {
-		const c0 = this.table;
-		const c1 = c0[entry.state] || (c0[entry.state] = Object.create(null));
-		const c2 = c1[entry.hash] || (c1[entry.hash] = Object.create(null));
-
-		c2[entry.id] = entry.value;
-	}
 }
 
-export default new IDBCacheStorage();
+export default new IDBCache();

@@ -44,3 +44,14 @@ export function throttle<T extends Function>(interval: number, fn: T): T {
 		}
 	} as any;
 }
+
+export function debounce<T extends Function>(delay: number, fn: T): T {
+	let id: any;
+	return function (this: any): void {
+		clearTimeout(id);
+		id = setTimeout(() => {
+			fn.apply(this, arguments);
+			id = undefined;
+		}, delay);
+	} as any;
+}

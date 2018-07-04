@@ -3,8 +3,8 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FormApi } from 'final-form';
 import { Form, FormSpy } from 'react-final-form';
-import { DataProvider, ExternalCache, DataCollector, Status } from "models/status";
-import CacheStorage from "models/idb-cache";
+import { DataProvider, DataCollector, Status } from "models/status";
+import IDBCache from "models/idb-cache";
 import { generateUUID } from "models/utility";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
@@ -36,8 +36,7 @@ const mapStateToProps = (state: State) => {
 	const statusList = Object.values(views)
 		.map(view => collector.resolveCharacter(view.target))
 		.filter(result => !result.error)
-		.map(result => new Status(result.value!))
-		.map(status => new Status(status.context, new ExternalCache(CacheStorage, status.hash)))
+		.map(result => new Status(result.value!, IDBCache))
 		.sort((x, y) => String.prototype.localeCompare.call(x.get("name"), y.get("name")))
 	return { provider, statusList };
 };
