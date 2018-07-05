@@ -3,10 +3,10 @@ import { Property, AttributeProperty } from "./property";
 
 export interface ValidationContext {
 	readonly ref: Reference;
-	readonly hash: string | null;
+	readonly time: string | null;
 	readonly property: Property;
 	readonly value: any;
-	request(ref: Reference, hash: string | null): any;
+	request(ref: Reference, time: string | null): any;
 }
 
 export interface PropertyValidator {
@@ -41,11 +41,11 @@ export class AttributeValidator implements TerminalValidator {
 	}
 
 	private validateInteger(context: ValidationContext): number | undefined {
-		const { ref, hash, property, value, request } = context;
+		const { ref, time, property, value, request } = context;
 		switch (property.type) {
 			case 'attribute':
-				const min = request(ref.set({ modifier: 'min' }), hash);
-				const max = request(ref.set({ modifier: 'max' }), hash);
+				const min = request(ref.set({ modifier: 'min' }), time);
+				const max = request(ref.set({ modifier: 'max' }), time);
 				return (min !== undefined && max !== undefined) ? Math.round(Math.max(Math.min(value, max), min)) : undefined;
 			case 'attribute:min': return Math.round(value);
 			case 'attribute:max': return Math.round(value);
@@ -54,11 +54,11 @@ export class AttributeValidator implements TerminalValidator {
 	}
 
 	private validateNumber(context: ValidationContext): number | undefined {
-		const { ref, hash, property, value, request } = context;
+		const { ref, time, property, value, request } = context;
 		switch (property.type) {
 			case 'attribute':
-				const min = request(ref.set({ modifier: 'min' }), hash);
-				const max = request(ref.set({ modifier: 'max' }), hash);
+				const min = request(ref.set({ modifier: 'min' }), time);
+				const max = request(ref.set({ modifier: 'max' }), time);
 				return (min !== undefined && max !== undefined) ? Number(Math.max(Math.min(value, max), min)) : undefined;
 			case 'attribute:min': return Number(value);
 			case 'attribute:max': return Number(value);

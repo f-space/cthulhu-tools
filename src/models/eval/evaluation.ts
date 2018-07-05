@@ -33,16 +33,16 @@ export class EvaluationChain {
 		this.evaluate = this.evaluate.bind(this);
 	}
 
-	public evaluate(ref: Reference, hash: string | null): any {
-		const key = Hash.from(this.hash + ref.key + hash || '').hex;
+	public evaluate(ref: Reference, time: string | null): any {
+		const key = Hash.from(this.hash + ref.key + time || '').hex;
 		if (!this.cache.has(key)) {
 			this.cache.set(key, undefined);
 
 			const request = this.evaluate;
 			const property = this.resolver.resolve({ ref });
 			if (property !== undefined) {
-				const value = this.evaluator.evaluate({ ref, hash, property, request });
-				const result = this.validator.validate({ ref, hash, property, value, request });
+				const value = this.evaluator.evaluate({ ref, time, property, request });
+				const result = this.validator.validate({ ref, time, property, value, request });
 
 				this.cache.set(key, result);
 			}

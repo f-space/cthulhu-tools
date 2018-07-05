@@ -8,9 +8,9 @@ import { Property, AttributeProperty, SkillProperty } from "./property";
 
 export interface EvaluationContext {
 	readonly ref: Reference;
-	readonly hash: string | null;
+	readonly time: string | null;
 	readonly property: Property;
-	request(ref: Reference, hash: string | null): any;
+	request(ref: Reference, time: string | null): any;
 }
 
 export interface PropertyEvaluator {
@@ -75,12 +75,12 @@ export class AttributeEvaluator implements TerminalEvaluator {
 	}
 
 	private evaluateExpression(context: EvaluationContext, attribute: Attribute, expression: Expression): any {
-		const { hash, request } = context;
+		const { time, request } = context;
 		const data = this.data.get(attribute.id) || new Map<string, any>();
 		const values = new Map<string, any>();
 
 		for (const reference of expression.refs) {
-			const value = request(reference, hash);
+			const value = request(reference, time);
 			values.set(reference.key, value);
 		}
 
@@ -121,19 +121,19 @@ export class SkillEvaluator implements TerminalEvaluator {
 	}
 
 	private evaluateSum(context: EvaluationContext): number | undefined {
-		const { ref, hash, request } = context;
-		const base = request(ref.set({ modifier: 'base' }), hash);
-		const points = request(ref.set({ modifier: 'points' }), hash);
+		const { ref, time, request } = context;
+		const base = request(ref.set({ modifier: 'base' }), time);
+		const points = request(ref.set({ modifier: 'points' }), time);
 		return (base !== undefined && points !== undefined) ? (base + points) : undefined;
 	}
 
 	private evaluateBase(context: EvaluationContext, skill: Skill): number | undefined {
-		const { hash, request } = context;
+		const { time, request } = context;
 		const expression = skill.base;
 		const values = new Map<string, any>();
 
 		for (const ref of expression.refs) {
-			const value = request(ref, hash);
+			const value = request(ref, time);
 			values.set(ref.key, value);
 		}
 
@@ -154,13 +154,13 @@ export class HistoryEvaluator implements TerminalEvaluator {
 	}
 
 	public supports(context: EvaluationContext): boolean {
-		return context.hash !== null && !context.property.view;
+		return context.time !== null && !context.property.view;
 	}
 
 	public evaluate(context: EvaluationContext): any {
-		const { ref, hash, request } = context;
+		const { ref, time, request } = context;
 		if (this.supports(context)) {
-			const command = this.history.command(hash!);
+			const command = this.history.command(time);
 			if (command !== undefined) {
 				const prevValue = request(ref, command.parent);
 				if (prevValue !== undefined) {
