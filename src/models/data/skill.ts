@@ -31,7 +31,7 @@ export interface SkillConfig {
 	readonly base: Expression;
 }
 
-export class Skill {
+export class Skill implements SkillConfig {
 	public readonly uuid: string;
 	public readonly id: string;
 	public readonly name: string;

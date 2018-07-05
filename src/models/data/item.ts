@@ -13,7 +13,7 @@ export interface ItemConfig {
 	readonly description?: string;
 }
 
-export class Item {
+export class Item implements ItemConfig {
 	public readonly uuid: string;
 	public readonly name: string;
 	public readonly description: string;

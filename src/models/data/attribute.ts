@@ -63,7 +63,7 @@ export interface TextAttributeConfig extends AttributeCommonConfig {
 	readonly expression: Expression;
 }
 
-abstract class AttributeBase<T extends AttributeType> {
+abstract class AttributeBase<T extends AttributeType> implements AttributeCommonConfig {
 	public readonly uuid: string;
 	public readonly id: string;
 	public readonly name: string;
@@ -116,7 +116,7 @@ abstract class AttributeBase<T extends AttributeType> {
 	}
 }
 
-export class IntegerAttribute extends AttributeBase<AttributeType.Integer> {
+export class IntegerAttribute extends AttributeBase<AttributeType.Integer> implements IntegerAttributeConfig {
 	public readonly expression: Expression;
 	public readonly min?: Expression;
 	public readonly max?: Expression;
@@ -162,7 +162,7 @@ export class IntegerAttribute extends AttributeBase<AttributeType.Integer> {
 	}
 }
 
-export class NumberAttribute extends AttributeBase<AttributeType.Number> {
+export class NumberAttribute extends AttributeBase<AttributeType.Number> implements NumberAttributeConfig {
 	public readonly expression: Expression;
 	public readonly min?: Expression;
 	public readonly max?: Expression;
@@ -208,7 +208,7 @@ export class NumberAttribute extends AttributeBase<AttributeType.Number> {
 	}
 }
 
-export class TextAttribute extends AttributeBase<AttributeType.Text> {
+export class TextAttribute extends AttributeBase<AttributeType.Text> implements TextAttributeConfig {
 	public readonly expression: Expression;
 
 	public get type(): AttributeType.Text { return AttributeType.Text; }

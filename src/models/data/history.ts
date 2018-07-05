@@ -15,7 +15,7 @@ export interface HistoryConfig {
 	readonly commands?: ReadonlyArray<Command>;
 }
 
-export class History {
+export class History implements HistoryConfig {
 	public readonly uuid: string;
 	public readonly name: string;
 	public readonly readonly: boolean;
@@ -25,7 +25,7 @@ export class History {
 
 	public get head(): string | null { return this._head; }
 	public set head(value: string | null) { this._head = value; }
-	public get commands(): ReadonlyMap<string, Command> { return this._commands; }
+	public get commands(): ReadonlyArray<Command> { return Array.from(this._commands.values()); }
 
 	public constructor({ uuid, name, head, commands }: HistoryConfig, readonly?: boolean) {
 		this.uuid = uuid;
@@ -49,18 +49,22 @@ export class History {
 			uuid: this.uuid,
 			name: this.name,
 			head: this.head,
-			commands: Array.from(this.commands.values()).map(command => command.toJSON()),
+			commands: this.commands.map(command => command.toJSON()),
 		};
 	}
 
 	public set(config: Partial<HistoryConfig>): History {
 		const { uuid, name, head, commands } = this;
 
-		return new History({ uuid, name, head, commands: Array.from(commands.values()), ...config });
+		return new History({ uuid, name, head, commands, ...config });
+	}
+
+	public command(hash: string | null): Command | undefined {
+		return hash !== null ? this._commands.get(hash) : undefined;
 	}
 
 	public *trace(hash: string | null = this.head): IterableIterator<Command> {
-		for (let command; command = this.commands.get(hash as any); hash = command.parent) yield command;
+		for (let command: Command | undefined; command = this.command(hash); hash = command.parent) yield command;
 	}
 
 	public sequence(hash: string | null = this.head): Command[] {

@@ -14,7 +14,7 @@ export interface ProfileConfig {
 	readonly skills?: ReadonlyArray<string>;
 }
 
-export class Profile {
+export class Profile implements ProfileConfig {
 	public readonly uuid: string;
 	public readonly name: string;
 	public readonly attributes: ReadonlyArray<string>;

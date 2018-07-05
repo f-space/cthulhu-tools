@@ -15,7 +15,7 @@ export interface CharacterConfig {
 	readonly params: CharacterParams;
 }
 
-export class Character {
+export class Character implements CharacterConfig {
 	public readonly uuid: string;
 	public readonly profile: string;
 	public readonly history: string | null;

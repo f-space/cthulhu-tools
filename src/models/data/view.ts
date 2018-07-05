@@ -10,7 +10,7 @@ export interface CharacterViewConfig {
 	readonly visible?: boolean;
 }
 
-export class CharacterView {
+export class CharacterView implements CharacterViewConfig {
 	public readonly target: string;
 	public readonly visible: boolean;
 

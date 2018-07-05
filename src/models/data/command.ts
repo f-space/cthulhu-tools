@@ -26,7 +26,7 @@ export interface OperationConfig {
 	readonly value: Expression;
 }
 
-export class Command {
+export class Command implements CommandConfig {
 	public readonly parent: string | null;
 	public readonly time: number;
 	public readonly message: string;
@@ -77,7 +77,7 @@ export class Command {
 	}
 }
 
-export class Operation {
+export class Operation implements OperationConfig {
 	public readonly target: string;
 	public readonly value: Expression;
 

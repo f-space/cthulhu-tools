@@ -45,7 +45,7 @@ export interface NumberInputMethodConfig extends InputMethodCommonConfig {
 
 export interface TextInputMethodConfig extends InputMethodCommonConfig { }
 
-abstract class InputMethodBase<T extends InputType> {
+abstract class InputMethodBase<T extends InputType> implements InputMethodCommonConfig {
 	public readonly name: string;
 
 	public abstract get type(): T;
@@ -72,7 +72,7 @@ abstract class InputMethodBase<T extends InputType> {
 	}
 }
 
-export class DiceInputMethod extends InputMethodBase<InputType.Dice> {
+export class DiceInputMethod extends InputMethodBase<InputType.Dice> implements DiceInputMethodConfig {
 	public readonly count: number;
 	public readonly max: number;
 	public readonly dices: ReadonlyArray<Dice>
@@ -126,7 +126,7 @@ export class DiceInputMethod extends InputMethodBase<InputType.Dice> {
 	}
 }
 
-export class NumberInputMethod extends InputMethodBase<InputType.Number> {
+export class NumberInputMethod extends InputMethodBase<InputType.Number> implements NumberInputMethodConfig {
 	public readonly min?: number;
 	public readonly max?: number;
 	public readonly step?: number;
@@ -207,7 +207,7 @@ export class NumberInputMethod extends InputMethodBase<InputType.Number> {
 	}
 }
 
-export class TextInputMethod extends InputMethodBase<InputType.Text> {
+export class TextInputMethod extends InputMethodBase<InputType.Text> implements TextInputMethodConfig {
 	public get type(): InputType.Text { return InputType.Text; }
 
 	public get default(): string { return ""; }
