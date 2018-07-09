@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { History } from 'history';
 import { FormState, Decorator, getIn } from 'final-form';
 import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
-import { Character, CharacterParams, AttributeParams, AttributeParamsData, SkillParams, DataProvider, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
+import { Character, CharacterParams, AttributeParams, AttributeParamsData, SkillParams, DataCollector, Profile, Attribute, Skill, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
 import { generateUUID, throttle } from "models/utility";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
@@ -17,9 +18,13 @@ import { SkillParamsEdit, SkillParamsEditValue } from "components/organisms/skil
 import { Page } from "components/templates/page";
 import style from "styles/pages/character-edit.scss";
 
-interface CharacterEditPageInternalProps extends RouteComponentProps<{ uuid?: string }> {
-	provider: DataProvider;
+interface CharacterEditPageInternalProps {
+	character?: Character;
+	profile?: Profile;
+	attributes: ReadonlyArray<Attribute>,
+	skills: ReadonlyArray<Skill>,
 	dispatcher: StatusDispatcher;
+	history: History;
 }
 
 interface FormValues {
@@ -28,14 +33,33 @@ interface FormValues {
 	skills: SkillParamsEditValue;
 }
 
+const EMPTY_ARRAY = [] as any[];
 const mapStateToProps = (state: State) => {
 	const provider = getDataProvider(state);
-	return { provider };
+	const collector = new DataCollector(provider);
+	const profile = provider.profile.default;
+	if (profile) {
+		const result = collector.resolveProfile(profile.uuid);
+		if (result.status) {
+			const { attributes, skills } = result.value;
+			return { provider, profile, attributes, skills };
+		}
+	}
+
+	return { provider, profile, attributes: EMPTY_ARRAY, skills: EMPTY_ARRAY };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
 	const dispatcher = new StatusDispatcher(dispatch);
 	return { dispatcher };
+}
+
+const mergeProps = (stateProps: ReturnType<typeof mapStateToProps>, dispatchProps: ReturnType<typeof mapDispatchToProps>, ownProps: RouteComponentProps<{ uuid?: string }>) => {
+	const { provider, profile, attributes, skills } = stateProps;
+	const { dispatcher } = dispatchProps;
+	const { history, match: { params: { uuid } } } = ownProps;
+	const character = uuid && provider.character.get(uuid);
+	return { character, profile, attributes, skills, dispatcher, history };
 }
 
 class CharacterEditPageInternal extends React.Component<CharacterEditPageInternalProps> {
@@ -49,13 +73,8 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	public get uuid(): string | undefined { return this.props.match.params.uuid; }
-
 	public render() {
-		const { provider } = this.props;
-		const profile = provider.profile.default;
-		const attributes = profile ? provider.attribute.get(profile.attributes) : [];
-		const skills = profile ? provider.skill.get(profile.skills) : [];
+		const { attributes, skills } = this.props;
 		const initialValues = this.makeInitialValues();
 
 		return <Page id="character-edit" heading={<h2>キャラクター編集</h2>}>
@@ -110,12 +129,8 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 	}
 
 	private buildChain(params: CharacterParams) {
-		const { provider } = this.props;
-		const profile = provider.profile.default;
-		const resolver = buildResolver({
-			attributes: profile && provider.attribute.get(profile.attributes),
-			skills: profile && provider.skill.get(profile.skills),
-		});
+		const { attributes, skills } = this.props;
+		const resolver = buildResolver({ attributes, skills });
 		const evaluator = buildEvaluator({ params });
 		const validator = buildValidator({ attribute: true, skill: true });
 
@@ -123,17 +138,14 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 	}
 
 	private makeInitialValues(): FormValues {
-		if (this.uuid !== undefined) {
-			const { provider } = this.props;
-			const character = provider.character.get(this.uuid);
-			const params = character && character.params;
-			if (params) {
-				const chain = this.buildChain(params);
-				const attributes = params.attribute.toJSON() || {};
-				const skills = Object.entries(params.skill.toJSON()).map(([id, points]) => ({ id, points }));
+		const { character } = this.props;
+		if (character !== undefined) {
+			const params = character.params;
+			const chain = this.buildChain(params);
+			const attributes = params.attribute.toJSON() || {};
+			const skills = Object.entries(params.skill.toJSON()).map(([id, points]) => ({ id, points }));
 
-				return { chain, attributes, skills };
-			}
+			return { chain, attributes, skills };
 		}
 
 		return this.makeEmptyValues();
@@ -174,17 +186,16 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 	}
 
 	private async saveCharacter(params: CharacterParams): Promise<void> {
-		const { provider, dispatcher } = this.props;
-		const profile = provider.profile.default;
+		const { character: target, profile, dispatcher } = this.props;
 		if (profile) {
 			const character = new Character({
-				uuid: this.uuid || generateUUID(),
+				uuid: target ? target.uuid : generateUUID(),
 				profile: profile.uuid,
 				history: null,
 				params,
 			});
 
-			if (this.uuid === undefined) {
+			if (!target) {
 				await dispatcher.character.create(character);
 			} else {
 				await dispatcher.character.update(character);
@@ -193,4 +204,8 @@ class CharacterEditPageInternal extends React.Component<CharacterEditPageInterna
 	}
 }
 
-export const CharacterEditPage = loadStatus(withRouter(connect(mapStateToProps, mapDispatchToProps)(CharacterEditPageInternal)));
+const Connected = connect(mapStateToProps, mapDispatchToProps, mergeProps)(CharacterEditPageInternal);
+const WithRouter = withRouter(Connected);
+const StatusReady = loadStatus(WithRouter);
+
+export const CharacterEditPage = StatusReady;
