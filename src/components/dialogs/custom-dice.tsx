@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import { NumberInput } from "components/atoms/input";
 import { Button, SubmitButton } from "components/atoms/button";
-import { Dialog } from "components/templates/dialog";
+import { Dialog } from "./shared/dialog";
 import style from "styles/dialogs/custom-dice-dialog.scss";
 
 export interface CustomDiceDialogResult {

@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import style from "styles/templates/page.scss";
+import style from "styles/templates/shared/page.scss";
 
 export interface PageProps extends React.HTMLAttributes<HTMLElement> {
 	heading: React.ReactNode;

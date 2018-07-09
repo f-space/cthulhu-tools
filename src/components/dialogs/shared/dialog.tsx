@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import DialogComponents from "components/frame/dialog";
-import style from "styles/templates/dialog.scss";
+import style from "styles/dialogs/shared/dialog.scss";
 
 export interface DialogProps extends React.HTMLAttributes<HTMLElement> {
 	when: boolean;
