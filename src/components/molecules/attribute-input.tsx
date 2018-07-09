@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { AST, Variable, Expression, AttributeType, Attribute, InputType, InputMethod } from "models/status";
+import { AST, Reference, AttributeType, Attribute, InputType, InputMethod, PropertyResolver } from "models/status";
+import { EvaluationConsumer } from "components/functions/evaluation";
 import { EvaluationText } from "components/atoms/evaluation-text";
 import { AttributeDiceInput } from "components/molecules/attribute-dice-input";
 import { AttributeNumberInput } from "components/molecules/attribute-number-input";
@@ -15,12 +16,24 @@ export interface AttributeInputProps extends React.HTMLAttributes<HTMLElement> {
 export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 	public render() {
 		const { name, attribute, className, ...rest } = this.props;
-		const segments = this.segment(attribute);
 
 		return <div {...rest} className={classNames(className, style['attribute'])}>
 			<div className={style['name']}>{attribute.name}</div>
 			<div className={style['input']}>
-				{segments.map(segment => typeof segment === 'string' ? segment : this.renderInput(segment))}
+				<EvaluationConsumer>
+					{chain => {
+						const renderer = new ASTRenderer(chain.resolver);
+						const segments = renderer.render(attribute);
+						return segments.map((segment, i) => {
+							if (i % 2 === 0) {
+								return segment;
+							} else {
+								const input = attribute.inputs.find(input => input.name === segment);
+								return input ? this.renderInput(input) : null;
+							}
+						});
+					}}
+				</EvaluationConsumer>
 			</div>
 			<div className={style['value']}>
 				<EvaluationText expression={attribute.id} hash={null} />
@@ -40,54 +53,22 @@ export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 			case InputType.Text: return <AttributeTextInput {...props} method={method} />
 		}
 	}
-
-	private segment(attribute: Attribute): (string | InputMethod)[] {
-		const expression = getExpression(attribute);
-		const segments = expression ? (new ASTSegmenter()).segment(expression.ast) : [];
-		return segments
-			.map(x => typeof x === 'string' ? x : attribute.inputs.find(input => input.name === x.name))
-			.filter(x => x) as (string | InputMethod)[];
-
-		function getExpression(attribute: Attribute): Expression {
-			switch (attribute.type) {
-				case AttributeType.Integer: return attribute.expression;
-				case AttributeType.Number: return attribute.expression;
-				case AttributeType.Text: return attribute.expression;
-			}
-		}
-	}
 }
 
-class ASTSegmenter {
-	public segment(node: AST.Node): (string | Variable)[] {
-		function* flatten(segments: any[]): IterableIterator<string | Variable> {
-			for (const segment of segments) {
-				if (Array.isArray(segment)) {
-					yield* flatten(segment);
-				} else {
-					yield segment;
-				}
-			}
-		}
+class ASTRenderer {
+	private context!: Attribute;
+	private depth!: number;
 
-		function* join(segments: IterableIterator<string | Variable>) {
-			let chunk = [];
-			for (const segment of segments) {
-				if (typeof segment === 'string') {
-					chunk.push(segment);
-				} else {
-					if (chunk.length > 0) yield chunk.join("");
-					yield segment;
-					chunk = [];
-				}
-			}
-			if (chunk.length > 0) yield chunk.join("");
-		}
+	public constructor(readonly resolver: PropertyResolver) { }
 
-		return Array.from(join(flatten(this.visit(node))));
+	public render(attribute: Attribute): string[] {
+		this.context = attribute;
+		this.depth = 0;
+
+		return this.visit(attribute.expression.ast).split("\0");
 	}
 
-	protected visit(node: AST.Node): any {
+	protected visit(node: AST.Node): string {
 		switch (node.type) {
 			case AST.NodeType.BinaryOp:
 				return this.onBinaryOperator(node);
@@ -110,51 +91,93 @@ class ASTSegmenter {
 		}
 	}
 
-	protected onBinaryOperator(node: AST.BinaryOperator): any[] {
+	protected onBinaryOperator(node: AST.BinaryOperator): string {
 		const lhs = this.visit(node.lhs);
 		const rhs = this.visit(node.rhs);
-		const lhsSeg = node.priority < node.lhs.priority ? ["(", lhs, ")"] : lhs;
-		const rhsSeg = node.priority > node.rhs.priority ? rhs : ["(", rhs, ")"];
-		return [lhsSeg, " ", node.op, " ", rhsSeg];
+		const lhsSeg = node.priority < node.lhs.priority ? `(${lhs})` : lhs;
+		const rhsSeg = node.priority > node.rhs.priority ? rhs : `(${rhs})`;
+		return `${lhsSeg} ${node.op} ${rhsSeg}`;
 	}
 
-	protected onUnaryOperator(node: AST.UnaryOperator): any[] {
+	protected onUnaryOperator(node: AST.UnaryOperator): string {
 		const expression = this.visit(node.expression);
-		const exprSeg = node.priority < node.expression.priority ? ["(", expression, ")"] : expression;
-		return [node.op, exprSeg];
+		const exprSeg = node.priority < node.expression.priority ? `(${expression})` : expression;
+		return `${node.op}${exprSeg}`;
 	}
 
-	protected onFunctionCall(node: AST.FunctionCall): any[] {
+	protected onFunctionCall(node: AST.FunctionCall): string {
 		const args = node.args.map(x => this.visit(x));
-		const argsSeg = args.slice(0, 1).concat(args.slice(1).map(arg => [", ", arg]));
-		return [node.fn, "(", argsSeg, ")"];
+		switch (node.fn) {
+			case 'if': return `if ${args[0]} then ${args[1]} else ${args[2]}`;
+			case 'and': return `${args[0]} \u2227 ${args[1]}`;
+			case 'or': return `${args[0]} \u2228 ${args[1]}`;
+			case 'not': return `\u00AC ${args[0]}`
+			case 'floor': return `\u230A ${args[0]} \u230B`;
+			case 'ceil': return `\u2308 ${args[0]} \u2309`;
+			case 'round': return `\u230A ${args[0]} \u2309`;
+			default: return `${node.fn}(${args.join(", ")})`;
+		}
 	}
 
-	protected onLiteral(node: AST.Literal): any[] {
-		return [String(node)];
+	protected onLiteral(node: AST.Literal): string {
+		return String(node.value);
 	}
 
-	protected onTemplate(node: AST.Template): any[] {
-		const segments = node.segments.map(x => this.visit(x));
-
-		return segments;
+	protected onTemplate(node: AST.Template): string {
+		return node.segments.map(x => this.visit(x)).join("");
 	}
 
-	protected onSubstitution(node: AST.Substitution): any[] {
-		const expression = this.visit(node.expression);
-
-		return expression;
+	protected onSubstitution(node: AST.Substitution): string {
+		return this.visit(node.expression);
 	}
 
-	protected onText(node: AST.Text): any[] {
-		return [String(node)];
+	protected onText(node: AST.Text): string {
+		return node.value;
 	}
 
-	protected onVariable(node: AST.Variable): any[] {
-		return [new Variable(node.name)];
+	protected onVariable(node: AST.Variable): string {
+		return `\0${node.name}\0`;
 	}
 
-	protected onReference(node: AST.Reference): any[] {
-		return [String(node)];
+	protected onReference(node: AST.Reference): string {
+		const ref = new Reference(node.id, node.modifier, node.scope);
+		const property = this.resolver.resolve({ ref });
+		if (property) {
+			switch (property.type) {
+				case 'attribute':
+				case 'attribute:min':
+				case 'attribute:max':
+					const attribute = property.attribute;
+					if (ref.id === this.context.id) {
+						return this.recurse(attribute, ref);
+					} else {
+						return ref.modifier ? `${attribute.name}:${ref.modifier}` : attribute.name;
+					}
+				case 'skill':
+				case 'skill:base':
+				case 'skill:points':
+					const skill = property.skill;
+					return ref.modifier ? `${skill.name}:${ref.modifier}` : skill.name;
+			}
+		}
+
+		return ref.key;
+	}
+
+	private recurse(attribute: Attribute, ref: Reference): string {
+		const MAX_DEPTH = 3;
+		if (this.depth++ < MAX_DEPTH) {
+			switch (attribute.type) {
+				case AttributeType.Integer:
+				case AttributeType.Number:
+					switch (ref.modifier) {
+						case 'min': return attribute.min ? this.visit(attribute.min.ast) : "-\u221E";
+						case 'max': return attribute.max ? this.visit(attribute.max.ast) : "+\u221E";
+					}
+					break;
+			}
+		}
+
+		return ref.key;
 	}
 }

@@ -5,6 +5,7 @@ import { Reference, Expression, EvaluationChain } from "models/status";
 const EvaluationContext = React.createContext<EvaluationChain>(new EvaluationChain({}));
 
 export const EvaluationProvider = EvaluationContext.Provider;
+export const EvaluationConsumer = EvaluationContext.Consumer;
 
 export interface EvaluationProps {
 	expression: string;
