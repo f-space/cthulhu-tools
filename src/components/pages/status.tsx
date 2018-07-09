@@ -21,8 +21,8 @@ const mapStateToProps = (state: State) => {
 	const statusList = views.valueSeq()
 		.filter(view => view.visible)
 		.map(view => collector.resolveCharacter(view.target))
-		.filter(result => !result.error)
-		.map(result => new Status(result.value!, IDBCache))
+		.filter(DataCollector.isOK)
+		.map(result => new Status(result.value, IDBCache))
 		.sort((x, y) => String.prototype.localeCompare.call(x.get("name"), y.get("name")))
 		.toArray();
 	return { provider, statusList };
