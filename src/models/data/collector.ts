@@ -45,10 +45,35 @@ export class DataCollector {
 			}
 			return this.mergeErrors(profileResult, historyResult);
 		}
-		return characterResult as CollectionResultError;
+		return characterResult;
 	}
 
 	public resolveProfile(uuid: string): CollectionResult<ProfileContext> {
+		const resolve = (uuid: string, seen: Set<string>): CollectionResult<ProfileContext> => {
+			if (seen.has(uuid)) return { status: true, value: { attributes: [], skills: [] } as any };
+
+			const result = this.resolveSingleProfile(uuid);
+			if (result.status) {
+				const { profile } = result.value;
+				if (profile.base) {
+					const baseResult = resolve(profile.base, seen.add(uuid));
+					if (baseResult.status) {
+						const baseValue = baseResult.value;
+						const value = result.value;
+						const attributes = [...baseValue.attributes, ...value.attributes];
+						const skills = [...baseValue.skills, ...value.skills];
+						return { status: true, value: { profile, attributes, skills } };
+					}
+					return baseResult;
+				}
+			}
+			return result;
+		}
+
+		return resolve(uuid, new Set());
+	}
+
+	public resolveSingleProfile(uuid: string): CollectionResult<ProfileContext> {
 		const profileResult = this.getProfile(uuid);
 		if (profileResult.status) {
 			const profile = profileResult.value;
@@ -61,7 +86,7 @@ export class DataCollector {
 			}
 			return this.mergeErrors(attributeResult, skillResult);
 		}
-		return profileResult as CollectionResultError;
+		return profileResult;
 	}
 
 	public getCharacter(uuid: string): CollectionResult<Character> {
