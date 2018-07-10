@@ -48,10 +48,10 @@ export default class ProfileDispatcher {
 				throw new Error(`${response.statusText}: ${url}`);
 			}
 		}).then(data => {
-			const profiles = (Array.isArray(data) ? data : [data]) as (ProfileData & { default?: boolean })[];
+			const profiles = (Array.isArray(data) ? data : [data]) as ProfileData[];
 			this.dispatch(ProfileAction.set(this.validate(profiles, true)));
 
-			const defaultProfile = profiles.find(profile => Boolean(profile.default));
+			const defaultProfile = profiles[0];
 			if (defaultProfile && defaultProfile.uuid) {
 				this.dispatch(ProfileAction.setDefault(defaultProfile.uuid));
 			}
