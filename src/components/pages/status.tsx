@@ -15,7 +15,7 @@ const mapStateToProps = (state: State) => {
 		.map(view => collector.resolveCharacter(view.target))
 		.filter(DataCollector.isOK)
 		.map(result => new Status(result.value, IDBCache))
-		.sort((x, y) => String.prototype.localeCompare.call(x.get("name"), y.get("name")))
+		.sort(Status.compare)
 		.toArray();
 	return { provider, statusList };
 };

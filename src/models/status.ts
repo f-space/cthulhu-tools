@@ -27,4 +27,16 @@ export class Status {
 
 		return this.chain.evaluate(ref, hash);
 	}
+
+	public static compare(x: Status, y: Status): number {
+		const xname = x.get("name");
+		const yname = y.get("name");
+
+		if (xname === undefined) {
+			if (yname === undefined) return 0;
+			else return -1;
+		} else if (yname === undefined) return 1;
+
+		return String.prototype.localeCompare.call(String(xname), String(yname));
+	}
 }
