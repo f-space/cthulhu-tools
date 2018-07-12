@@ -114,8 +114,8 @@ export class DiceInputMethod extends InputMethodBase<InputType.Dice> implements 
 
 	protected static import({ count, max, ...rest }: DiceInputMethodData): DiceInputMethodConfig {
 		return Object.assign(InputMethodBase.import(rest), {
-			count: validate("count", count).int().min(0).value,
-			max: validate("max", max).int().min(1).value,
+			count: validate("count", count).int().min(0).max(10).value,
+			max: validate("max", max).int().min(1).max(100).value,
 		});
 	}
 
