@@ -3,7 +3,7 @@ import { Form } from 'react-final-form';
 import { NumberInput } from "components/atoms/input";
 import { Button, SubmitButton } from "components/atoms/button";
 import { Dialog } from "./shared/dialog";
-import style from "styles/dialogs/custom-dice-dialog.scss";
+import style from "styles/dialogs/custom-dice.scss";
 
 export interface CustomDiceDialogResult {
 	count: number;
@@ -11,7 +11,7 @@ export interface CustomDiceDialogResult {
 }
 
 export interface CustomDiceDialogProps {
-	when: boolean;
+	open: boolean;
 	count: number;
 	max: number;
 	onClose(result?: CustomDiceDialogResult): void;
@@ -28,7 +28,7 @@ export class CustomDiceDialog extends React.Component<CustomDiceDialogProps> {
 	public render() {
 		const { count, max } = this.props;
 
-		return <Dialog when={this.props.when} header={"Custom Dice"}>
+		return <Dialog open={this.props.open} header={"Custom Dice"}>
 			<Form initialValues={{ count, max }} onSubmit={this.handleSubmit} render={({ handleSubmit, valid }) =>
 				<form onSubmit={handleSubmit}>
 					<div className={style['inputs']}>

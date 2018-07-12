@@ -52,7 +52,7 @@ export class DiceTemplate extends React.Component<DiceTemplateProps, DiceTemplat
 			<button className={style['roll']} onClick={this.handleRollClick}>
 				Roll
 			</button>
-			<CustomDiceDialog when={this.state.openCustomDiceDialog} {...this.state.custom} onClose={this.handleClose} />
+			<CustomDiceDialog open={this.state.openCustomDiceDialog} {...this.state.custom} onClose={this.handleClose} />
 		</Page>
 	}
 

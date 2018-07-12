@@ -4,14 +4,14 @@ import DialogComponents from "components/frame/dialog";
 import style from "styles/dialogs/shared/dialog.scss";
 
 export interface DialogProps extends React.HTMLAttributes<HTMLElement> {
-	when: boolean;
+	open: boolean;
 	header: React.ReactNode;
 }
 
 export function Dialog(props: DialogProps) {
-	const { when, header, className, children, ...rest } = props;
+	const { open, header, className, children, ...rest } = props;
 
-	if (when) {
+	if (open) {
 		return <DialogComponents.Portal>
 			<aside {...rest} className={classNames(className, style['dialog'])}>
 				<h1 className={style['header']}>{header}</h1>
