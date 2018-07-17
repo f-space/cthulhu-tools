@@ -2,6 +2,7 @@ import React from 'react';
 import { Dice } from "models/dice";
 import { DiceRoll, DiceRollTask } from "models/dice-roll";
 import { DiceSound } from "components/functions/dice-sound";
+import { RollButton } from "components/atoms/roll-button";
 import { DiceView } from "components/organisms/dice-view";
 import { DiceTypeSelector } from "components/organisms/dice-type-selector";
 import { CustomDiceDialog, CustomDiceDialogResult } from "components/dialogs/custom-dice";
@@ -49,9 +50,7 @@ export class DiceTemplate extends React.Component<DiceTemplateProps, DiceTemplat
 			<DiceSound ref={this.soundRef} />
 			<DiceView className={style['view']} dices={dices} faces={faces} />
 			<DiceTypeSelector className={style['selector']} types={PRESETS} selected={this.state.type} onTypeChange={this.handleTypeChange} />
-			<button className={style['roll']} onClick={this.handleRollClick}>
-				Roll
-			</button>
+			<RollButton className={style['roll']} onClick={this.handleRollClick} />
 			<CustomDiceDialog open={this.state.openCustomDiceDialog} {...this.state.custom} onClose={this.handleClose} />
 		</Page>
 	}

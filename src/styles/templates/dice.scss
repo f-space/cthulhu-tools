@@ -1,5 +1,3 @@
-@import "core/mixin";
-
 .view {
 	flex: 1 1 0;
 	margin: 1em 0;
@@ -11,20 +9,7 @@
 }
 
 .roll {
-	@include unselectable;
-	@include designed-font;
-
 	flex: 0 0 auto;
 	align-self: center;
-	outline: none;
-	border: none;
-	background: radial-gradient(ellipse closest-side at 50% 75%, rgba(255, 0, 0, 0.5), transparent);
-	cursor: pointer;
-	padding: 0 0.75em;
-	line-height: 1;
 	font-size: 5rem;
-
-	&:active {
-		background: radial-gradient(ellipse closest-side at 50% 75%, rgba(0, 255, 0, 0.5), transparent);
-	}
 }
