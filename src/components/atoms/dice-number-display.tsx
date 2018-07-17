@@ -18,7 +18,7 @@ interface DiceNumberDisplayState {
 
 export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, DiceNumberDisplayState> {
 	public static defaultProps = {
-		scale: 0.5,
+		scale: 0.75,
 	};
 
 	private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
