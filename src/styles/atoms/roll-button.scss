@@ -16,4 +16,12 @@
 	&:active {
 		--shadow-color: rgba(0, 255, 0, 0.5);
 	}
+
+	&:disabled {
+		--shadow-color: transparent;
+
+		opacity: 0.75;
+		cursor: auto;
+		filter: contrast(50%);
+	}
 }
