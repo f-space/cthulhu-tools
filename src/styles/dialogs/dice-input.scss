@@ -1,0 +1,49 @@
+.inputs {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: flex-start;
+	margin: 1em;
+}
+
+.dices {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+	justify-content: space-around;
+	margin: 1em 0;
+}
+
+.group {
+	&:nth-child(n+1) {
+		margin-left: 0.2em;
+	}
+}
+
+.dice {
+	--dice-height: 5rem;
+
+	&:nth-child(n+1) {
+		margin-left: 0.1em;
+	}
+}
+
+.roll {
+	font-size: 5em;
+}
+
+.buttons {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+}
+
+.ok,
+.cancel {
+	box-sizing: content-box;
+	margin: 0.5ex 0.5em;
+	width: 5em;
+}
+
+.cancel { order: 0; }
+.ok { order: 1; }

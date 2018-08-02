@@ -1,0 +1,80 @@
+import React from 'react';
+import { Dice } from "models/dice";
+import { DiceRollTask } from "components/functions/dice-roll-task";
+import { Button } from "components/atoms/button";
+import { RollButton } from "components/atoms/roll-button";
+import { DiceImage } from "components/atoms/dice-image";
+import { Dialog } from "./shared/dialog";
+import style from "styles/dialogs/dice-input.scss";
+
+export interface DiceInputDialogResult {
+	value: number[];
+}
+
+export interface DiceInputDialogProps {
+	open: boolean;
+	dices: ReadonlyArray<Dice>;
+	value: ReadonlyArray<number>;
+	onClose(result?: DiceInputDialogResult): void;
+}
+
+interface DiceInputDialogState {
+	value: number[];
+	rolling: boolean;
+}
+
+export class DiceInputDialog extends React.Component<DiceInputDialogProps, DiceInputDialogState> {
+	public constructor(props: DiceInputDialogProps) {
+		super(props);
+
+		this.state = { value: Array.from(props.value), rolling: false };
+		this.handleClickRoll = this.handleClickRoll.bind(this);
+		this.handleClickOK = this.handleClickOK.bind(this);
+		this.handleClickCancel = this.handleClickCancel.bind(this);
+		this.updateValue = this.updateValue.bind(this);
+	}
+
+	public render() {
+		const { dices } = this.props;
+		const { value, rolling } = this.state;
+		const display = dices.map((dice, i) => dice.display(value[i]));
+
+		return <Dialog open={this.props.open} header={"Dice Input"}>
+			<div className={style['inputs']}>
+				<div className={style['dices']}>
+					{
+						display.map((group, groupIndex) =>
+							<div key={groupIndex} className={style['group']}>
+								{group.map((dice, diceIndex) => <DiceImage key={diceIndex} className={style['dice']} type={dice.type} face={dice.face} />)}
+							</div>
+						)
+					}
+				</div>
+				<RollButton className={style['roll']} disabled={rolling} onClick={this.handleClickRoll} />
+			</div>
+			<div className={style['buttons']}>
+				<Button className={style['ok']} disabled={rolling} commit onClick={this.handleClickOK}>OK</Button>
+				<Button className={style['cancel']} onClick={this.handleClickCancel}>Cancel</Button>
+			</div >
+			<DiceRollTask active={rolling} dices={dices} faces={value} callback={this.updateValue} />
+		</Dialog >
+	}
+
+	private handleClickRoll(): void {
+		this.setState({ rolling: true });
+	}
+
+	private handleClickOK(): void {
+		const { value } = this.state;
+
+		this.props.onClose({ value });
+	}
+
+	private handleClickCancel(): void {
+		this.props.onClose();
+	}
+
+	private updateValue(value: number[], final: boolean): void {
+		this.setState({ value, rolling: !final });
+	}
+}
