@@ -5,7 +5,8 @@ import style from "styles/atoms/dice-number-display.scss";
 export interface DiceNumberDisplayProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 	width: number;
 	height: number;
-	scale?: number;
+	scaleX?: number;
+	scaleY?: number;
 	digits: number;
 	value: number | undefined;
 	critical?: boolean;
@@ -17,8 +18,9 @@ interface DiceNumberDisplayState {
 }
 
 export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, DiceNumberDisplayState> {
-	public static defaultProps = {
-		scale: 0.75,
+	public static defaultProps: Readonly<Partial<DiceNumberDisplayProps>> = {
+		scaleX: 0.95,
+		scaleY: 0.75,
 	};
 
 	private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
@@ -40,19 +42,19 @@ export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, D
 	}
 
 	public render() {
-		const { width, height, scale, digits, value, critical, fumble, className, ...rest } = this.props;
+		const { width, height, scaleX, scaleY, digits, value, critical, fumble, className, ...rest } = this.props;
 		const fontSize = this.getFontSize();
 
-		return <div {...rest} className={classNames(className, style['display'], { critical, fumble })} style={{ fontSize }}>
+		return <div {...rest} className={classNames(className, style['display'])} style={{ fontSize }}>
 			<canvas className={style['canvas']} width={0} height={0} hidden ref={this.canvasRef} />
-			{value}
+			<span className={classNames(style['text'], { critical, fumble })}>{value}</span>
 		</div>
 	}
 
 	private getFontSize(): number {
 		const ratio = this.state.textAspectRatio || Infinity;
-		const maxHeight = this.props.height * (this.props.scale as number);
-		const preferredHeight = this.props.width / ratio;
+		const maxHeight = this.props.height * this.props.scaleY!;
+		const preferredHeight = this.props.width * this.props.scaleX! / ratio;
 		return Math.min(maxHeight, preferredHeight);
 	}
 
