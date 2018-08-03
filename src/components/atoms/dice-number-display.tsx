@@ -18,7 +18,7 @@ interface DiceNumberDisplayState {
 }
 
 export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, DiceNumberDisplayState> {
-	public static defaultProps: Readonly<Partial<DiceNumberDisplayProps>> = {
+	public static readonly defaultProps = {
 		scaleX: 0.95,
 		scaleY: 0.75,
 	};

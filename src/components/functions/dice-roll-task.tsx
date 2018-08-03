@@ -14,7 +14,7 @@ export interface DiceRollTaskProps {
 }
 
 export class DiceRollTask extends React.Component<DiceRollTaskProps> {
-	public static readonly defaultProps: Readonly<Partial<DiceRollTaskProps>> = {
+	public static readonly defaultProps = {
 		interval: 100,
 		iteration: 10,
 	};
