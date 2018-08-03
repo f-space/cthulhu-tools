@@ -7,6 +7,7 @@ module.exports = () => {
 	return {
 		plugins: [
 			require('autoprefixer')({ browsers, remove: false }),
+			require('cssnano')({ preset: 'default' }),
 		]
 	}
 }

@@ -18,7 +18,7 @@ module.exports = function (env, { mode }) {
 				url: false,
 				modules: true,
 				importLoaders: 2,
-				...(production ? { minimize: true } : { sourceMap: true })
+				...(production ? {} : { sourceMap: true })
 			}
 		},
 		{
