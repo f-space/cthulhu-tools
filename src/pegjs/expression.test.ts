@@ -1,4 +1,4 @@
-import Expression from "./expression";
+import * as Expression from "./expression";
 
 describe("literal parsing", () => {
 	test("integer", () => {

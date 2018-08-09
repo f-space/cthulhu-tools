@@ -1,4 +1,4 @@
-import parser from "pegjs/expression";
+import * as pegjs from "pegjs/expression";
 
 export enum NodeType {
 	BinaryOp = 'binary-op',
@@ -252,7 +252,7 @@ export class Reference implements NodeInterface {
 }
 
 export function parse(source: string): Node {
-	return walk(parser.parse(source));
+	return walk(pegjs.parse(source));
 }
 
 function walk(node: any): Node {

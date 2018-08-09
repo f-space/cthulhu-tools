@@ -1,11 +1,6 @@
-export interface Parser {
-	parse(text: string, options?: ParserOptions): any;
-}
+export function parse(text: string, options?: ParseOptions): any;
 
-export interface ParserOptions {
+export interface ParseOptions {
 	startRule?: string;
 	tracer?: any;
 }
-
-declare const parser: Parser;
-export default parser;
