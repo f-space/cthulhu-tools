@@ -6,8 +6,8 @@ import { RepeatTask } from "components/functions/repeat-task";
 
 export interface DiceRollTaskProps {
 	active: boolean;
-	interval?: number;
-	iteration?: number;
+	interval: number;
+	iteration: number;
 	dices: ReadonlyArray<Dice>;
 	faces: ReadonlyArray<number>;
 	callback: (faces: number[], final: boolean) => void;
@@ -45,12 +45,12 @@ export class DiceRollTask extends React.Component<DiceRollTaskProps> {
 	public render() {
 		const { active, interval } = this.props;
 
-		return <RepeatTask active={active} interval={interval!} callback={this.roll} />
+		return <RepeatTask active={active} interval={interval} callback={this.roll} />
 	}
 
 	private roll(n: number): void {
 		const { iteration, dices, faces, callback } = this.props;
-		if (n < iteration! - 1) {
+		if (n < iteration - 1) {
 			callback(this.method.next(dices, faces), false);
 		} else {
 			callback(this.method.last(dices), true);

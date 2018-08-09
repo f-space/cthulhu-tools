@@ -5,8 +5,8 @@ import style from "styles/atoms/dice-number-display.scss";
 export interface DiceNumberDisplayProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 	width: number;
 	height: number;
-	scaleX?: number;
-	scaleY?: number;
+	scaleX: number;
+	scaleY: number;
 	digits: number;
 	value: number | undefined;
 	critical?: boolean;
@@ -53,8 +53,8 @@ export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, D
 
 	private getFontSize(): number {
 		const ratio = this.state.textAspectRatio || Infinity;
-		const maxHeight = this.props.height * this.props.scaleY!;
-		const preferredHeight = this.props.width * this.props.scaleX! / ratio;
+		const maxHeight = this.props.height * this.props.scaleY;
+		const preferredHeight = this.props.width * this.props.scaleX / ratio;
 		return Math.min(maxHeight, preferredHeight);
 	}
 
