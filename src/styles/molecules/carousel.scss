@@ -1,0 +1,19 @@
+.frame {
+	display: grid;
+	grid-template: "item" 1fr / 1fr;
+	overflow: hidden;
+	user-select: none;
+}
+
+.item {
+	grid-area: item;
+	transform: translateX(calc(100% * var(--item-position, 0)));
+	width: calc(100% * var(--item-size, 0));
+	height: auto;
+
+	.vertical & {
+		transform: translateY(calc(100% * var(--item-position, 0)));
+		width: auto;
+		height: calc(100% * var(--item-size, 0));
+	}
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { DataProvider, Status } from "models/status";
+import { Carousel, CarouselView } from "components/molecules/carousel";
 import { Page } from "./shared/page";
 import style from "styles/templates/status.scss";
 
@@ -16,17 +17,17 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 		return <Page id="status" heading={<h2>ステータス</h2>} navs={
 			<Link to="/status/character-management">管理</Link>
 		}>
-			<div className={style['characters']}>
+			<Carousel models={statusList} wrap={true}>
 				{
-					statusList.map(status =>
-						<section key={status.context.character.uuid} className={style['character']}>
+					context => <CarouselView className={style['characters']} context={context} render={status =>
+						<section className={style['character']}>
 							{this.renderAttributes(status)}
 							{this.renderSkills(status)}
 							{this.renderItems(status)}
 						</section>
-					)
+					} />
 				}
-			</div>
+			</Carousel>
 		</Page>
 	}
 
