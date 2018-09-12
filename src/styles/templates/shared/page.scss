@@ -1,10 +1,10 @@
 .page {
 	display: flex;
-	flex: 1 0 auto;
 	flex-flow: column nowrap;
 	align-items: stretch;
 	justify-content: flex-start;
 	padding: 1ex 1em calc(1ex + 10px);
+	height: 100%;
 }
 
 .heading {
@@ -19,4 +19,8 @@
 	flex-flow: row nowrap;
 	align-items: stretch;
 	justify-content: flex-end;
+}
+
+.content {
+	flex: 1 1 0;
 }

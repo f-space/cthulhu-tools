@@ -51,15 +51,9 @@
 }
 
 .content {
-	display: flex;
-	position: relative;
 	flex: 1 1 0;
-	flex-flow: column nowrap;
-	align-items: stretch;
-	justify-content: flex-start;
 	background: linear-gradient(rgba(255, 0, 0, 0.5), transparent 20px);
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: auto;
 }
 
 .navigation {

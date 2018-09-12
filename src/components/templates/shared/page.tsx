@@ -8,7 +8,7 @@ export interface PageProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function Page({ id, className, heading, navs, children, ...rest }: PageProps) {
-	return <div id={id} className={classNames(className, style['page'])}>
+	return <div {...rest} id={id} className={classNames(className, style['page'])}>
 		<header className={style['heading']}>
 			{heading}
 		</header>
@@ -17,6 +17,8 @@ export function Page({ id, className, heading, navs, children, ...rest }: PagePr
 				{navs}
 			</nav>
 		}
-		{children}
+		<div className={style['content']}>
+			{children}
+		</div>
 	</div>
 }

@@ -48,9 +48,12 @@ export class DiceTemplate extends React.Component<DiceTemplateProps, DiceTemplat
 		const ready = (dices.length !== 0 && !rolling);
 
 		return <Page id="dice" heading={<h2>ダイスロール</h2>}>
-			<DiceView className={style['view']} dices={dices} faces={faces} />
-			<DiceTypeSelector className={style['selector']} types={PRESETS} selected={type} onTypeChange={this.handleTypeChange} />
-			<RollButton className={style['roll']} disabled={!ready} onClick={this.handleRollClick} />
+			<div className={style['container']}>
+				<DiceView className={style['view']} dices={dices} faces={faces} />
+				<DiceTypeSelector className={style['selector']} types={PRESETS} selected={type} onTypeChange={this.handleTypeChange} />
+				<RollButton className={style['roll']} disabled={!ready} onClick={this.handleRollClick} />
+			</div>
+			
 			<DiceRollTask active={rolling} dices={dices} faces={faces} callback={this.updateFaces} />
 			<CustomDiceDialog open={openCustomDiceDialog} {...custom} onClose={this.handleClose} />
 		</Page>
