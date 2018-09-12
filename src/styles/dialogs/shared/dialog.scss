@@ -6,7 +6,7 @@
 	flex-flow: column nowrap;
 	align-items: stretch;
 	background: linear-gradient(rgb(128, 0, 0), black 1rem, black calc(100% - 1rem), rgb(128, 0, 0));
-	padding: calc(1rem + 1ex) 1em;
+	padding: 1rem 0;
 	max-height: 80%;
 }
 
@@ -15,15 +15,14 @@
 
 	display: block;
 	position: absolute;
-	top: -2ex;
+	top: -1.5rem;
 	right: 0;
 	left: 0;
 	text-align: center;
+	line-height: 1;
 	font-size: 3rem;
 }
 
 .content {
-	height: 100%;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: auto;
 }
