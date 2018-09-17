@@ -22,10 +22,10 @@ export interface CarouselViewProps<T> extends React.HTMLAttributes<HTMLDivElemen
 
 export interface CarouselContext<T> {
 	readonly models: ReadonlyArray<T>;
-	readonly index: number;
+	readonly index: number | undefined;
 	readonly target: number;
 	readonly data: TrackData;
-	readonly layout: TrackLayout;
+	map(position: number): number | undefined;
 	move(index: number): void;
 	shift(delta: number): void;
 }
@@ -68,6 +68,7 @@ export class Carousel<T> extends React.Component<CarouselProps<T>, CarouselState
 		const prevLength = props.models.length;
 
 		this.state = { target, data, prevWrap, prevLength };
+		this.map = this.map.bind(this);
 		this.move = this.move.bind(this);
 		this.shift = this.shift.bind(this);
 	}
@@ -119,32 +120,24 @@ export class Carousel<T> extends React.Component<CarouselProps<T>, CarouselState
 	public render() {
 		const { models, children } = this.props;
 		const { target, data } = this.state;
-		const { move, shift } = this;
+		const { map, move, shift } = this;
 
-		const index = this.index(target);
-		const layout = this.layout();
-		const context = { models, index, target, data, layout, move, shift };
+		const index = map(target);
+		const context = { models, index, target, data, map, move, shift };
 
 		return children(context);
 	}
 
-	private index(position: number): number {
+	private map(position: number): number | undefined {
 		const { models, wrap } = this.props;
 
 		if (!wrap) {
-			return position;
+			return (position >= 0 && position < models.length) ? Math.floor(position) : undefined;
 		} else if (models.length !== 0) {
-			return modulo(position, models.length);
+			return Math.floor(modulo(position, models.length));
 		} else {
-			return NaN;
+			return undefined;
 		}
-	}
-
-	private layout(): TrackLayout {
-		const { models, wrap } = this.props;
-		const length = models.length;
-
-		return !wrap ? new CarouselTrackLayout(length) : new CarouselWrappedTrackLayout(length);
 	}
 
 	private move(index: number): void {
@@ -197,7 +190,7 @@ export class CarouselView<T> extends React.Component<CarouselViewProps<T>> {
 	public render() {
 		const {
 			className,
-			context: { models, target, data, layout },
+			context: { models, target, data, map },
 			vertical,
 			spring,
 			flick,
@@ -206,23 +199,17 @@ export class CarouselView<T> extends React.Component<CarouselViewProps<T>> {
 			...rest
 		} = this.props;
 
-		const frameClass = classNames(
-			className,
-			style['frame'],
-			{ [style['vertical']]: vertical }
-		);
-
 		return <Flick {...flick} vertical={vertical} onFlick={this.handleFlick}>
 			{
-				props => <SpringTrack
+				props => <SpringTrack<number>
 					{...spring}
 					target={target}
 					state={data}
 					select={this.select.bind(this)}
 					postrender={this.postrender.bind(this)}
-					render={(key: number) => (i => render(models[i], i))(layout.index(key))}>
+					render={key => { const index = map(key)!; return render(models[index], index); }}>
 					{
-						items => <div {...rest} {...props} className={frameClass} ref={this.frame}>
+						items => <div {...rest} {...props} className={classNames(className, style['frame'])} ref={this.frame}>
 							{
 								models.length !== 0
 									? items.map(({ node, key }) => <div key={key} className={style['item']}>{node}</div>)
@@ -240,93 +227,32 @@ export class CarouselView<T> extends React.Component<CarouselViewProps<T>> {
 	}
 
 	private select(data: TrackData): number[] {
-		const { layout } = this.props.context;
+		const { map } = this.props.context;
 		const { position } = data;
 
-		return layout.items(position, position + 1);
+		const base = Math.floor(position);
+		const candidates = base !== position ? [base, base + 1] : [base];
+		const keys = candidates.filter(x => map(x) !== undefined);
+
+		return keys;
 	}
 
 	private postrender(data: TrackData, items: ReadonlyArray<number>): void {
-		const { layout } = this.props.context;
+		const { vertical } = this.props;
 
 		const frame = this.frame.current;
 		if (frame) {
+			const fn = vertical ? 'translateY' : 'translateX';
 			for (const [index, item] of items.entries()) {
-				const element = frame.children[index];
-				if (element instanceof HTMLElement) {
-					const position = layout.position(item) - data.position;
-					const size = layout.size(item);
+				const child = frame.children[index] as HTMLElement;
+				const amount = item - data.position;
 
-					set(element, '--item-position', String(position));
-					set(element, '--item-size', String(size));
+				if (amount !== 0) {
+					child.style.setProperty('transform', `${fn}(${100 * amount}%)`);
+				} else {
+					child.style.removeProperty('transform');
 				}
 			}
 		}
-
-		function set(element: HTMLElement, name: string, value: string): void {
-			const current = element.style.getPropertyValue(name);
-			if (value !== current) {
-				element.style.setProperty(name, value);
-			}
-		}
-	}
-}
-
-interface TrackLayout {
-	items(start: number, end: number): number[];
-	position(item: number): number;
-	size(item: number): number;
-	index(item: number): number;
-}
-
-class CarouselTrackLayout implements TrackLayout {
-	public constructor(readonly length: number) { }
-
-	public items(start: number, end: number): number[] {
-		const startIndex = Math.max(Math.floor(start), 0);
-		const endIndex = Math.min(Math.ceil(end), this.length);
-		const count = Math.max(endIndex - startIndex, 0);
-
-		return [...Array(count)].map((_, i) => i + startIndex);
-	}
-
-	public position(item: number): number {
-		return item;
-	}
-
-	public size(item: number): number {
-		return 1;
-	}
-
-	public index(item: number): number {
-		return item;
-	}
-}
-
-class CarouselWrappedTrackLayout implements TrackLayout {
-	public constructor(readonly length: number) { }
-
-	public items(start: number, end: number): number[] {
-		if (this.length !== 0) {
-			const startIndex = Math.floor(start);
-			const endIndex = Math.ceil(end);
-			const count = Math.max(endIndex - startIndex, 0);
-
-			return [...Array(count)].map((_, i) => i + startIndex);
-		} else {
-			return [];
-		}
-	}
-
-	public position(item: number): number {
-		return item;
-	}
-
-	public size(item: number): number {
-		return 1;
-	}
-
-	public index(item: number): number {
-		return modulo(item, this.length);
 	}
 }
