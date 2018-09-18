@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, NavLink, NavLinkProps } from 'react-router-dom';
 import classNames from 'classnames';
-import style from "styles/frame/navigation.scss";
+import style from "./navigation.scss";
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLElement> { }
 

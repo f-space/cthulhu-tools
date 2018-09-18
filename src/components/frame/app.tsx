@@ -4,13 +4,13 @@ import { Provider } from 'react-redux';
 import { Header } from "components/frame/header";
 import { Navigation } from "components/frame/navigation";
 import { DialogProvider, DialogSlot } from "components/frame/dialog";
-import { HomePage } from "components/pages/home";
-import { DicePage } from "components/pages/dice";
-import { StatusPage } from "components/pages/status";
-import { CharacterManagementPage } from "components/pages/character-management";
-import { CharacterEditPage } from "components/pages/character-edit";
+import { HomePage } from "components/pages/home/page";
+import { DicePage } from "components/pages/dice/page";
+import { StatusPage } from "components/pages/status/page";
+import { CharacterManagementPage } from "components/pages/character-management/page";
+import { CharacterEditPage } from "components/pages/character-edit/page";
 import store from "redux/store";
-import style from "styles/frame/app.scss";
+import style from "./app.scss";
 
 export class App extends React.Component {
 	public render() {

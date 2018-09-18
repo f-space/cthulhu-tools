@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import classNames from 'classnames';
-import style from "styles/frame/header.scss";
+import style from "./header.scss";
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> { }
 

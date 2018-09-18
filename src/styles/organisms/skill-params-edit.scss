@@ -1,9 +1,0 @@
-@import "core/mixin";
-
-.point-stats {
-	text-align: right;
-	font-size: 1.2em;
-
-	&.full { @include blur-text(1px, 0, green); }
-	&.over { @include blur-text(1px, 0, red); }
-}
