@@ -47,7 +47,7 @@ export class DiceTemplate extends React.Component<DiceTemplateProps, DiceTemplat
 		const dices = this.getDices(type, custom);
 		const ready = (dices.length !== 0 && !rolling);
 
-		return <Page id="dice" heading={<h2>ダイスロール</h2>}>
+		return <Page id="dice" heading="ダイスロール" flexible>
 			<div className={style['container']}>
 				<DiceView className={style['view']} dices={dices} faces={faces} />
 				<DiceTypeSelector className={style['selector']} types={PRESETS} selected={type} onTypeChange={this.handleTypeChange} />

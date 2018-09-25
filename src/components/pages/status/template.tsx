@@ -14,7 +14,7 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 	public render() {
 		const { statusList } = this.props;
 
-		return <Page id="status" heading={<h2>ステータス</h2>} navs={
+		return <Page id="status" heading="ステータス" navs={
 			<Link to="/status/character-management">管理</Link>
 		}>
 			<Carousel models={statusList} wrap={true}>

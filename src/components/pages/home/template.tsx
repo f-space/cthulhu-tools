@@ -7,7 +7,7 @@ export interface HomeTemplateProps {
 }
 
 export function HomeTemplate({ children }: HomeTemplateProps) {
-	return <Page id="home" heading={<h2>クトゥルフTRPGのための<wbr />Webアプリ</h2>}>
+	return <Page id="home" heading="クトゥルフTRPG ツール">
 		<div className={style['content']}>
 			{children}
 		</div>

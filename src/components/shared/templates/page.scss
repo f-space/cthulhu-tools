@@ -3,22 +3,40 @@
 	flex-flow: column nowrap;
 	align-items: stretch;
 	justify-content: flex-start;
-	padding: 1ex 1em calc(1ex + 10px);
+	padding: 1em;
+}
+
+.flexible {
 	height: 100%;
 }
 
-.heading {
+.header {
 	flex: 0 0 auto;
-	align-self: center;
-	text-align: center;
+	z-index: 1;
+}
+
+.heading {
+	border-style: solid;
+	border-image: linear-gradient(to right, #900, #f99 5%, #900 10%, transparent 75%);
+	border-image-width: 0 0 1px 0;
+	border-image-slice: 1 0;
+	background-clip: text;
+	background-image: linear-gradient(#600 50%, #f99);
+	color: transparent;
 }
 
 .navs {
 	display: flex;
+	position: sticky;
+	top: 1em;
+	right: 1em;
 	flex: 0 0 auto;
 	flex-flow: row nowrap;
 	align-items: stretch;
+	align-self: flex-end;
 	justify-content: flex-end;
+	background: rgba(0, 0, 0, 0.5);
+	padding: 0.25em 0.5em;
 }
 
 .content {
