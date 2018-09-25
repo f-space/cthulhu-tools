@@ -1,10 +1,10 @@
 @import "mixin";
 
 .button {
-	--shadow-color: rgba(255, 0, 0, 0.5);
+	--shadow-color: rgba(var(--color-vec-main), 0.5);
 
 	@include unselectable;
-	@include designed-font;
+	@include designed-font(var(--color-text), var(--color-main));
 
 	outline: none;
 	border: none;
@@ -14,7 +14,7 @@
 	line-height: 1;
 
 	&:active {
-		--shadow-color: rgba(0, 255, 0, 0.5);
+		--shadow-color: rgba(var(--color-vec-accent-bright), 0.5);
 	}
 
 	&:disabled {

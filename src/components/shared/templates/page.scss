@@ -16,12 +16,16 @@
 }
 
 .heading {
+	$c-p1: var(--color-main-light);
+	$c-m1: var(--color-main-dark);
+	$c-m2: var(--color-main-dark2);
+
 	border-style: solid;
-	border-image: linear-gradient(to right, #900, #f99 5%, #900 10%, transparent 75%);
+	border-image: linear-gradient(to right, $c-m1, $c-p1 5%, $c-m1 10%, transparent 75%);
 	border-image-width: 0 0 1px 0;
 	border-image-slice: 1 0;
 	background-clip: text;
-	background-image: linear-gradient(#600 50%, #f99);
+	background-image: linear-gradient($c-m2 50%, $c-p1);
 	color: transparent;
 }
 
@@ -35,7 +39,7 @@
 	align-items: stretch;
 	align-self: flex-end;
 	justify-content: flex-end;
-	background: rgba(0, 0, 0, 0.5);
+	background: rgba(var(--color-vec-background), 0.5);
 	padding: 0.25em 0.5em;
 }
 

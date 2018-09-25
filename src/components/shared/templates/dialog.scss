@@ -1,17 +1,20 @@
 @import "mixin";
 
 .dialog {
+	$bg-edge: var(--color-main-dialog-bg);
+	$bg-mid: var(--color-background);
+
 	display: flex;
 	position: relative;
 	flex-flow: column nowrap;
 	align-items: stretch;
-	background: linear-gradient(rgb(128, 0, 0), black 1rem, black calc(100% - 1rem), rgb(128, 0, 0));
+	background: linear-gradient($bg-edge, $bg-mid 1rem, $bg-mid calc(100% - 1rem), $bg-edge);
 	padding: 1rem 0;
 	max-height: 80%;
 }
 
 .header {
-	@include designed-font;
+	@include designed-font(var(--color-text), var(--color-main));
 
 	display: block;
 	position: absolute;

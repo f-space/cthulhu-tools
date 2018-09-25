@@ -1,6 +1,6 @@
 .button {
 	outline: none;
-	border: solid 1px rgb(128, 0, 0);
+	border: solid 1px var(--color-main-button-dark);
 	border-radius: 0.5ex;
 	padding: 0.5em 0.75em;
 	text-align: center;
@@ -8,20 +8,20 @@
 	white-space: nowrap;
 
 	&:active {
-		border-color: rgb(255, 128, 128);
-		background: rgb(255, 128, 128);
+		border-color: var(--color-main-button-light);
+		background: var(--color-main-button-light);
 	}
 }
 
 .commit {
-	background: rgb(128, 0, 0);
+	background: var(--color-main-button-dark);
 
 	&:active {
-		border-color: rgb(255, 128, 128);
-		background: rgb(255, 128, 128);
+		border-color: var(--color-main-button-light);
+		background: var(--color-main-button-light);
 	}
 
 	&:disabled {
-		background: rgb(64, 0, 0);
+		background: var(--color-main-button-disabled);
 	}
 }

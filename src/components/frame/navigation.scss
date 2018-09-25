@@ -29,13 +29,13 @@
 
 %item-display {
 	opacity: 0.5;
-	background: linear-gradient(transparent 80%, red);
+	background: linear-gradient(transparent 80%, var(--color-main));
 	cursor: pointer;
 	font-size: 3rem;
 
 	&.active {
 		opacity: 1;
-		background: linear-gradient(transparent 50%, green);
+		background: linear-gradient(transparent 50%, var(--color-accent));
 		cursor: default;
 	}
 
@@ -45,7 +45,7 @@
 	}
 
 	&.indicator {
-		@include designed-font(limegreen);
+		@include designed-font(var(--color-text), var(--color-accent-light));
 	}
 }
 
@@ -54,5 +54,5 @@
 	@extend %item-layout;
 	@extend %item-display;
 
-	@include designed-font;
+	@include designed-font(var(--color-text), var(--color-main));
 }

@@ -4,6 +4,6 @@
 	text-align: right;
 	font-size: 1.2em;
 
-	&.full { @include blur-text(1px, 0, green); }
-	&.over { @include blur-text(1px, 0, red); }
+	&.full { @include blur-text(1px, 0, var(--color-accent)); }
+	&.over { @include blur-text(1px, 0, var(--color-main)); }
 }

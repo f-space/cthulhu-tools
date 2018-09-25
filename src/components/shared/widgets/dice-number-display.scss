@@ -11,18 +11,18 @@
 }
 
 .text {
-	@include blur-text-double(0.1ex, 0.25ex, red);
+	@include blur-text-double(0.1ex, 0.25ex, var(--color-main));
 
 	opacity: 0.5;
-	color: white;
+	color: var(--color-text);
 }
 
 .critical {
-	@include blur-text-double(0.1ex, 0.25ex, green);
+	@include blur-text-double(0.1ex, 0.25ex, var(--color-dice-critical));
 }
 
 .fumble {
-	@include blur-text-double(0.1ex, 0.25ex, blue);
+	@include blur-text-double(0.1ex, 0.25ex, var(--color-dice-fumble));
 }
 
 .canvas {

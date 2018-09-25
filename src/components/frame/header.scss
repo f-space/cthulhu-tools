@@ -3,7 +3,7 @@
 .header {
 	@include unselectable;
 
-	border-bottom: #900 solid 1px;
+	border-bottom: var(--color-main-dark) solid 1px;
 	text-align: center;
 }
 
@@ -13,5 +13,5 @@
 }
 
 .title-text {
-	@include designed-font;
+	@include designed-font(var(--color-text), var(--color-main));
 }

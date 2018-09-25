@@ -32,11 +32,11 @@
 		(+$offset) (+$offset) $radius $color;
 }
 
-@mixin designed-font($color: red) {
-	@include blur-text(0.1ex, 0.25ex, $color);
+@mixin designed-font($inner, $outer) {
+	@include blur-text(0.1ex, 0.25ex, $outer);
 
 	text-decoration: none;
-	color: white;
+	color: $inner;
 	font-family: "Cthulhu", sans-serif;
 }
 

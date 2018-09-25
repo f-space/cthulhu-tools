@@ -13,13 +13,13 @@
 .dice-set {
 	flex: 1 1 auto;
 	margin: 1ex 0.25em;
-	border: solid 1px red;
+	border: solid 1px var(--color-main);
 	border-radius: 2ex/50%;
 	cursor: pointer;
 	width: calc(30% - 0.25em);
 	text-align: center;
 
 	&.active {
-		background: red;
+		background: var(--color-main);
 	}
 }

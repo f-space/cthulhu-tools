@@ -2,8 +2,8 @@
 	display: flex;
 	flex-flow: column nowrap;
 	margin: 1ex 0;
-	border-top: solid 1px red;
-	border-bottom: solid 1px red;
+	border-top: solid 1px var(--color-main-list-border);
+	border-bottom: solid 1px var(--color-main-list-border);
 	padding: 2ex 0.5em;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -11,6 +11,6 @@
 
 .item {
 	flex: 0 0 auto;
-	border-bottom: dashed 1px rgb(128, 0, 0);
+	border-bottom: dashed 1px var(--color-main-underline);
 	padding-bottom: 0.5ex;
 }
