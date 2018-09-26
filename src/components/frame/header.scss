@@ -14,5 +14,5 @@
 }
 
 .title-text {
-	@include designed-font($color-text, $color-main);
+	@include designed-font($color-text-glare, $color-main-bright);
 }

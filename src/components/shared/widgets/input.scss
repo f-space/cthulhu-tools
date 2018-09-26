@@ -3,14 +3,14 @@
 
 .input {
 	outline: none;
-	border: solid 1px $color-main-input-dark;
+	border: solid 1px $color-main-dark;
 	border-radius: 1ex;
 	background: transparent;
 	padding: 0.5ex 0.5em;
 	min-width: 0;
 
 	&:invalid {
-		background: rgba($color-main-input-invalid, 0.25);
+		background: rgba($color-main, 0.25);
 	}
 }
 
@@ -32,7 +32,7 @@
 	&::before {
 		display: inline-block;
 		vertical-align: middle;
-		color: $color-main-input-check;
+		color: $color-main;
 		font-size: 0.8em;
 		content: "";
 	}
@@ -55,7 +55,7 @@
 	}
 
 	&:checked {
-		background: $color-main-input-dark;
+		background: $color-main-dark;
 
 		&::before {
 			content: attr(data-on);

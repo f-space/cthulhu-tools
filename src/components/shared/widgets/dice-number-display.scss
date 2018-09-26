@@ -12,10 +12,10 @@
 }
 
 .text {
-	@include blur-text-double(0.1ex, 0.25ex, $color-main);
+	@include blur-text-double(0.1ex, 0.25ex, $color-dice-normal);
 
 	opacity: 0.5;
-	color: $color-text;
+	color: $color-text-glare;
 }
 
 .critical {

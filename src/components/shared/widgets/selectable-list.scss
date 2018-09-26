@@ -4,8 +4,8 @@
 	display: flex;
 	flex-flow: column nowrap;
 	margin: 1ex 0;
-	border-top: solid 1px $color-main-list-border;
-	border-bottom: solid 1px $color-main-list-border;
+	border-top: solid 1px $color-main;
+	border-bottom: solid 1px $color-main;
 	padding: 2ex 0.5em;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -13,6 +13,6 @@
 
 .item {
 	flex: 0 0 auto;
-	border-bottom: dashed 1px $color-main-underline;
+	border-bottom: dashed 1px $color-main-dark;
 	padding-bottom: 0.5ex;
 }

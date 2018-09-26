@@ -1,21 +1,22 @@
 $color-background: black;
 $color-overlay: black;
 $color-text: white;
+$color-text-glare: invert($color-background);
+
 $color-main: red;
-$color-main-light: #f99;
-$color-main-dark: #900;
-$color-main-dark2: #600;
-$color-main-dialog-bg: #900;
-$color-main-underline: rgb(128, 0, 0);
-$color-main-button-dark: rgb(128, 0, 0);
-$color-main-button-light: rgb(255, 128, 128);
-$color-main-button-disabled: rgb(64, 0, 0);
-$color-main-input-dark: rgb(128, 0, 0);
-$color-main-input-invalid: red;
-$color-main-input-check: red;
-$color-main-list-border: red;
+$color-main-bright: mix($color-main, change-color($color-main, $lightness: 50%), 50%);
+$color-main-lighter: mix(white, $color-main, 67%);
+$color-main-light: mix(white, $color-main, 33%);
+$color-main-dark: mix(black, $color-main, 33%);
+$color-main-darker: mix(black, $color-main, 67%);
+
 $color-accent: green;
-$color-accent-light: limegreen;
-$color-accent-bright: lime;
+$color-accent-bright: mix($color-accent, change-color($color-accent, $lightness: 50%), 50%);
+$color-accent-lighter: mix(white, $color-accent, 67%);
+$color-accent-light: mix(white, $color-accent, 33%);
+$color-accent-dark: mix(black, $color-accent, 33%);
+$color-accent-darker: mix(black, $color-accent, 67%);
+
+$color-dice-normal: red;
 $color-dice-critical: green;
 $color-dice-fumble: blue;

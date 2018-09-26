@@ -46,7 +46,7 @@
 	}
 
 	&.indicator {
-		@include designed-font($color-text, $color-accent-light);
+		@include designed-font($color-text-glare, $color-accent-light);
 	}
 }
 
@@ -55,5 +55,5 @@
 	@extend %item-layout;
 	@extend %item-display;
 
-	@include designed-font($color-text, $color-main);
+	@include designed-font($color-text-glare, $color-main-bright);
 }
