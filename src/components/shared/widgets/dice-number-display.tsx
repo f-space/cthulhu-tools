@@ -44,10 +44,14 @@ export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, D
 	public render() {
 		const { width, height, scaleX, scaleY, digits, value, critical, fumble, className, ...rest } = this.props;
 		const fontSize = this.getFontSize();
+		const result = {
+			[style['critical']]: critical,
+			[style['fumble']]: fumble,
+		};
 
 		return <div {...rest} className={classNames(className, style['display'])} style={{ fontSize }}>
 			<canvas className={style['canvas']} width={0} height={0} hidden ref={this.canvasRef} />
-			<span className={classNames(style['text'], { critical, fumble })}>{value}</span>
+			<span className={classNames(style['text'], result)}>{value}</span>
 		</div>
 	}
 
