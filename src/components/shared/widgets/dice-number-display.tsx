@@ -19,7 +19,7 @@ interface DiceNumberDisplayState {
 
 export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, DiceNumberDisplayState> {
 	public static readonly defaultProps = {
-		scaleX: 0.95,
+		scaleX: 0.9,
 		scaleY: 0.75,
 	};
 
@@ -70,8 +70,12 @@ export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, D
 			const context = canvas.getContext('2d');
 			if (context) {
 				const style = window.getComputedStyle(canvas);
-				const font = style.getPropertyValue('font');
+				const fontStyle = style.getPropertyValue('font-style');
+				const fontVariant = style.getPropertyValue('font-variant');
+				const fontWeight = style.getPropertyValue('font-weight');
 				const fontSize = style.getPropertyValue('font-size');
+				const fontFamily = style.getPropertyValue('font-family');
+				const font = `${fontStyle} ${fontVariant} ${fontWeight} ${fontSize} ${fontFamily}`;
 
 				context.font = font;
 				const width = context.measureText(text).width;
