@@ -1,15 +1,16 @@
+@import "variable";
 @import "mixin";
 
 .input {
 	outline: none;
-	border: solid 1px var(--color-main-input-dark);
+	border: solid 1px $color-main-input-dark;
 	border-radius: 1ex;
 	background: transparent;
 	padding: 0.5ex 0.5em;
 	min-width: 0;
 
 	&:invalid {
-		background: rgba(var(--color-vec-main-input-invalid), 0.25);
+		background: rgba($color-main-input-invalid, 0.25);
 	}
 }
 
@@ -31,7 +32,7 @@
 	&::before {
 		display: inline-block;
 		vertical-align: middle;
-		color: var(--color-main-input-check);
+		color: $color-main-input-check;
 		font-size: 0.8em;
 		content: "";
 	}
@@ -54,7 +55,7 @@
 	}
 
 	&:checked {
-		background: var(--color-main-input-dark);
+		background: $color-main-input-dark;
 
 		&::before {
 			content: attr(data-on);

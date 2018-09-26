@@ -1,6 +1,8 @@
+@import "variable";
+
 .button {
 	outline: none;
-	border: solid 1px var(--color-main-button-dark);
+	border: solid 1px $color-main-button-dark;
 	border-radius: 0.5ex;
 	padding: 0.5em 0.75em;
 	text-align: center;
@@ -8,20 +10,20 @@
 	white-space: nowrap;
 
 	&:active {
-		border-color: var(--color-main-button-light);
-		background: var(--color-main-button-light);
+		border-color: $color-main-button-light;
+		background: $color-main-button-light;
 	}
 }
 
 .commit {
-	background: var(--color-main-button-dark);
+	background: $color-main-button-dark;
 
 	&:active {
-		border-color: var(--color-main-button-light);
-		background: var(--color-main-button-light);
+		border-color: $color-main-button-light;
+		background: $color-main-button-light;
 	}
 
 	&:disabled {
-		background: var(--color-main-button-disabled);
+		background: $color-main-button-disabled;
 	}
 }

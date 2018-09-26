@@ -1,7 +1,9 @@
+@import "variable";
+
 .content {
 	line-height: 1.6;
 
 	p { margin: 1ex 0; }
 	li { margin-left: 2em; }
-	a { color: var(--color-main); }
+	a { color: $color-main; }
 }

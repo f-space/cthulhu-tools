@@ -1,9 +1,10 @@
+@import "variable";
 @import "mixin";
 
 .point-stats {
 	text-align: right;
 	font-size: 1.2em;
 
-	&.full { @include blur-text(1px, 0, var(--color-accent)); }
-	&.over { @include blur-text(1px, 0, var(--color-main)); }
+	&.full { @include blur-text(1px, 0, $color-accent); }
+	&.over { @include blur-text(1px, 0, $color-main); }
 }

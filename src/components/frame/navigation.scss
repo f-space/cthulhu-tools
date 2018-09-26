@@ -1,3 +1,4 @@
+@import "variable";
 @import "mixin";
 
 .navigation {
@@ -29,13 +30,13 @@
 
 %item-display {
 	opacity: 0.5;
-	background: linear-gradient(transparent 80%, var(--color-main));
+	background: linear-gradient(transparent 80%, $color-main);
 	cursor: pointer;
 	font-size: 3rem;
 
 	&.active {
 		opacity: 1;
-		background: linear-gradient(transparent 50%, var(--color-accent));
+		background: linear-gradient(transparent 50%, $color-accent);
 		cursor: default;
 	}
 
@@ -45,7 +46,7 @@
 	}
 
 	&.indicator {
-		@include designed-font(var(--color-text), var(--color-accent-light));
+		@include designed-font($color-text, $color-accent-light);
 	}
 }
 
@@ -54,5 +55,5 @@
 	@extend %item-layout;
 	@extend %item-display;
 
-	@include designed-font(var(--color-text), var(--color-main));
+	@include designed-font($color-text, $color-main);
 }

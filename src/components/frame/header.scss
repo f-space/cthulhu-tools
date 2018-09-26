@@ -1,9 +1,10 @@
+@import "variable";
 @import "mixin";
 
 .header {
 	@include unselectable;
 
-	border-bottom: var(--color-main-dark) solid 1px;
+	border-bottom: $color-main-dark solid 1px;
 	text-align: center;
 }
 
@@ -13,5 +14,5 @@
 }
 
 .title-text {
-	@include designed-font(var(--color-text), var(--color-main));
+	@include designed-font($color-text, $color-main);
 }

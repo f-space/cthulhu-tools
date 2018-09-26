@@ -1,3 +1,4 @@
+@import "variable";
 @import "mixin";
 
 .display {
@@ -11,18 +12,18 @@
 }
 
 .text {
-	@include blur-text-double(0.1ex, 0.25ex, var(--color-main));
+	@include blur-text-double(0.1ex, 0.25ex, $color-main);
 
 	opacity: 0.5;
-	color: var(--color-text);
+	color: $color-text;
 }
 
 .critical {
-	@include blur-text-double(0.1ex, 0.25ex, var(--color-dice-critical));
+	@include blur-text-double(0.1ex, 0.25ex, $color-dice-critical);
 }
 
 .fumble {
-	@include blur-text-double(0.1ex, 0.25ex, var(--color-dice-fumble));
+	@include blur-text-double(0.1ex, 0.25ex, $color-dice-fumble);
 }
 
 .canvas {

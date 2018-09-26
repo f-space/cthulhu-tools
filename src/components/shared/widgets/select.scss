@@ -1,5 +1,7 @@
+@import "variable";
+
 .select {
 	option {
-		background: var(--color-background);
+		background: $color-background;
 	}
 }

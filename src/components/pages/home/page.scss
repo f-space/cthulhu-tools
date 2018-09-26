@@ -1,3 +1,5 @@
+@import "variable";
+
 .heading {
 	margin: 1ex 0;
 	text-align: center;
@@ -20,7 +22,7 @@
 
 		& > * {
 			display: table-cell;
-			border: solid 1px var(--color-main);
+			border: solid 1px $color-main;
 			padding: 0.5ex 0.5em;
 		}
 	}
