@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { History } from 'history';
 import { FormApi } from 'final-form';
 import { Form, FormSpy } from 'react-final-form';
@@ -8,7 +7,7 @@ import { generateUUID } from "models/utility";
 import StatusDispatcher from "redux/dispatchers/status";
 import { SelectableList } from "components/shared/widgets/selectable-list";
 import { CommandList } from "components/shared/widgets/command-list";
-import { Page } from "components/shared/templates/page";
+import { Page, Navigation } from "components/shared/templates/page";
 import { VisibilityToggle } from "./visibility-toggle";
 import style from "./template.scss";
 
@@ -26,6 +25,13 @@ interface FormValues {
 	selection: string[];
 }
 
+const NAVS: Navigation[] = [
+	{
+		to: "/status/character-edit",
+		icon: "plus",
+	}
+];
+
 export class CharacterManagementTemplate extends React.Component<CharacterManagementTemplateProps> {
 	public constructor(props: CharacterManagementTemplateProps) {
 		super(props);
@@ -36,9 +42,7 @@ export class CharacterManagementTemplate extends React.Component<CharacterManage
 	public render() {
 		const initialValues = { selection: [] };
 
-		return <Page id="character-management" heading="キャラクター管理" navs={
-			<Link to="/status/character-edit">作成</Link>
-		} flexible>
+		return <Page id="character-management" heading="キャラクター管理" navs={NAVS} flexible>
 			<Form initialValues={initialValues} onSubmit={this.handleSubmit} render={({ handleSubmit }) =>
 				<form className={style['form']} onSubmit={handleSubmit}>
 					{this.renderCharacters()}

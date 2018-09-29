@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { DataProvider, Status } from "models/status";
 import { Carousel, CarouselView } from "components/shared/layouts/carousel";
-import { Page } from "components/shared/templates/page";
+import { Page, Navigation } from "components/shared/templates/page";
 import style from "./template.scss";
 
 export interface StatusTemplateProps {
@@ -10,13 +9,18 @@ export interface StatusTemplateProps {
 	statusList: Status[];
 }
 
+const NAVS: Navigation[] = [
+	{
+		to: "/status/character-management",
+		icon: "list",
+	}
+];
+
 export class StatusTemplate extends React.Component<StatusTemplateProps> {
 	public render() {
 		const { statusList } = this.props;
 
-		return <Page id="status" heading="ステータス" navs={
-			<Link to="/status/character-management">管理</Link>
-		}>
+		return <Page id="status" heading="ステータス" navs={NAVS}>
 			<Carousel models={statusList} wrap={true}>
 				{
 					context => <CarouselView className={style['characters']} context={context} render={status =>
