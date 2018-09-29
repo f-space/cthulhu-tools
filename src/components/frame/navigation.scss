@@ -54,6 +54,13 @@
 	@extend %item-size;
 	@extend %item-layout;
 	@extend %item-display;
+}
 
-	@include designed-font($color-text-glare, $color-main-bright);
+.icon {
+	color: $color-background;
+	filter: drop-shadow(0 0 3px $color-main-bright);
+
+	.active & {
+		filter: drop-shadow(0 0 5px $color-accent-bright);
+	}
 }

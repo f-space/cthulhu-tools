@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, NavLink, NavLinkProps } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import style from "./navigation.scss";
 
@@ -17,8 +18,8 @@ export function Navigation(props: NavigationProps) {
 	const { className, ...rest } = props;
 
 	return <nav {...rest} className={classNames(className, style['navigation'])}>
-		<NavigationLink to="/dice">Dice</NavigationLink>
-		<NavigationLink to="/status">Status</NavigationLink>
+		<NavigationLink to="/dice"><FontAwesomeIcon className={style['icon']} icon="dice" size="xs"/></NavigationLink>
+		<NavigationLink to="/status"><FontAwesomeIcon className={style['icon']} icon="users" size="xs"/></NavigationLink>
 		<NavigationIndicator path="/status/character-management">
 			<span>Character</span>
 			<span>Management</span>
