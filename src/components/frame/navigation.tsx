@@ -1,62 +1,40 @@
 import React from 'react';
-import { Route, NavLink, NavLinkProps } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, RouteComponentProps, matchPath, withRouter } from 'react-router-dom';
+import { FontAwesomeIcon, Props as FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import style from "./navigation.scss";
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLElement> { }
 
-interface NavigationLinkProps extends NavLinkProps {
+interface NavItemInnerProps extends RouteComponentProps {
 	to: string;
+	children?: React.ReactNode;
 }
 
-interface NavigationIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
-	path: string;
+interface NavIconProps {
+	icon: FontAwesomeIconProps['icon'];
 }
 
 export function Navigation(props: NavigationProps) {
 	const { className, ...rest } = props;
 
 	return <nav {...rest} className={classNames(className, style['navigation'])}>
-		<NavigationLink to="/dice"><FontAwesomeIcon className={style['icon']} icon="dice" size="xs"/></NavigationLink>
-		<NavigationLink to="/status"><FontAwesomeIcon className={style['icon']} icon="users" size="xs"/></NavigationLink>
-		<NavigationIndicator path="/status/character-management">
-			<span>Character</span>
-			<span>Management</span>
-		</NavigationIndicator>
-		<NavigationIndicator path="/status/character-edit">
-			<span>Character</span>
-			<span>Edit</span>
-		</NavigationIndicator>
+		<NavItem to="/dice"><NavIcon icon="dice" /></NavItem>
+		<NavItem to="/status"><NavIcon icon="users" /></NavItem>
 	</nav>
 }
 
-function NavigationLink({ to, className, children, ...rest }: NavigationLinkProps) {
-	const classList = [
-		className,
-		style['nav-item'],
-		{ [style['two-lines']]: Array.isArray(children) && children.length >= 2 },
-	];
+function NavItemInner({ to, location, children }: NavItemInnerProps) {
+	const match = Boolean(matchPath(location.pathname, { path: to, exact: true }));
 
-	return <Route path={to} children={({ match }) => {
-		return <NavLink {...rest} className={classNames(classList)} activeClassName={style['active']} exact to={to} replace={Boolean(match)}>
-			{children}
-		</NavLink>
-	}} />
+	const className = classNames(style['item'], { [style['active']]: match });
+	const item = <div className={className}>{children}</div>
+
+	return match ? item : <Link to={to}>{item}</Link>;
 }
 
-function NavigationIndicator({ path, className, children, ...rest }: NavigationIndicatorProps) {
-	const classList = [
-		className,
-		style['nav-item'],
-		style['indicator'],
-		style['active'],
-		{ [style['two-lines']]: Array.isArray(children) && children.length >= 2 },
-	];
+const NavItem = withRouter(NavItemInner);
 
-	return <Route exact path={path} children={({ match }) => {
-		if (!match) classList.push(style['hidden']);
-
-		return <div {...rest} className={classNames(classList)}>{children}</div>
-	}} />
+function NavIcon({ icon }: NavIconProps) {
+	return <FontAwesomeIcon className={style['icon']} icon={icon} size="xs" />
 }
