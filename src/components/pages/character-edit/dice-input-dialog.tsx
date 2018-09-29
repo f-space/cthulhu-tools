@@ -28,6 +28,7 @@ export class DiceInputDialog extends React.Component<DiceInputDialogProps, DiceI
 		super(props);
 
 		this.state = { value: Array.from(props.value), rolling: false };
+		this.handleClickDice = this.handleClickDice.bind(this);
 		this.handleClickRoll = this.handleClickRoll.bind(this);
 		this.handleClickOK = this.handleClickOK.bind(this);
 		this.handleClickCancel = this.handleClickCancel.bind(this);
@@ -44,7 +45,7 @@ export class DiceInputDialog extends React.Component<DiceInputDialogProps, DiceI
 				<div className={style['dices']}>
 					{
 						display.map((group, groupIndex) =>
-							<div key={groupIndex} className={style['group']}>
+							<div key={groupIndex} className={style['group']} onClick={this.handleClickDice} data-index={groupIndex}>
 								{group.map((dice, diceIndex) => <DiceImage key={diceIndex} className={style['dice']} type={dice.type} face={dice.face} />)}
 							</div>
 						)
@@ -58,6 +59,18 @@ export class DiceInputDialog extends React.Component<DiceInputDialogProps, DiceI
 			</div >
 			<DiceRollTask active={rolling} dices={dices} faces={value} callback={this.updateValue} />
 		</Dialog >
+	}
+
+	private handleClickDice(event: React.MouseEvent<HTMLElement>): void {
+		const { dices } = this.props;
+		const index = parseInt(event.currentTarget.dataset['index']!);
+
+		this.setState(state => {
+			const dice = dices[index];
+			const value = Array.from(state.value);
+			value[index] = (value[index] + 1) % dice.faces;
+			return { value };
+		});
 	}
 
 	private handleClickRoll(): void {
