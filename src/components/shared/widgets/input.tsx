@@ -24,13 +24,13 @@ export function NumberInput({ className, ...rest }: NumberInputProps) {
 export function Checkbox({ className, ...rest }: CheckboxProps) {
 	return <label>
 		<Input {...rest} className={style['invisible']} type="checkbox" />
-		<div className={classNames(className, style['input'], style['checkbox'])} />
+		<div className={classNames(className, style['checkbox'])} />
 	</label>
 }
 
 export function Toggle({ on, off, className, ...rest }: ToggleProps) {
 	return <label>
 		<Input {...rest} className={style['invisible']} type="checkbox" />
-		<div className={classNames(className, style['input'], style['toggle'])} data-on={on} data-off={off} />
+		<div className={classNames(className, style['toggle'])} data-on={on} data-off={off} />
 	</label>
 }
