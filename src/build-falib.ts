@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faDice, faUsers, faList, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faDice, faUsers, faList, faPlus, faChevronCircleLeft, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function build() {
 	library.add(
@@ -7,5 +7,7 @@ export default function build() {
 		faUsers,
 		faList,
 		faPlus,
+		faChevronCircleLeft,
+		faChevronCircleRight,
 	);
 };
