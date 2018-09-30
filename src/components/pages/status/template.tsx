@@ -2,6 +2,7 @@ import React from 'react';
 import { DataProvider, Status } from "models/status";
 import { Carousel, CarouselView } from "components/shared/layouts/carousel";
 import { Page, Navigation } from "components/shared/templates/page";
+import { Dots } from "./dots";
 import style from "./template.scss";
 
 export interface StatusTemplateProps {
@@ -23,13 +24,20 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 		return <Page id="status" heading="ステータス" navs={NAVS}>
 			<Carousel models={statusList} wrap={true}>
 				{
-					context => <CarouselView className={style['characters']} context={context} render={status =>
-						<section className={style['character']}>
-							{this.renderAttributes(status)}
-							{this.renderSkills(status)}
-							{this.renderItems(status)}
-						</section>
-					} />
+					context => <div className={style['container']}>
+						<CarouselView className={style['characters']} context={context} render={status =>
+							<section className={style['character']}>
+								{this.renderAttributes(status)}
+								{this.renderSkills(status)}
+								{this.renderItems(status)}
+							</section>
+						} />
+						<div className={style['pager']}>
+							<div className={style['indicator']}>
+								<Dots length={context.models.length} index={context.index} />
+							</div>
+						</div>
+					</div>
 				}
 			</Carousel>
 		</Page>

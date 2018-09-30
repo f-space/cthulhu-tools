@@ -1,0 +1,16 @@
+.dots {
+	letter-spacing: 0.25em;
+	font-size: 80%;
+}
+
+.dot {
+	opacity: 0.5;
+
+	&::before {
+		content: '\25cf';
+	}
+
+	&.active {
+		opacity: 1;
+	}
+}
