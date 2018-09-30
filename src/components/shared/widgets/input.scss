@@ -1,6 +1,10 @@
 @import "variable";
 @import "mixin";
 
+.invisible {
+	display: none;
+}
+
 .input {
 	outline: none;
 	border: solid 1px $color-main-dark;
@@ -21,7 +25,6 @@
 }
 
 .checkbox {
-	appearance: none;
 	border-radius: 0.25em;
 	padding: 0;
 	width: 1em;
@@ -37,13 +40,12 @@
 		content: "";
 	}
 
-	&:checked::before {
+	:checked + &::before {
 		content: "\2713";
 	}
 }
 
 .toggle {
-	appearance: none;
 	border-radius: calc(1ex + 1em);
 	text-align: center;
 	white-space: nowrap;
@@ -54,7 +56,7 @@
 		content: attr(data-off);
 	}
 
-	&:checked {
+	:checked + & {
 		background: $color-main-dark;
 
 		&::before {

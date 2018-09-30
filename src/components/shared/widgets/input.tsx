@@ -22,9 +22,15 @@ export function NumberInput({ className, ...rest }: NumberInputProps) {
 }
 
 export function Checkbox({ className, ...rest }: CheckboxProps) {
-	return <Input {...rest} className={classNames(className, style['input'], style['checkbox'])} type="checkbox" />
+	return <label>
+		<Input {...rest} className={style['invisible']} type="checkbox" />
+		<div className={classNames(className, style['input'], style['checkbox'])} />
+	</label>
 }
 
 export function Toggle({ on, off, className, ...rest }: ToggleProps) {
-	return <Input {...rest} className={classNames(className, style['input'], style['toggle'])} type="checkbox" data-on={on} data-off={off} />
+	return <label>
+		<Input {...rest} className={style['invisible']} type="checkbox" />
+		<div className={classNames(className, style['input'], style['toggle'])} data-on={on} data-off={off} />
+	</label>
 }
