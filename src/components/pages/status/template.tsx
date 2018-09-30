@@ -34,17 +34,19 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 								{this.renderItems(status)}
 							</section>
 						} />
-						<div className={style['pager']}>
-							<button className={classNames(style['shift'], style['prev'])} type="button" onClick={() => context.shift(-1)}>
-								<FontAwesomeIcon icon="chevron-circle-left" size="2x" />
-							</button>
-							<div className={style['indicator']}>
-								<Dots length={context.models.length} index={context.index} />
+						{
+							context.models.length !== 0 && <div className={style['pager']}>
+								<button className={classNames(style['shift'], style['prev'])} type="button" onClick={() => context.shift(-1)}>
+									<FontAwesomeIcon icon="chevron-circle-left" size="2x" />
+								</button>
+								<div className={style['indicator']}>
+									<Dots length={context.models.length} index={context.index} />
+								</div>
+								<button className={classNames(style['shift'], style['next'])} type="button" onClick={() => context.shift(1)}>
+									<FontAwesomeIcon icon="chevron-circle-right" size="2x" />
+								</button>
 							</div>
-							<button className={classNames(style['shift'], style['next'])} type="button" onClick={() => context.shift(1)}>
-								<FontAwesomeIcon icon="chevron-circle-right" size="2x" />
-							</button>
-						</div>
+						}
 					</div>
 				}
 			</Carousel>
