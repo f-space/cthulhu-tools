@@ -38,6 +38,10 @@
 		content: "";
 	}
 
+	&:hover {
+		border-color: $color-main-light;
+	}
+
 	:checked + &::before {
 		content: "\2713";
 	}
@@ -46,6 +50,7 @@
 .toggle {
 	border: solid 1px $color-main-dark;
 	border-radius: 1.75em;
+	cursor: pointer;
 	padding: 0.375em 0.5em;
 	text-align: center;
 	line-height: 1;
