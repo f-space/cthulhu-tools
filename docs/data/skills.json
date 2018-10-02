@@ -10,7 +10,7 @@
 		"uuid": "8708dd50-22af-48f5-bb43-821dfaa6bc2b",
 		"id": "anthropology",
 		"name": "人類学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
@@ -24,7 +24,7 @@
 		"uuid": "f5211e89-7227-4abd-bf1f-5c5db7bed4f0",
 		"id": "archaeology",
 		"name": "考古学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
@@ -38,7 +38,7 @@
 		"uuid": "bca7dd4f-3ebe-4381-81c1-a0ab6ad8bf33",
 		"id": "astronomy",
 		"name": "天文学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
@@ -52,14 +52,14 @@
 		"uuid": "f04a7fa8-2dba-4eeb-88c1-d0f116511eec",
 		"id": "biology",
 		"name": "生物学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
 		"uuid": "e20c53ae-9298-4cf5-9b45-36aeb3bb6de7",
 		"id": "chemistry",
 		"name": "化学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
@@ -87,7 +87,7 @@
 		"uuid": "ea3dc835-4c45-49b1-b145-568132ffa00b",
 		"id": "computer_use",
 		"name": "コンピューター",
-		"category": "investigation",
+		"category": "knowledge",
 		"base": "1"
 	},
 	{
@@ -136,14 +136,14 @@
 		"uuid": "279be3d6-a33f-4d5b-85cf-515b928eed2e",
 		"id": "electrical_repair",
 		"name": "電気修理",
-		"category": "investigation",
+		"category": "knowledge",
 		"base": "10"
 	},
 	{
 		"uuid": "e162f1a4-4dd4-4bc2-9748-63aa04b8c9a7",
 		"id": "electronics",
 		"name": "電子工学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
@@ -164,7 +164,7 @@
 		"uuid": "74d491d6-7bf8-447f-a9fe-bf5f07ddce2c",
 		"id": "first_aid",
 		"name": "応急手当",
-		"category": "investigation",
+		"category": "knowledge",
 		"base": "30"
 	},
 	{
@@ -185,7 +185,7 @@
 		"uuid": "03c6fb27-c13d-4f6d-bbef-2977b348d219",
 		"id": "geology",
 		"name": "地質学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
@@ -227,7 +227,7 @@
 		"uuid": "9594aa6f-c2eb-493f-a7a0-3fec88046656",
 		"id": "history",
 		"name": "歴史",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "20"
 	},
 	{
@@ -269,7 +269,7 @@
 		"uuid": "1e421bf3-203b-40a6-a39a-c642a538e30f",
 		"id": "law",
 		"name": "法律",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "5"
 	},
 	{
@@ -311,21 +311,21 @@
 		"uuid": "4f62882c-a069-4708-add5-2656ac89ffb1",
 		"id": "mechanical_repair",
 		"name": "機械修理",
-		"category": "investigation",
+		"category": "knowledge",
 		"base": "20"
 	},
 	{
 		"uuid": "5deb3c30-ae8a-4746-abcd-319abbef092d",
 		"id": "medicine",
 		"name": "医学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "5"
 	},
 	{
 		"uuid": "903b9841-73ab-48d0-85c4-7ff643f3b41e",
 		"id": "natural_history",
 		"name": "博物学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "10"
 	},
 	{
@@ -346,7 +346,7 @@
 		"uuid": "6b729abd-610a-4f84-b9c0-4712966b52f5",
 		"id": "operate_heavy_machine",
 		"name": "重機械操作",
-		"category": "investigation",
+		"category": "knowledge",
 		"base": "1"
 	},
 	{
@@ -367,21 +367,21 @@
 		"uuid": "5b029a86-c5c5-447a-b6a3-0fc6998bf095",
 		"id": "pharmacy",
 		"name": "薬学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
 		"uuid": "9d9f2f99-2f31-459f-8ad3-a9352fb3d39a",
 		"id": "photography",
 		"name": "写真術",
-		"category": "investigation",
+		"category": "knowledge",
 		"base": "10"
 	},
 	{
 		"uuid": "43c04bfb-b943-4eac-afe4-9ef68e8f414e",
 		"id": "physics",
 		"name": "物理学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "1"
 	},
 	{
@@ -402,14 +402,14 @@
 		"uuid": "8da73911-5af6-42eb-96c1-3a0d578b2ffb",
 		"id": "psychoanalysis",
 		"name": "精神分析",
-		"category": "investigation",
+		"category": "knowledge",
 		"base": "1"
 	},
 	{
 		"uuid": "c354c1a7-e4e5-4b1e-b6a2-4a9e2765b829",
 		"id": "psychology",
 		"name": "心理学",
-		"category": "knowledge",
+		"category": "scholarship",
 		"base": "5"
 	},
 	{

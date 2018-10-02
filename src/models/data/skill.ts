@@ -5,8 +5,9 @@ import { validate } from "./validation";
 export enum SkillCategory {
 	Locomotion = 'locomotion',
 	Investigation = 'investigation',
-	Knowledge = 'knowledge',
 	Communication = 'communication',
+	Knowledge = 'knowledge',
+	Scholarship = 'scholarship',
 	Language = 'language',
 	Combat = 'combat',
 	Special = 'special',
