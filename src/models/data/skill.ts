@@ -14,7 +14,19 @@ export enum SkillCategory {
 	Other = 'other',
 };
 
-const SKILL_CATEGORY_SET = new Set<SkillCategory>(Object.values(SkillCategory));
+export namespace SkillCategory {
+	export function compare(x: SkillCategory, y: SkillCategory): number {
+		const xorder = SKILL_CATEGORY_ORDER.get(x);
+		const yorder = SKILL_CATEGORY_ORDER.get(y);
+
+		return xorder === undefined
+			? (yorder === undefined ? 0 : -1)
+			: (yorder === undefined ? 1 : xorder - yorder);
+	}
+}
+
+const SKILL_CATEGORY_ORDER = new Map(Object.values(SkillCategory).map((v, i) => [v, i] as [SkillCategory, number]));
+const SKILL_CATEGORY_SET = new Set(SKILL_CATEGORY_ORDER.keys());
 
 export interface SkillData {
 	readonly uuid: string;
