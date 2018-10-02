@@ -5,7 +5,7 @@ export * from "models/data";
 export * from "models/eval";
 
 export class Status {
-	private readonly chain: EvaluationChain;
+	public readonly chain: EvaluationChain;
 
 	public constructor(readonly context: CharacterContext, cache?: Cache) {
 		const resolver = buildResolver({ attributes: context.profile.attributes, skills: context.profile.skills });
