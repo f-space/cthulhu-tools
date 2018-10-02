@@ -17,7 +17,7 @@ const mapStateToProps = (state: State) => {
 		.map(result => new Status(result.value, IDBCache))
 		.sort(Status.compare)
 		.toArray();
-	return { provider, statusList };
+	return { statusList };
 };
 
 const Connected = connect(mapStateToProps)(StatusTemplate);

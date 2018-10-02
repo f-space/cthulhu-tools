@@ -1,15 +1,21 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { DataProvider, Status } from "models/status";
-import { Carousel, CarouselView } from "components/shared/layouts/carousel";
+import { Status, SkillCategory, Skill } from "models/status";
+import { EvaluationProvider } from "components/shared/decorators/evaluation";
+import { EvaluationText } from "components/shared/primitives/evaluation-text";
+import { Carousel, CarouselView, CarouselContext } from "components/shared/layouts/carousel";
 import { Page, Navigation } from "components/shared/templates/page";
 import { Dots } from "./dots";
 import style from "./template.scss";
 
 export interface StatusTemplateProps {
-	provider: DataProvider;
 	statusList: Status[];
+}
+
+interface SkillGroup {
+	category: SkillCategory;
+	skills: Skill[];
 }
 
 const NAVS: Navigation[] = [
@@ -19,6 +25,18 @@ const NAVS: Navigation[] = [
 	}
 ];
 
+const CATEGORY_NAME = {
+	[SkillCategory.Locomotion]: "移動",
+	[SkillCategory.Investigation]: "調査",
+	[SkillCategory.Communication]: "対話",
+	[SkillCategory.Knowledge]: "知識",
+	[SkillCategory.Scholarship]: "学問",
+	[SkillCategory.Language]: "言語",
+	[SkillCategory.Combat]: "戦闘",
+	[SkillCategory.Special]: "特殊",
+	[SkillCategory.Other]: "その他",
+};
+
 export class StatusTemplate extends React.Component<StatusTemplateProps> {
 	public render() {
 		const { statusList } = this.props;
@@ -27,43 +45,38 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 			<Carousel models={statusList} wrap={true}>
 				{
 					context => <div className={style['container']}>
-						<CarouselView className={style['characters']} context={context} render={status =>
-							<section className={style['character']}>
-								{this.renderAttributes(status)}
-								{this.renderSkills(status)}
-								{this.renderItems(status)}
-							</section>
-						} />
-						{
-							context.models.length !== 0 && <div className={style['pager']}>
-								<button className={classNames(style['shift'], style['prev'])} type="button" onClick={() => context.shift(-1)}>
-									<FontAwesomeIcon icon="chevron-circle-left" size="2x" />
-								</button>
-								<div className={style['indicator']}>
-									<Dots length={context.models.length} index={context.index} />
-								</div>
-								<button className={classNames(style['shift'], style['next'])} type="button" onClick={() => context.shift(1)}>
-									<FontAwesomeIcon icon="chevron-circle-right" size="2x" />
-								</button>
-							</div>
-						}
+						<CarouselView className={style['list']} context={context} render={status => this.renderStatus(status)} />
+						{context.models.length !== 0 && this.renderPager(context)}
 					</div>
 				}
 			</Carousel>
 		</Page>
 	}
 
+	private renderStatus(status: Status) {
+		const chain = status.chain;
+		const hash = status.current;
+
+		return <EvaluationProvider value={chain}>
+			<section className={style['status']}>
+				<h3 className={style['name']}><EvaluationText expression="@attr:name" hash={hash} /></h3>
+				{this.renderAttributes(status)}
+				{this.renderSkills(status)}
+			</section>
+		</EvaluationProvider>
+	}
+
 	private renderAttributes(status: Status) {
+		const hash = status.current;
 		const attributes = status.context.profile.attributes;
 
-		return <section>
-			<header><h3>人物/能力</h3></header>
+		return <section className={style['section']}>
 			<dl className={style['attributes']}>
 				{
 					attributes.map(attribute =>
-						<div key={attribute.uuid} className={style['attribute']}>
-							<dt className={style['name']}>{attribute.name}</dt>
-							<dd className={style['value']}>{status.get(`@attr:${attribute.id}`)}</dd>
+						<div key={attribute.uuid} className={classNames(style['attribute'], style[attribute.type], style[`id-${attribute.id}`])}>
+							<dt className={style['attr-name']}>{attribute.name}</dt>
+							<dd className={style['attr-value']}><EvaluationText expression={`@attr:${attribute.id}`} hash={hash} /></dd>
 						</div>
 					)
 				}
@@ -72,39 +85,68 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 	}
 
 	private renderSkills(status: Status) {
+		const hash = status.current;
 		const skills = status.context.profile.skills;
+		const groups = this.groupSkills(skills);
 
-		return <section>
-			<header><h3>技能</h3></header>
+		return <section className={style['section']}>
+			<h4 className={style['heading']}>技能</h4>
 			<dl className={style['skills']}>
 				{
-					skills.map(skill =>
-						<div key={skill.uuid} className={style['skill']}>
-							<dt className={style['name']}>{skill.name}</dt>
-							<dd className={style['value']}>{status.get(`@skill:${skill.id}`)}</dd>
-						</div>
+					groups.map(group =>
+						<React.Fragment key={group.category}>
+							<h5 className={style['category-name']}>{CATEGORY_NAME[group.category]}</h5>
+							<div className={style['category']}>
+								{
+									group.skills.map(skill =>
+										<div key={skill.uuid} className={style['skill']}>
+											<dt className={style['skill-name']}>{skill.name}</dt>
+											<dd className={style['skill-value']}><EvaluationText expression={`@skill:${skill.id}`} hash={hash} /></dd>
+										</div>
+									)
+								}
+							</div>
+						</React.Fragment>
 					)
 				}
 			</dl>
 		</section>
 	}
 
-	private renderItems(status: Status) {
-		const { provider } = this.props;
-		const items = provider.item.get(Object.keys(status.context.character.params.item));
+	private renderPager(context: CarouselContext<unknown>) {
+		return <div className={style['pager']}>
+			<button className={classNames(style['shift'], style['prev'])} type="button" onClick={() => context.shift(-1)}>
+				<FontAwesomeIcon icon="chevron-circle-left" size="2x" />
+			</button>
+			<div className={style['indicator']}>
+				<Dots length={context.models.length} index={context.index} />
+			</div>
+			<button className={classNames(style['shift'], style['next'])} type="button" onClick={() => context.shift(1)}>
+				<FontAwesomeIcon icon="chevron-circle-right" size="2x" />
+			</button>
+		</div>
+	}
 
-		return <section>
-			<header><h3>所持品</h3></header>
-			<dl className={style['items']}>
-				{
-					items.map(item =>
-						<div className={style['item']}>
-							<dt className={style['name']}>{item.name}</dt>
-							<dd className={style['description']}>{item.description}</dd>
-						</div>
-					)
-				}
-			</dl>
-		</section>
+	private groupSkills(skills: ReadonlyArray<Skill>): SkillGroup[] {
+		const groups = new Map<SkillCategory, SkillGroup>();
+		for (const skill of skills) {
+			const group = groups.get(skill.category);
+			if (group) {
+				group.skills.push(skill);
+			} else {
+				groups.set(skill.category, {
+					category: skill.category,
+					skills: [skill],
+				});
+			}
+		}
+
+		return this.sortSkills(Array.from(groups.values()));
+	}
+
+	private sortSkills(groups: SkillGroup[]): SkillGroup[] {
+		groups.sort((x, y) => SkillCategory.compare(x.category, y.category));
+		groups.forEach(group => group.skills.sort((x, y) => String.prototype.localeCompare.call(x.name, y.name)));
+		return groups;
 	}
 }
