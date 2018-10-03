@@ -1,13 +1,13 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faDice, faUsers, faList, faPlus, faChevronCircleLeft, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
+import * as icons from '@fortawesome/free-solid-svg-icons';
 
 export default function build() {
 	library.add(
-		faDice,
-		faUsers,
-		faList,
-		faPlus,
-		faChevronCircleLeft,
-		faChevronCircleRight,
+		icons.faDice,
+		icons.faUsers,
+		icons.faList,
+		icons.faPlus,
+		icons.faChevronCircleLeft,
+		icons.faChevronCircleRight,
 	);
 };
