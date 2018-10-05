@@ -28,7 +28,7 @@ export class SkillParamsEdit extends React.PureComponent<SkillParamsEditProps> {
 				}} />
 				<span>/</span>
 				<span className={style['available']}>
-					<EvaluationText expression="oskp + hskp" hash={null} />
+					<EvaluationText mode='expression' target="oskp + hskp" hash={null} />
 				</span>
 			</div>
 			<FieldArray name={name} render={({ fields }) =>

@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Attribute, InputType, InputMethod } from "models/status";
-import { EvaluationConsumer } from "components/shared/decorators/evaluation";
+import { Resolver } from "components/shared/decorators/resolver";
 import { EvaluationText } from "components/shared/primitives/evaluation-text";
 import { ExpressionArranger } from "./expression-arranger";
 import { AttributeDiceInput } from "./dice-input";
@@ -21,23 +21,25 @@ export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 		return <div {...rest} className={classNames(className, style['attribute'])}>
 			<div className={style['name']}>{attribute.name}</div>
 			<div className={style['input']}>
-				<EvaluationConsumer>
-					{chain => {
-						const arranger = new ExpressionArranger(chain.resolver);
-						const segments = arranger.arrange(attribute);
-						return segments.map((segment, i) => {
-							if (i % 2 === 0) {
-								return segment;
-							} else {
-								const input = attribute.inputs.find(input => input.name === segment);
-								return input ? this.renderInput(input) : null;
-							}
-						});
-					}}
-				</EvaluationConsumer>
+				<Resolver.Consumer>
+					{
+						resolver => {
+							const arranger = new ExpressionArranger(resolver);
+							const segments = arranger.arrange(attribute);
+							return segments.map((segment, i) => {
+								if (i % 2 === 0) {
+									return segment;
+								} else {
+									const input = attribute.inputs.find(input => input.name === segment);
+									return input ? this.renderInput(input) : null;
+								}
+							});
+						}
+					}
+				</Resolver.Consumer>
 			</div>
 			<div className={style['value']}>
-				<EvaluationText expression={attribute.id} hash={null} />
+				<EvaluationText target={attribute.id} hash={null} />
 			</div>
 		</div>
 	}

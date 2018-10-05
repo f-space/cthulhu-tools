@@ -57,9 +57,9 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 		const chain = status.chain;
 		const hash = status.current;
 
-		return <EvaluationProvider value={chain}>
+		return <EvaluationProvider chain={chain}>
 			<section className={style['status']}>
-				<h3 className={style['name']}><EvaluationText expression="@attr:name" hash={hash} /></h3>
+				<h3 className={style['name']}><EvaluationText target="@attr:name" hash={hash} /></h3>
 				{this.renderAttributes(status)}
 				{this.renderSkills(status)}
 			</section>
@@ -76,7 +76,7 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 					attributes.map(attribute =>
 						<div key={attribute.uuid} className={classNames(style['attribute'], style[attribute.type], style[`id-${attribute.id}`])}>
 							<dt className={style['attr-name']}>{attribute.name}</dt>
-							<dd className={style['attr-value']}><EvaluationText expression={`@attr:${attribute.id}`} hash={hash} /></dd>
+							<dd className={style['attr-value']}><EvaluationText target={`@attr:${attribute.id}`} hash={hash} /></dd>
 						</div>
 					)
 				}
@@ -101,7 +101,7 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 									group.skills.map(skill =>
 										<div key={skill.uuid} className={style['skill']}>
 											<dt className={style['skill-name']}>{skill.name}</dt>
-											<dd className={style['skill-value']}><EvaluationText expression={`@skill:${skill.id}`} hash={hash} /></dd>
+											<dd className={style['skill-value']}><EvaluationText target={`@skill:${skill.id}`} hash={hash} /></dd>
 										</div>
 									)
 								}

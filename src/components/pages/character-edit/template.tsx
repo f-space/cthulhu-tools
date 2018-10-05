@@ -6,6 +6,7 @@ import arrayMutators from 'final-form-arrays';
 import { Character, CharacterParams, AttributeParams, AttributeParamsData, SkillParams, Profile, Attribute, Skill, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
 import { generateUUID, throttle } from "models/utility";
 import StatusDispatcher from "redux/dispatchers/status";
+import { Resolver } from "components/shared/decorators/resolver";
 import { EvaluationProvider } from "components/shared/decorators/evaluation";
 import { Button, SubmitButton } from "components/shared/widgets/button";
 import { Page } from "components/shared/templates/page";
@@ -52,29 +53,31 @@ export class CharacterEditTemplate extends React.Component<CharacterEditTemplate
 				render={({ handleSubmit }) =>
 					<form className={style['entry']} onSubmit={handleSubmit}>
 						<Field name="chain" subscription={{ value: true }} render={({ input: { value } }) =>
-							<EvaluationProvider value={value}>
-								<section className={style['attributes']}>
-									<header><h3>能力値</h3></header>
-									<AttributeParamsEdit name="attributes" attributes={attributes} />
-								</section>
-								<section className={style['skills']}>
-									<header><h3>技能</h3></header>
-									<SkillParamsEdit name="skills" skills={skills} />
-								</section>
-								<section className={style['items']}>
-									<header><h3>所持品</h3></header>
-									<div className={style['commands']}>
-										<Button>追加</Button>
-										<Button>削除</Button>
+							<Resolver.Provider value={value.resolver}>
+								<EvaluationProvider chain={value}>
+									<section className={style['attributes']}>
+										<header><h3>能力値</h3></header>
+										<AttributeParamsEdit name="attributes" attributes={attributes} />
+									</section>
+									<section className={style['skills']}>
+										<header><h3>技能</h3></header>
+										<SkillParamsEdit name="skills" skills={skills} />
+									</section>
+									<section className={style['items']}>
+										<header><h3>所持品</h3></header>
+										<div className={style['commands']}>
+											<Button>追加</Button>
+											<Button>削除</Button>
+										</div>
+									</section>
+									<div className={style['actions']}>
+										<FormSpy subscription={{ valid: true, submitting: true }} render={({ valid, submitting }) =>
+											<SubmitButton className={style['ok']} disabled={!valid || submitting} commit>OK</SubmitButton>
+										} />
+										<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
 									</div>
-								</section>
-								<div className={style['actions']}>
-									<FormSpy subscription={{ valid: true, submitting: true }} render={({ valid, submitting }) =>
-										<SubmitButton className={style['ok']} disabled={!valid || submitting} commit>OK</SubmitButton>
-									} />
-									<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
-								</div>
-							</EvaluationProvider>
+								</EvaluationProvider>
+							</Resolver.Provider>
 						} />
 					</form>
 				} />
