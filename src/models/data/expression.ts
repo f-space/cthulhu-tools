@@ -61,7 +61,7 @@ export class Expression {
 	public static parse(source: string): Expression | null {
 		try {
 			const ast = AST.parse(source);
-			const deps = this.collectDependencies(ast);
+			const deps = Expression.collectDependencies(ast);
 			return new Expression(ast, deps.vars, deps.refs);
 		} catch {
 			return null;
