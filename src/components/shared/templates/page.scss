@@ -14,7 +14,6 @@
 
 .header {
 	flex: 0 0 auto;
-	z-index: 1;
 }
 
 .heading {
@@ -41,6 +40,7 @@
 	align-items: stretch;
 	align-self: flex-end;
 	justify-content: flex-end;
+	z-index: 1;
 	background: rgba($color-background, 0.5);
 	padding: 0.25em 0.5em;
 }
