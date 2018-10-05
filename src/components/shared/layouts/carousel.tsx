@@ -199,6 +199,8 @@ export class CarouselView<T> extends React.Component<CarouselViewProps<T>> {
 			...rest
 		} = this.props;
 
+		const classList = classNames(className, style['frame'], { [style['vertical']]: vertical });
+
 		return <Flick {...flick} vertical={vertical} onFlick={this.handleFlick}>
 			{
 				props => <SpringTrack<number>
@@ -209,7 +211,7 @@ export class CarouselView<T> extends React.Component<CarouselViewProps<T>> {
 					postrender={this.postrender.bind(this)}
 					render={key => { const index = map(key)!; return render(models[index], index); }}>
 					{
-						items => <div {...rest} {...props} className={classNames(className, style['frame'])} ref={this.frame}>
+						items => <div {...rest} {...props} className={classList} ref={this.frame}>
 							{
 								models.length !== 0
 									? items.map(({ node, key }) => <div key={key} className={style['item']}>{node}</div>)
