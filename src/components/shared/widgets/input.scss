@@ -25,17 +25,19 @@
 }
 
 .checkbox {
+	display: inline-block;
 	border: solid 1px $color-main-dark;
-	border-radius: 0.25em;
+	border-radius: 25%;
 	width: 1em;
 	height: 1em;
 	text-align: center;
 	line-height: 1;
+	white-space: nowrap;
 	color: $color-main;
-	font-size: 0.8em;
 
 	&::before {
-		content: "";
+		visibility: hidden;
+		content: "\2713";
 	}
 
 	&:hover {
@@ -43,11 +45,12 @@
 	}
 
 	:checked + &::before {
-		content: "\2713";
+		visibility: visible;
 	}
 }
 
 .toggle {
+	display: inline-block;
 	border: solid 1px $color-main-dark;
 	border-radius: 1.75em;
 	cursor: pointer;
