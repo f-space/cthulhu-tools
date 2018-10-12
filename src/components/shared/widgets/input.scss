@@ -71,3 +71,42 @@
 		}
 	}
 }
+
+.radio {
+	display: inline-block;
+	position: relative;
+	border: solid 1px $color-main-dark;
+	border-radius: 50%;
+	width: 1em;
+	height: 1em;
+	text-align: center;
+	line-height: 1;
+	white-space: nowrap;
+
+	&::before {
+		visibility: hidden;
+		content: "\2713";
+	}
+
+	&::after {
+		display: block;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: auto;
+		border-radius: 50%;
+		width: 60%;
+		height: 60%;
+		content: "";
+	}
+
+	&:hover {
+		border-color: $color-main-light;
+	}
+
+	:checked + &::after {
+		background: $color-main-dark;
+	}
+}

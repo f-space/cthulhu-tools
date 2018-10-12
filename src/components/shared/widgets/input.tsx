@@ -12,6 +12,7 @@ export interface ToggleProps extends Omit<InputProps, 'type'> {
 	on: string;
 	off: string;
 }
+export interface RadioProps extends Omit<InputProps, 'type'> { }
 
 export function TextInput({ className, ...rest }: TextInputProps) {
 	return <Input {...rest} className={classNames(className, style['input'])} />
@@ -32,5 +33,12 @@ export function Toggle({ on, off, className, ...rest }: ToggleProps) {
 	return <label>
 		<Input {...rest} className={style['invisible']} type="checkbox" />
 		<div className={classNames(className, style['toggle'])} data-on={on} data-off={off} />
+	</label>
+}
+
+export function Radio({className, ...rest}: RadioProps) {
+	return <label>
+		<Input {...rest} className={style['invisible']} type="radio" />
+		<div className={classNames(className, style['radio'])} />
 	</label>
 }
