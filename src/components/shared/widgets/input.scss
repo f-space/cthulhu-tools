@@ -16,6 +16,10 @@
 	&:invalid {
 		background: rgba($color-main, 0.25);
 	}
+
+	&:disabled {
+		opacity: 0.5;
+	}
 }
 
 .number {
@@ -74,9 +78,9 @@
 	}
 
 	:checked + &::before {
-			content: attr(data-on);
-		}
+		content: attr(data-on);
 	}
+}
 
 .radio {
 	display: inline-block;
