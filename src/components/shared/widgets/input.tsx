@@ -23,22 +23,22 @@ export function NumberInput({ className, ...rest }: NumberInputProps) {
 }
 
 export function Checkbox({ className, ...rest }: CheckboxProps) {
-	return <label>
+	return <label className={classNames(className, style['checkbox'])}>
 		<Input {...rest} className={style['invisible']} type="checkbox" />
-		<div className={classNames(className, style['checkbox'])} />
+		<span className={style['checkbox-content']} />
 	</label>
 }
 
 export function Toggle({ on, off, className, ...rest }: ToggleProps) {
-	return <label>
+	return <label className={classNames(className, style['toggle'])} >
 		<Input {...rest} className={style['invisible']} type="checkbox" />
-		<div className={classNames(className, style['toggle'])} data-on={on} data-off={off} />
+		<span className={style['toggle-content']} data-on={on} data-off={off} />
 	</label>
 }
 
-export function Radio({className, ...rest}: RadioProps) {
-	return <label>
+export function Radio({ className, ...rest }: RadioProps) {
+	return <label className={classNames(className, style['radio'])}>
 		<Input {...rest} className={style['invisible']} type="radio" />
-		<div className={classNames(className, style['radio'])} />
+		<span className={style['radio-content']} />
 	</label>
 }

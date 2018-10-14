@@ -35,13 +35,15 @@
 	white-space: nowrap;
 	color: $color-main;
 
+	&:hover {
+		border-color: $color-main-light;
+	}
+}
+
+.checkbox-content {
 	&::before {
 		visibility: hidden;
 		content: "\2713";
-	}
-
-	&:hover {
-		border-color: $color-main-light;
 	}
 
 	:checked + &::before {
@@ -51,6 +53,10 @@
 
 .toggle {
 	display: inline-block;
+}
+
+.toggle-content {
+	display: block;
 	border: solid 1px $color-main-dark;
 	border-radius: 1.75em;
 	cursor: pointer;
@@ -65,12 +71,12 @@
 
 	:checked + & {
 		background: $color-main-dark;
+	}
 
-		&::before {
+	:checked + &::before {
 			content: attr(data-on);
 		}
 	}
-}
 
 .radio {
 	display: inline-block;
@@ -83,6 +89,12 @@
 	line-height: 1;
 	white-space: nowrap;
 
+	&:hover {
+		border-color: $color-main-light;
+	}
+}
+
+.radio-content {
 	&::before {
 		visibility: hidden;
 		content: "\2713";
@@ -100,10 +112,6 @@
 		width: 60%;
 		height: 60%;
 		content: "";
-	}
-
-	&:hover {
-		border-color: $color-main-light;
 	}
 
 	:checked + &::after {
