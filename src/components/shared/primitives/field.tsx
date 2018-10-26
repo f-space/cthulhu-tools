@@ -25,7 +25,7 @@ function normalize(field: string | FieldProps): FieldProps {
 }
 
 export function Input({ field, ...props }: InputProps) {
-	if (field === undefined) {
+	if (field === undefined || props.disabled) {
 		return <input {...props} />
 	} else {
 		return <FieldWrapper {...normalize(field)} {...props} inner="input" />
@@ -33,7 +33,7 @@ export function Input({ field, ...props }: InputProps) {
 }
 
 export function TextArea({ field, ...props }: TextAreaProps) {
-	if (field === undefined) {
+	if (field === undefined || props.disabled) {
 		return <textarea {...props} />
 	} else {
 		return <FieldWrapper {...normalize(field)} {...props} inner="textarea" />
@@ -41,7 +41,7 @@ export function TextArea({ field, ...props }: TextAreaProps) {
 }
 
 export function Select({ field, ...props }: SelectProps) {
-	if (field === undefined) {
+	if (field === undefined || props.disabled) {
 		return <select {...props} />
 	} else {
 		return <FieldWrapper {...normalize(field)} {...props} inner="select" />
@@ -49,7 +49,7 @@ export function Select({ field, ...props }: SelectProps) {
 }
 
 export function NInput({ field, ...props }: NInputProps) {
-	if (field === undefined) {
+	if (field === undefined || props.disabled) {
 		return <NumberInput {...props} />
 	} else {
 		return <FieldWrapper {...normalize(field)} {...props} inner={NumberInput} />
