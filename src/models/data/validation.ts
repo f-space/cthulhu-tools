@@ -5,9 +5,7 @@ const MAX_INT32 = (1 << 31) ^ -1;
 const ID_PATTERN = /^[a-z_][0-9a-z_]*$/;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 
-export type Unknown = {} | null | undefined;
-
-export function validate(name: string, value: any): Validation<Unknown> {
+export function validate(name: string, value: any): Validation<unknown> {
 	return new Validation(name, value);
 }
 
@@ -20,11 +18,11 @@ export class Validation<T> {
 		this.value = value;
 	}
 
-	public any(this: Validation<Unknown>): Validation<any> {
+	public any(this: Validation<unknown>): Validation<any> {
 		return this;
 	}
 
-	public int(this: Validation<Unknown>): Validation<number> {
+	public int(this: Validation<unknown>): Validation<number> {
 		if (typeof this.value !== 'number') return this.error("int::type");
 		if (!Number.isInteger(this.value)) return this.error("int::integer");
 		if (this.value < MIN_INT32 || this.value > MAX_INT32) return this.error("int::i32");
@@ -32,46 +30,46 @@ export class Validation<T> {
 		return this as Validation<number>;
 	}
 
-	public number(this: Validation<Unknown>): Validation<number> {
+	public number(this: Validation<unknown>): Validation<number> {
 		if (typeof this.value !== 'number') return this.error("number:type");
 		if (!Number.isFinite(this.value)) return this.error("number::finite");
 
 		return this as Validation<number>;
 	}
 
-	public string(this: Validation<Unknown>): Validation<string> {
+	public string(this: Validation<unknown>): Validation<string> {
 		if (typeof this.value !== 'string') return this.error("string::type");
 
 		return this as Validation<string>;
 	}
 
-	public bool(this: Validation<Unknown>): Validation<boolean> {
+	public bool(this: Validation<unknown>): Validation<boolean> {
 		if (typeof this.value !== 'boolean') return this.error("bool::type");
 
 		return this as Validation<boolean>;
 	}
 
-	public object<U extends object>(this: Validation<Unknown>): Validation<U> {
+	public object<U extends object>(this: Validation<unknown>): Validation<U> {
 		if (typeof this.value !== 'object' || this.value === null) return this.error("object::type");
 
 		return this as Validation<U>;
 	}
 
-	public enum<U>(this: Validation<Unknown>, set: Set<U>): Validation<U> {
+	public enum<U>(this: Validation<unknown>, set: Set<U>): Validation<U> {
 		if (!set.has(this.value as any)) return this.error("enum::member");
 
 		return this as Validation<U>;
 	}
 
-	public nullable<U>(this: Validation<Unknown>, map: (v: Validation<Unknown>) => Validation<U>): Validation<U | null> {
+	public nullable<U>(this: Validation<unknown>, map: (v: Validation<unknown>) => Validation<U>): Validation<U | null> {
 		return (this.value === null ? this as Validation<null> : map(this));
 	}
 
-	public optional<U>(this: Validation<Unknown>, map: (v: Validation<Unknown>) => Validation<U>): Validation<U | undefined> {
+	public optional<U>(this: Validation<unknown>, map: (v: Validation<unknown>) => Validation<U>): Validation<U | undefined> {
 		return (this.value === undefined ? this as Validation<undefined> : map(this));
 	}
 
-	public array<U>(this: Validation<Unknown>, map: (v: Validation<Unknown>) => Validation<U>): Validation<U[]> {
+	public array<U>(this: Validation<unknown>, map: (v: Validation<unknown>) => Validation<U>): Validation<U[]> {
 		if (!Array.isArray(this.value)) return this.error("array::type");
 
 		const name = this.name;
@@ -79,7 +77,7 @@ export class Validation<T> {
 		return new Validation(name, value);
 	}
 
-	public dict<U>(this: Validation<Unknown>, map: (v: Validation<{}>) => Validation<U>): Validation<Map<string, U>> {
+	public dict<U>(this: Validation<unknown>, map: (v: Validation<{}>) => Validation<U>): Validation<Map<string, U>> {
 		if (typeof this.value !== 'object' || this.value === null || Array.isArray(this.value)) return this.error("dict::type");
 
 		const name = this.name;
@@ -87,7 +85,7 @@ export class Validation<T> {
 		return new Validation(name, value);
 	}
 
-	public time(this: Validation<Unknown>): Validation<number> {
+	public time(this: Validation<unknown>): Validation<number> {
 		if (typeof this.value !== 'number') return this.error("time::type");
 		if (!Number.isSafeInteger(this.value)) return this.error("time::integer");
 

@@ -34,8 +34,8 @@ export class Character implements CharacterConfig {
 		return new Character({
 			uuid: validate("uuid", uuid).string().uuid().value,
 			profile: validate("profile", profile).string().uuid().value,
-			history: validate("history", history).or(null).nullable(v => v.string().uuid()).value,
-			params: validate("params", params).or({}).object().map(CharacterParams.from).value,
+			history: validate("history", history).optional(v => v.nullable(v => v.string().uuid())).or(null).value,
+			params: validate("params", params).optional(v => v.object<CharacterParamsData>()).or({}).map(CharacterParams.from).value,
 		}, readonly);
 	}
 
