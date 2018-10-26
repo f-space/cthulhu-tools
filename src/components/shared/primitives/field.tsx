@@ -20,6 +20,10 @@ export interface TextAreaProps extends HTMLTextAreaProps, FieldCommonProps { }
 export interface SelectProps extends HTMLSelectProps, FieldCommonProps { }
 export interface NInputProps extends NumberInputProps, FieldCommonProps { }
 
+function isPromise(obj: any): obj is Promise<unknown> {
+	return obj !== null && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+}
+
 function normalize(field: string | FieldProps): FieldProps {
 	return (typeof field === 'string') ? { name: field } : field;
 }
@@ -69,10 +73,6 @@ class FieldWrapper extends React.Component<FieldWrapperProps> {
 		this.validate = this.validate.bind(this);
 	}
 
-	public componentDidMount(): void {
-		this.forceUpdate();
-	}
-
 	public render() {
 		const { inner, ...props } = this.props;
 
@@ -83,8 +83,22 @@ class FieldWrapper extends React.Component<FieldWrapperProps> {
 
 	private validate(): any {
 		const { validate } = this.props;
-		const element = this.ref.current;
 
-		return (element && element.validationMessage) || (validate && validate.apply(this, arguments));
+		const element = this.ref.current;
+		if (element) {
+			element.setCustomValidity("");
+
+			const result = validate && validate.apply(this, arguments);
+			return isPromise(result)
+				? result.then(setDomValidity.bind(element))
+				: setDomValidity(element, result);
+		}
+
+		function setDomValidity(element: FieldElement, value: any): string | undefined {
+			if (value !== undefined) {
+				element.setCustomValidity(value);
+			}
+			return element.validationMessage || undefined;
+		}
 	}
 }
