@@ -1,42 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-interface DialogContext {
-	readonly container: Element | null;
+const Context = React.createContext<React.RefObject<any>>(React.createRef());
+
+export function DialogProvider({ children }: { children: React.ReactNode }) {
+	return <Context.Provider value={React.createRef()}>
+		{children}
+	</Context.Provider>
 }
 
-type ContainerSetter = (value: Element | null) => void;
+export function DialogSlot({ children }: { children: (ref: React.RefObject<any>) => React.ReactNode }) {
+	return <Context.Consumer>
+		{children}
+	</Context.Consumer>
+}
 
-const Container = React.createContext<Element | null>(null);
-const Setter = React.createContext<ContainerSetter>(() => { });
+export function DialogPortal({ children }: { children: React.ReactElement<any> }) {
+	return <Context.Consumer>
+		{value => value.current instanceof Element && <DialogPortalInner container={value.current} children={children} />}
+	</Context.Consumer>
+}
 
-export class DialogProvider extends React.Component<{}, DialogContext> {
-	private setter: ContainerSetter;
+interface DialogPortalInnerProps {
+	container: Element;
+	children: React.ReactElement<any>;
+}
 
-	public constructor(props: {}) {
-		super(props);
+class DialogPortalInner extends React.Component<DialogPortalInnerProps> {
+	public componentDidMount(): void {
+		ReactDOM.render(this.props.children, this.props.container);
+	}
 
-		this.state = { container: null };
-		this.setter = container => this.setState({ container });
+	public componentWillUnmount(): void {
+		ReactDOM.unmountComponentAtNode(this.props.container);
+	}
+
+	public componentDidUpdate(prevProps: DialogPortalInnerProps): void {
+		if (this.props.container !== prevProps.container) {
+			ReactDOM.unmountComponentAtNode(prevProps.container);
+		}
+
+		ReactDOM.render(this.props.children, this.props.container);
 	}
 
 	public render() {
-		return <Setter.Provider value={this.setter}>
-			<Container.Provider {...this.props} value={this.state.container} />
-		</Setter.Provider>
+		return null;
 	}
-}
-
-export function DialogSlot(props: { children: (ref: (instance: Element | null) => void) => React.ReactNode }) {
-	return <Setter.Consumer>
-		{value => props.children(value)}
-	</Setter.Consumer>
-}
-
-export function DialogPortal(props: { children: React.ReactNode }) {
-	return <Container.Consumer>
-		{value => value && ReactDOM.createPortal(props.children, value)}
-	</Container.Consumer>
 }
 
 export default {
