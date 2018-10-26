@@ -109,7 +109,7 @@ export class Operation implements OperationConfig {
 	}
 
 	public apply(value: any): any {
-		const values = new Map<string, any>([Variable.key("_"), value]);
+		const values = new Map<string, any>([[Variable.key("_"), value]]);
 
 		return this.value.evaluate(values);
 	}
