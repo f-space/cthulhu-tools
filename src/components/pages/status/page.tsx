@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { DataCollector, Status } from "models/status";
 import IDBCache from "models/idb-cache";
-import { State } from "redux/store";
+import { State, Dispatch } from "redux/store";
+import StatusDispatcher from 'redux/dispatchers/status';
 import { getDataProvider } from "redux/selectors/status";
 import { loadStatus } from "components/shared/decorators/status-loader";
 import { StatusTemplate } from "./template";
@@ -20,7 +21,12 @@ const mapStateToProps = (state: State) => {
 	return { statusList };
 };
 
-const Connected = connect(mapStateToProps)(StatusTemplate);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+	const dispatcher = new StatusDispatcher(dispatch);
+	return { dispatcher };
+};
+
+const Connected = connect(mapStateToProps, mapDispatchToProps)(StatusTemplate);
 const StatusReady = loadStatus(Connected);
 
 export const StatusPage = StatusReady;

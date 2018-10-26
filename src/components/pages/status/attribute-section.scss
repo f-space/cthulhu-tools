@@ -9,8 +9,9 @@
 }
 
 .attribute {
-	border-bottom: dashed 1px $color-main-dark;
-	padding-bottom: 0.1em;
+	border: dashed 1px transparent;
+	border-bottom-color: $color-main-dark;
+	padding: 0.25em 0.5em 0.1em;
 
 	&.integer { grid-column: span 1; }
 	&.number { grid-column: span 1; }
@@ -19,6 +20,17 @@
 	&.id-name { display: none; }
 	&.id-age { grid-column: span 1; }
 	&.id-occupation { grid-column: span 2; }
+
+	&.edit {
+		transition: border 0.5s;
+		border: solid 1px $color-main-dark;
+		border-radius: 0.5em;
+
+		&:hover {
+			background: $color-main-light;
+			cursor: pointer;
+		}
+	}
 }
 
 .name {

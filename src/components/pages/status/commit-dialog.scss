@@ -1,0 +1,65 @@
+.inputs {
+	margin: 1em;
+	font-size: 1.2rem;
+}
+
+.name {
+	margin: 0.5em 0;
+	text-align: center;
+	font-size: 150%;
+}
+
+.methods {
+	margin: 0.5em 10%;
+}
+
+.method {
+	margin: 0.5em 0;
+}
+
+.text .add {
+	display: none;
+}
+
+.caption {
+	display: grid;
+	grid-template-columns: auto auto 1fr;
+	grid-auto-flow: column;
+	grid-column-gap: 0.5em;
+	align-items: center;
+	margin: 0.5em 0;
+}
+
+.value {
+	display: grid;
+	margin-left: 3em;
+}
+
+.note {
+	text-align: right;
+	font-size: 80%;
+}
+
+.message {
+	display: grid;
+	grid-template-rows: auto 1fr;
+	grid-auto-flow: row;
+	grid-row-gap: 0.5em;
+	margin: 1em 0;
+}
+
+.buttons {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+}
+
+.ok,
+.cancel {
+	box-sizing: content-box;
+	margin: 0.5ex 0.5em;
+	width: 5em;
+}
+
+.cancel { order: 0; }
+.ok { order: 1; }

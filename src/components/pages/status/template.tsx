@@ -2,17 +2,20 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { Status } from "models/status";
-import { EvaluationProvider } from "components/shared/decorators/evaluation";
-import { EvaluationText } from "components/shared/primitives/evaluation-text";
+import StatusDispatcher from "redux/dispatchers/status";
 import { Carousel, CarouselView, CarouselContext } from "components/shared/layouts/carousel";
 import { Page, Navigation } from "components/shared/templates/page";
 import { Dots } from "./dots";
-import { AttributeSection } from "./attribute-section";
-import { SkillSection } from "./skill-section";
+import { StatusView } from "./status-view";
 import style from "./template.scss";
 
 export interface StatusTemplateProps {
 	statusList: Status[];
+	dispatcher: StatusDispatcher;
+}
+
+interface StatusTemplateState {
+	edit: boolean;
 }
 
 const NAVS: Navigation[] = [
@@ -24,9 +27,17 @@ const NAVS: Navigation[] = [
 
 const CACHE = new WeakMap<Status, React.ReactNode>();
 
-export class StatusTemplate extends React.Component<StatusTemplateProps> {
+export class StatusTemplate extends React.Component<StatusTemplateProps, StatusTemplateState> {
+	public constructor(props: StatusTemplateProps) {
+		super(props);
+
+		this.state = { edit: false };
+		this.handleEditClick = this.handleEditClick.bind(this);
+	}
+
 	public render() {
-		const { statusList } = this.props;
+		const { statusList, dispatcher } = this.props;
+		const { edit } = this.state;
 
 		return <Page id="status" heading="ステータス" navs={NAVS}>
 			<Carousel models={statusList} wrap={true}>
@@ -36,7 +47,8 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 							className={style['list']}
 							context={context}
 							spring={{ maxIteration: 1 }}
-							render={status => this.renderStatusWithCache(status)} />
+							render={status => <StatusView status={status} edit={edit} dispatcher={dispatcher} />} />
+						{context.models.length !== 0 && this.renderCommands()}
 						{context.models.length !== 0 && this.renderPager(context)}
 					</div>
 				}
@@ -44,27 +56,16 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 		</Page>
 	}
 
-	private renderStatusWithCache(status: Status) {
-		let result = CACHE.get(status);
-		if (result === undefined) {
-			result = this.renderStatus(status);
-			CACHE.set(status, result);
-		}
+	private renderCommands() {
+		const { edit } = this.state;
 
-		return result;
-	}
-
-	private renderStatus(status: Status) {
-		const chain = status.chain;
-		const hash = status.current;
-
-		return <EvaluationProvider chain={chain}>
-			<section className={style['status']}>
-				<h3 className={style['name']}><EvaluationText target="@attr:name" hash={hash} /></h3>
-				<AttributeSection status={status} />
-				<SkillSection status={status} />
-			</section>
-		</EvaluationProvider>
+		return <div className={style['track']}>
+			<div className={style['commands']}>
+				<button className={classNames(style['command'], { [style['active']]: edit })} type="button" onClick={this.handleEditClick}>
+					<FontAwesomeIcon icon="edit" />
+				</button>
+			</div>
+		</div>
 	}
 
 	private renderPager(context: CarouselContext<unknown>) {
@@ -79,5 +80,9 @@ export class StatusTemplate extends React.Component<StatusTemplateProps> {
 				<FontAwesomeIcon icon="chevron-circle-right" size="2x" />
 			</button>
 		</div>
+	}
+
+	private handleEditClick(): void {
+		this.setState(state => ({ edit: !state.edit }));
 	}
 }

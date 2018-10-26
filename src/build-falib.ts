@@ -9,5 +9,6 @@ export default function build() {
 		icons.faPlus,
 		icons.faChevronCircleLeft,
 		icons.faChevronCircleRight,
+		icons.faEdit,
 	);
 };
