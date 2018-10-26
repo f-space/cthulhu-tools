@@ -2,6 +2,7 @@ import { CharacterView, CharacterData, Character } from "models/status";
 import DB from "models/storage";
 import { Dispatch } from "redux/store";
 import { CharacterAction } from "redux/actions/character";
+import { HistoryAction } from "redux/actions/history";
 
 export default class CharacterDispatcher {
 	public constructor(readonly dispatch: Dispatch) { }
@@ -26,13 +27,19 @@ export default class CharacterDispatcher {
 	}
 
 	public async delete(uuid: string): Promise<void> {
-		await DB.transaction("rw", DB.characters, DB.views, () => {
-			return DB.characters.delete(uuid).then(() => {
-				return DB.views.delete(uuid);
+		const character = await DB.transaction("r", DB.characters, () => DB.characters.get(uuid));
+		if (character) {
+			const history = character.history;
+
+			await DB.transaction("rw", DB.characters, DB.views, DB.histories, async () => {
+				await DB.characters.delete(uuid);
+				await DB.views.delete(uuid);
+				if (history) await DB.histories.delete(history);
+			}).then(() => {
+				this.dispatch(CharacterAction.delete(uuid));
+				if (history) this.dispatch(HistoryAction.delete(history));
 			});
-		}).then(() => {
-			this.dispatch(CharacterAction.delete(uuid));
-		});
+		}
 	}
 
 	public async load(): Promise<void> {
