@@ -89,7 +89,7 @@ export class Validation<T> {
 
 	public time(this: Validation<Unknown>): Validation<number> {
 		if (typeof this.value !== 'number') return this.error("time::type");
-		if (Number.isSafeInteger(this.value)) return this.error("time::integer");
+		if (!Number.isSafeInteger(this.value)) return this.error("time::integer");
 
 		return this as Validation<number>;
 	}
