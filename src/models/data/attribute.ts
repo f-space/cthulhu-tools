@@ -255,4 +255,8 @@ export namespace Attribute {
 			default: throw new Error(`Invalid attribute type: ${(data as any).type}`);
 		}
 	}
+
+	export function is(value: unknown): value is Attribute {
+		return value instanceof AttributeBase;
+	}
 }

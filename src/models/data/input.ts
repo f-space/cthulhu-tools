@@ -254,4 +254,8 @@ export namespace InputMethod {
 			default: throw new Error(`Invalid input type: ${(data as any).type}`);
 		}
 	}
+
+	export function is(value: unknown): value is InputMethod {
+		return value instanceof InputMethodBase;
+	}
 }
