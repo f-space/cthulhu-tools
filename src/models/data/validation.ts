@@ -1,4 +1,4 @@
-import { Expression } from "./expression";
+import { Reference, Expression } from "./expression";
 
 const MIN_INT32 = (1 << 31);
 const MAX_INT32 = (1 << 31) ^ -1;
@@ -126,6 +126,13 @@ export class Validation<T> {
 
 	public uuid(this: Validation<string>): Validation<string> {
 		if (!UUID_PATTERN.test(this.value)) return this.error("uuid::format");
+
+		return this;
+	}
+
+	public ref(this: Validation<string>): Validation<string> {
+		const ref = Reference.parse(this.value);
+		if (ref === null) return this.error("ref::format");
 
 		return this;
 	}

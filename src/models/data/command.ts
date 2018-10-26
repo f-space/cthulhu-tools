@@ -90,7 +90,7 @@ export class Operation implements OperationConfig {
 
 	public static from({ target, value }: OperationData): Operation {
 		return new Operation({
-			target: validate("target", target).string().id().value,
+			target: validate("target", target).string().ref().value,
 			value: validate("value", value).string().expr().value,
 		});
 	}
