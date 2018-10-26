@@ -50,13 +50,13 @@ Other
 Literal = value:$([+-]? [0-9]+ ("." [0-9]+)?) { return newLiteral(Number(value)); }
 
 Template
-	=  "`" first:Text? rest:TemplateRest* "`" { return newTemplate([first].concat(...rest).filter(x => x)); }
+	=  "\"" first:Text? rest:TemplateRest* "\"" { return newTemplate([first].concat(...rest).filter(x => x)); }
 TemplateRest
 	=  substitution:Substitution successor:Text? { return [substitution, successor]; }
 Substitution
 	= "{" expr:Expression "}" { return newSubstitution(expr); }
 Text
-	= value:$(([^`{}\\] / "\\" .)+) { return newText(value.replace(/\\(.)/g, "$1")); }
+	= value:$(([^"{}\\] / "\\" .)+) { return newText(value.replace(/\\(.)/g, "$1")); }
 
 Parentheses
 	= "(" _ expr:ExpressionTrim _ ")" { return expr; }

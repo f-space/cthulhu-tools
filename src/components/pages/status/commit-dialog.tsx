@@ -132,7 +132,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 		if (typeof value === 'number') {
 			expression = Expression.parse(String(Number.isFinite(value) ? value : 0))!;
 		} else {
-			expression = Expression.parse(`\`${String(value).replace(/[{}`\\]/g, "\\$1")}\``)!;
+			expression = Expression.parse(`"${String(value).replace(/[{}`\\]/g, "\\$1")}"`)!;
 		}
 
 		return new Operation({ target, value: expression });

@@ -173,8 +173,8 @@ function peg$parse(input, options) {
       peg$c29 = ".",
       peg$c30 = peg$literalExpectation(".", false),
       peg$c31 = function(value) { return newLiteral(Number(value)); },
-      peg$c32 = "`",
-      peg$c33 = peg$literalExpectation("`", false),
+      peg$c32 = "\"",
+      peg$c33 = peg$literalExpectation("\"", false),
       peg$c34 = function(first, rest) { return newTemplate([first].concat(...rest).filter(x => x)); },
       peg$c35 = function(substitution, successor) { return [substitution, successor]; },
       peg$c36 = "{",
@@ -182,8 +182,8 @@ function peg$parse(input, options) {
       peg$c38 = "}",
       peg$c39 = peg$literalExpectation("}", false),
       peg$c40 = function(expr) { return newSubstitution(expr); },
-      peg$c41 = /^[^`{}\\]/,
-      peg$c42 = peg$classExpectation(["`", "{", "}", "\\"], true, false),
+      peg$c41 = /^[^"{}\\]/,
+      peg$c42 = peg$classExpectation(["\"", "{", "}", "\\"], true, false),
       peg$c43 = "\\",
       peg$c44 = peg$literalExpectation("\\", false),
       peg$c45 = peg$anyExpectation(),
@@ -204,7 +204,7 @@ function peg$parse(input, options) {
       peg$c60 = /^[0-9a-z_]/,
       peg$c61 = peg$classExpectation([["0", "9"], ["a", "z"], "_"], false, false),
       peg$c62 = function(name) { return newVariable(name); },
-      peg$c63 = function(scope, id, modifier) { return newReference(scope, id, modifier); },
+      peg$c63 = function(scope, id, modifier) { return newReference(id, modifier, scope); },
       peg$c64 = "@",
       peg$c65 = peg$literalExpectation("@", false),
       peg$c66 = ":",
@@ -805,7 +805,7 @@ function peg$parse(input, options) {
     var s0, s1, s2, s3, s4;
 
     s0 = peg$currPos;
-    if (input.charCodeAt(peg$currPos) === 96) {
+    if (input.charCodeAt(peg$currPos) === 34) {
       s1 = peg$c32;
       peg$currPos++;
     } else {
@@ -825,7 +825,7 @@ function peg$parse(input, options) {
           s4 = peg$parseTemplateRest();
         }
         if (s3 !== peg$FAILED) {
-          if (input.charCodeAt(peg$currPos) === 96) {
+          if (input.charCodeAt(peg$currPos) === 34) {
             s4 = peg$c32;
             peg$currPos++;
           } else {
@@ -1593,7 +1593,7 @@ function peg$parse(input, options) {
   	function newSubstitution(expr) { return { type: SUBSTITUTION, expr }; }
   	function newText(value) { return { type: TEXT, value }; }
   	function newVariable(name) { return { type: VARIABLE, name, }; }
-  	function newReference(scope, id, modifier) { return { type: REFERENCE, scope, id, modifier }; }
+  	function newReference(id, modifier, scope) { return { type: REFERENCE, id, modifier, scope }; }
 
 
   peg$result = peg$startRuleFunction();

@@ -175,7 +175,7 @@ export class Template implements NodeInterface {
 	}
 
 	public toString(): string {
-		return `\`${this.segments.join("")}\``;
+		return `"${this.segments.join("")}"`;
 	}
 }
 

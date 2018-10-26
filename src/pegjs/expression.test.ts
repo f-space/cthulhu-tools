@@ -36,14 +36,14 @@ describe("literal parsing", () => {
 
 describe("template parsing", () => {
 	test("empty", () => {
-		expect(Expression.parse("``")).toEqual({
+		expect(Expression.parse(`""`)).toEqual({
 			type: "template",
 			segments: [],
 		});
 	});
 
 	test("simple", () => {
-		expect(Expression.parse("`test`")).toEqual({
+		expect(Expression.parse(`"test"`)).toEqual({
 			type: "template",
 			segments: [
 				{
@@ -55,7 +55,7 @@ describe("template parsing", () => {
 	});
 
 	test("interpolation", () => {
-		expect(Expression.parse("`{1234}`")).toEqual({
+		expect(Expression.parse(`"{1234}"`)).toEqual({
 			type: "template",
 			segments: [
 				{
@@ -70,7 +70,7 @@ describe("template parsing", () => {
 	});
 
 	test("nest", () => {
-		expect(Expression.parse("`1{ `{2}3` }{4}`")).toEqual({
+		expect(Expression.parse(`"1{ "{2}3" }{4}"`)).toEqual({
 			type: "template",
 			segments: [
 				{
@@ -108,21 +108,21 @@ describe("template parsing", () => {
 	});
 
 	test("escape", () => {
-		expect(Expression.parse("`\\{\\\\\\`\\}`")).toEqual({
+		expect(Expression.parse(`"\\{\\\\\\"\\}"`)).toEqual({
 			type: "template",
 			segments: [
 				{
 					type: "text",
-					value: "{\\`}",
+					value: "{\\\"}",
 				},
 			],
 		});
 	});
 
 	test("invalid", () => {
-		expect(() => Expression.parse("`\\`")).toThrow();
-		expect(() => Expression.parse("`{\\}`")).toThrow();
-		expect(() => Expression.parse("`{{}`")).toThrow();
+		expect(() => Expression.parse(`"\\"`)).toThrow();
+		expect(() => Expression.parse(`"{\\}"`)).toThrow();
+		expect(() => Expression.parse(`"{{}"`)).toThrow();
 	});
 });
 
@@ -267,7 +267,7 @@ describe("unary operator parsing", () => {
 	});
 
 	test("invalid", () => {
-		expect(()=>Expression.parse("+ (1234)")).toThrow();
+		expect(() => Expression.parse("+ (1234)")).toThrow();
 	});
 });
 
