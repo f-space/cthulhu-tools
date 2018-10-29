@@ -34,7 +34,7 @@ export class Command implements CommandConfig {
 
 	public get repr(): string {
 		return [
-			`@${this.parent || "root"}`,
+			`#${this.parent || "root"}`,
 			...this.operations.map(op => op.repr),
 		].join("\n");
 	}
@@ -81,7 +81,7 @@ export class Operation implements OperationConfig {
 	public readonly target: string;
 	public readonly value: Expression;
 
-	public get repr(): string { return `${this.target}: ${this.value}`; }
+	public get repr(): string { return `<${this.target}>${this.value}`; }
 
 	public constructor({ target, value }: OperationConfig) {
 		this.target = target;
