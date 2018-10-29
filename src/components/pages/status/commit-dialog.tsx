@@ -65,10 +65,19 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 									</div>
 									<div className={style['value']}>
 										<Field name="mode" subscription={{ value: true }} render={({ input: { value } }) =>
-											<TextInput field={{
-												name: "expression.value",
-												validate: value => Expression.parse(value) ? undefined : "無効な式",
-											}} disabled={value !== 'expression'} required />
+											<TextInput
+												field={{
+													name: "expression.value",
+													validate: value => Expression.parse(value) ? undefined : "無効な式",
+												}}
+												placeholder={
+													target.type !== AttributeType.Text
+														? "e.g. floor(($_ + 1) * 2 / 3)"
+														: "e.g. \"{$_}abc{1 + 1}\""
+												}
+												disabled={value !== 'expression'}
+												autoComplete="off"
+												required />
 										} />
 									</div>
 								</div>
