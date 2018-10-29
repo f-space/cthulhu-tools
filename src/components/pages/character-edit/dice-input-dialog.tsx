@@ -41,23 +41,27 @@ export class DiceInputDialog extends React.Component<DiceInputDialogProps, DiceI
 		const display = dices.map((dice, i) => dice.display(value[i]));
 
 		return <Dialog open={this.props.open} header={"Dice Input"}>
-			<div className={style['inputs']}>
-				<div className={style['dices']}>
-					{
-						display.map((group, groupIndex) =>
-							<div key={groupIndex} className={style['group']} onClick={this.handleClickDice} data-index={groupIndex}>
-								{group.map((dice, diceIndex) => <DiceImage key={diceIndex} className={style['dice']} type={dice.type} face={dice.face} />)}
-							</div>
-						)
-					}
-				</div>
-				<RollButton className={style['roll']} disabled={rolling} onClick={this.handleClickRoll} />
-			</div>
-			<div className={style['buttons']}>
-				<Button className={style['ok']} disabled={rolling} commit onClick={this.handleClickOK}>OK</Button>
-				<Button className={style['cancel']} onClick={this.handleClickCancel}>Cancel</Button>
-			</div >
-			<DiceRollTask active={rolling} dices={dices} faces={value} callback={this.updateValue} />
+			{
+				() => <>
+					<div className={style['inputs']}>
+						<div className={style['dices']}>
+							{
+								display.map((group, groupIndex) =>
+									<div key={groupIndex} className={style['group']} onClick={this.handleClickDice} data-index={groupIndex}>
+										{group.map((dice, diceIndex) => <DiceImage key={diceIndex} className={style['dice']} type={dice.type} face={dice.face} />)}
+									</div>
+								)
+							}
+						</div>
+						<RollButton className={style['roll']} disabled={rolling} onClick={this.handleClickRoll} />
+					</div>
+					<div className={style['buttons']}>
+						<Button className={style['ok']} disabled={rolling} commit onClick={this.handleClickOK}>OK</Button>
+						<Button className={style['cancel']} onClick={this.handleClickCancel}>Cancel</Button>
+					</div >
+					<DiceRollTask active={rolling} dices={dices} faces={value} callback={this.updateValue} />
+				</>
+			}
 		</Dialog >
 	}
 

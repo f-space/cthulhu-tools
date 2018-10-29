@@ -29,7 +29,8 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 		const { open, target } = this.props;
 
 		return <Dialog open={open} header={"Commit"}>
-			<Form initialValues={{ mode: 'set' }} onSubmit={this.handleSubmit} render={({ handleSubmit, invalid }) =>
+			{
+				() => <Form initialValues={{ mode: 'set' }} onSubmit={this.handleSubmit} render={({ handleSubmit, invalid }) =>
 				<form onSubmit={handleSubmit}>
 					<div className={classNames(style['inputs'], style[target.type])}>
 						<div className={style['name']}>{target.name}</div>
@@ -83,6 +84,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 					</div >
 				</form>
 			} />
+			}
 		</Dialog >
 	}
 

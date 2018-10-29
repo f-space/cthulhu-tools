@@ -6,6 +6,7 @@ import style from "./dialog.scss";
 export interface DialogProps extends React.HTMLAttributes<HTMLElement> {
 	open: boolean;
 	header: React.ReactNode;
+	children: () => React.ReactNode;
 }
 
 export function Dialog(props: DialogProps) {
@@ -16,7 +17,7 @@ export function Dialog(props: DialogProps) {
 			<aside {...rest} className={classNames(className, style['dialog'])}>
 				<h1 className={style['header']}>{header}</h1>
 				<div className={style['content']}>
-					{children}
+					{children()}
 				</div>
 			</aside>
 		</DialogComponents.Portal>

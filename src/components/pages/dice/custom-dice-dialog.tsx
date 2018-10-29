@@ -29,19 +29,21 @@ export class CustomDiceDialog extends React.Component<CustomDiceDialogProps> {
 		const { count, max } = this.props;
 
 		return <Dialog open={this.props.open} header={"Custom Dice"}>
-			<Form initialValues={{ count, max }} onSubmit={this.handleSubmit} render={({ handleSubmit, valid }) =>
-				<form onSubmit={handleSubmit}>
-					<div className={style['inputs']}>
-						<NumberInput field="count" className={style['number']} required min={1} max={100} step={1} />
-						D
+			{
+				() => <Form initialValues={{ count, max }} onSubmit={this.handleSubmit} render={({ handleSubmit, valid }) =>
+					<form onSubmit={handleSubmit}>
+						<div className={style['inputs']}>
+							<NumberInput field="count" className={style['number']} required min={1} max={100} step={1} />
+							D
 						<NumberInput field="max" className={style['number']} required min={1} max={1000} step={1} />
-					</div>
-					<div className={style['buttons']}>
-						<SubmitButton className={style['ok']} disabled={!valid} commit>OK</SubmitButton>
-						<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
-					</div >
-				</form>
-			} />
+						</div>
+						<div className={style['buttons']}>
+							<SubmitButton className={style['ok']} disabled={!valid} commit>OK</SubmitButton>
+							<Button className={style['cancel']} onClick={this.handleClick}>Cancel</Button>
+						</div >
+					</form>
+				} />
+			}
 		</Dialog >
 	}
 
