@@ -114,8 +114,19 @@ export class CharacterManagementTemplate extends React.Component<CharacterManage
 
 		const sources = provider.character.get(selection);
 		for (const source of sources) {
-			const character = source.set({ uuid: generateUUID() });
-			dispatcher.character.create(character);
+			const character = source.set({ uuid: generateUUID(), history: null });
+			const promise = dispatcher.character.create(character);
+
+			const history = source.history !== null ? provider.history.get(source.history) : undefined;
+			if (history) {
+				const newHistory = history.set({ uuid: generateUUID() });
+				Promise.all([
+					promise,
+					dispatcher.history.create(newHistory),
+				]).then(() => {
+					return dispatcher.character.update(character.set({ history: newHistory.uuid }));
+				});
+			}
 		}
 
 		return true;
