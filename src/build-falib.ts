@@ -10,5 +10,6 @@ export default function build() {
 		icons.faChevronCircleLeft,
 		icons.faChevronCircleRight,
 		icons.faEdit,
+		icons.faTrashAlt,
 	);
 };

@@ -6,7 +6,9 @@ import { EvaluationProvider } from "components/shared/decorators/evaluation";
 import { EvaluationText } from "components/shared/primitives/evaluation-text";
 import { AttributeSection } from "./attribute-section";
 import { SkillSection } from "./skill-section";
+import { HistorySection } from "./history-section";
 import { CommitDialog, CommitDialogResult } from "./commit-dialog";
+import { DeleteCommandDialog, DeleteCommandDialogResult } from "./delete-command-dialog";
 import style from "./status-view.scss";
 
 export interface StatusViewProps {
@@ -16,7 +18,7 @@ export interface StatusViewProps {
 }
 
 interface StatusViewState {
-	target?: Attribute;
+	target?: Attribute | Command;
 }
 
 export class StatusView extends React.Component<StatusViewProps, StatusViewState> {
@@ -25,7 +27,9 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 
 		this.state = {};
 		this.handleEdit = this.handleEdit.bind(this);
-		this.handleClose = this.handleClose.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
+		this.handleCloseCommitDialog = this.handleCloseCommitDialog.bind(this);
+		this.handleCloseDeleteCommandDialog = this.handleCloseDeleteCommandDialog.bind(this);
 	}
 
 	public render() {
@@ -39,7 +43,9 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 				<h3 className={style['name']}><EvaluationText target="@attr:name" hash={hash} /></h3>
 				<AttributeSection status={status} edit={edit} onEdit={this.handleEdit} />
 				<SkillSection status={status} />
-				<CommitDialog open={Attribute.is(target)} target={target!} onClose={this.handleClose} />
+				<HistorySection status={status} edit={edit} onDelete={this.handleDelete} />
+				<CommitDialog open={Attribute.is(target)} target={target as Attribute} onClose={this.handleCloseCommitDialog} />
+				<DeleteCommandDialog open={target instanceof Command} target={target as Command} onClose={this.handleCloseDeleteCommandDialog} />
 			</section>
 		</EvaluationProvider>
 	}
@@ -48,9 +54,21 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 		this.setState({ target });
 	}
 
-	private handleClose(result?: CommitDialogResult): void {
+	private handleDelete(target: Command): void {
+		this.setState({ target });
+	}
+
+	private handleCloseCommitDialog(result?: CommitDialogResult): void {
 		if (result) {
 			this.addCommand(result.command);
+		}
+
+		this.setState({ target: undefined });
+	}
+
+	private handleCloseDeleteCommandDialog(result?: DeleteCommandDialogResult): void {
+		if (result) {
+			this.deleteCommand(result.command);
 		}
 
 		this.setState({ target: undefined });
@@ -60,7 +78,7 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 		const { dispatcher } = this.props;
 
 		const history = await this.getOrCreateHistory();
-		
+
 		const command = source.set({ parent: history.head });
 		history.commit(command);
 		history.head = command.hash;
@@ -85,6 +103,34 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 			await dispatcher.character.update(character.set({ history: history.uuid }));
 
 			return history;
+		}
+	}
+
+	private async deleteCommand(command: Command): Promise<void> {
+		const { status, dispatcher } = this.props;
+
+		const history = status.context.history;
+		if (history && history.command(command.hash)) {
+			const rest: Command[] = [];
+			for (const current of history.trace()) {
+				if (current.hash === command.hash) break;
+				rest.push(current);
+			}
+
+			let parent = command.parent;
+			for (let i = rest.length - 1; i >= 0; i--) {
+				const newCommand = new Command({
+					...rest[i],
+					parent,
+				});
+				history.commit(newCommand);
+				parent = newCommand.hash;
+			}
+
+			history.head = parent;
+			history.gc();
+
+			await dispatcher.history.update(history);
 		}
 	}
 }

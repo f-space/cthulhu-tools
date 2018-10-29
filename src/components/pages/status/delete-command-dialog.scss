@@ -1,0 +1,46 @@
+@import "variable";
+
+.text {
+	margin: 1em 0;
+	text-align: center;
+	font-size: 1.2rem;
+}
+
+.details {
+	margin: 1em;
+	border-top: solid 1px $color-main;
+	border-bottom: solid 1px $color-main;
+	padding: 0.5em 0;
+}
+
+.message {
+	margin: 1em;
+	text-align: center;
+}
+
+.operations {
+	display: grid;
+	opacity: 0.8;
+	margin: 1em 10%;
+	list-style: square inside;
+}
+
+.operation {
+	margin: 0.5em 0;
+}
+
+.buttons {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+}
+
+.ok,
+.cancel {
+	box-sizing: content-box;
+	margin: 0.5ex 0.5em;
+	width: 5em;
+}
+
+.cancel { order: 0; }
+.ok { order: 1; }
