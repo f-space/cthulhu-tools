@@ -160,7 +160,7 @@ export class CharacterEditTemplate extends React.Component<CharacterEditTemplate
 			const character = new Character({
 				uuid: target ? target.uuid : generateUUID(),
 				profile: profile.uuid,
-				history: null,
+				history: target ? target.history : null,
 				params,
 			});
 
