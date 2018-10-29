@@ -8,7 +8,7 @@ export interface SectionProps {
 
 export function Section({ heading, children }: SectionProps) {
 	return <section className={style['section']}>
-		{heading && <h4 className={style['heading']}>技能</h4>}
+		{heading && <h4 className={style['heading']}>{heading}</h4>}
 		{children}
 	</section>
 }
