@@ -9,6 +9,6 @@ export * from "./input";
 export * from "./skill";
 export * from "./item";
 export * from "./history";
-export * from "./command";
+export * from "./commit";
 export * from "./provider";
 export * from "./collector";

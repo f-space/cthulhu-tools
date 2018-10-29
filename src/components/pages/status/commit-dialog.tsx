@@ -1,14 +1,14 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
 import classNames from "classnames";
-import { Attribute, AttributeType, Command, Operation, Expression } from "models/status";
+import { Attribute, AttributeType, Commit, Operation, Expression } from "models/status";
 import { TextInput, NumberInput, Radio } from "components/shared/widgets/input";
 import { Button, SubmitButton } from "components/shared/widgets/button";
 import { Dialog } from "components/shared/templates/dialog";
 import style from "./commit-dialog.scss";
 
 export interface CommitDialogResult {
-	command: Command;
+	commit: Commit;
 }
 
 export interface CommitDialogProps {
@@ -107,19 +107,19 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 
 	private handleSubmit(values: any): void {
 		const target = `@attr:${this.props.target.id}`;
-		const command = this.createCommand(target, values);
+		const commit = this.createCommit(target, values);
 
-		this.props.onClose({ command });
+		this.props.onClose({ commit });
 	}
 
 	private handleClick(event: React.MouseEvent<HTMLButtonElement>): void {
 		this.props.onClose();
 	}
 
-	private createCommand(target: string, values: any): Command {
+	private createCommit(target: string, values: any): Commit {
 		const operation = this.createOperation(target, values);
 
-		return new Command({
+		return new Commit({
 			parent: null,
 			time: Date.now(),
 			message: values.message,

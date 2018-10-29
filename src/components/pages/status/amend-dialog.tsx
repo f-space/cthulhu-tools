@@ -1,21 +1,21 @@
 import React from 'react';
-import { Command } from "models/status";
+import { Commit } from "models/status";
 import { Button } from "components/shared/widgets/button";
 import { Dialog } from "components/shared/templates/dialog";
-import style from "./delete-command-dialog.scss";
+import style from "./amend-dialog.scss";
 
-export interface DeleteCommandDialogResult {
-	command: Command;
+export interface AmendDialogResult {
+	commit: Commit;
 }
 
-export interface DeleteCommandDialogProps {
+export interface AmendDialogProps {
 	open: boolean;
-	target: Command;
-	onClose: (result?: DeleteCommandDialogResult) => void;
+	target: Commit;
+	onClose: (result?: AmendDialogResult) => void;
 }
 
-export class DeleteCommandDialog extends React.Component<DeleteCommandDialogProps> {
-	public constructor(props: DeleteCommandDialogProps) {
+export class AmendDialog extends React.Component<AmendDialogProps> {
+	public constructor(props: AmendDialogProps) {
 		super(props);
 
 		this.handleClickOK = this.handleClickOK.bind(this);
@@ -25,7 +25,7 @@ export class DeleteCommandDialog extends React.Component<DeleteCommandDialogProp
 	public render() {
 		const { open, target } = this.props;
 
-		return <Dialog open={open} header={"Delete Command"}>
+		return <Dialog open={open} header={"Amend"}>
 			{
 				() => <>
 					<div className={style['text']}>次の変更を削除します。</div>
@@ -49,7 +49,7 @@ export class DeleteCommandDialog extends React.Component<DeleteCommandDialogProp
 	}
 
 	private handleClickOK(): void {
-		this.props.onClose({ command: this.props.target });
+		this.props.onClose({ commit: this.props.target });
 	}
 
 	private handleClickCancel(): void {

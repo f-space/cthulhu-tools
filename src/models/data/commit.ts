@@ -2,14 +2,14 @@ import { Hash } from "./hash";
 import { Variable, Expression } from "./expression";
 import { validate } from "./validation";
 
-export interface CommandData {
+export interface CommitData {
 	readonly parent: string | null;
 	readonly time: number;
 	readonly message?: string;
 	readonly operations?: ReadonlyArray<OperationData>;
 }
 
-export interface CommandConfig {
+export interface CommitConfig {
 	readonly parent: string | null;
 	readonly time: number;
 	readonly message?: string;
@@ -26,7 +26,7 @@ export interface OperationConfig {
 	readonly value: Expression;
 }
 
-export class Command implements CommandConfig {
+export class Commit implements CommitConfig {
 	public readonly parent: string | null;
 	public readonly time: number;
 	public readonly message: string;
@@ -39,17 +39,17 @@ export class Command implements CommandConfig {
 		].join("\n");
 	}
 
-	public get hash(): string { return Hash.get(this, command => command.repr).hex; }
+	public get hash(): string { return Hash.get(this, commit => commit.repr).hex; }
 
-	public constructor({ parent, time, message, operations }: CommandConfig) {
+	public constructor({ parent, time, message, operations }: CommitConfig) {
 		this.parent = parent;
 		this.time = time;
 		this.message = message !== undefined ? message : "";
 		this.operations = operations !== undefined ? operations : [];
 	}
 
-	public static from({ parent, time, message, operations }: CommandData): Command {
-		return new Command({
+	public static from({ parent, time, message, operations }: CommitData): Commit {
+		return new Commit({
 			parent: validate("parent", parent).nullable(v => v.string()).value,
 			time: validate("time", time).time().value,
 			message: validate("message", message).optional(v => v.string()).value,
@@ -57,7 +57,7 @@ export class Command implements CommandConfig {
 		});
 	}
 
-	public toJSON(): CommandData {
+	public toJSON(): CommitData {
 		return {
 			parent: this.parent,
 			time: this.time,
@@ -66,10 +66,10 @@ export class Command implements CommandConfig {
 		};
 	}
 
-	public set(config: Partial<CommandConfig>): Command {
+	public set(config: Partial<CommitConfig>): Commit {
 		const { parent, time, message, operations } = this;
 
-		return new Command({ parent, time, message, operations, ...config });
+		return new Commit({ parent, time, message, operations, ...config });
 	}
 
 	public toString(): string {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Status, Attribute, History, Command } from "models/status";
+import { Status, Attribute, History, Commit } from "models/status";
 import { generateUUID } from "models/utility";
 import StatusDispatcher from "redux/dispatchers/status";
 import { EvaluationProvider } from "components/shared/decorators/evaluation";
@@ -8,7 +8,7 @@ import { AttributeSection } from "./attribute-section";
 import { SkillSection } from "./skill-section";
 import { HistorySection } from "./history-section";
 import { CommitDialog, CommitDialogResult } from "./commit-dialog";
-import { DeleteCommandDialog, DeleteCommandDialogResult } from "./delete-command-dialog";
+import { AmendDialog, AmendDialogResult } from "./amend-dialog";
 import style from "./status-view.scss";
 
 export interface StatusViewProps {
@@ -18,7 +18,7 @@ export interface StatusViewProps {
 }
 
 interface StatusViewState {
-	target?: Attribute | Command;
+	target?: Attribute | Commit;
 }
 
 export class StatusView extends React.Component<StatusViewProps, StatusViewState> {
@@ -29,7 +29,7 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 		this.handleEdit = this.handleEdit.bind(this);
 		this.handleDelete = this.handleDelete.bind(this);
 		this.handleCloseCommitDialog = this.handleCloseCommitDialog.bind(this);
-		this.handleCloseDeleteCommandDialog = this.handleCloseDeleteCommandDialog.bind(this);
+		this.handleCloseAmendDialog = this.handleCloseAmendDialog.bind(this);
 	}
 
 	public render() {
@@ -45,7 +45,7 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 				<SkillSection status={status} />
 				<HistorySection status={status} edit={edit} onDelete={this.handleDelete} />
 				<CommitDialog open={Attribute.is(target)} target={target as Attribute} onClose={this.handleCloseCommitDialog} />
-				<DeleteCommandDialog open={target instanceof Command} target={target as Command} onClose={this.handleCloseDeleteCommandDialog} />
+				<AmendDialog open={target instanceof Commit} target={target as Commit} onClose={this.handleCloseAmendDialog} />
 			</section>
 		</EvaluationProvider>
 	}
@@ -54,34 +54,34 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 		this.setState({ target });
 	}
 
-	private handleDelete(target: Command): void {
+	private handleDelete(target: Commit): void {
 		this.setState({ target });
 	}
 
 	private handleCloseCommitDialog(result?: CommitDialogResult): void {
 		if (result) {
-			this.addCommand(result.command);
+			this.addCommit(result.commit);
 		}
 
 		this.setState({ target: undefined });
 	}
 
-	private handleCloseDeleteCommandDialog(result?: DeleteCommandDialogResult): void {
+	private handleCloseAmendDialog(result?: AmendDialogResult): void {
 		if (result) {
-			this.deleteCommand(result.command);
+			this.deleteCommit(result.commit);
 		}
 
 		this.setState({ target: undefined });
 	}
 
-	private async addCommand(source: Command): Promise<void> {
+	private async addCommit(commit: Commit): Promise<void> {
 		const { dispatcher } = this.props;
 
 		const history = await this.getOrCreateHistory();
 
-		const command = source.set({ parent: history.head });
-		history.commit(command);
-		history.head = command.hash;
+		const newCommit = commit.set({ parent: history.head });
+		history.commit(newCommit);
+		history.head = newCommit.hash;
 
 		await dispatcher.history.update(history);
 	}
@@ -106,25 +106,25 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 		}
 	}
 
-	private async deleteCommand(command: Command): Promise<void> {
+	private async deleteCommit(commit: Commit): Promise<void> {
 		const { status, dispatcher } = this.props;
 
 		const history = status.context.history;
-		if (history && history.command(command.hash)) {
-			const rest: Command[] = [];
+		if (history && history.find(commit.hash)) {
+			const rest: Commit[] = [];
 			for (const current of history.trace()) {
-				if (current.hash === command.hash) break;
+				if (current.hash === commit.hash) break;
 				rest.push(current);
 			}
 
-			let parent = command.parent;
+			let parent = commit.parent;
 			for (let i = rest.length - 1; i >= 0; i--) {
-				const newCommand = new Command({
+				const newCommit = new Commit({
 					...rest[i],
 					parent,
 				});
-				history.commit(newCommand);
-				parent = newCommand.hash;
+				history.commit(newCommit);
+				parent = newCommit.hash;
 			}
 
 			history.head = parent;

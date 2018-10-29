@@ -160,11 +160,11 @@ export class HistoryEvaluator implements TerminalEvaluator {
 	public evaluate(context: EvaluationContext): any {
 		const { ref, time, request } = context;
 		if (this.supports(context)) {
-			const command = this.history.command(time);
-			if (command !== undefined) {
-				const prevValue = request(ref, command.parent);
+			const commit = this.history.find(time);
+			if (commit !== undefined) {
+				const prevValue = request(ref, commit.parent);
 				if (prevValue !== undefined) {
-					return command.operations
+					return commit.operations
 						.filter(x => x.target === ref.key)
 						.reduce((value, op) => op.apply(value), prevValue);
 				}
