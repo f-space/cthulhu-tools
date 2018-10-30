@@ -47,14 +47,18 @@ export class Flick extends React.Component<FlickProps> {
 	}
 
 	public render() {
-		const props = {
-			onPointerDown: this.handlePointerDown,
-			onPointerUp: this.handlePointerUp,
-			onPointerCancel: this.handlePointerCancel,
-			onPointerMove: this.handlePointerMove,
-		};
+		if (typeof PointerEvent !== undefined) {
+			const props = {
+				onPointerDown: this.handlePointerDown,
+				onPointerUp: this.handlePointerUp,
+				onPointerCancel: this.handlePointerCancel,
+				onPointerMove: this.handlePointerMove,
+			};
 
-		return this.props.children(props);
+			return this.props.children(props);
+		} else {
+			return this.props.children({} as any);
+		}
 	}
 
 	private handlePointerDown(event: React.PointerEvent<Element>): void {
