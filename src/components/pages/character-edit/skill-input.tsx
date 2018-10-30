@@ -28,11 +28,11 @@ export function SkillInput(props: SkillInputProps) {
 		<Field name={`${name}.id`} subscription={{ value: true }} render={({ input: { value: id } }) =>
 			<React.Fragment>
 				<div className={style['base']}>
-					<EvaluationText target={`@skill:${id}:base`} hash={null} />
+					{id && <EvaluationText target={`@skill:${id}:base`} hash={null} />}
 				</div>
 				<NumberInput className={style['points']} field={`${name}.points`} required min={0} max={99} step={1} />
 				<div className={style['value']}>
-					<EvaluationText target={`@skill:${id}`} hash={null} />
+					{id && <EvaluationText target={`@skill:${id}`} hash={null} />}
 				</div>
 			</React.Fragment>
 		} />
