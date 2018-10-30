@@ -56,8 +56,15 @@
 }
 
 .value {
+	position: relative;
 	overflow: hidden;
 	text-align: center;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+.points {
+	position: absolute;
+	right: 0;
+	opacity: 0.5;
 }

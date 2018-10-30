@@ -73,7 +73,14 @@ export function SkillSection({ status, edit, onEdit }: SkillSectionProps) {
 									return <div key={skill.uuid} className={classList} onClick={() => edit && onEdit(skill)}>
 										<dt className={style['name']}>{skill.name}</dt>
 										<dd className={style['value']}>
-											<EvaluationText target={`@skill:${skill.id}`} hash={hash} />
+											<span>
+												<EvaluationText target={`@skill:${skill.id}`} hash={hash} />
+											</span>
+											<span className={style['points']}>
+												<span>(</span>
+												<EvaluationText target={`@skill:${skill.id}:points`} hash={hash} />
+												<span>)</span>
+											</span>
 										</dd>
 									</div>
 								})
