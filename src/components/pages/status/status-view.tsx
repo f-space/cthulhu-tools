@@ -1,5 +1,5 @@
 import React from 'react';
-import { Status, Attribute, History, Commit } from "models/status";
+import { Status, Attribute, Skill, History, Commit } from "models/status";
 import { generateUUID } from "models/utility";
 import StatusDispatcher from "redux/dispatchers/status";
 import { EvaluationProvider } from "components/shared/decorators/evaluation";
@@ -18,7 +18,7 @@ export interface StatusViewProps {
 }
 
 interface StatusViewState {
-	target?: Attribute | Commit;
+	target?: Attribute | Skill | Commit;
 }
 
 export class StatusView extends React.Component<StatusViewProps, StatusViewState> {
@@ -34,7 +34,6 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 
 	public render() {
 		const { status, edit } = this.props;
-		const { target } = this.state;
 		const chain = status.chain;
 		const hash = status.current;
 
@@ -42,15 +41,29 @@ export class StatusView extends React.Component<StatusViewProps, StatusViewState
 			<section className={style['status']}>
 				<h3 className={style['name']}><EvaluationText target="@attr:name" hash={hash} /></h3>
 				<AttributeSection status={status} edit={edit} onEdit={this.handleEdit} />
-				<SkillSection status={status} />
+				<SkillSection status={status} edit={edit} onEdit={this.handleEdit} />
 				<HistorySection status={status} edit={edit} onDelete={this.handleDelete} />
-				<CommitDialog open={Attribute.is(target)} target={target as Attribute} onClose={this.handleCloseCommitDialog} />
-				<AmendDialog open={target instanceof Commit} target={target as Commit} onClose={this.handleCloseAmendDialog} />
+				{this.renderCommitDialog()}
+				{this.renderAmendDialog()}
 			</section>
 		</EvaluationProvider>
 	}
 
-	private handleEdit(target: Attribute): void {
+	private renderCommitDialog() {
+		const { target } = this.state;
+		const open = Attribute.is(target) || target instanceof Skill;
+
+		return <CommitDialog open={open} target={target as Attribute | Skill} onClose={this.handleCloseCommitDialog} />
+	}
+
+	private renderAmendDialog() {
+		const { target } = this.state;
+		const open = target instanceof Commit;
+
+		return <AmendDialog open={open} target={target as Commit} onClose={this.handleCloseAmendDialog} />
+	}
+
+	private handleEdit(target: Attribute | Skill): void {
 		this.setState({ target });
 	}
 

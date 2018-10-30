@@ -28,8 +28,20 @@
 }
 
 .skill {
-	border-bottom: dashed 1px $color-main-dark;
-	padding-bottom: 0.1em;
+	border: dashed 1px transparent;
+	border-bottom-color: $color-main-dark;
+	padding: 0.25em 0.5em 0.1em;
+
+	&.edit {
+		transition: border 0.5s;
+		border: solid 1px $color-main-dark;
+		border-radius: 0.5em;
+
+		&:hover {
+			background: $color-main-light;
+			cursor: pointer;
+		}
+	}
 }
 
 .name {

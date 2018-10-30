@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { EvaluationText } from "components/shared/primitives/evaluation-text";
 import { Status, Skill, SkillCategory } from "models/status";
 import { Section } from "./section";
@@ -46,9 +47,11 @@ function sort(groups: SkillGroup[]): SkillGroup[] {
 
 export interface SkillSectionProps {
 	status: Status;
+	edit: boolean;
+	onEdit(target: Skill): void;
 }
 
-export function SkillSection({ status }: SkillSectionProps) {
+export function SkillSection({ status, edit, onEdit }: SkillSectionProps) {
 	const hash = status.current;
 	const skills = status.context.profile.skills;
 	const groups = group(skills);
@@ -61,14 +64,19 @@ export function SkillSection({ status }: SkillSectionProps) {
 						<h5 className={style['category']}>{CATEGORY_NAME[group.category]}</h5>
 						<dl className={style['group']}>
 							{
-								group.skills.map(skill =>
-									<div key={skill.uuid} className={style['skill']}>
+								group.skills.map(skill => {
+									const classList = classNames(
+										style['skill'],
+										{ [style['edit']]: edit },
+									);
+
+									return <div key={skill.uuid} className={classList} onClick={() => edit && onEdit(skill)}>
 										<dt className={style['name']}>{skill.name}</dt>
 										<dd className={style['value']}>
 											<EvaluationText target={`@skill:${skill.id}`} hash={hash} />
 										</dd>
 									</div>
-								)
+								})
 							}
 						</dl>
 					</React.Fragment>

@@ -1,11 +1,17 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
 import classNames from "classnames";
-import { Attribute, AttributeType, Commit, Operation, Expression } from "models/status";
+import { Attribute, AttributeType, Skill, Commit, Operation, Expression } from "models/status";
 import { TextInput, NumberInput, Radio } from "components/shared/widgets/input";
 import { Button, SubmitButton } from "components/shared/widgets/button";
 import { Dialog } from "components/shared/templates/dialog";
 import style from "./commit-dialog.scss";
+
+enum TargetType {
+	Integer = 'integer',
+	Number = 'number',
+	Text = 'text',
+}
 
 export interface CommitDialogResult {
 	commit: Commit;
@@ -13,7 +19,7 @@ export interface CommitDialogResult {
 
 export interface CommitDialogProps {
 	open: boolean;
-	target: Attribute;
+	target: Attribute | Skill;
 	onClose: (result?: CommitDialogResult) => void;
 }
 
@@ -27,12 +33,13 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 
 	public render() {
 		const { open, target } = this.props;
+		const type = this.getTargetType(target);
 
 		return <Dialog open={open} header={"Commit"}>
 			{
 				() => <Form initialValues={{ mode: 'set' }} onSubmit={this.handleSubmit} render={({ handleSubmit, invalid }) =>
 					<form onSubmit={handleSubmit}>
-						<div className={classNames(style['inputs'], style[target.type])}>
+						<div className={classNames(style['inputs'], style[type])}>
 							<div className={style['name']}>{target.name}</div>
 							<div className={style['methods']}>
 								<div className={classNames(style['method'], style['set'])}>
@@ -42,7 +49,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 									</div>
 									<div className={style['value']}>
 										<Field name="mode" subscription={{ value: true }} render={({ input: { value } }) =>
-											this.renderInput(target, "set.value", value !== 'set')
+											this.renderInput(type, "set.value", value !== 'set')
 										} />
 									</div>
 								</div>
@@ -53,7 +60,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 									</div>
 									<div className={style['value']}>
 										<Field name="mode" subscription={{ value: true }} render={({ input: { value } }) =>
-											this.renderInput(target, "add.value", value !== 'add')
+											this.renderInput(type, "add.value", value !== 'add')
 										} />
 									</div>
 								</div>
@@ -71,7 +78,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 													validate: value => Expression.parse(value) ? undefined : "無効な式",
 												}}
 												placeholder={
-													target.type !== AttributeType.Text
+													type !== TargetType.Text
 														? "e.g. floor(($_ + 1) * 2 / 3)"
 														: "e.g. \"{$_}abc{1 + 1}\""
 												}
@@ -97,16 +104,16 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 		</Dialog >
 	}
 
-	private renderInput(attribute: Attribute, field: string, disabled: boolean) {
-		switch (attribute.type) {
-			case AttributeType.Integer: return <NumberInput field={field} disabled={disabled} required step="1" />
-			case AttributeType.Number: return <NumberInput field={field} disabled={disabled} required />
-			case AttributeType.Text: return <TextInput field={field} disabled={disabled} autoComplete="off" />
+	private renderInput(type: TargetType, field: string, disabled: boolean) {
+		switch (type) {
+			case TargetType.Integer: return <NumberInput field={field} disabled={disabled} required step="1" />
+			case TargetType.Number: return <NumberInput field={field} disabled={disabled} required />
+			case TargetType.Text: return <TextInput field={field} disabled={disabled} autoComplete="off" />
 		}
 	}
 
 	private handleSubmit(values: any): void {
-		const target = `@attr:${this.props.target.id}`;
+		const target = this.getTargetRef(this.props.target);
 		const commit = this.createCommit(target, values);
 
 		this.props.onClose({ commit });
@@ -114,6 +121,25 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 
 	private handleClick(event: React.MouseEvent<HTMLButtonElement>): void {
 		this.props.onClose();
+	}
+
+	private getTargetType(target: Attribute | Skill): TargetType {
+		if (Attribute.is(target)) {
+			switch (target.type) {
+				case AttributeType.Integer: return TargetType.Integer;
+				case AttributeType.Number: return TargetType.Number;
+				case AttributeType.Text: return TargetType.Text;
+				default: throw new Error('unreachable code.');
+			}
+		} else {
+			return TargetType.Integer;
+		}
+	}
+
+	private getTargetRef(target: Attribute | Skill): string {
+		return Attribute.is(target)
+			? `@attr:${target.id}`
+			: `@skill:${target.id}:points`;
 	}
 
 	private createCommit(target: string, values: any): Commit {
