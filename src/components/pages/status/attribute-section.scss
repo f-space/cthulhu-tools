@@ -11,7 +11,7 @@
 .attribute {
 	border: dashed 1px transparent;
 	border-bottom-color: $color-main-dark;
-	padding: 0.25em 0.5em 0.1em;
+	padding: 0.25em 0.5em;
 
 	&.integer { grid-column: span 1; }
 	&.number { grid-column: span 1; }
@@ -22,12 +22,13 @@
 	&.id-occupation { grid-column: span 2; }
 
 	&.edit {
-		transition: border 0.5s;
+		transition: border 0.5s, background-color 0.5s;
 		border: solid 1px $color-main-dark;
 		border-radius: 0.5em;
+		background-color: rgba($color-main, 0.1);
 
 		&:hover {
-			background: $color-main-light;
+			background-color: $color-main-light;
 			cursor: pointer;
 		}
 	}
