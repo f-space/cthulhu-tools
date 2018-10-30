@@ -77,8 +77,8 @@ export class CharacterManagementTemplate extends React.Component<CharacterManage
 				{ value: "delete", disabled: !some, children: "削除" },
 				{ value: "clone", disabled: !some, children: "複製" },
 				{ value: "edit", disabled: !single, children: "編集" },
-				{ value: "import", disabled: false, children: "読込み" },
-				{ value: "export", disabled: !some, children: "書出し" },
+				// { value: "import", disabled: false, children: "読込み" },
+				// { value: "export", disabled: !some, children: "書出し" },
 			]} />
 		}} />
 	}
