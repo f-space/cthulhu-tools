@@ -1,8 +1,0 @@
-page-template#dice
-	template(slot="title")
-		h2 ダイスロール
-	dice-view.dice-view(ref="view", :dices="dices", v-model="faces")
-	.dice-set-list
-		.dice-set(:class="{active: type === CUSTOM_TYPE}", @click="openCustomDiceDialog") custom
-		.dice-set(:class="{active: type === preset}", @click="type = preset", v-for="preset in presets") {{ preset }}
-	button.roll-button(type="button", @click="roll") Roll

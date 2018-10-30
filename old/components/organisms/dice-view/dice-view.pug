@@ -1,6 +1,0 @@
-.dice-view
-	template(v-if="dices.length > 0")
-		dice-layout.dice-layout(:layout="layout", :display="display")
-			.dice-group(slot-scope="props")
-				dice-image.dice(v-for="(dice, index) in props.group", :key="index", :type="dice.type", :face="dice.face")
-		dice-number-display.dice-number(:digits="digits", :value="value",:critical="critical", :fumble="fumble")
