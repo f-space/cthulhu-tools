@@ -20,12 +20,15 @@
 }
 
 .message {
+	overflow: hidden;
 	font-size: 1rem;
+	overflow-wrap: break-word;
 }
 
 .summary {
 	opacity: 0.5;
 	margin-left: 3em;
+	word-break: break-all;
 	font-size: 80%;
 }
 
