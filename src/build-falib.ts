@@ -8,6 +8,7 @@ export default function build() {
 		icons.faDice,
 		icons.faEdit,
 		icons.faList,
+		icons.faMinus,
 		icons.faPlus,
 		icons.faTrashAlt,
 		icons.faUsers,

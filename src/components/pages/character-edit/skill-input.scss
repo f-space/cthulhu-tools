@@ -1,29 +1,13 @@
 .skill {
-	display: flex;
-	flex-flow: row nowrap;
+	display: grid;
+	grid-template-columns: 2fr minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr);
 	align-items: center;
-	margin-top: 1ex;
-}
-
-.id {
-	flex: 1 1 8em;
 }
 
 .base {
-	flex: 1 0 4ex;
 	text-align: center;
-
-	&::before {
-		content: "+";
-	}
-}
-
-.points {
-	flex: 0.5 0 auto;
-	width: 3ex;
 }
 
 .value {
-	flex: 1 0 4ex;
 	text-align: center;
 }

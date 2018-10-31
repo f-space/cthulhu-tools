@@ -51,24 +51,16 @@ export class CharacterEditTemplate extends React.Component<CharacterEditTemplate
 				subscription={{}}
 				onSubmit={this.handleSubmit}
 				render={({ handleSubmit }) =>
-					<form className={style['entry']} onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit}>
 						<Field name="chain" subscription={{ value: true }} render={({ input: { value } }) =>
 							<Resolver.Provider value={value.resolver}>
 								<EvaluationProvider chain={value}>
-									<section className={style['attributes']}>
-										<header><h3>能力値</h3></header>
+									<section className={style['section']}>
 										<AttributeParamsEdit name="attributes" attributes={attributes} />
 									</section>
-									<section className={style['skills']}>
-										<header><h3>技能</h3></header>
+									<section className={style['section']}>
+										<h3 className={style['heading']}>技能</h3>
 										<SkillParamsEdit name="skills" skills={skills} />
-									</section>
-									<section className={style['items']}>
-										<header><h3>所持品</h3></header>
-										<div className={style['commands']}>
-											<Button>追加</Button>
-											<Button>削除</Button>
-										</div>
 									</section>
 									<div className={style['actions']}>
 										<FormSpy subscription={{ valid: true, submitting: true }} render={({ valid, submitting }) =>
@@ -85,7 +77,7 @@ export class CharacterEditTemplate extends React.Component<CharacterEditTemplate
 	}
 
 	private handleSubmit(values: object): Promise<void> {
-		const { attributes, skills } = values as FormValues;
+		const { attributes = {}, skills } = values as FormValues;
 		const attribute = AttributeParams.from(attributes);
 		const skill = new SkillParams(skills.reduce((map, { id, points }) => map.set(id, points), new Map<string, number>()));
 		const params = new CharacterParams({ attribute, skill });
@@ -135,8 +127,9 @@ export class CharacterEditTemplate extends React.Component<CharacterEditTemplate
 				const values = state.values as FormValues;
 
 				if (["attributes", "skills"].some(key => getIn(values, key) !== getIn(prev, key))) {
-					const attribute = AttributeParams.from(values.attributes);
-					const skill = new SkillParams(values.skills.reduce((map, { id, points }) => map.set(id, points), new Map<string, number>()));
+					const { attributes = {}, skills } = values as FormValues;
+					const attribute = AttributeParams.from(attributes);
+					const skill = new SkillParams(skills.reduce((map, { id, points }) => map.set(id, points), new Map<string, number>()));
 					const params = new CharacterParams({ attribute, skill });
 					const chain = this.buildChain(params);
 

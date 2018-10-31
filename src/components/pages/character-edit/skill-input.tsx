@@ -21,18 +21,18 @@ export function SkillInput(props: SkillInputProps) {
 	const { name, skills, className, ...rest } = props;
 
 	return <div {...rest} className={classNames(className, style['skill'])}>
-		<Select className={style['id']} field={`${name}.id`} required >
+		<Select field={`${name}.id`} required >
 			<option value="">未選択</option>
 			{skills.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
 		</Select>
 		<Field name={`${name}.id`} subscription={{ value: true }} render={({ input: { value: id } }) =>
 			<React.Fragment>
 				<div className={style['base']}>
-					{id && <EvaluationText target={`@skill:${id}:base`} hash={null} />}
+					{id ? <EvaluationText target={`@skill:${id}:base`} hash={null} /> : 0}
 				</div>
-				<NumberInput className={style['points']} field={`${name}.points`} required min={0} max={99} step={1} />
+				<NumberInput field={`${name}.points`} required min={0} max={99} step={1} />
 				<div className={style['value']}>
-					{id && <EvaluationText target={`@skill:${id}`} hash={null} />}
+					{id ? <EvaluationText target={`@skill:${id}`} hash={null} /> : 0}
 				</div>
 			</React.Fragment>
 		} />

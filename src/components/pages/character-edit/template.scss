@@ -1,23 +1,12 @@
-.entry {
-	header {
-		margin-top: 2ex;
-		text-align: center;
-	}
-}
-
-.attributes {
+.section {
 	display: flex;
 	flex-flow: column nowrap;
+	margin: 2em 0;
 }
 
-.skills {
-	display: flex;
-	flex-flow: column nowrap;
-}
-
-.items {
-	display: flex;
-	flex-flow: column nowrap;
+.heading {
+	margin: 1em 0;
+	text-align: center;
 }
 
 .actions {
