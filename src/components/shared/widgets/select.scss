@@ -1,6 +1,23 @@
 @import "variable";
 
 .select {
+	appearance: none;
+	outline: none;
+	border: solid 1px $color-main-dark;
+	border-radius: 0.5em;
+	background: transparent;
+	cursor: pointer;
+	padding: 0.25em 0.5em;
+	min-width: 0;
+
+	&:invalid {
+		background: rgba($color-main, 0.25);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+	}
+
 	option {
 		background: $color-background;
 	}
