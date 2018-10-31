@@ -98,8 +98,9 @@ export class SkillValidator implements TerminalValidator {
 			switch (property.type) {
 				case 'skill':
 				case 'skill:base':
-				case 'skill:points':
 					return Math.round(Math.max(Math.min(value, this.max), this.min));
+				case 'skill:points':
+					return Math.round(value);
 			}
 		}
 		return undefined;
