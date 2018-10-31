@@ -211,9 +211,9 @@
 		"type": "integer",
 		"inputs": [],
 		"expression": "pow * 5",
-		"view": true,
 		"min": "0",
-		"max": "99"
+		"max": "99",
+		"view": true
 	},
 	{
 		"uuid": "1b019781-7587-4c29-89a0-178905d1d4fb",
@@ -223,7 +223,8 @@
 		"inputs": [],
 		"expression": "int * 5",
 		"min": "0",
-		"max": "99"
+		"max": "99",
+		"view": true
 	},
 	{
 		"uuid": "17a74eab-616a-4b28-8bd2-ff90a403a26a",
@@ -233,7 +234,8 @@
 		"inputs": [],
 		"expression": "pow * 5",
 		"min": "0",
-		"max": "99"
+		"max": "99",
+		"view": true
 	},
 	{
 		"uuid": "4cccd989-c6b5-41ab-a99b-f7331985e5bf",
@@ -243,7 +245,8 @@
 		"inputs": [],
 		"expression": "edu * 5",
 		"min": "0",
-		"max": "99"
+		"max": "99",
+		"view": true
 	},
 	{
 		"uuid": "eb2ec402-fbe2-46bc-9dcc-9b171bc7d080",
@@ -253,7 +256,8 @@
 		"inputs": [],
 		"expression": "str + siz",
 		"min": "0",
-		"max": "99"
+		"max": "99",
+		"view": true
 	},
 	{
 		"uuid": "01e9829a-6353-4278-bbde-bd572a852dd5",
@@ -263,7 +267,8 @@
 		"inputs": [],
 		"expression": "edu * 20",
 		"min": "0",
-		"max": "999"
+		"max": "999",
+		"view": true
 	},
 	{
 		"uuid": "61d7fbac-01e2-4b6e-acad-d676402bfdf3",
@@ -273,6 +278,7 @@
 		"inputs": [],
 		"expression": "int * 10",
 		"min": "0",
-		"max": "999"
+		"max": "999",
+		"view": true
 	}
 ]
