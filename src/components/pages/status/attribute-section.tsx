@@ -19,14 +19,16 @@ export function AttributeSection({ status, edit, onEdit }: AttributeSectionProps
 		<dl className={style['attributes']}>
 			{
 				attributes.map(attribute => {
+					const editable = edit && !attribute.view;
 					const classList = classNames(
 						style['attribute'],
 						style[attribute.type],
 						style[`id-${attribute.id}`],
 						{ [style['edit']]: edit },
+						{ [style['editable']]: editable },
 					);
 
-					return <div key={attribute.uuid} className={classList} onClick={() => edit && onEdit(attribute)}>
+					return <div key={attribute.uuid} className={classList} onClick={() => editable && onEdit(attribute)}>
 						<dt className={style['name']}>{attribute.name}</dt>
 						<dd className={style['value']}>
 							<EvaluationText target={`@attr:${attribute.id}`} hash={hash} />

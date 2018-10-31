@@ -25,7 +25,12 @@
 		transition: border 0.5s, background-color 0.5s;
 		border: solid 1px $color-main-dark;
 		border-radius: 0.5em;
+		filter: blur(1px);
+	}
+
+	&.editable {
 		background-color: rgba($color-main, 0.1);
+		filter: none;
 
 		&:hover {
 			background-color: $color-main-light;
