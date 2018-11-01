@@ -18,7 +18,13 @@
 		opacity: 0.5;
 	}
 
+	optgroup {
+		background: $color-main-dark;
+		color: $color-text;
+	}
+
 	option {
 		background: $color-background;
+		color: $color-text;
 	}
 }
