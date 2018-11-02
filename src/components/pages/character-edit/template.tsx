@@ -44,7 +44,7 @@ export class CharacterEditTemplate extends React.Component<CharacterEditTemplate
 		const { attributes, skills } = this.props;
 		const initialValues = this.makeInitialValues();
 
-		return <Page id="character-edit" heading="キャラクター編集" pageTitle>
+		return <Page heading="キャラクター編集" pageTitle>
 			<Form initialValues={initialValues}
 				decorators={this.decorators}
 				mutators={{ ...arrayMutators }}

@@ -17,13 +17,13 @@ export interface Navigation {
 	icon: FontAwesomeIconProps['icon'];
 }
 
-export function Page({ id, className, heading, pageTitle, navs, flexible, children, ...rest }: PageProps) {
+export function Page({ className, heading, pageTitle, navs, flexible, children, ...rest }: PageProps) {
 	const title = typeof pageTitle !== 'boolean'
 		? pageTitle
 		: (pageTitle ? heading : null);
 
 	return <DocumentTitle title={title}>
-		<div {...rest} id={id} className={classNames(className, style['page'], { [style['flexible']]: flexible })}>
+		<div {...rest} className={classNames(className, style['page'], { [style['flexible']]: flexible })}>
 			<header className={style['header']}>
 				<h2 className={style['heading']}>{heading}</h2>
 			</header>

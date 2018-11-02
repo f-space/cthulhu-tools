@@ -42,7 +42,7 @@ export class CharacterManagementTemplate extends React.Component<CharacterManage
 	public render() {
 		const initialValues = { selection: [] };
 
-		return <Page id="character-management" heading="キャラクター管理" navs={NAVS} pageTitle flexible>
+		return <Page heading="キャラクター管理" navs={NAVS} pageTitle flexible>
 			<Form initialValues={initialValues} onSubmit={this.handleSubmit} render={({ handleSubmit }) =>
 				<form className={style['form']} onSubmit={handleSubmit}>
 					{this.renderCharacters()}

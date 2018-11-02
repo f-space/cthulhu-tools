@@ -39,7 +39,7 @@ export class StatusTemplate extends React.Component<StatusTemplateProps, StatusT
 		const { statusList, dispatcher } = this.props;
 		const { edit } = this.state;
 
-		return <Page id="status" heading="ステータス" navs={NAVS} pageTitle>
+		return <Page heading="ステータス" navs={NAVS} pageTitle>
 			<Carousel models={statusList} wrap={true}>
 				{
 					context => <div className={style['container']}>
