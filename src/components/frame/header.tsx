@@ -12,7 +12,7 @@ export function Header(props: HeaderProps) {
 	return <header {...rest} className={classNames(className, style['header'])}>
 		<h1 className={style['title']}>
 			<Route path={HOME_PATH} children={({ match }) =>
-				<Link className={style['title-text']} to={HOME_PATH} replace={Boolean(match)}>Cthulhu Tools</Link>
+				<Link className={style['title-text']} to={HOME_PATH} replace={match && match.isExact}>Cthulhu Tools</Link>
 			} />
 		</h1>
 	</header>
