@@ -1,3 +1,4 @@
+import 'blueimp-canvas-to-blob';
 import DICE_IMAGE_URL from "assets/image/dice.png";
 import DICE_IMAGE_LAYOUT_URL from "assets/image/dice.json";
 import DICE_SOUND_URL from "assets/audio/dice.wav";
@@ -124,11 +125,7 @@ export class DiceImageManager {
 				context.drawImage(image, x, y, w, h, 0, 0, canvas.width, canvas.height);
 			}
 
-			if (canvas.toBlob) {
-				canvas.toBlob(blob => { resolve(blob ? URL.createObjectURL(blob) : "") });
-			} else if (canvas.msToBlob) {
-				resolve(URL.createObjectURL(canvas.msToBlob()));
-			}
+			canvas.toBlob(blob => { resolve(blob ? URL.createObjectURL(blob) : "") });
 		});
 	}
 }
