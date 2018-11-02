@@ -4,7 +4,9 @@ html
 		title クトゥルフTRPG ツール
 		meta(charset="utf-8")
 		if process.env.NODE_ENV === 'production'
-			meta(http-equiv="Content-Security-Policy", content="default-src 'self' blob:; style-src 'self' 'unsafe-inline'")
+			meta(
+				http-equiv="Content-Security-Policy",
+				content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob:; media-src 'self' blob:")
 		meta(name="description", content="クトゥルフTRPGのためのツール。ダイスやステータス管理など。")
 		meta(name="author", content="F_")
 		meta(name="viewport", content="width=device-width, initial-scale=1")
