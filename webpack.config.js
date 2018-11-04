@@ -3,8 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
-const TsConfigPlugin = require("./tsconfig-webpack-plugin");
-const SourceMapFixPlugin = require("./source-map-fix-webpack-plugin");
+const TsConfigPlugin = require("./webpack-ext/tsconfig-webpack-plugin");
+const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
 module.exports = function (env, { mode }) {
 
@@ -54,7 +54,7 @@ module.exports = function (env, { mode }) {
 				},
 				{
 					test: /\.jsx\.pug$/,
-					use: require.resolve("./jsx-pug-loader")
+					use: require.resolve("./webpack-ext/jsx-pug-loader")
 				},
 				{
 					test: /\.tsx?$/,
@@ -80,7 +80,7 @@ module.exports = function (env, { mode }) {
 				},
 				{
 					test: /LICENSE$/,
-					loader: "./license-loader",
+					loader: "./webpack-ext/license-loader",
 				}
 			]
 		},
