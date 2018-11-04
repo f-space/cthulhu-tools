@@ -87,6 +87,7 @@ module.exports = function (env, { mode }) {
 		resolve: {
 			extensions: [".tsx", ".ts", ".js", ".json"],
 			alias: {
+				"project": __dirname,
 				"assets": path.resolve(__dirname, "docs")
 			},
 			plugins: [
