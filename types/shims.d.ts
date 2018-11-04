@@ -9,17 +9,7 @@ declare module "*.scss" {
 	export default styles;
 }
 
-declare module "*.png" {
-	const url: string;
-	export default url;
-}
-
-declare module "*.wav" {
-	const url: string;
-	export default url;
-}
-
-declare module "*.json" {
+declare module "assets/*" {
 	const url: string;
 	export default url;
 }

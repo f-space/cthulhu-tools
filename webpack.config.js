@@ -68,7 +68,8 @@ module.exports = function (env, { mode }) {
 					loader: cssLoader
 				},
 				{
-					test: /\.(png|wav|json)/,
+					test: /(?<!\.(?:html|css|js))$/,
+					include: [path.resolve(__dirname, "docs")],
 					type: 'javascript/auto',
 					loader: "file-loader",
 					options: {
