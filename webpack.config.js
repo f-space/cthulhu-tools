@@ -77,6 +77,10 @@ module.exports = function (env, { mode }) {
 						outputPath: url => path.relative("docs", url),
 						emitFile: false
 					}
+				},
+				{
+					test: /LICENSE$/,
+					loader: "./license-loader",
 				}
 			]
 		},
