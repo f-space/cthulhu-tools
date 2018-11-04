@@ -1,10 +1,8 @@
 import React from 'react';
 import { HomeTemplate } from "./template";
-import HomeContent from "./page.jsx.pug";
-import style from "./page.scss";
+import Summary from "./summary.jsx.pug";
+import Caveat from "./caveat.jsx.pug";
 
 export function HomePage() {
-	return <HomeTemplate>
-		<HomeContent {...style} />
-	</HomeTemplate>
+	return <HomeTemplate summary={Summary} caveat={Caveat} />
 }
