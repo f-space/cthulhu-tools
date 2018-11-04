@@ -1,0 +1,292 @@
+[
+	{
+		"name": "@babel/runtime",
+		"owner": "Sebastian McKenzie and other contributors",
+		"licenses": "MIT"
+	},
+	{
+		"name": "@fortawesome/fontawesome-common-types",
+		"owner": "Fonticons, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "@fortawesome/fontawesome-svg-core",
+		"owner": "Fonticons, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "@fortawesome/free-solid-svg-icons",
+		"owner": "Fonticons, Inc.",
+		"licenses": "(CC-BY-4.0 AND MIT)"
+	},
+	{
+		"name": "@fortawesome/react-fontawesome",
+		"owner": "Fonticons, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "array-buffer-from-string",
+		"owner": "Linus Unnebäck",
+		"licenses": "MIT"
+	},
+	{
+		"name": "asap",
+		"owner": "Contributors",
+		"licenses": "MIT"
+	},
+	{
+		"name": "blueimp-canvas-to-blob",
+		"owner": "Sebastian Tschan",
+		"licenses": "MIT"
+	},
+	{
+		"name": "classnames",
+		"owner": "Jed Watson",
+		"licenses": "MIT"
+	},
+	{
+		"name": "core-js",
+		"owner": "Denis Pushkarev",
+		"licenses": "MIT"
+	},
+	{
+		"name": "dexie",
+		"owner": "David Fahlander",
+		"licenses": "Apache-2.0"
+	},
+	{
+		"name": "encoding",
+		"owner": "Andris Reinman",
+		"licenses": "MIT"
+	},
+	{
+		"name": "fbjs",
+		"owner": "Facebook, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "final-form-arrays",
+		"owner": "Erik Rasmussen",
+		"licenses": "MIT"
+	},
+	{
+		"name": "final-form",
+		"owner": "Erik Rasmussen",
+		"licenses": "MIT"
+	},
+	{
+		"name": "fmix",
+		"owner": "Linus Unnebäck",
+		"licenses": "MIT"
+	},
+	{
+		"name": "history",
+		"owner": "Michael Jackson",
+		"licenses": "MIT"
+	},
+	{
+		"name": "hoist-non-react-statics",
+		"owner": "Yahoo! Inc.",
+		"licenses": "BSD-3-Clause"
+	},
+	{
+		"name": "humps",
+		"owner": "Dom Christie",
+		"licenses": "MIT"
+	},
+	{
+		"name": "iconv-lite",
+		"owner": "Alexander Shtuchkin",
+		"licenses": "MIT"
+	},
+	{
+		"name": "immutable",
+		"owner": "Facebook, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "imul",
+		"owner": "Sindre Sorhus",
+		"licenses": "MIT"
+	},
+	{
+		"name": "invariant@2.2.2",
+		"owner": "Andres Suarez",
+		"licenses": "BSD-3-Clause"
+	},
+	{
+		"name": "invariant",
+		"owner": "Facebook, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "is-stream",
+		"owner": "Sindre Sorhus",
+		"licenses": "MIT"
+	},
+	{
+		"name": "isarray",
+		"owner": "Julian Gruber",
+		"licenses": "MIT"
+	},
+	{
+		"name": "isomorphic-fetch",
+		"owner": "Matt Andrews",
+		"licenses": "MIT"
+	},
+	{
+		"name": "js-tokens",
+		"owner": "Simon Lydell",
+		"licenses": "MIT"
+	},
+	{
+		"name": "loose-envify",
+		"owner": "Andres Suarez",
+		"licenses": "MIT"
+	},
+	{
+		"name": "memoize-one",
+		"owner": "Alexander Reardon",
+		"licenses": "MIT"
+	},
+	{
+		"name": "murmur-128",
+		"owner": "Linus Unnebäck",
+		"licenses": "MIT"
+	},
+	{
+		"name": "node-fetch",
+		"owner": "David Frank",
+		"licenses": "MIT"
+	},
+	{
+		"name": "object-assign",
+		"owner": "Sindre Sorhus",
+		"licenses": "MIT"
+	},
+	{
+		"name": "path-to-regexp",
+		"owner": "Blake Embrey",
+		"licenses": "MIT"
+	},
+	{
+		"name": "promise",
+		"owner": "Forbes Lindesay",
+		"licenses": "MIT"
+	},
+	{
+		"name": "prop-types",
+		"owner": "Facebook, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react-dom",
+		"owner": "Facebook, Inc. and its affiliates",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react-final-form-arrays",
+		"owner": "Erik Rasmussen",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react-final-form",
+		"owner": "Erik Rasmussen",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react-is",
+		"owner": "Facebook, Inc. and its affiliates",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react-lifecycles-compat",
+		"owner": "Facebook, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react-redux",
+		"owner": "Dan Abramov",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react-router-dom",
+		"owner": "React Training",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react-router",
+		"owner": "React Training",
+		"licenses": "MIT"
+	},
+	{
+		"name": "react",
+		"owner": "Facebook, Inc. and its affiliates",
+		"licenses": "MIT"
+	},
+	{
+		"name": "redux",
+		"owner": "Dan Abramov",
+		"licenses": "MIT"
+	},
+	{
+		"name": "regenerator-runtime",
+		"owner": "Facebook, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "reselect",
+		"owner": "Reselect Contributors",
+		"licenses": "MIT"
+	},
+	{
+		"name": "resolve-pathname",
+		"owner": "Michael Jackson",
+		"licenses": "MIT"
+	},
+	{
+		"name": "ress",
+		"owner": "Filipe Linhares",
+		"licenses": "MIT"
+	},
+	{
+		"name": "scheduler",
+		"owner": "Facebook, Inc. and its affiliates",
+		"licenses": "MIT"
+	},
+	{
+		"name": "setimmediate",
+		"owner": "Barnesandnoble.com, llc, Donavon West, and Domenic Denicola",
+		"licenses": "MIT"
+	},
+	{
+		"name": "symbol-observable",
+		"owner": "Sindre Sorhus",
+		"licenses": "MIT"
+	},
+	{
+		"name": "ua-parser-js",
+		"owner": "Faisal Salman",
+		"licenses": "(GPL-2.0 OR MIT)"
+	},
+	{
+		"name": "value-equal",
+		"owner": "Michael Jackson",
+		"licenses": "MIT"
+	},
+	{
+		"name": "warning@3.0.0",
+		"owner": "Facebook, Inc.",
+		"licenses": "BSD-3-Clause"
+	},
+	{
+		"name": "warning",
+		"owner": "Facebook, Inc.",
+		"licenses": "MIT"
+	},
+	{
+		"name": "whatwg-fetch",
+		"owner": "GitHub, Inc.",
+		"licenses": "MIT"
+	}
+]
