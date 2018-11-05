@@ -15,7 +15,6 @@ module.exports = function (env, { mode }) {
 		{
 			loader: 'css-loader',
 			options: {
-				url: false,
 				modules: true,
 				importLoaders: 2,
 				...(production ? {} : { sourceMap: true })
