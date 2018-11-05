@@ -74,7 +74,7 @@ module.exports = function (env, { mode }) {
 					loader: "file-loader",
 					options: {
 						name: "[path][name].[ext]",
-						outputPath: url => path.relative("docs", url),
+						outputPath: url => path.relative("docs", url).replace(/\\/g, "/"),
 						emitFile: false
 					}
 				},
