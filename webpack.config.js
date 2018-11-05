@@ -44,7 +44,8 @@ module.exports = function (env, { mode }) {
 		},
 		output: {
 			path: path.resolve(__dirname, "docs"),
-			filename: "[name].js"
+			filename: "[name].js",
+			publicPath: "/cthulhu-tools/"
 		},
 		module: {
 			rules: [
@@ -100,7 +101,12 @@ module.exports = function (env, { mode }) {
 			]
 		},
 		devServer: {
-			contentBase: "docs"
+			contentBase: path.resolve(__dirname, "docs"),
+			publicPath: "/cthulhu-tools/",
+			before: function (app) {
+				const express = require('express');
+				app.use("/cthulhu-tools/", express.static(path.resolve(__dirname, "docs")));
+			}
 		},
 		plugins: [
 			new MiniCssExtractPlugin({
