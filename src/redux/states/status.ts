@@ -6,7 +6,7 @@ import { SkillState, INITIAL_SKILL_STATE } from "redux/states/skill";
 import { ItemState, INITIAL_ITEM_STATE } from "redux/states/item";
 import { HistoryState, INITIAL_HISTORY_STATE } from "redux/states/history";
 
-export type LoadState = 'unloaded' | 'loading' | 'loaded';
+export type LoadState = 'unloaded' | 'loading' | 'loaded' | 'error';
 
 export interface StatusState {
 	view: ViewState;

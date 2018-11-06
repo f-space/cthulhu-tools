@@ -31,17 +31,25 @@ export default class StatusDispatcher {
 	public async load(): Promise<void> {
 		this.dispatch(StatusAction.setLoadState('loading'));
 
-		await Promise.all([
-			this.view.load(),
-			this.character.load(),
-			this.profile.load(),
-			this.attribute.load(),
-			this.skill.load(),
-			this.item.load(),
-			this.history.load(),
-			CacheStorage.load(),
-		]);
+		if (window.indexedDB) {
+			try {
+				await Promise.all([
+					this.view.load(),
+					this.character.load(),
+					this.profile.load(),
+					this.attribute.load(),
+					this.skill.load(),
+					this.item.load(),
+					this.history.load(),
+					CacheStorage.load(),
+				]);
 
-		this.dispatch(StatusAction.setLoadState('loaded'));
+				this.dispatch(StatusAction.setLoadState('loaded'));
+			} catch (e) {
+				this.dispatch(StatusAction.setLoadState('error'));
+			}
+		} else {
+			this.dispatch(StatusAction.setLoadState('error'));
+		}
 	}
 }

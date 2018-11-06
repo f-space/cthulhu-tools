@@ -7,3 +7,14 @@
 	width: 10vh;
 	height: 10vh;
 }
+
+.hint {
+	opacity: 0.5;
+	width: 80%;
+	text-align: center;
+	line-height: 1.6;
+
+	p {
+		margin: 1em 0;
+	}
+}

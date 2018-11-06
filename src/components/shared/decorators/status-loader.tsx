@@ -5,8 +5,23 @@ import { LoadState } from "redux/states/status";
 import { getLoadState } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
 
+export enum StatusLoadState {
+	Loading,
+	Done,
+	Error,
+}
+
 export interface StatusLoaderProps {
-	children: (loaded: boolean) => React.ReactNode;
+	children: (state: StatusLoadState) => React.ReactNode;
+}
+
+function toStatusLoadState(state: LoadState): StatusLoadState {
+	switch (state) {
+		case 'unloaded': return StatusLoadState.Loading;
+		case 'loading': return StatusLoadState.Loading;
+		case 'loaded': return StatusLoadState.Done;
+		case 'error': return StatusLoadState.Error;
+	}
 }
 
 interface StatusLoaderInternalProps extends StatusLoaderProps {
@@ -26,7 +41,7 @@ class StatusLoaderInternal extends React.Component<StatusLoaderInternalProps> {
 	public render() {
 		const { state, children } = this.props;
 
-		return children(state === 'loaded');
+		return children(toStatusLoadState(state));
 	}
 }
 
