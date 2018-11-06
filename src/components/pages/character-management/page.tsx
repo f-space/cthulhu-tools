@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { DataProvider, DataCollector, Status } from "models/status";
@@ -5,7 +6,7 @@ import IDBCache from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
-import { loadStatus } from "components/shared/decorators/status-loader";
+import { StatusGuard } from "components/shared/templates/status-guard";
 import { CharacterManagementTemplate, CharacterManagementTemplateProps } from "./template";
 
 interface StateProps {
@@ -17,7 +18,7 @@ interface DispatchProps {
 	dispatcher: StatusDispatcher;
 }
 
-interface OwnProps extends RouteComponentProps<{}> { }
+interface OwnProps extends RouteComponentProps { }
 
 function mapStateToProps(state: State): StateProps {
 	const provider = getDataProvider(state);
@@ -43,6 +44,9 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
 }
 
 const Connected = connect(mapStateToProps, mapDispatchToProps, mergeProps)(CharacterManagementTemplate);
-const StatusReady = loadStatus(Connected);
 
-export const CharacterManagementPage = StatusReady;
+export function CharacterManagementPage(props: RouteComponentProps) {
+	return <StatusGuard>
+		{() => <Connected {...props} />}
+	</StatusGuard>
+};

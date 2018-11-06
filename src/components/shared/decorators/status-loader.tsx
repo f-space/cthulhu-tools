@@ -5,7 +5,11 @@ import { LoadState } from "redux/states/status";
 import { getLoadState } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
 
-interface StatusLoaderInternalProps {
+export interface StatusLoaderProps {
+	children: (loaded: boolean) => React.ReactNode;
+}
+
+interface StatusLoaderInternalProps extends StatusLoaderProps {
 	state: LoadState;
 	dispatcher: StatusDispatcher;
 }
@@ -22,7 +26,7 @@ class StatusLoaderInternal extends React.Component<StatusLoaderInternalProps> {
 	public render() {
 		const { state, children } = this.props;
 
-		return (state === 'loaded' ? children : null);
+		return children(state === 'loaded');
 	}
 }
 
@@ -35,11 +39,3 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 }
 
 export const StatusLoader = connect(mapStateToProps, mapDispatchToProps)(StatusLoaderInternal);
-
-export function loadStatus<P>(Component: React.ComponentType<P>): React.ComponentType<P> {
-	return function (props: P) {
-		return <StatusLoader>
-			<Component {...props} />
-		</StatusLoader>
-	}
-}

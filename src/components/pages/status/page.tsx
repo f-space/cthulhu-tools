@@ -1,10 +1,11 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import { DataCollector, Status } from "models/status";
 import IDBCache from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
 import StatusDispatcher from 'redux/dispatchers/status';
 import { getDataProvider } from "redux/selectors/status";
-import { loadStatus } from "components/shared/decorators/status-loader";
+import { StatusGuard } from "components/shared/templates/status-guard";
 import { StatusTemplate } from "./template";
 
 const mapStateToProps = (state: State) => {
@@ -27,6 +28,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 const Connected = connect(mapStateToProps, mapDispatchToProps)(StatusTemplate);
-const StatusReady = loadStatus(Connected);
 
-export const StatusPage = StatusReady;
+export function StatusPage() {
+	return <StatusGuard>
+		{() => <Connected />}
+	</StatusGuard>
+}

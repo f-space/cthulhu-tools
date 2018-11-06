@@ -1,10 +1,11 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Profile, Attribute, Skill, DataProvider, DataCollector } from "models/status";
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
-import { loadStatus } from "components/shared/decorators/status-loader";
+import { StatusGuard } from "components/shared/templates/status-guard";
 import { CharacterEditTemplate, CharacterEditTemplateProps } from "./template";
 
 interface StateProps {
@@ -50,6 +51,9 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
 }
 
 const Connected = connect(mapStateToProps, mapDispatchToProps, mergeProps)(CharacterEditTemplate);
-const StatusReady = loadStatus(Connected);
 
-export const CharacterEditPage = StatusReady;
+export function CharacterEditPage(props: RouteComponentProps<{ uuid?: string }>) {
+	return <StatusGuard>
+		{() => <Connected {...props} />}
+	</StatusGuard>
+}
