@@ -6,6 +6,9 @@ const StylelintPlugin = require('stylelint-webpack-plugin');
 const TsConfigPlugin = require("./webpack-ext/tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
+const PUBLIC_PATH = "/cthulhu-tools/";
+const CONTENT_PATH = path.resolve(__dirname, "docs");
+
 module.exports = function (env, { mode }) {
 
 	const production = (mode === 'production');
@@ -42,9 +45,9 @@ module.exports = function (env, { mode }) {
 			index: ["./src/index.tsx"],
 		},
 		output: {
-			path: path.resolve(__dirname, "docs"),
+			path: CONTENT_PATH,
 			filename: "[name].js",
-			publicPath: "/cthulhu-tools/"
+			publicPath: PUBLIC_PATH
 		},
 		module: {
 			rules: [
@@ -69,12 +72,12 @@ module.exports = function (env, { mode }) {
 				},
 				{
 					test: /(?<!\.(?:html|css|js))$/,
-					include: [path.resolve(__dirname, "docs")],
+					include: [CONTENT_PATH],
 					type: 'javascript/auto',
 					loader: "file-loader",
 					options: {
 						name: "[path][name].[ext]",
-						outputPath: url => path.relative("docs", url).replace(/\\/g, "/"),
+						outputPath: url => path.relative(CONTENT_PATH, url).replace(/\\/g, "/"),
 						emitFile: false
 					}
 				},
@@ -88,7 +91,7 @@ module.exports = function (env, { mode }) {
 			extensions: [".tsx", ".ts", ".js", ".json"],
 			alias: {
 				"project": __dirname,
-				"assets": path.resolve(__dirname, "docs")
+				"assets": CONTENT_PATH
 			},
 			plugins: [
 				new TsConfigPlugin()
@@ -100,11 +103,11 @@ module.exports = function (env, { mode }) {
 			]
 		},
 		devServer: {
-			contentBase: path.resolve(__dirname, "docs"),
-			publicPath: "/cthulhu-tools/",
+			contentBase: CONTENT_PATH,
+			publicPath: PUBLIC_PATH,
 			before: function (app) {
 				const express = require('express');
-				app.use("/cthulhu-tools/", express.static(path.resolve(__dirname, "docs")));
+				app.use(PUBLIC_PATH, express.static(CONTENT_PATH));
 			}
 		},
 		plugins: [
