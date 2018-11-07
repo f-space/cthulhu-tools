@@ -108,11 +108,5 @@ export class Operation implements OperationConfig {
 		return new Operation({ target, value, ...config });
 	}
 
-	public apply(value: any): any {
-		const values = new Map<string, any>([[Variable.key("_"), value]]);
-
-		return this.value.evaluate(values);
-	}
-
 	public toString(): string { return this.repr; }
 }

@@ -1,8 +1,8 @@
 import {
-	Hash, Reference, Expression,
+	Hash, Variable, Reference, Expression,
 	CharacterParams, AttributeParams, SkillParams,
 	AttributeType, Attribute, IntegerAttribute, NumberAttribute, TextAttribute,
-	Skill, History
+	Skill, History, Operation
 } from "models/data";
 import { Property, AttributeProperty, SkillProperty } from "./property";
 
@@ -137,7 +137,7 @@ export class SkillEvaluator implements TerminalEvaluator {
 			values.set(ref.key, value);
 		}
 
-		return skill.base.evaluate(values);
+		return expression.evaluate(values);
 	}
 
 	private evaluatePoints(context: EvaluationContext, skill: Skill): number | undefined {
@@ -166,12 +166,27 @@ export class HistoryEvaluator implements TerminalEvaluator {
 				if (prevValue !== undefined) {
 					return commit.operations
 						.filter(x => x.target === ref.key)
-						.reduce((value, op) => op.apply(value), prevValue);
+						.reduce((value, op) => this.applyOperation(context, op, value), prevValue);
 				}
 			}
 		}
 
 		return undefined;
+	}
+
+	private applyOperation(context: EvaluationContext, operation: Operation, value: any): any {
+		const { time, request } = context;
+		const expression = operation.value;
+		const values = new Map<string, any>();
+
+		for (const ref of expression.refs) {
+			const value = request(ref, time);
+			values.set(ref.key, value);
+		}
+
+		values.set(Variable.key("_"), value);
+
+		return expression.evaluate(values);
 	}
 }
 
