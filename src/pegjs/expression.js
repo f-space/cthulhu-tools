@@ -204,7 +204,7 @@ function peg$parse(input, options) {
       peg$c60 = /^[0-9a-z_]/,
       peg$c61 = peg$classExpectation([["0", "9"], ["a", "z"], "_"], false, false),
       peg$c62 = function(name) { return newVariable(name); },
-      peg$c63 = function(scope, id, modifier) { return newReference(id, modifier, scope); },
+      peg$c63 = function(scope, id, modifier) { return newReference(id, modifier || '', scope || ''); },
       peg$c64 = "@",
       peg$c65 = peg$literalExpectation("@", false),
       peg$c66 = ":",

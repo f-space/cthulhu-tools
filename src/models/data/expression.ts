@@ -27,20 +27,20 @@ export class Variable {
 export class Reference {
 	public readonly key: string;
 
-	public constructor(readonly id: string, readonly modifier: string | null = null, readonly scope: string | null = null) {
+	public constructor(readonly id: string, readonly modifier: string = '', readonly scope: string = '') {
 		this.key = Reference.key(id, modifier, scope);
 	}
 
 	public static parse(key: string): Reference | null {
 		const matches = key.match(/^(?:@([0-9a-z_]+):)?([a-z_][0-9a-z_]*)(?::([0-9a-z_]+))?$/);
 		if (matches !== null) {
-			const [_, scope = null, id, modifier = null] = matches;
+			const [_, scope, id, modifier] = matches;
 			return new Reference(id, modifier, scope);
 		}
 		return null;
 	}
 
-	public static key(id: string, modifier: string | null = null, scope: string | null = null): string {
+	public static key(id: string, modifier?: string, scope?: string): string {
 		return (scope ? `@${scope}:` : "") + id + (modifier ? `:${modifier}` : "")
 	}
 

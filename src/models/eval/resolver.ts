@@ -30,7 +30,7 @@ export class AttributeResolver implements TerminalResolver {
 	}
 
 	public supports(context: ResolutionContext): boolean {
-		return (context.ref.scope === 'attr' || context.ref.scope === null);
+		return (context.ref.scope === 'attr' || context.ref.scope === '');
 	}
 
 	public resolve(context: ResolutionContext): AttributeProperty | undefined {
@@ -38,7 +38,7 @@ export class AttributeResolver implements TerminalResolver {
 		const attribute = this.attributes.get(ref.id);
 		if (attribute) {
 			switch (ref.modifier) {
-				case null: return new AttributeValueProperty(attribute);
+				case '': return new AttributeValueProperty(attribute);
 				case 'min': return new AttributeMinProperty(attribute);
 				case 'max': return new AttributeMaxProperty(attribute);
 			}
@@ -67,7 +67,7 @@ export class SkillResolver implements TerminalResolver {
 		const skill = this.skills.get(ref.id);
 		if (skill) {
 			switch (ref.modifier) {
-				case null: return new SkillValueProperty(skill);
+				case '': return new SkillValueProperty(skill);
 				case 'base': return new SkillBaseProperty(skill);
 				case 'points': return new SkillPointsProperty(skill);
 			}

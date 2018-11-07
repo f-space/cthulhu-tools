@@ -73,7 +73,7 @@ ArgumentsRest
 
 Variable = "$" name:$([0-9a-z_]+) { return newVariable(name); }
 
-Reference = scope:Scope? id:Identifier modifier:Modifier? { return newReference(id, modifier, scope); }
+Reference = scope:Scope? id:Identifier modifier:Modifier? { return newReference(id, modifier || '', scope || ''); }
 Scope = "@" scope:$([0-9a-z_]+) ":" { return scope; }
 Identifier = id:$([a-z_] [0-9a-z_]*) { return id; }
 Modifier = ":" modifier:$([0-9a-z_]+) { return modifier; }
