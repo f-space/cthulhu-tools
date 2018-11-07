@@ -30,7 +30,7 @@ export class AttributeResolver implements TerminalResolver {
 	}
 
 	public supports(context: ResolutionContext): boolean {
-		return (context.ref.scope === 'attr' || context.ref.scope === '');
+		return (context.ref.scope === 'attr');
 	}
 
 	public resolve(context: ResolutionContext): AttributeProperty | undefined {

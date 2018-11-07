@@ -60,7 +60,8 @@ export class Expression {
 
 	public static parse(source: string): Expression | null {
 		try {
-			const ast = AST.parse(source);
+			const parsed = AST.parse(source);
+			const ast = Expression.completeReferencesScope(parsed);
 			const deps = Expression.collectDependencies(ast);
 			return new Expression(ast, deps.vars, deps.refs);
 		} catch {
@@ -78,6 +79,19 @@ export class Expression {
 
 	public toString(): string {
 		return this.ast.toString();
+	}
+
+	private static completeReferencesScope(ast: AST.Node): AST.Node {
+		const replacer = (node: AST.Node): AST.Node => {
+			switch (node.type) {
+				case AST.NodeType.Reference:
+					return node.scope ? node : new AST.Reference(node.id, node.modifier, 'attr');
+			}
+
+			return node.replaceChildren(replacer);
+		}
+
+		return replacer(ast);
 	}
 
 	private static collectDependencies(ast: AST.Node): { vars: Variable[], refs: Reference[] } {
