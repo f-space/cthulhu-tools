@@ -149,7 +149,7 @@ export class Literal implements NodeInterface {
 
 	public visitChildren(visitor: (node: Node) => void): void { }
 
-	public replaceChildren(visitor: (node: never) => any): Literal {
+	public replaceChildren(visitor: (node: Node) => Node): Literal {
 		return this;
 	}
 
@@ -208,7 +208,7 @@ export class Text implements NodeInterface {
 
 	public visitChildren(visitor: (node: Node) => void): void { }
 
-	public replaceChildren(visitor: (node: never) => any): Text {
+	public replaceChildren(visitor: (node: Node) => Node): Text {
 		return this;
 	}
 
@@ -225,7 +225,7 @@ export class Variable implements NodeInterface {
 
 	public visitChildren(visitor: (node: Node) => void): void { }
 
-	public replaceChildren(visitor: (node: never) => any): Variable {
+	public replaceChildren(visitor: (node: Node) => Node): Variable {
 		return this;
 	}
 
@@ -242,7 +242,7 @@ export class Reference implements NodeInterface {
 
 	public visitChildren(visitor: (node: Node) => void): void { }
 
-	public replaceChildren(visitor: (node: never) => any): Reference {
+	public replaceChildren(visitor: (node: Node) => Node): Reference {
 		return this;
 	}
 
