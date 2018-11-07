@@ -61,7 +61,7 @@ export class CharacterManagementTemplate extends React.Component<CharacterManage
 			return {
 				key: uuid,
 				content: <div className={style['character']}>
-					<div className={style['name']}>{status.get("name")}</div>
+					<div className={style['name']}>{status.get("@attr:name")}</div>
 					<VisibilityToggle className={style['visibility']} uuid={uuid} on="表示" off="非表示" />
 				</div>
 			};

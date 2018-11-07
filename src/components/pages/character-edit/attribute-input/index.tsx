@@ -39,7 +39,7 @@ export class AttributeInput extends React.PureComponent<AttributeInputProps> {
 				</Resolver.Consumer>
 			</div>
 			<div className={style['value']}>
-				<EvaluationText target={attribute.id} hash={null} />
+				<EvaluationText target={`@attr:${attribute.id}`} hash={null} />
 			</div>
 		</div>
 	}

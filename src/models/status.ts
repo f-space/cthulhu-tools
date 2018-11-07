@@ -23,14 +23,12 @@ export class Status {
 	}
 
 	public getByRef(ref: Reference, hash: string | null = this.current): any {
-		ref = ref.scope !== null ? ref : ref.set({ scope: "attr" });
-
 		return this.chain.evaluate(ref, hash);
 	}
 
 	public static compare(x: Status, y: Status): number {
-		const xname = x.get("name");
-		const yname = y.get("name");
+		const xname = x.get("@attr:name");
+		const yname = y.get("@attr:name");
 
 		if (xname === undefined) {
 			if (yname === undefined) return 0;
