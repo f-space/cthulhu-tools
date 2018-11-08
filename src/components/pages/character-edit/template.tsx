@@ -1,6 +1,6 @@
 import React from 'react';
 import { History } from 'history';
-import { FormState, Decorator, getIn } from 'final-form';
+import { FormState, Decorator, Mutator, getIn } from 'final-form';
 import { Form, Field, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { Character, CharacterParams, AttributeParams, AttributeParamsData, SkillParams, Profile, Attribute, Skill, EvaluationChain, buildResolver, buildEvaluator, buildValidator } from "models/status";
@@ -23,31 +23,45 @@ export interface CharacterEditTemplateProps {
 	history: History;
 }
 
+interface CharacterEditTemplateState {
+	initialValues: FormValues;
+	decorators: Decorator[];
+	mutators: { [key: string]: Mutator };
+}
+
 interface FormValues {
 	chain: EvaluationChain;
 	attributes: AttributeParamsData;
 	skills: SkillParamsEditValue;
 }
 
-export class CharacterEditTemplate extends React.Component<CharacterEditTemplateProps> {
+export class CharacterEditTemplate extends React.Component<CharacterEditTemplateProps, CharacterEditTemplateState> {
 	private decorators: Decorator[];
 
 	public constructor(props: CharacterEditTemplateProps) {
 		super(props);
 
+		this.state = {
+			initialValues: this.makeInitialValues(),
+			decorators: [this.createEvaluationDecorator()],
+			mutators: arrayMutators as any,
+		};
 		this.decorators = [this.createEvaluationDecorator()];
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
 
+	public componentDidUpdate(prevProps: CharacterEditTemplateProps): void {
+		if (this.props.target !== prevProps.target) {
+			this.setState({ initialValues: this.makeInitialValues() });
+		}
+	}
+
 	public render() {
 		const { attributes, skills } = this.props;
-		const initialValues = this.makeInitialValues();
 
 		return <Page heading="キャラクター編集" pageTitle>
-			<Form initialValues={initialValues}
-				decorators={this.decorators}
-				mutators={{ ...arrayMutators }}
+			<Form {...this.state}
 				subscription={{}}
 				onSubmit={this.handleSubmit}
 				render={({ handleSubmit }) =>

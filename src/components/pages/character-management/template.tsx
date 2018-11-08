@@ -18,6 +18,10 @@ export interface CharacterManagementTemplateProps {
 	history: History;
 }
 
+interface CharacterManagementTemplateState {
+	initialValues: FormValues;
+}
+
 type CommandType = "delete" | "clone" | "edit" | "import" | "export";
 
 interface FormValues {
@@ -32,18 +36,17 @@ const NAVS: Navigation[] = [
 	}
 ];
 
-export class CharacterManagementTemplate extends React.Component<CharacterManagementTemplateProps> {
+export class CharacterManagementTemplate extends React.Component<CharacterManagementTemplateProps, CharacterManagementTemplateState> {
 	public constructor(props: CharacterManagementTemplateProps) {
 		super(props);
 
+		this.state = { initialValues: { selection: [] } };
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	public render() {
-		const initialValues = { selection: [] };
-
 		return <Page heading="キャラクター管理" navs={NAVS} pageTitle flexible>
-			<Form initialValues={initialValues} onSubmit={this.handleSubmit} render={({ handleSubmit }) =>
+			<Form {...this.state} onSubmit={this.handleSubmit} render={({ handleSubmit }) =>
 				<form className={style['form']} onSubmit={handleSubmit}>
 					{this.renderCharacters()}
 					{this.renderCommands()}

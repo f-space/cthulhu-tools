@@ -23,10 +23,35 @@ export interface CommitDialogProps {
 	onClose: (result?: CommitDialogResult) => void;
 }
 
-export class CommitDialog extends React.Component<CommitDialogProps> {
+interface CommitDialogState {
+	initialValues: FormValues;
+}
+
+interface FormValues {
+	mode: 'set' | 'add' | 'expression';
+	message?: string;
+	set?: SetValues;
+	add?: AddValues;
+	expression?: ExpressionValues;
+}
+
+interface SetValues {
+	value: number | string;
+}
+
+interface AddValues {
+	value: number;
+}
+
+interface ExpressionValues {
+	value: string;
+}
+
+export class CommitDialog extends React.Component<CommitDialogProps, CommitDialogState> {
 	public constructor(props: CommitDialogProps) {
 		super(props);
 
+		this.state = { initialValues: { mode: 'set' } };
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
@@ -37,7 +62,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 
 		return <Dialog open={open} header={"Commit"}>
 			{
-				() => <Form initialValues={{ mode: 'set' }} onSubmit={this.handleSubmit} render={({ handleSubmit, invalid }) =>
+				() => <Form {...this.state} onSubmit={this.handleSubmit} render={({ handleSubmit, invalid }) =>
 					<form onSubmit={handleSubmit}>
 						<div className={classNames(style['inputs'], style[type])}>
 							<div className={style['name']}>{target.name}</div>
@@ -142,7 +167,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 			: `@skill:${target.id}:points`;
 	}
 
-	private createCommit(target: string, values: any): Commit {
+	private createCommit(target: string, values: FormValues): Commit {
 		const operation = this.createOperation(target, values);
 
 		return new Commit({
@@ -153,16 +178,16 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 		});
 	}
 
-	private createOperation(target: string, values: any): Operation {
+	private createOperation(target: string, values: FormValues): Operation {
 		switch (values.mode) {
-			case 'set': return this.createSetOperation(target, values.set);
-			case 'add': return this.createAddOperation(target, values.add);
-			case 'expression': return this.createExpressionOperation(target, values.expression);
+			case 'set': return this.createSetOperation(target, values.set!);
+			case 'add': return this.createAddOperation(target, values.add!);
+			case 'expression': return this.createExpressionOperation(target, values.expression!);
 			default: throw new Error('unreachable code.');
 		}
 	}
 
-	private createSetOperation(target: string, values: any): Operation {
+	private createSetOperation(target: string, values: SetValues): Operation {
 		const value = values.value;
 		const expression = typeof value === 'number'
 			? Expression.parse(String(Number.isFinite(value) ? value : 0))
@@ -173,7 +198,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 		return new Operation({ target, value: expression });
 	}
 
-	private createAddOperation(target: string, values: any): Operation {
+	private createAddOperation(target: string, values: AddValues): Operation {
 		const value = values.value;
 		const expression = Expression.parse(`$_+${Number.isFinite(value) ? value : 0}`);
 
@@ -182,7 +207,7 @@ export class CommitDialog extends React.Component<CommitDialogProps> {
 		return new Operation({ target, value: expression });
 	}
 
-	private createExpressionOperation(target: string, values: any): Operation {
+	private createExpressionOperation(target: string, values: ExpressionValues): Operation {
 		const value = values.value;
 		const expression = Expression.parse(value);
 
