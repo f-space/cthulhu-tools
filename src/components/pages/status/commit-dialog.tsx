@@ -200,7 +200,8 @@ export class CommitDialog extends React.Component<CommitDialogProps, CommitDialo
 
 	private createAddOperation(target: string, values: AddValues): Operation {
 		const value = values.value;
-		const expression = Expression.parse(`$_+${Number.isFinite(value) ? value : 0}`);
+		const delta = Number.isFinite(value) ? value : 0;
+		const expression = Expression.parse(`$_${Math.sign(delta) >= 0 ? "+" : "-"}${Math.abs(delta)}`);
 
 		if (!expression) throw new Error("unreachable code.");
 
