@@ -38,14 +38,14 @@
 }
 
 .assets {
-	display: flex;
-	flex-flow: column nowrap;
+	display: grid;
+	grid-template-columns: 1fr;
 	margin-top: 3em;
 }
 
 .libraries {
-	display: flex;
-	flex-flow: column nowrap;
+	display: grid;
+	grid-template-columns: 1fr;
 	margin-top: 3em;
 }
 
