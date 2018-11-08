@@ -15,6 +15,8 @@
 
 .message {
 	margin: 1em;
+	overflow: hidden;
+	overflow-wrap: break-word;
 	text-align: center;
 }
 
@@ -27,6 +29,8 @@
 
 .operation {
 	margin: 0.5em 0;
+	overflow: hidden;
+	overflow-wrap: break-word;
 }
 
 .buttons {
