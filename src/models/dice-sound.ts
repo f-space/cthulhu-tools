@@ -1,15 +1,11 @@
 import { DiceSoundManager } from "models/resource";
 
-export interface DiceSoundPlayer {
-	readonly playing: boolean;
-	play(): void;
-	pause(): void;
-}
+export class DiceSoundPlayer {
+	private element: HTMLAudioElement = document.createElement('audio');
 
-export class DOMDiceSoundPlayer implements DiceSoundPlayer {
-	private element?: HTMLAudioElement;
-
-	public get playing(): boolean { return Boolean(this.element && !this.element.paused); }
+	public get muted(): boolean { return this.element.muted; }
+	public set muted(value: boolean) { this.element.muted = value; }
+	public get paused(): boolean { return this.element.paused; }
 
 	public constructor(autoLoad?: boolean) {
 		if (autoLoad) this.load();
@@ -18,7 +14,12 @@ export class DOMDiceSoundPlayer implements DiceSoundPlayer {
 	public async load(): Promise<void> {
 		await DiceSoundManager.load();
 
-		this.element = await DiceSoundManager.player();
+		await new Promise<void>((resolve, reject) => {
+			this.element.oncanplaythrough = () => resolve();
+			this.element.onerror = (e) => reject(new Error(e.message));
+			this.element.preload = 'auto';
+			this.element.src = DiceSoundManager.get();
+		});
 	}
 
 	public play(): void {
@@ -34,10 +35,4 @@ export class DOMDiceSoundPlayer implements DiceSoundPlayer {
 			this.element.pause();
 		}
 	}
-}
-
-export class MuteDiceSoundPlayer implements DiceSoundPlayer {
-	public get playing(): boolean { return false; }
-	public play(): void { }
-	public pause(): void { }
 }

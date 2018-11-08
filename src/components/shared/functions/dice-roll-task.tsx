@@ -1,13 +1,14 @@
 import React from 'react';
 import { Dice } from "models/dice";
 import { DiceRoll, UniformDiceRoll } from "models/dice-roll";
-import { DiceSoundPlayer, DOMDiceSoundPlayer } from "models/dice-sound";
+import { DiceSoundPlayer } from "models/dice-sound";
 import { RepeatTask } from "./repeat-task";
 
 export interface DiceRollTaskProps {
 	active: boolean;
 	interval: number;
 	iteration: number;
+	muted: boolean;
 	dices: ReadonlyArray<Dice>;
 	faces: ReadonlyArray<number>;
 	callback: (faces: number[], final: boolean) => void;
@@ -17,9 +18,10 @@ export class DiceRollTask extends React.Component<DiceRollTaskProps> {
 	public static readonly defaultProps = {
 		interval: 100,
 		iteration: 10,
+		muted: false,
 	};
 
-	private sound: DiceSoundPlayer = new DOMDiceSoundPlayer(true);
+	private sound: DiceSoundPlayer = new DiceSoundPlayer(true);
 	private method: DiceRoll = new UniformDiceRoll();
 
 	public constructor(props: DiceRollTaskProps) {
@@ -29,6 +31,8 @@ export class DiceRollTask extends React.Component<DiceRollTaskProps> {
 	}
 
 	public componentDidMount(): void {
+		this.sound.muted = this.props.muted;
+
 		if (this.props.active) this.sound.play();
 	}
 
@@ -37,6 +41,8 @@ export class DiceRollTask extends React.Component<DiceRollTaskProps> {
 	}
 
 	public componentDidUpdate(prevProps: DiceRollTaskProps): void {
+		this.sound.muted = this.props.muted;
+
 		if (this.props.active && !prevProps.active) {
 			this.sound.play();
 		}

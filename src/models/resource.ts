@@ -159,14 +159,4 @@ export class DiceSoundManager {
 	}
 
 	public static get(): string { return this.sound; }
-
-	public static async player(): Promise<HTMLAudioElement> {
-		return new Promise<HTMLAudioElement>((resolve, reject) => {
-			const audio = document.createElement('audio');
-			audio.oncanplaythrough = () => resolve(audio);
-			audio.onerror = (e) => reject(new Error(e.message));
-			audio.preload = 'auto';
-			audio.src = this.sound;
-		});
-	}
 }
