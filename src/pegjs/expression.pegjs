@@ -47,7 +47,7 @@ Other
 	/ Variable
 	/ Reference
 
-Literal = value:$([+-]? [0-9]+ ("." [0-9]+)?) { return newLiteral(Number(value)); }
+Literal = value:$([+-]? [0-9]+ ("." [0-9]+)? ("e" [+-]? [0-9]+)?) { return newLiteral(Number(value)); }
 
 Template
 	=  "\"" first:Text? rest:TemplateRest* "\"" { return newTemplate([first].concat(...rest).filter(x => x)); }
