@@ -2,14 +2,14 @@
 @import "mixin";
 
 .dialog {
-	$bg-edge: $color-main-dark;
-	$bg-mid: $color-background;
-
 	display: flex;
 	position: relative;
 	flex-flow: column nowrap;
 	align-items: stretch;
-	background: linear-gradient($bg-edge, $bg-mid 1rem, $bg-mid calc(100% - 1rem), $bg-edge);
+	background:
+		linear-gradient(to bottom, $color-main-dark, transparent 1rem),
+		linear-gradient(to top, $color-main-dark, transparent 1rem),
+		linear-gradient(to top, $color-background 0, $color-background 100%);
 	padding: 1rem 0;
 	max-height: 80%;
 }

@@ -24,15 +24,15 @@ export class SkillParamsEdit extends React.PureComponent<SkillParamsEditProps> {
 			<div className={style['point-stats']}>
 				<div className={style['source']}>
 					<span>職業</span>
-					<EvaluationText target="oskp" hash={null} />
+					<EvaluationText target="@attr:oskp" hash={null} />
 				</div>
 				<div className={style['source']}>
 					<span>趣味</span>
-					<EvaluationText target="hskp" hash={null} />
+					<EvaluationText target="@attr:hskp" hash={null} />
 				</div>
 				<div className={style['total']}>
 					<span>合計</span>
-					<EvaluationAsync mode='expression' target="oskp + hskp" hash={null}>
+					<EvaluationAsync mode='expression' target="@attr:oskp + @attr:hskp" hash={null}>
 						{
 							result => <Field name={name} subscription={{ value: true }} render={({ input: { value } }) => {
 								const skills = value as SkillInputValue[];
@@ -41,7 +41,7 @@ export class SkillParamsEdit extends React.PureComponent<SkillParamsEditProps> {
 								const full = available !== undefined && consumed !== undefined && consumed === available;
 								const over = available !== undefined && consumed !== undefined && consumed > available;
 
-								return <span className={classNames(style['usage'],{ [style['full']]: full, [style['over']]: over })}>
+								return <span className={classNames(style['usage'], { [style['full']]: full, [style['over']]: over })}>
 									<span className={style['consumed']}>{consumed !== undefined ? consumed : "-"}</span>
 									<span>/</span>
 									<span className={style['available']}>{available !== undefined ? available : "-"}</span>
