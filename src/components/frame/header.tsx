@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import classNames from 'classnames';
+import { Menu } from "./menu";
 import style from "./header.scss";
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> { }
@@ -15,5 +16,6 @@ export function Header(props: HeaderProps) {
 				<Link className={style['title-text']} to={HOME_PATH} replace={match && match.isExact}>Cthulhu Tools</Link>
 			} />
 		</h1>
+		<Menu className={style['menu']} />
 	</header>
 }

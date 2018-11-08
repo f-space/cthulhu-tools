@@ -12,5 +12,7 @@ export default function build() {
 		icons.faPlus,
 		icons.faTrashAlt,
 		icons.faUsers,
+		icons.faVolumeMute,
+		icons.faVolumeUp,
 	);
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Dice } from "models/dice";
-import { DiceRollTask } from "components/shared/functions/dice-roll-task";
 import { RollButton } from "components/shared/widgets/roll-button";
+import { Page } from "components/shared/templates/page";
+import { DiceRoll } from "components/shared/templates/dice-roll";
 import { DiceView } from "./dice-view";
 import { DiceTypeSelector } from "./dice-type-selector";
 import { CustomDiceDialog, CustomDiceDialogResult } from "./custom-dice-dialog";
-import { Page } from "components/shared/templates/page";
 import style from "./template.scss";
 
 export interface DiceTemplateProps { }
@@ -54,7 +54,7 @@ export class DiceTemplate extends React.Component<DiceTemplateProps, DiceTemplat
 				<RollButton className={style['roll']} disabled={!ready} onClick={this.handleRollClick} />
 			</div>
 
-			<DiceRollTask active={rolling} dices={dices} faces={faces} callback={this.updateFaces} />
+			<DiceRoll active={rolling} dices={dices} faces={faces} callback={this.updateFaces} />
 			<CustomDiceDialog open={openCustomDiceDialog} {...custom} onClose={this.handleClose} />
 		</Page>
 	}

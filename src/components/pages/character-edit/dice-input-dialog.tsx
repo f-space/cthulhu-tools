@@ -1,10 +1,10 @@
 import React from 'react';
 import { Dice } from "models/dice";
-import { DiceRollTask } from "components/shared/functions/dice-roll-task";
 import { Button } from "components/shared/widgets/button";
 import { RollButton } from "components/shared/widgets/roll-button";
 import { DiceImage } from "components/shared/widgets/dice-image";
 import { Dialog } from "components/shared/templates/dialog";
+import { DiceRoll } from "components/shared/templates/dice-roll";
 import style from "./dice-input-dialog.scss";
 
 export interface DiceInputDialogResult {
@@ -59,7 +59,7 @@ export class DiceInputDialog extends React.Component<DiceInputDialogProps, DiceI
 						<Button className={style['ok']} disabled={rolling} commit onClick={this.handleClickOK}>OK</Button>
 						<Button className={style['cancel']} onClick={this.handleClickCancel}>Cancel</Button>
 					</div >
-					<DiceRollTask active={rolling} dices={dices} faces={value} callback={this.updateValue} />
+					<DiceRoll active={rolling} dices={dices} faces={value} callback={this.updateValue} />
 				</>
 			}
 		</Dialog >
