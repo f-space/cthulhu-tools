@@ -1,0 +1,31 @@
+@import "variable";
+@import "mixin";
+
+.display {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center;
+	line-height: 0;
+	font-family: "Times New Roman", monospace;
+	font-size: 0;
+}
+
+.text {
+	@include blur-text-double(0.1ex, 0.25ex, $color-dice-normal);
+
+	opacity: 0.5;
+	color: $color-text-glare;
+}
+
+.critical {
+	@include blur-text-double(0.1ex, 0.25ex, $color-dice-critical);
+}
+
+.fumble {
+	@include blur-text-double(0.1ex, 0.25ex, $color-dice-fumble);
+}
+
+.canvas {
+	font-size: 100px;
+}

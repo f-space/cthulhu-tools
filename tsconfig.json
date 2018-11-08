@@ -1,14 +1,13 @@
 {
 	"compilerOptions": {
-		"target": "ES6",
-		"moduleResolution": "Node",
-		"outDir": "js",
-		"baseUrl": "ts",
+		"target": "es2017",
+		"module": "es2015",
+		"moduleResolution": "node",
+		"baseUrl": "src",
+		"jsx": "react",
+		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true
-	},
-	"include": [
-		"ts/**/*"
-	]
+	}
 }

@@ -1,0 +1,24 @@
+.frame {
+	display: grid;
+	grid-template-areas: "item";
+	user-select: none;
+
+	&:not(.vertical) {
+		grid-template-rows: 1fr;
+		grid-template-columns: minmax(0, 1fr);
+		overflow-x: hidden;
+		touch-action: pan-y;
+	}
+
+	&.vertical {
+		grid-template-rows: minmax(0, 1fr);
+		grid-template-columns: 1fr;
+		overflow-y: hidden;
+		touch-action: pan-x;
+	}
+}
+
+.item {
+	grid-area: item;
+	will-change: transform;
+}

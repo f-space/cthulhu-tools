@@ -1,0 +1,21 @@
+.dice-input {
+	display: inline-flex;
+	flex-flow: row nowrap;
+	margin: 0 0.25em;
+}
+
+.group {
+	&:nth-child(n+1) {
+		margin-left: 0.2em;
+	}
+}
+
+.dice {
+	--dice-height: 2.5em;
+
+	vertical-align: middle;
+
+	&:nth-child(n+1) {
+		margin-left: 0.1em;
+	}
+}

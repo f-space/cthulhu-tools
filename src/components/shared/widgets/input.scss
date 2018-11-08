@@ -1,0 +1,124 @@
+@import "variable";
+@import "mixin";
+
+.invisible {
+	display: none;
+}
+
+.input {
+	outline: none;
+	border: solid 1px $color-main-dark;
+	border-radius: 0.5em;
+	background: transparent;
+	padding: 0.25em 0.5em;
+	min-width: 0;
+
+	&:invalid {
+		background: rgba($color-main, 0.25);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+	}
+}
+
+.number {
+	@include no-spin-button;
+
+	text-align: center;
+}
+
+.checkbox {
+	display: inline-block;
+	border: solid 1px $color-main-dark;
+	border-radius: 25%;
+	width: 1em;
+	height: 1em;
+	text-align: center;
+	line-height: 1;
+	white-space: nowrap;
+	color: $color-main;
+
+	&:hover {
+		border-color: $color-main-light;
+	}
+}
+
+.checkbox-content {
+	&::before {
+		visibility: hidden;
+		content: "\2713";
+	}
+
+	:checked + &::before {
+		visibility: visible;
+	}
+}
+
+.toggle {
+	display: inline-block;
+}
+
+.toggle-content {
+	display: block;
+	border: solid 1px $color-main-dark;
+	border-radius: 1.75em;
+	cursor: pointer;
+	padding: 0.375em 0.5em;
+	text-align: center;
+	line-height: 1;
+	white-space: nowrap;
+
+	&::before {
+		content: attr(data-off);
+	}
+
+	:checked + & {
+		background: $color-main-dark;
+	}
+
+	:checked + &::before {
+		content: attr(data-on);
+	}
+}
+
+.radio {
+	display: inline-block;
+	position: relative;
+	border: solid 1px $color-main-dark;
+	border-radius: 50%;
+	width: 1em;
+	height: 1em;
+	text-align: center;
+	line-height: 1;
+	white-space: nowrap;
+
+	&:hover {
+		border-color: $color-main-light;
+	}
+}
+
+.radio-content {
+	&::before {
+		visibility: hidden;
+		content: "\2713";
+	}
+
+	&::after {
+		display: block;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: auto;
+		border-radius: 50%;
+		width: 60%;
+		height: 60%;
+		content: "";
+	}
+
+	:checked + &::after {
+		background: $color-main-dark;
+	}
+}

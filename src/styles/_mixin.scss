@@ -1,0 +1,56 @@
+@mixin count-eq($n) {
+	&:first-child:nth-last-child(#{$n}),
+	&:first-child:nth-last-child(#{$n}) ~ * {
+		@content;
+	}
+}
+
+@mixin count-gt($n) {
+	&:first-child:nth-last-child(n+#{$n}),
+	&:first-child:nth-last-child(n+#{$n}) ~ * {
+		@content;
+	}
+}
+
+@mixin blur-text($offset, $radius, $color) {
+	text-shadow:
+		(-$offset) (-$offset) $radius $color,
+		(-$offset) (+$offset) $radius $color,
+		(+$offset) (-$offset) $radius $color,
+		(+$offset) (+$offset) $radius $color;
+}
+
+@mixin blur-text-double($offset, $radius, $color) {
+	text-shadow:
+		(-$offset / 4) (-$offset / 4) ($radius / 4) $color,
+		(-$offset / 4) (+$offset / 4) ($radius / 4) $color,
+		(+$offset / 4) (-$offset / 4) ($radius / 4) $color,
+		(+$offset / 4) (+$offset / 4) ($radius / 4) $color,
+		(-$offset) (-$offset) $radius $color,
+		(-$offset) (+$offset) $radius $color,
+		(+$offset) (-$offset) $radius $color,
+		(+$offset) (+$offset) $radius $color;
+}
+
+@mixin designed-font($inner, $outer) {
+	@include blur-text(0.1ex, 0.25ex, $outer);
+
+	text-decoration: none;
+	color: $inner;
+	font-family: "Cthulhu", sans-serif;
+}
+
+@mixin unselectable {
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+}
+
+@mixin no-spin-button {
+	-moz-appearance: textfield;
+
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+}

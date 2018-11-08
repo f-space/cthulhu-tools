@@ -1,0 +1,75 @@
+@import "variable";
+
+.point-stats {
+	display: grid;
+	grid-template-columns: 1fr 1fr 2fr;
+	grid-column-gap: 1em;
+	margin: 1em 0;
+}
+
+.source {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	justify-items: center;
+}
+
+.total {
+	display: grid;
+	grid-template-columns: auto 1fr;
+}
+
+.usage {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	grid-column-gap: 0.5em;
+	justify-items: center;
+}
+
+.full {
+	color: mix($color-text, $color-good, 80%);
+}
+
+.over {
+	color: mix($color-text, $color-error, 80%);
+}
+
+.commands {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.command {
+	margin: 0 0.5em;
+	outline: none;
+	cursor: pointer;
+	color: $color-main-dark;
+	font-size: 1.5rem;
+
+	&:active {
+		transform: scale(1.2);
+	}
+}
+
+.skills {
+	display: grid;
+	grid-row-gap: 1em;
+	margin: 1em 0;
+	border-top: solid 1px $color-main;
+	border-bottom: solid 1px $color-main;
+	padding: 1em 0.5em;
+}
+
+.help {
+	opacity: 0.5;
+	text-align: center;
+
+	&:not(:last-child) {
+		display: none;
+	}
+}
+
+.icon {
+	margin: 0 0.5em;
+}

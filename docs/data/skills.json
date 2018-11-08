@@ -1,0 +1,492 @@
+﻿[
+	{
+		"uuid": "acedbfbc-bbb1-4af7-850d-985521f429e0",
+		"id": "accounting",
+		"name": "経理",
+		"category": "knowledge",
+		"base": "10"
+	},
+	{
+		"uuid": "8708dd50-22af-48f5-bb43-821dfaa6bc2b",
+		"id": "anthropology",
+		"name": "人類学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "feedf5c4-da84-4cbb-b4fe-eead97380c33",
+		"id": "arabic",
+		"name": "アラビア語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "f5211e89-7227-4abd-bf1f-5c5db7bed4f0",
+		"id": "archaeology",
+		"name": "考古学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "f249839b-2f61-40b5-b54c-294354878d09",
+		"id": "art",
+		"name": "芸術",
+		"category": "communication",
+		"base": "5"
+	},
+	{
+		"uuid": "bca7dd4f-3ebe-4381-81c1-a0ab6ad8bf33",
+		"id": "astronomy",
+		"name": "天文学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "a21c3aa7-ab06-4baa-8bb1-0b2798d9006c",
+		"id": "bargain",
+		"name": "値切り",
+		"category": "communication",
+		"base": "5"
+	},
+	{
+		"uuid": "f04a7fa8-2dba-4eeb-88c1-d0f116511eec",
+		"id": "biology",
+		"name": "生物学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "e20c53ae-9298-4cf5-9b45-36aeb3bb6de7",
+		"id": "chemistry",
+		"name": "化学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "7df20819-ad1a-4b2b-b004-e11ade228e8b",
+		"id": "chinese",
+		"name": "中国語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "11e5757d-927c-4d5e-ba4f-748f2bb20851",
+		"id": "climb",
+		"name": "登攀",
+		"category": "locomotion",
+		"base": "40"
+	},
+	{
+		"uuid": "29fe29bd-24fa-4d92-9233-d226123439a4",
+		"id": "conceal",
+		"name": "隠す",
+		"category": "investigation",
+		"base": "15"
+	},
+	{
+		"uuid": "ea3dc835-4c45-49b1-b145-568132ffa00b",
+		"id": "computer_use",
+		"name": "コンピューター",
+		"category": "knowledge",
+		"base": "1"
+	},
+	{
+		"uuid": "f89e1300-366e-4426-9c6f-5c8e44aa97e7",
+		"id": "craft",
+		"name": "製作",
+		"category": "investigation",
+		"base": "5"
+	},
+	{
+		"uuid": "37d7910f-4a22-43d2-a8c7-df1211225459",
+		"id": "credit_rating",
+		"name": "信用",
+		"category": "communication",
+		"base": "15"
+	},
+	{
+		"uuid": "68393f11-515d-4742-ab02-6ecb418b5d20",
+		"id": "cthulhu_mythos",
+		"name": "クトゥルフ神話",
+		"category": "special",
+		"base": "0"
+	},
+	{
+		"uuid": "9379b1a0-0d81-47df-9311-2d05b8bb834c",
+		"id": "disguise",
+		"name": "変装",
+		"category": "communication",
+		"base": "1"
+	},
+	{
+		"id": "dodge",
+		"name": "回避",
+		"uuid": "50e33942-5d35-4ec1-bb99-d55e530db907",
+		"category": "combat",
+		"base": "dex * 2"
+	},
+	{
+		"uuid": "b4ec50d6-5af6-42c7-8749-7d65bc1f5d64",
+		"id": "drive_automobile",
+		"name": "運転",
+		"category": "locomotion",
+		"base": "20"
+	},
+	{
+		"uuid": "279be3d6-a33f-4d5b-85cf-515b928eed2e",
+		"id": "electrical_repair",
+		"name": "電気修理",
+		"category": "knowledge",
+		"base": "10"
+	},
+	{
+		"uuid": "e162f1a4-4dd4-4bc2-9748-63aa04b8c9a7",
+		"id": "electronics",
+		"name": "電子工学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "a6fd5e41-5e2d-4379-bdd5-55156c3fb7f5",
+		"id": "english",
+		"name": "英語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "9e0ac88e-63ec-4a98-9a19-f31a78e223c3",
+		"id": "fast_talk",
+		"name": "言いくるめ",
+		"category": "communication",
+		"base": "5"
+	},
+	{
+		"uuid": "74d491d6-7bf8-447f-a9fe-bf5f07ddce2c",
+		"id": "first_aid",
+		"name": "応急手当",
+		"category": "knowledge",
+		"base": "30"
+	},
+	{
+		"uuid": "adfc8314-dcdb-4fae-8c37-444f8bfc8c4a",
+		"id": "fist_punch",
+		"name": "こぶし/パンチ",
+		"category": "combat",
+		"base": "50"
+	},
+	{
+		"uuid": "43fb0d08-4e43-4484-b584-65cc6dafd90c",
+		"id": "french",
+		"name": "フランス語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "03c6fb27-c13d-4f6d-bbef-2977b348d219",
+		"id": "geology",
+		"name": "地質学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "bdbebcfa-ae0c-48c6-bba5-b45ea3de159c",
+		"id": "german",
+		"name": "ドイツ語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "fe69e3bb-a11e-4e92-84ff-6f02d92e743f",
+		"id": "grapple",
+		"name": "組みつき",
+		"category": "combat",
+		"base": "25"
+	},
+	{
+		"uuid": "abc081b8-589a-42da-ab79-6dcea155415c",
+		"id": "handgun",
+		"name": "拳銃",
+		"category": "combat",
+		"base": "20"
+	},
+	{
+		"uuid": "0f478b85-13cf-4a86-92e3-3166377742e2",
+		"id": "head_butt",
+		"name": "頭突き",
+		"category": "combat",
+		"base": "10"
+	},
+	{
+		"uuid": "7aa4489b-60eb-4b60-9aaa-859a0d31f8d0",
+		"id": "hide",
+		"name": "隠れる",
+		"category": "investigation",
+		"base": "10"
+	},
+	{
+		"uuid": "9594aa6f-c2eb-493f-a7a0-3fec88046656",
+		"id": "history",
+		"name": "歴史",
+		"category": "scholarship",
+		"base": "20"
+	},
+	{
+		"uuid": "bcd0262e-32f5-45cc-afcb-336b211a559d",
+		"id": "italian",
+		"name": "イタリア語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "59731aaf-2790-4b4a-a35c-5c21f17d90a8",
+		"id": "japanese",
+		"name": "日本語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "d0f6353b-b4f4-4c5a-8539-11358761ec34",
+		"id": "jump",
+		"name": "跳躍",
+		"category": "locomotion",
+		"base": "25"
+	},
+	{
+		"uuid": "ff2c3c20-cfba-47c3-8998-295433a7f506",
+		"id": "kick",
+		"name": "キック",
+		"category": "combat",
+		"base": "25"
+	},
+	{
+		"uuid": "0ad376b3-ae11-43bb-a119-8d846383645d",
+		"id": "korean",
+		"name": "韓国語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "1e421bf3-203b-40a6-a39a-c642a538e30f",
+		"id": "law",
+		"name": "法律",
+		"category": "scholarship",
+		"base": "5"
+	},
+	{
+		"uuid": "2e25dd4f-574b-44de-9e51-a9c3e42ac636",
+		"id": "library_use",
+		"name": "図書館",
+		"category": "investigation",
+		"base": "25"
+	},
+	{
+		"uuid": "59780486-2aab-4748-993a-a6c3ec84e3fc",
+		"id": "listen",
+		"name": "聞き耳",
+		"category": "investigation",
+		"base": "25"
+	},
+	{
+		"uuid": "b3878cee-f434-45e2-b714-e23849ef0362",
+		"id": "locksmith",
+		"name": "鍵開け",
+		"category": "investigation",
+		"base": "1"
+	},
+	{
+		"uuid": "4d5f780b-87a9-4833-bd74-6315f530e07c",
+		"id": "machine_gun",
+		"name": "マシンガン",
+		"category": "combat",
+		"base": "15"
+	},
+	{
+		"uuid": "e0ef451e-7daa-46ba-8721-f0548f4e2e33",
+		"id": "martial_arts",
+		"name": "マーシャルアーツ",
+		"category": "combat",
+		"base": "1"
+	},
+	{
+		"uuid": "4f62882c-a069-4708-add5-2656ac89ffb1",
+		"id": "mechanical_repair",
+		"name": "機械修理",
+		"category": "knowledge",
+		"base": "20"
+	},
+	{
+		"uuid": "5deb3c30-ae8a-4746-abcd-319abbef092d",
+		"id": "medicine",
+		"name": "医学",
+		"category": "scholarship",
+		"base": "5"
+	},
+	{
+		"uuid": "903b9841-73ab-48d0-85c4-7ff643f3b41e",
+		"id": "natural_history",
+		"name": "博物学",
+		"category": "scholarship",
+		"base": "10"
+	},
+	{
+		"uuid": "533fe76f-807e-4849-bc59-9d603e91a212",
+		"id": "navigate",
+		"name": "ナビゲート",
+		"category": "locomotion",
+		"base": "10"
+	},
+	{
+		"uuid": "66243b46-ab08-407a-8bdc-d2bac2b89537",
+		"id": "occult",
+		"name": "オカルト",
+		"category": "knowledge",
+		"base": "5"
+	},
+	{
+		"uuid": "6b729abd-610a-4f84-b9c0-4712966b52f5",
+		"id": "operate_heavy_machine",
+		"name": "重機械操作",
+		"category": "knowledge",
+		"base": "1"
+	},
+	{
+		"id": "own_language",
+		"name": "母国語",
+		"uuid": "7c0a191b-82e6-4ec2-b84d-da6f1554c4d3",
+		"category": "language",
+		"base": "edu * 5"
+	},
+	{
+		"uuid": "8b3494ee-bdf4-411d-9a99-d3542c0e066e",
+		"id": "persuade",
+		"name": "説得",
+		"category": "communication",
+		"base": "15"
+	},
+	{
+		"uuid": "5b029a86-c5c5-447a-b6a3-0fc6998bf095",
+		"id": "pharmacy",
+		"name": "薬学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "9d9f2f99-2f31-459f-8ad3-a9352fb3d39a",
+		"id": "photography",
+		"name": "写真術",
+		"category": "knowledge",
+		"base": "10"
+	},
+	{
+		"uuid": "43c04bfb-b943-4eac-afe4-9ef68e8f414e",
+		"id": "physics",
+		"name": "物理学",
+		"category": "scholarship",
+		"base": "1"
+	},
+	{
+		"uuid": "300fd32e-bf08-48e6-8f26-ab4a4d590147",
+		"id": "pilot",
+		"name": "操縦",
+		"category": "locomotion",
+		"base": "1"
+	},
+	{
+		"uuid": "155601b3-9625-4efe-926f-6b466450ec1a",
+		"id": "portuguese",
+		"name": "ポルトガル語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "8da73911-5af6-42eb-96c1-3a0d578b2ffb",
+		"id": "psychoanalysis",
+		"name": "精神分析",
+		"category": "knowledge",
+		"base": "1"
+	},
+	{
+		"uuid": "c354c1a7-e4e5-4b1e-b6a2-4a9e2765b829",
+		"id": "psychology",
+		"name": "心理学",
+		"category": "scholarship",
+		"base": "5"
+	},
+	{
+		"uuid": "cccaf5df-ed7a-43f8-97eb-b857fcb91d7f",
+		"id": "ride",
+		"name": "乗馬",
+		"category": "locomotion",
+		"base": "5"
+	},
+	{
+		"uuid": "59f2b1d1-ddd6-4456-a380-9dd149abffb5",
+		"id": "rifle",
+		"name": "ライフル",
+		"category": "combat",
+		"base": "25"
+	},
+	{
+		"uuid": "49d162ed-90f9-4094-8859-798944221735",
+		"id": "russian",
+		"name": "ロシア語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "35eefb24-6e15-434b-81e4-f7264187c641",
+		"id": "shotgun",
+		"name": "ショットガン",
+		"category": "combat",
+		"base": "30"
+	},
+	{
+		"uuid": "e5fcac7a-bad2-4c6a-b8b4-f4083d1e6067",
+		"id": "sneak",
+		"name": "忍び歩き",
+		"category": "investigation",
+		"base": "10"
+	},
+	{
+		"uuid": "18f7a305-952b-4b46-9d14-a6cb5af7c3ba",
+		"id": "spanish",
+		"name": "スペイン語",
+		"category": "language",
+		"base": "1"
+	},
+	{
+		"uuid": "d32329d9-fa5d-42b5-9ddb-39fc2070bca2",
+		"id": "spot_hidden",
+		"name": "目星",
+		"category": "investigation",
+		"base": "25"
+	},
+	{
+		"uuid": "61213097-805d-492e-8fc1-e99531638784",
+		"id": "submachine_gun",
+		"name": "サブマシンガン",
+		"category": "combat",
+		"base": "15"
+	},
+	{
+		"uuid": "dfa00e72-6abc-400e-a491-8628d7758e36",
+		"id": "swim",
+		"name": "水泳",
+		"category": "locomotion",
+		"base": "25"
+	},
+	{
+		"uuid": "35b14f6a-cba5-485d-9300-168b62cde37c",
+		"id": "throw",
+		"name": "投擲",
+		"category": "investigation",
+		"base": "25"
+	},
+	{
+		"uuid": "4c5bdd4b-9097-407f-b298-c44321660a66",
+		"id": "track",
+		"name": "追跡",
+		"category": "investigation",
+		"base": "10"
+	}
+]

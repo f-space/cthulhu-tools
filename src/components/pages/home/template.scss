@@ -1,0 +1,57 @@
+@import "variable";
+
+.content {
+	margin-top: 1em;
+	border: solid 1px $color-main-dark;
+	border-radius: 1em;
+	padding: 2em 1em;
+	line-height: 1.6;
+
+	p {
+		margin: 1em 0;
+	}
+
+	ul {
+		list-style: disc inside;
+	}
+
+	a {
+		color: $color-main;
+
+		&:visited {
+			color: $color-main-dark;
+		}
+
+		&:hover {
+			color: $color-main-light;
+		}
+	}
+}
+
+.heading {
+	border-bottom: solid 1px $color-main-dark;
+	text-align: left;
+	color: $color-main-dark;
+	font-size: 1.5rem;
+
+	:not(:first-child) > & {
+		margin-top: 1em;
+	}
+}
+
+.sub {
+	margin-left: 1em;
+	font-size: 0.6em;
+}
+
+.app-info {
+	display: grid;
+	grid-template-columns: 8em 1fr;
+	margin: 1em 0.5em;
+
+	dt,
+	dd {
+		border-bottom: dashed 1px $color-main-dark;
+		padding: 0.25em 0.5em 0.1em;
+	}
+}

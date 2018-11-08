@@ -1,0 +1,17 @@
+@import "variable";
+
+.status {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: stretch;
+	justify-content: flex-start;
+	margin: 0 3px;
+	border: solid 1px $color-main;
+	padding: 1em 1em;
+}
+
+.name {
+	margin: 0.5em 0;
+	text-align: center;
+	font-size: 1.25rem;
+}

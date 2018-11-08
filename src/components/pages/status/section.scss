@@ -1,0 +1,12 @@
+@import "variable";
+
+.section {
+	margin-top: 2em;
+}
+
+.heading {
+	margin-bottom: 1em;
+	border-bottom: solid 1px $color-main;
+	padding-bottom: 0.1em;
+	font-size: 1rem;
+}

@@ -1,0 +1,28 @@
+@import "variable";
+@import "mixin";
+
+.button {
+	--shadow-color: rgba($color-main-bright, 0.5);
+
+	@include unselectable;
+	@include designed-font($color-text-glare, $color-main-bright);
+
+	outline: none;
+	border: none;
+	background: radial-gradient(ellipse closest-side at 50% 75%, var(--shadow-color), transparent);
+	cursor: pointer;
+	padding: 0 0.75em;
+	line-height: 1;
+
+	&:active {
+		--shadow-color: #{rgba($color-accent-bright, 0.5)};
+	}
+
+	&:disabled {
+		--shadow-color: transparent;
+
+		opacity: 0.75;
+		cursor: auto;
+		filter: contrast(50%);
+	}
+}

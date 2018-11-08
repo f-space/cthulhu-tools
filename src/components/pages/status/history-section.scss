@@ -1,0 +1,60 @@
+@import "variable";
+
+@keyframes fadein {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+.history {
+	margin: 0 0.25em;
+	list-style: none;
+	line-height: 1.6;
+}
+
+.event {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	margin: 0.25em 0;
+	border-bottom: dashed 1px $color-main-dark;
+	padding: 0 0.5em;
+}
+
+.message {
+	overflow: hidden;
+	font-size: 1rem;
+	overflow-wrap: break-word;
+}
+
+.summary {
+	opacity: 0.5;
+	margin-left: 3em;
+	word-break: break-all;
+	font-size: 80%;
+}
+
+.property {
+	&:not(:first-child) {
+		margin-left: 0.5em;
+	}
+}
+
+.delete {
+	align-self: center;
+	justify-self: center;
+	width: 2em;
+	text-align: center;
+}
+
+.delete-button {
+	outline: none;
+	animation: 500ms fadein;
+	color: $color-main-dark;
+
+	&:hover {
+		color: $color-main-light;
+	}
+
+	&:active {
+		transform: scale(1.2);
+	}
+}

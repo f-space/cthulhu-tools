@@ -1,0 +1,28 @@
+.section {
+	display: flex;
+	flex-flow: column nowrap;
+	margin: 2em 0;
+}
+
+.heading {
+	margin: 1em 0;
+	text-align: center;
+}
+
+.actions {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: flex-end;
+	margin: 3ex 0 1ex;
+}
+
+.ok,
+.cancel {
+	box-sizing: content-box;
+	margin-left: 0.5em;
+	width: 4em;
+}
+
+.ok { order: 1; }
+.cancel { order: 0; }

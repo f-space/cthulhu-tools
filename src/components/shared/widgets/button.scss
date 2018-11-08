@@ -1,0 +1,29 @@
+@import "variable";
+
+.button {
+	outline: none;
+	border: solid 1px $color-main-dark;
+	border-radius: 0.5ex;
+	padding: 0.5em 0.75em;
+	text-align: center;
+	line-height: 1;
+	white-space: nowrap;
+
+	&:active {
+		border-color: $color-main-light;
+		background: $color-main-light;
+	}
+}
+
+.commit {
+	background: $color-main-dark;
+
+	&:active {
+		border-color: $color-main-light;
+		background: $color-main-light;
+	}
+
+	&:disabled {
+		background: $color-main-darker;
+	}
+}

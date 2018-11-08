@@ -1,0 +1,28 @@
+@import "variable";
+@import "mixin";
+
+.header {
+	@include unselectable;
+
+	position: relative;
+	border-bottom: $color-main-dark solid 1px;
+	text-align: center;
+}
+
+.title {
+	display: inline;
+	cursor: pointer;
+}
+
+.title-text {
+	@include designed-font($color-text-glare, $color-main-bright);
+}
+
+.menu {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	flex-flow: row nowrap;
+}

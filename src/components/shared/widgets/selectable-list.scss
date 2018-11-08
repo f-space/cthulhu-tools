@@ -1,0 +1,23 @@
+@import "variable";
+
+.list {
+	display: flex;
+	flex-flow: column nowrap;
+	margin: 0.75em 0;
+	border-top: solid 1px $color-main;
+	border-bottom: solid 1px $color-main;
+	padding: 0.75em 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.item {
+	flex: 0 0 auto;
+	margin: 0 0.5em;
+	border-bottom: dashed 1px $color-main-dark;
+	padding-bottom: 0.5ex;
+
+	&:not(:first-child) {
+		margin-top: 0.5em;
+	}
+}

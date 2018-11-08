@@ -1,0 +1,32 @@
+@import "variable";
+@import "mixin";
+
+.navigation {
+	@include unselectable;
+
+	display: grid;
+	grid-auto-columns: 1fr;
+	grid-auto-flow: column;
+}
+
+.item {
+	opacity: 0.5;
+	background: linear-gradient(transparent 80%, $color-main);
+	overflow: hidden;
+	text-align: center;
+	font-size: 3rem;
+
+	&.active {
+		opacity: 1;
+		background: linear-gradient(transparent 50%, $color-accent);
+	}
+}
+
+.icon {
+	color: $color-background;
+	filter: drop-shadow(0 0 3px $color-main-bright);
+
+	.active & {
+		filter: drop-shadow(0 0 5px $color-accent-bright);
+	}
+}
