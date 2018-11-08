@@ -14,12 +14,14 @@ export function Dialog(props: DialogProps) {
 
 	if (open) {
 		return <DialogComponents.Portal>
-			<aside {...rest} className={classNames(className, style['dialog'])}>
-				<h1 className={style['header']}>{header}</h1>
-				<div className={style['content']}>
-					{children()}
-				</div>
-			</aside>
+			{
+				() => <aside {...rest} className={classNames(className, style['dialog'])}>
+					<h1 className={style['header']}>{header}</h1>
+					<div className={style['content']}>
+						{children()}
+					</div>
+				</aside>
+			}
 		</DialogComponents.Portal>
 	} else {
 		return null;

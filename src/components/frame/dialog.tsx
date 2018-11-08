@@ -1,46 +1,75 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-const Context = React.createContext<React.RefObject<any>>(React.createRef());
-
-export function DialogProvider({ children }: { children: React.ReactNode }) {
-	return <Context.Provider value={React.createRef()}>
-		{children}
-	</Context.Provider>
+interface DialogHub {
+	renderers: ReadonlyArray<DialogRenderer>
+	open(renderer: DialogRenderer): void;
+	close(renderer: DialogRenderer): void;
 }
 
-export function DialogSlot({ children }: { children: (ref: React.RefObject<any>) => React.ReactNode }) {
+interface DialogRenderer {
+	(): React.ReactNode;
+}
+
+const Context = React.createContext<DialogHub>({
+	renderers: [],
+	open() { },
+	close() { },
+});
+
+export interface DialogProviderProps { }
+
+export class DialogProvider extends React.Component<DialogProviderProps, DialogHub> {
+	public state = {
+		renderers: [],
+		open: (renderer: DialogRenderer) => {
+			this.setState(state => {
+				return { renderers: [...state.renderers, renderer] };
+			});
+		},
+		close: (renderer: DialogRenderer) => {
+			this.setState(state => {
+				return { renderers: state.renderers.filter(r => r !== renderer) };
+			});
+		}
+	};
+
+	public render() {
+		return <Context.Provider value={this.state}>
+			{this.props.children}
+		</Context.Provider>
+	}
+}
+
+export interface DialogSlotProps { }
+
+export function DialogSlot() {
 	return <Context.Consumer>
-		{children}
+		{({ renderers }) => renderers.length !== 0 ? renderers[0]() : null}
 	</Context.Consumer>
 }
 
-export function DialogPortal({ children }: { children: React.ReactElement<any> }) {
-	return <Context.Consumer>
-		{value => value.current instanceof Element && <DialogPortalInner container={value.current} children={children} />}
-	</Context.Consumer>
+export interface DialogPortalProps {
+	children: DialogRenderer;
 }
 
-interface DialogPortalInnerProps {
-	container: Element;
-	children: React.ReactElement<any>;
-}
+export class DialogPortal extends React.Component<DialogPortalProps> {
+	public static contextType = Context;
 
-class DialogPortalInner extends React.Component<DialogPortalInnerProps> {
+	public context!: DialogHub;
+
 	public componentDidMount(): void {
-		ReactDOM.render(this.props.children, this.props.container);
+		this.context.open(this.props.children);
 	}
 
 	public componentWillUnmount(): void {
-		ReactDOM.unmountComponentAtNode(this.props.container);
+		this.context.close(this.props.children);
 	}
 
-	public componentDidUpdate(prevProps: DialogPortalInnerProps): void {
-		if (this.props.container !== prevProps.container) {
-			ReactDOM.unmountComponentAtNode(prevProps.container);
+	public componentDidUpdate(prevProps: DialogPortalProps): void {
+		if (this.props.children !== prevProps.children) {
+			this.context.close(prevProps.children);
+			this.context.open(this.props.children);
 		}
-
-		ReactDOM.render(this.props.children, this.props.container);
 	}
 
 	public render() {
