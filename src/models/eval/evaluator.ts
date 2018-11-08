@@ -2,7 +2,7 @@ import {
 	Hash, Variable, Reference, Expression,
 	CharacterParams, AttributeParams, SkillParams,
 	AttributeType, Attribute, IntegerAttribute, NumberAttribute, TextAttribute,
-	Skill, History, Operation
+	Skill, History, Commit, Operation
 } from "models/data";
 import { Property, AttributeProperty, SkillProperty } from "./property";
 
@@ -166,7 +166,7 @@ export class HistoryEvaluator implements TerminalEvaluator {
 				if (prevValue !== undefined) {
 					return commit.operations
 						.filter(x => x.target === ref.key)
-						.reduce((value, op) => this.applyOperation(context, op, value), prevValue);
+						.reduce((value, op) => this.applyOperation(context, commit, op, value), prevValue);
 				}
 			}
 		}
@@ -174,13 +174,13 @@ export class HistoryEvaluator implements TerminalEvaluator {
 		return undefined;
 	}
 
-	private applyOperation(context: EvaluationContext, operation: Operation, value: any): any {
-		const { time, request } = context;
+	private applyOperation(context: EvaluationContext, commit: Commit, operation: Operation, value: any): any {
+		const { request } = context;
 		const expression = operation.value;
 		const values = new Map<string, any>();
 
 		for (const ref of expression.refs) {
-			const value = request(ref, time);
+			const value = request(ref, commit.parent);
 			values.set(ref.key, value);
 		}
 
