@@ -191,6 +191,7 @@ class ASTEvaluator {
 			case 'floor': return Math.floor(args[0]);
 			case 'ceil': return Math.ceil(args[0]);
 			case 'round': return Math.round(args[0]);
+			case 'db': return db(args[0]);
 			default: return undefined;
 		}
 	}
@@ -224,4 +225,14 @@ class ASTEvaluator {
 	protected onReference(node: AST.Reference): any {
 		return this.values.get(Reference.key(node.id, node.modifier, node.scope));
 	}
+}
+
+function db(value: number): string | undefined {
+	if (!Number.isFinite(value)) return undefined;
+	if (value <= 12) return "-1D6";
+	if (value <= 16) return "-1D4";
+	if (value <= 24) return "+0";
+	if (value <= 32) return "+1D4";
+	if (value <= 40) return "+1D6";
+	return `+${Math.ceil((value - 40) / 16) + 1}D6`;
 }

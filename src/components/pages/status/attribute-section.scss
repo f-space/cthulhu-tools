@@ -20,6 +20,7 @@
 	&.id-name { display: none; }
 	&.id-age { grid-column: span 1; }
 	&.id-occupation { grid-column: span 2; }
+	&.id-db { grid-column: span 1; }
 
 	&.edit {
 		transition: border 0.5s, background-color 0.5s;

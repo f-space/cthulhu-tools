@@ -252,11 +252,9 @@
 		"uuid": "eb2ec402-fbe2-46bc-9dcc-9b171bc7d080",
 		"id": "db",
 		"name": "ダメージボーナス",
-		"type": "integer",
+		"type": "text",
 		"inputs": [],
-		"expression": "str + siz",
-		"min": "0",
-		"max": "99",
+		"expression": "db(str + siz)",
 		"view": true
 	},
 	{

@@ -107,7 +107,14 @@ module.exports = function (env, { mode }) {
 			publicPath: PUBLIC_PATH,
 			before: function (app) {
 				const express = require('express');
-				app.use(PUBLIC_PATH, express.static(CONTENT_PATH));
+				const static = express.static(CONTENT_PATH);
+				app.use(PUBLIC_PATH, function (req, res, next) {
+					const match = req.path.match(/^\/(?:index\.(?:html|css|js))?$/);
+					if (!match) {
+						return static.apply(this, arguments);
+					}
+					next();
+				});
 			}
 		},
 		plugins: [
