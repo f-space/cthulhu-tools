@@ -33,7 +33,7 @@ function AppInfo() {
 		<dt>開発者</dt>
 		<dd>F_</dd>
 		<dt>バージョン</dt>
-		<dd>0.4.1</dd>
+		<dd>0.4.2</dd>
 		<dt>ライセンス</dt>
 		<dd><Link to="/license">MIT</Link></dd>
 		<dt>著作権等</dt>
