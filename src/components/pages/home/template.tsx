@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Page } from "components/shared/templates/page";
+import { author, version, license } from "project/package.json";
 import style from "./template.scss";
 
 export interface HomeTemplateProps {
@@ -31,11 +32,11 @@ function Section({ heading, sub, content: Content }: { heading: string, sub: str
 function AppInfo() {
 	return <dl className={style['app-info']}>
 		<dt>開発者</dt>
-		<dd>F_</dd>
+		<dd>{author}</dd>
 		<dt>バージョン</dt>
-		<dd>0.4.3</dd>
+		<dd>{version}</dd>
 		<dt>ライセンス</dt>
-		<dd><Link to="/license">MIT</Link></dd>
+		<dd><Link to="/license">{license}</Link></dd>
 		<dt>著作権等</dt>
 		<dd><Link to="/license">ライセンス</Link> ページ参照</dd>
 	</dl>
