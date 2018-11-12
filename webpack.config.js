@@ -6,7 +6,8 @@ const StylelintPlugin = require('stylelint-webpack-plugin');
 const TsConfigPlugin = require("./webpack-ext/tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
-const PUBLIC_PATH = "/cthulhu-tools/";
+const PACKAGE = require("./package.json");
+const PUBLIC_PATH = `/${PACKAGE.name}/`;
 const CONTENT_PATH = path.resolve(__dirname, "docs");
 
 module.exports = function (env, { mode }) {
