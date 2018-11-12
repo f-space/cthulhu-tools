@@ -1,22 +1,17 @@
 {
 	"name": "cthulhu-tools",
 	"version": "0.4.3",
-	"description": "",
-	"main": "",
 	"scripts": {
 		"test": "jest",
 		"start": "npm run start:dev",
-		"start:dev": "webpack-dev-server --mode development --devtool inline-source-map --inline --hot",
+		"start:dev": "webpack-dev-server --mode development --debug --devtool eval-source-map",
 		"start:prod": "webpack-dev-server --mode production",
 		"build": "npm run build:prod",
-		"build:dev": "webpack --mode development --devtool inline-source-map",
+		"build:dev": "webpack --mode development --debug --devtool eval-source-map",
 		"build:prod": "webpack --mode production",
 		"pegjs": "pegjs --allowed-start-rules Expression src/pegjs/expression.pegjs",
 		"library": "node library.js"
 	},
-	"keywords": [
-		"Cthulhu"
-	],
 	"author": "F_",
 	"license": "MIT",
 	"dependencies": {
