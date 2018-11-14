@@ -6,6 +6,10 @@ import {
 } from "models/data";
 import { Property, AttributeProperty, SkillProperty } from "./property";
 
+function andThen<T, U>(value: T | undefined, map: (value: T) => U): U | undefined {
+	return value !== undefined ? map(value) : undefined;
+}
+
 export interface EvaluationContext {
 	readonly ref: Reference;
 	readonly time: string | null;
@@ -48,28 +52,31 @@ export class AttributeEvaluator implements TerminalEvaluator {
 
 	private evaluateInteger(context: EvaluationContext, attribute: IntegerAttribute): number | undefined {
 		const { property } = context;
+		const evalExpr = this.evaluateExpression.bind(this, context, attribute) as (expr: Expression) => any;
 		switch (property.type) {
-			case 'attribute': return this.evaluateExpression(context, attribute, attribute.expression);
-			case 'attribute:min': return attribute.min ? this.evaluateExpression(context, attribute, attribute.min) : Number.MIN_SAFE_INTEGER;
-			case 'attribute:max': return attribute.max ? this.evaluateExpression(context, attribute, attribute.max) : Number.MAX_SAFE_INTEGER;
+			case 'attribute': return evalExpr(attribute.expression);
+			case 'attribute:min': return andThen(attribute.min, evalExpr);
+			case 'attribute:max': return andThen(attribute.max, evalExpr);
 			default: return undefined;
 		}
 	}
 
 	private evaluateNumber(context: EvaluationContext, attribute: NumberAttribute): number | undefined {
 		const { property } = context;
+		const evalExpr = this.evaluateExpression.bind(this, context, attribute) as (expr: Expression) => any;
 		switch (property.type) {
-			case 'attribute': return this.evaluateExpression(context, attribute, attribute.expression);
-			case 'attribute:min': return attribute.min ? this.evaluateExpression(context, attribute, attribute.min) : Number.NEGATIVE_INFINITY;
-			case 'attribute:max': return attribute.max ? this.evaluateExpression(context, attribute, attribute.max) : Number.POSITIVE_INFINITY;
+			case 'attribute': return evalExpr(attribute.expression);
+			case 'attribute:min': return andThen(attribute.min, evalExpr);
+			case 'attribute:max': return andThen(attribute.max, evalExpr);
 			default: return undefined;
 		}
 	}
 
 	private evaluateText(context: EvaluationContext, attribute: TextAttribute): string | undefined {
 		const { property } = context;
+		const evalExpr = this.evaluateExpression.bind(this, context, attribute) as (expr: Expression) => any;
 		switch (property.type) {
-			case 'attribute': return this.evaluateExpression(context, attribute, attribute.expression);
+			case 'attribute': return evalExpr(attribute.expression);
 			default: return undefined;
 		}
 	}
@@ -163,11 +170,9 @@ export class HistoryEvaluator implements TerminalEvaluator {
 			const commit = this.history.find(time);
 			if (commit !== undefined) {
 				const prevValue = request(ref, commit.parent);
-				if (prevValue !== undefined) {
-					return commit.operations
-						.filter(x => x.target === ref.key)
-						.reduce((value, op) => this.applyOperation(context, commit, op, value), prevValue);
-				}
+				return commit.operations
+					.filter(x => x.target === ref.key)
+					.reduce((value, op) => this.applyOperation(context, commit, op, value), prevValue);
 			}
 		}
 

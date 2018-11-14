@@ -1,6 +1,10 @@
 import { Hash, Reference } from "models/data";
 import { Property, AttributeProperty } from "./property";
 
+function withDefault<T>(value: T | undefined, defaultValue: T): T {
+	return value !== undefined ? value : defaultValue;
+}
+
 export interface ValidationContext {
 	readonly ref: Reference;
 	readonly time: string | null;
@@ -44,9 +48,9 @@ export class AttributeValidator implements TerminalValidator {
 		const { ref, time, property, value, request } = context;
 		switch (property.type) {
 			case 'attribute':
-				const min = request(ref.set({ modifier: 'min' }), time);
-				const max = request(ref.set({ modifier: 'max' }), time);
-				return (min !== undefined && max !== undefined) ? Math.round(Math.max(Math.min(value, max), min)) : undefined;
+				const min = withDefault(request(ref.set({ modifier: 'min' }), time), Number.MIN_SAFE_INTEGER);
+				const max = withDefault(request(ref.set({ modifier: 'max' }), time), Number.MAX_SAFE_INTEGER);
+				return Math.round(Math.max(Math.min(value, max), min));
 			case 'attribute:min': return Math.round(value);
 			case 'attribute:max': return Math.round(value);
 			default: return undefined;
@@ -57,9 +61,9 @@ export class AttributeValidator implements TerminalValidator {
 		const { ref, time, property, value, request } = context;
 		switch (property.type) {
 			case 'attribute':
-				const min = request(ref.set({ modifier: 'min' }), time);
-				const max = request(ref.set({ modifier: 'max' }), time);
-				return (min !== undefined && max !== undefined) ? Number(Math.max(Math.min(value, max), min)) : undefined;
+				const min = withDefault(request(ref.set({ modifier: 'min' }), time), Number.NEGATIVE_INFINITY);
+				const max = withDefault(request(ref.set({ modifier: 'max' }), time), Number.POSITIVE_INFINITY);
+				return Number(Math.max(Math.min(value, max), min));
 			case 'attribute:min': return Number(value);
 			case 'attribute:max': return Number(value);
 			default: return undefined;
