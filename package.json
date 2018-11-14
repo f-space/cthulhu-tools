@@ -4,10 +4,10 @@
 	"scripts": {
 		"test": "jest",
 		"start": "npm run start:dev",
-		"start:dev": "webpack-dev-server --mode development --debug --devtool eval-source-map",
+		"start:dev": "webpack-dev-server --mode development --debug --devtool source-map",
 		"start:prod": "webpack-dev-server --mode production",
 		"build": "npm run build:prod",
-		"build:dev": "webpack --mode development --debug --devtool eval-source-map",
+		"build:dev": "webpack --mode development --debug --devtool source-map",
 		"build:prod": "webpack --mode production",
 		"pegjs": "pegjs --allowed-start-rules Expression src/pegjs/expression.pegjs",
 		"library": "node library.js"
