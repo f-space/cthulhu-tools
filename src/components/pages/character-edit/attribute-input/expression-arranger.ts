@@ -10,7 +10,7 @@ export class ExpressionArranger {
 		this.context = attribute;
 		this.depth = 0;
 
-		return this.visit(attribute.expression.ast).split("\0");
+		return this.visit(attribute.expression.ast).split("\x00");
 	}
 
 	protected visit(node: AST.Node): string {
@@ -81,7 +81,7 @@ export class ExpressionArranger {
 	}
 
 	protected onVariable(node: AST.Variable): string {
-		return `\0${node.name}\0`;
+		return `\x00${node.name}\x00`;
 	}
 
 	protected onReference(node: AST.Reference): string {
