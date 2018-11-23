@@ -101,8 +101,8 @@ function LibraryTable({ libraries }: LibraryProps) {
 
 function LinkedLicense({ licenses }: { licenses: string }) {
 	const list = Object.keys(LICENSE_LINKS);
-	const separated = list.reduce((s, spdx) => s.replace(spdx, `\0${spdx}\0`), licenses);
-	const split = separated.split("\0").filter(s => s);
+	const separated = list.reduce((s, spdx) => s.replace(spdx, `\x00${spdx}\x00`), licenses);
+	const split = separated.split("\x00").filter(s => s);
 	return <>
 		{
 			split.map(token => {

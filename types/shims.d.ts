@@ -19,6 +19,12 @@ declare module "project/LICENSE" {
 	export default list;
 }
 
+declare module "project/package.json" {
+	export const author: string;
+	export const version: string;
+	export const license: string;
+}
+
 declare module "project/assets.json" {
 	const assets: ReadonlyArray<Asset>;
 	export default assets;
@@ -40,3 +46,5 @@ interface Library {
 	owner: string;
 	licenses: string;
 }
+
+declare const PUBLIC_PATH: string;

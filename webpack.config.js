@@ -1,4 +1,6 @@
+const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -6,7 +8,8 @@ const StylelintPlugin = require('stylelint-webpack-plugin');
 const TsConfigPlugin = require("./webpack-ext/tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
-const PUBLIC_PATH = "/cthulhu-tools/";
+const PACKAGE = require("./package.json");
+const PUBLIC_PATH = `/${PACKAGE.name}/`;
 const CONTENT_PATH = path.resolve(__dirname, "docs");
 
 module.exports = function (env, { mode }) {
@@ -105,11 +108,15 @@ module.exports = function (env, { mode }) {
 		devServer: {
 			contentBase: CONTENT_PATH,
 			publicPath: PUBLIC_PATH,
+			https: {
+				key: fs.readFileSync("ssl/server.key"),
+				cert: fs.readFileSync("ssl/server.crt"),
+			},
 			before: function (app) {
 				const express = require('express');
 				const static = express.static(CONTENT_PATH);
 				app.use(PUBLIC_PATH, function (req, res, next) {
-					const match = req.path.match(/^\/(?:index\.(?:html|css|js))?$/);
+					const match = req.path.match(/^\/(?:index\.(?:html|css|js)(?:\.map)?)?$/);
 					if (!match) {
 						return static.apply(this, arguments);
 					}
@@ -118,6 +125,9 @@ module.exports = function (env, { mode }) {
 			}
 		},
 		plugins: [
+			new webpack.DefinePlugin({
+				PUBLIC_PATH: JSON.stringify(PUBLIC_PATH)
+			}),
 			new MiniCssExtractPlugin({
 				filename: "[name].css"
 			}),
