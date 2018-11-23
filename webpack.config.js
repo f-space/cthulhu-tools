@@ -1,4 +1,6 @@
+const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -106,6 +108,10 @@ module.exports = function (env, { mode }) {
 		devServer: {
 			contentBase: CONTENT_PATH,
 			publicPath: PUBLIC_PATH,
+			https: {
+				key: fs.readFileSync("ssl/server.key"),
+				cert: fs.readFileSync("ssl/server.crt"),
+			},
 			before: function (app) {
 				const express = require('express');
 				const static = express.static(CONTENT_PATH);
@@ -119,6 +125,9 @@ module.exports = function (env, { mode }) {
 			}
 		},
 		plugins: [
+			new webpack.DefinePlugin({
+				PUBLIC_PATH: JSON.stringify(PUBLIC_PATH)
+			}),
 			new MiniCssExtractPlugin({
 				filename: "[name].css"
 			}),

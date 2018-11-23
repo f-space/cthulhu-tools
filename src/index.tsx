@@ -4,6 +4,10 @@ import ReactDOM from 'react-dom';
 import { App } from "components/frame/app";
 import buildIconLibrary from "./build-falib";
 
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register(PUBLIC_PATH + "service-worker.js");
+}
+
 buildIconLibrary();
 
 if (document.readyState !== 'loading') {
