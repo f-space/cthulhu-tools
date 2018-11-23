@@ -110,7 +110,7 @@ module.exports = function (env, { mode }) {
 				const express = require('express');
 				const static = express.static(CONTENT_PATH);
 				app.use(PUBLIC_PATH, function (req, res, next) {
-					const match = req.path.match(/^\/(?:index\.(?:html|css|js))?$/);
+					const match = req.path.match(/^\/(?:index\.(?:html|css|js)(?:\.map)?)?$/);
 					if (!match) {
 						return static.apply(this, arguments);
 					}
