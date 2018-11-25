@@ -21,6 +21,7 @@ interface StatusTemplateState {
 const NAVS: Navigation[] = [
 	{
 		to: "/status/character-management",
+		label: "キャラクター管理",
 		icon: "list",
 	}
 ];

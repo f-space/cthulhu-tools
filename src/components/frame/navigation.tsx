@@ -8,6 +8,7 @@ export interface NavigationProps extends React.HTMLAttributes<HTMLElement> { }
 
 interface NavItemInnerProps extends RouteComponentProps {
 	to: string;
+	label: string;
 	children?: React.ReactNode;
 }
 
@@ -19,18 +20,18 @@ export function Navigation(props: NavigationProps) {
 	const { className, ...rest } = props;
 
 	return <nav {...rest} className={classNames(className, style['navigation'])}>
-		<NavItem to="/dice"><NavIcon icon="dice" /></NavItem>
-		<NavItem to="/status"><NavIcon icon="users" /></NavItem>
+		<NavItem to="/dice" label="ダイス"><NavIcon icon="dice" /></NavItem>
+		<NavItem to="/status" label="ステータス"><NavIcon icon="users" /></NavItem>
 	</nav>
 }
 
-function NavItemInner({ to, location, children }: NavItemInnerProps) {
+function NavItemInner({ to, label, location, children }: NavItemInnerProps) {
 	const match = Boolean(matchPath(location.pathname, { path: to, exact: true }));
 
 	const className = classNames(style['item'], { [style['active']]: match });
 	const item = <div className={className}>{children}</div>
 
-	return match ? item : <Link to={to}>{item}</Link>;
+	return match ? item : <Link to={to} aria-label={label}>{item}</Link>;
 }
 
 const NavItem = withRouter(NavItemInner);

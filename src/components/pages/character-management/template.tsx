@@ -32,6 +32,7 @@ interface FormValues {
 const NAVS: Navigation[] = [
 	{
 		to: "/status/character-edit",
+		label: "キャラクター作成",
 		icon: "plus",
 	}
 ];
