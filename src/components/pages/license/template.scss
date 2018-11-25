@@ -11,11 +11,11 @@
 		color: $color-main;
 
 		&:visited {
-			color: $color-main-dark;
+			color: $color-main-light;
 		}
 
 		&:hover {
-			color: $color-main-light;
+			color: $color-accent-light;
 		}
 	}
 }
