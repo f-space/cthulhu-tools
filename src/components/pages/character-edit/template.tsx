@@ -58,9 +58,10 @@ export class CharacterEditTemplate extends React.Component<CharacterEditTemplate
 	}
 
 	public render() {
-		const { attributes, skills } = this.props;
+		const { target, attributes, skills } = this.props;
+		const heading = target ? "キャラクター編集" : "キャラクター作成";
 
-		return <Page heading="キャラクター編集" pageTitle>
+		return <Page heading={heading} pageTitle>
 			<Form {...this.state}
 				subscription={{}}
 				onSubmit={this.handleSubmit}
