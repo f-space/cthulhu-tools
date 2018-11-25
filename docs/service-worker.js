@@ -14,7 +14,9 @@ const FILE_URLS = [
 	"font/Neko_no_Mezame.ttf",
 	"image/dice.json",
 	"image/dice.png",
-	"image/icon.png",
+	"icon/favicon.png",
+	"icon/icon_192x192.png",
+	"icon/icon_512x512.png",
 ];
 
 self.addEventListener('install', function (event) {
