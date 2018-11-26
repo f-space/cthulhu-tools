@@ -25,7 +25,7 @@ export function HistorySection({ status, edit, onDelete }: HistorySectionProps) 
 						</div>
 						{
 							edit && <div className={style['delete']}>
-								<button className={style['delete-button']} type="button" onClick={() => onDelete(commit)}>
+								<button className={style['delete-button']} type="button" aria-label="削除" onClick={() => onDelete(commit)}>
 									<FontAwesomeIcon icon="trash-alt" />
 								</button>
 							</div>

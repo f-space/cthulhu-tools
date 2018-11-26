@@ -55,16 +55,16 @@ export class SkillParamsEdit extends React.PureComponent<SkillParamsEditProps> {
 			<FieldArray name={name} render={({ fields }) =>
 				<React.Fragment>
 					<div className={style['commands']}>
-						<button className={style['command']} type="button" onClick={() => fields.push({ id: "", points: 0 })}>
+						<button className={style['command']} type="button" aria-label="追加" onClick={() => fields.push({ id: "", points: 0 })}>
 							<FontAwesomeIcon icon="plus" />
 						</button>
-						<button className={style['command']} type="button" onClick={() => fields.pop()}>
+						<button className={style['command']} type="button" aria-label="削除" onClick={() => fields.pop()}>
 							<FontAwesomeIcon icon="minus" />
 						</button>
 					</div>
 					<div className={style['skills']}>
 						<div className={style['help']}>
-							<span className={style['icon']}><FontAwesomeIcon icon="plus" /></span>
+							<span className={style['icon']} aria-label="追加ボタン"><FontAwesomeIcon icon="plus" /></span>
 							<span>で技能を追加</span>
 						</div>
 						{
