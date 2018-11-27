@@ -1,4 +1,4 @@
-import { DiceSoundManager } from "models/resource";
+import { DiceSoundResource } from "models/resource";
 
 export class DiceSoundPlayer {
 	private element: HTMLAudioElement = document.createElement('audio');
@@ -12,13 +12,13 @@ export class DiceSoundPlayer {
 	}
 
 	public async load(): Promise<void> {
-		await DiceSoundManager.load();
+		const store = await DiceSoundResource.global();
 
 		await new Promise<void>((resolve, reject) => {
 			this.element.oncanplaythrough = () => resolve();
 			this.element.onerror = (e) => reject(new Error(e.message));
 			this.element.preload = 'auto';
-			this.element.src = DiceSoundManager.get();
+			this.element.src = store.get();
 		});
 	}
 

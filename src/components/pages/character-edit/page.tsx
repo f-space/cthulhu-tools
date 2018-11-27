@@ -5,6 +5,7 @@ import { Profile, Attribute, Skill, DataProvider, DataCollector } from "models/s
 import { State, Dispatch } from "redux/store";
 import { getDataProvider } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
+import { DiceImageGuard } from "components/shared/templates/dice-image-guard";
 import { StatusGuard } from "components/shared/templates/status-guard";
 import { CharacterEditTemplate, CharacterEditTemplateProps } from "./template";
 
@@ -53,7 +54,11 @@ function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownPro
 const Connected = connect(mapStateToProps, mapDispatchToProps, mergeProps)(CharacterEditTemplate);
 
 export function CharacterEditPage(props: RouteComponentProps<{ uuid?: string }>) {
-	return <StatusGuard>
-		{() => <Connected {...props} />}
-	</StatusGuard>
+	return <DiceImageGuard>
+		{
+			() => <StatusGuard>
+				{() => <Connected {...props} />}
+			</StatusGuard>
+		}
+	</DiceImageGuard>
 }

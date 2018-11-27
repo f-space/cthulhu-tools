@@ -4,6 +4,7 @@ import { Button } from "components/shared/widgets/button";
 import { RollButton } from "components/shared/widgets/roll-button";
 import { DiceImage } from "components/shared/widgets/dice-image";
 import { Dialog } from "components/shared/templates/dialog";
+import { DiceImageConsumer } from "components/shared/templates/dice-image-guard";
 import { DiceRoll } from "components/shared/templates/dice-roll";
 import style from "./dice-input-dialog.scss";
 
@@ -40,29 +41,36 @@ export class DiceInputDialog extends React.Component<DiceInputDialogProps, DiceI
 		const { value, rolling } = this.state;
 		const display = dices.map((dice, i) => dice.display(value[i]));
 
-		return <Dialog open={this.props.open} header={"Dice Input"}>
+		return <DiceImageConsumer>
 			{
-				() => <>
-					<div className={style['inputs']}>
-						<div className={style['dices']}>
-							{
-								display.map((group, groupIndex) =>
-									<div key={groupIndex} className={style['group']} onClick={this.handleClickDice} data-index={groupIndex}>
-										{group.map((dice, diceIndex) => <DiceImage key={diceIndex} className={style['dice']} type={dice.type} face={dice.face} />)}
-									</div>
-								)
-							}
-						</div>
-						<RollButton className={style['roll']} disabled={rolling} onClick={this.handleClickRoll} />
-					</div>
-					<div className={style['buttons']}>
-						<Button className={style['ok']} disabled={rolling} commit onClick={this.handleClickOK}>OK</Button>
-						<Button className={style['cancel']} onClick={this.handleClickCancel}>Cancel</Button>
-					</div >
-					<DiceRoll active={rolling} dices={dices} faces={value} callback={this.updateValue} />
-				</>
+				store => store && <Dialog open={this.props.open} header={"Dice Input"}>
+					{
+						() => <>
+							<div className={style['inputs']}>
+								<div className={style['dices']}>
+									{
+										display.map((group, groupIndex) =>
+											<div key={groupIndex} className={style['group']} onClick={this.handleClickDice} data-index={groupIndex}>
+												{
+													group.map((dice, diceIndex) =>
+														<DiceImage key={diceIndex} className={style['dice']} store={store} type={dice.type} face={dice.face} />)
+												}
+											</div>
+										)
+									}
+								</div>
+								<RollButton className={style['roll']} disabled={rolling} onClick={this.handleClickRoll} />
+							</div>
+							<div className={style['buttons']}>
+								<Button className={style['ok']} disabled={rolling} commit onClick={this.handleClickOK}>OK</Button>
+								<Button className={style['cancel']} onClick={this.handleClickCancel}>Cancel</Button>
+							</div >
+							<DiceRoll active={rolling} dices={dices} faces={value} callback={this.updateValue} />
+						</>
+					}
+				</Dialog >
 			}
-		</Dialog >
+		</DiceImageConsumer>
 	}
 
 	private handleClickDice(event: React.MouseEvent<HTMLElement>): void {

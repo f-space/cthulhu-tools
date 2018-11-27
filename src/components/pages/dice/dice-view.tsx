@@ -9,6 +9,7 @@ import RowLayout from "models/layout/row-layout";
 import { FlexibleContainer } from "components/shared/decorators/flexible-container";
 import { DiceNumberDisplay } from "components/shared/widgets/dice-number-display";
 import { DiceLayout } from "components/shared/widgets/dice-layout";
+import { DiceImageConsumer } from "components/shared/templates/dice-image-guard";
 import style from "./dice-view.scss";
 
 export interface DiceViewProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -26,22 +27,26 @@ export class DiceView extends React.Component<DiceViewProps> {
 	public render() {
 		const { dices, faces, className, ...rest } = this.props;
 
-		return <FlexibleContainer className={classNames(className, style['view'])} render={size => {
-			if (dices.length !== 0) {
-				const layout = this.selectLayout(dices);
-				const value = this.getValue(dices, faces);
-				const display = this.getDisplay(dices, faces);
-				const digits = this.getDigits(dices);
-				const state = this.getState(dices, value);
+		return <DiceImageConsumer>
+			{
+				store => store && <FlexibleContainer className={classNames(className, style['view'])} render={size => {
+					if (dices.length !== 0) {
+						const layout = this.selectLayout(dices);
+						const value = this.getValue(dices, faces);
+						const display = this.getDisplay(dices, faces);
+						const digits = this.getDigits(dices);
+						const state = this.getState(dices, value);
 
-				return <React.Fragment>
-					<DiceLayout {...size} className={style['layout']} layout={layout} dices={display} />
-					<DiceNumberDisplay {...size} {...state} className={style['number']} digits={digits} value={value} />
-				</React.Fragment>
+						return <React.Fragment>
+							<DiceLayout {...size} className={style['layout']} store={store} layout={layout} dices={display} />
+							<DiceNumberDisplay {...size} {...state} className={style['number']} digits={digits} value={value} />
+						</React.Fragment>
+					}
+
+					return null;
+				}} />
 			}
-
-			return null;
-		}} />
+		</DiceImageConsumer>
 	}
 
 	private selectLayout(dices: ReadonlyArray<Dice>): Layout {
