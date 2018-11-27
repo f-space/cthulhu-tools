@@ -1,4 +1,4 @@
-import { LoadState } from "redux/states/status";
+import { LoadState, LoadError } from "redux/states/status";
 import { ViewAction } from "redux/actions/view";
 import { CharacterAction } from "redux/actions/character";
 import { ProfileAction } from "redux/actions/profile";
@@ -14,6 +14,7 @@ export enum StatusActionType {
 export interface StatusSetLoadStateAction {
 	readonly type: StatusActionType.SetLoadState;
 	readonly state: LoadState;
+	readonly error: LoadError;
 }
 
 export type StatusAction =
@@ -27,7 +28,7 @@ export type StatusAction =
 	| StatusSetLoadStateAction;
 
 export const StatusAction = {
-	setLoadState(state: LoadState): StatusSetLoadStateAction {
-		return { type: StatusActionType.SetLoadState, state };
+	setLoadState(state: LoadState, error: LoadError = ''): StatusSetLoadStateAction {
+		return { type: StatusActionType.SetLoadState, state, error };
 	},
 }

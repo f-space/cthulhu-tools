@@ -1,5 +1,6 @@
 import CacheStorage from "models/idb-cache";
 import { Dispatch } from "redux/store";
+import { LoadError } from "redux/states/status";
 import { StatusAction } from "redux/actions/status";
 import ViewDispatcher from "redux/dispatchers/view";
 import CharacterDispatcher from "redux/dispatchers/character";
@@ -32,24 +33,33 @@ export default class StatusDispatcher {
 		this.dispatch(StatusAction.setLoadState('loading'));
 
 		if (window.indexedDB) {
-			try {
-				await Promise.all([
-					this.view.load(),
-					this.character.load(),
-					this.profile.load(),
-					this.attribute.load(),
-					this.skill.load(),
-					this.item.load(),
-					this.history.load(),
-					CacheStorage.load(),
-				]);
+			const loadBuiltins = Promise.all([
+				this.profile.loadBuiltins(),
+				this.attribute.loadBuiltins(),
+				this.skill.loadBuiltins(),
+			]);
+			const loadUserData = Promise.all([
+				this.view.load(),
+				this.character.load(),
+				this.profile.load(),
+				this.attribute.load(),
+				this.skill.load(),
+				this.item.load(),
+				this.history.load(),
+			]);
+			const loadCache = CacheStorage.load();
 
+			await Promise.all([
+				loadBuiltins.catch(() => Promise.reject('network')),
+				loadUserData.catch(() => Promise.reject('indexeddb')),
+				loadCache.catch(() => Promise.reject('indexeddb')),
+			]).then(() => {
 				this.dispatch(StatusAction.setLoadState('loaded'));
-			} catch (e) {
-				this.dispatch(StatusAction.setLoadState('error'));
-			}
+			}).catch((e: LoadError) => {
+				this.dispatch(StatusAction.setLoadState('error', e));
+			});
 		} else {
-			this.dispatch(StatusAction.setLoadState('error'));
+			this.dispatch(StatusAction.setLoadState('error', 'indexeddb'));
 		}
 	}
 }

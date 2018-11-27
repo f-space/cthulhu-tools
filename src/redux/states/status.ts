@@ -7,6 +7,7 @@ import { ItemState, INITIAL_ITEM_STATE } from "redux/states/item";
 import { HistoryState, INITIAL_HISTORY_STATE } from "redux/states/history";
 
 export type LoadState = 'unloaded' | 'loading' | 'loaded' | 'error';
+export type LoadError = '' | 'network' | 'indexeddb';
 
 export interface StatusState {
 	view: ViewState;
@@ -17,6 +18,7 @@ export interface StatusState {
 	item: ItemState;
 	history: HistoryState;
 	loadState: LoadState;
+	loadError: LoadError;
 }
 
 export const INITIAL_STATE: StatusState = {
@@ -28,4 +30,5 @@ export const INITIAL_STATE: StatusState = {
 	item: INITIAL_ITEM_STATE,
 	history: INITIAL_HISTORY_STATE,
 	loadState: 'unloaded',
+	loadError: '',
 };
