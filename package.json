@@ -1,6 +1,6 @@
 {
 	"name": "cthulhu-tools",
-	"version": "0.4.4",
+	"version": "0.4.5",
 	"scripts": {
 		"test": "jest",
 		"start": "npm run start:dev",
