@@ -44,9 +44,9 @@ function AppInfo() {
 		<dt>バージョン</dt>
 		<dd>{version}</dd>
 		<dt>ライセンス</dt>
-		<dd><Link to="/license">{license}</Link></dd>
+		<dd><Link to="/license" rel="license">{license}</Link></dd>
 		<dt>著作権等</dt>
-		<dd><Link to="/license">ライセンス</Link> ページ参照</dd>
+		<dd><Link to="/license" rel="license">ライセンス</Link> ページ参照</dd>
 	</dl>
 }
 
