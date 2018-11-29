@@ -11,7 +11,7 @@ import { ItemReducer } from "redux/reducers/item";
 import { HistoryReducer } from "redux/reducers/history";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-type PartialStatusState = Omit<StatusState, 'loadState'>;
+type PartialStatusState = Omit<StatusState, 'loadState' | 'loadError'>;
 
 const PartialStatusReducer = combineReducers<PartialStatusState, Action>({
 	view: ViewReducer,
@@ -27,19 +27,20 @@ export function StatusReducer(state: StatusState = INITIAL_STATE, action: Action
 	switch (action.type) {
 		case StatusActionType.SetLoadState:
 			{
-				const { state: loadState } = action;
+				const { state: loadState, error: loadError } = action;
 
 				return {
 					...state,
 					loadState,
+					loadError,
 				};
 			}
 		default:
 			{
-				const { loadState, ...rest } = state;
+				const { loadState, loadError, ...rest } = state;
 				const nextState = PartialStatusReducer(rest, action);
 
-				return state === nextState ? state : { ...state, ...nextState }
+				return state === nextState ? state : { ...nextState, loadState, loadError }
 			}
 	}
 }

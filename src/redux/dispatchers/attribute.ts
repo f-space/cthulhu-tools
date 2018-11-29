@@ -32,7 +32,6 @@ export default class AttributeDispatcher {
 	}
 
 	public async load(): Promise<void> {
-		await this.loadBuiltins();
 		await DB.transaction("r", DB.attributes, () => {
 			return DB.attributes.toArray();
 		}).then(attributes => {

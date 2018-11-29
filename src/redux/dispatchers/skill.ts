@@ -32,7 +32,6 @@ export default class SkillDispatcher {
 	}
 
 	public async load(): Promise<void> {
-		await this.loadBuiltins();
 		await DB.transaction("r", DB.skills, () => {
 			return DB.skills.toArray();
 		}).then(skills => {

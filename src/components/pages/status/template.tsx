@@ -21,6 +21,7 @@ interface StatusTemplateState {
 const NAVS: Navigation[] = [
 	{
 		to: "/status/character-management",
+		label: "キャラクター管理",
 		icon: "list",
 	}
 ];
@@ -61,7 +62,12 @@ export class StatusTemplate extends React.Component<StatusTemplateProps, StatusT
 
 		return <div className={style['track']}>
 			<div className={style['commands']}>
-				<button className={classNames(style['command'], { [style['active']]: edit })} type="button" onClick={this.handleEditClick}>
+				<button
+					className={classNames(style['command'], { [style['active']]: edit })}
+					type="button"
+					aria-pressed={edit}
+					aria-label="編集"
+					onClick={this.handleEditClick}>
 					<FontAwesomeIcon icon="edit" />
 				</button>
 			</div>
@@ -70,13 +76,13 @@ export class StatusTemplate extends React.Component<StatusTemplateProps, StatusT
 
 	private renderPager(context: CarouselContext<unknown>) {
 		return <div className={style['pager']}>
-			<button className={classNames(style['shift'], style['prev'])} type="button" onClick={() => context.shift(-1)}>
+			<button className={classNames(style['shift'], style['prev'])} type="button" aria-label="前へ" onClick={() => context.shift(-1)}>
 				<FontAwesomeIcon icon="chevron-circle-left" size="2x" />
 			</button>
-			<div className={style['indicator']}>
+			<div className={style['indicator']} aria-label={`${context.index}/${context.models.length}`}>
 				<Dots length={context.models.length} index={context.index} />
 			</div>
-			<button className={classNames(style['shift'], style['next'])} type="button" onClick={() => context.shift(1)}>
+			<button className={classNames(style['shift'], style['next'])} type="button" aria-label="次へ" onClick={() => context.shift(1)}>
 				<FontAwesomeIcon icon="chevron-circle-right" size="2x" />
 			</button>
 		</div>

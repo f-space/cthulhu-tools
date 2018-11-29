@@ -12,3 +12,19 @@
 	padding: 0;
 	max-width: calc(100vh * 10 / 16);
 }
+
+:global(#noscript) {
+	display: flex;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	flex-flow: column nowrap;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	line-height: 3;
+	color: white;
+}

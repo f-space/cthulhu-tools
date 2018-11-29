@@ -60,7 +60,7 @@ function AssetTable({ assets }: AssetProps) {
 			{
 				assets.map(({ name, owner, url }) =>
 					<tr key={name}>
-						<th scope="row"><a href={url}>{name}</a></th>
+						<th scope="row"><a href={url} rel="external">{name}</a></th>
 						<td>{`© ${owner}`}</td>
 					</tr>
 				)
@@ -107,7 +107,7 @@ function LinkedLicense({ licenses }: { licenses: string }) {
 		{
 			split.map(token => {
 				const url = LICENSE_LINKS[token];
-				return url ? <a key={url} href={url}>{token}</a> : token;
+				return url ? <a key={url} href={url} rel="external">{token}</a> : token;
 			})
 		}
 	</>

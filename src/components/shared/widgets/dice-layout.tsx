@@ -1,13 +1,18 @@
 import React from 'react';
 import { DiceDisplay } from "models/dice";
-import { DiceImageManager } from "models/resource";
-import { DiceLayout as Layout } from "models/layout/layout";
+import { Resources, DiceImageStore } from "models/resource";
+import { DiceLayout as Layout, DiceRect } from "models/layout/layout";
 
 export interface DiceLayoutProps extends React.CanvasHTMLAttributes<HTMLCanvasElement> {
+	store: DiceImageStore;
 	layout: Layout;
 	width: number;
 	height: number;
 	dices: DiceDisplay[][];
+}
+
+interface ImageRect extends DiceRect {
+	image: HTMLImageElement;
 }
 
 export class DiceLayout extends React.Component<DiceLayoutProps>{
@@ -29,8 +34,6 @@ export class DiceLayout extends React.Component<DiceLayoutProps>{
 	}
 
 	public async renderDices(canvas: HTMLCanvasElement): Promise<void> {
-		await DiceImageManager.load();
-
 		const rects = await this.getRects();
 
 		const context = canvas.getContext('2d');
@@ -42,12 +45,12 @@ export class DiceLayout extends React.Component<DiceLayoutProps>{
 		}
 	}
 
-	private getRects() {
-		const { layout, width, height, dices } = this.props;
+	private getRects(): Promise<ImageRect[]> {
+		const { store, layout, width, height, dices } = this.props;
 
 		const result = layout.compute(width, height, dices);
 		return Promise.all(Array.from(result, async ([dice, rect]) => {
-			const src = DiceImageManager.get(dice.type, dice.face);
+			const src = store.get(dice.type, dice.face);
 			const image = await this.getImage(src);
 			return { image, ...rect };
 		}));
@@ -55,17 +58,8 @@ export class DiceLayout extends React.Component<DiceLayoutProps>{
 
 	private getImage(src: string): Promise<HTMLImageElement> {
 		if (!this.cache.has(src)) {
-			this.cache.set(src, this.loadImage(src));
+			this.cache.set(src, Resources.loadImage(src));
 		}
 		return this.cache.get(src)!;
-	}
-
-	private loadImage(src: string): Promise<HTMLImageElement> {
-		return new Promise((resolve, reject) => {
-			const image = new Image();
-			image.onload = () => resolve(image);
-			image.onerror = e => reject(e);
-			image.src = src;
-		});
 	}
 }

@@ -8,10 +8,11 @@
 	line-height: 1.6;
 
 	p {
-		margin: 1em 0;
+		margin: 1em 0.5em;
 	}
 
 	ul {
+		margin-left: 2em;
 		list-style: disc inside;
 	}
 
@@ -19,11 +20,11 @@
 		color: $color-main;
 
 		&:visited {
-			color: $color-main-dark;
+			color: $color-main-light;
 		}
 
 		&:hover {
-			color: $color-main-light;
+			color: $color-accent-light;
 		}
 	}
 }
@@ -54,4 +55,10 @@
 		border-bottom: dashed 1px $color-main-dark;
 		padding: 0.25em 0.5em 0.1em;
 	}
+}
+
+.install {
+	display: block;
+	margin: 2em auto 0;
+	width: 80%;
 }

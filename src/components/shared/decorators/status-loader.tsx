@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { State, Dispatch } from "redux/store";
-import { LoadState } from "redux/states/status";
-import { getLoadState } from "redux/selectors/status";
+import { LoadState, LoadError } from "redux/states/status";
+import { getLoadState, getLoadError } from "redux/selectors/status";
 import StatusDispatcher from "redux/dispatchers/status";
 
 export enum StatusLoadState {
@@ -11,8 +11,14 @@ export enum StatusLoadState {
 	Error,
 }
 
+export enum StatusLoadError {
+	None,
+	Network,
+	IndexedDB,
+}
+
 export interface StatusLoaderProps {
-	children: (state: StatusLoadState) => React.ReactNode;
+	children: (state: StatusLoadState, error: StatusLoadError) => React.ReactNode;
 }
 
 function toStatusLoadState(state: LoadState): StatusLoadState {
@@ -24,8 +30,17 @@ function toStatusLoadState(state: LoadState): StatusLoadState {
 	}
 }
 
+function toStatusLoadError(error: LoadError): StatusLoadError {
+	switch (error) {
+		case '': return StatusLoadError.None;
+		case 'network': return StatusLoadError.Network;
+		case 'indexeddb': return StatusLoadError.IndexedDB;
+	}
+}
+
 interface StatusLoaderInternalProps extends StatusLoaderProps {
 	state: LoadState;
+	error: LoadError;
 	dispatcher: StatusDispatcher;
 }
 
@@ -39,14 +54,17 @@ class StatusLoaderInternal extends React.Component<StatusLoaderInternalProps> {
 	}
 
 	public render() {
-		const { state, children } = this.props;
+		const { state, error, children } = this.props;
 
-		return children(toStatusLoadState(state));
+		return children(toStatusLoadState(state), toStatusLoadError(error));
 	}
 }
 
 const mapStateToProps = (state: State) => {
-	return { state: getLoadState(state) };
+	return {
+		state: getLoadState(state),
+		error: getLoadError(state),
+	};
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

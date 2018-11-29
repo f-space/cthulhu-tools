@@ -3,6 +3,7 @@ import { Field } from 'react-final-form';
 import { Dice } from "models/dice";
 import { DiceInputMethod } from "models/status";
 import { DiceImage } from "components/shared/widgets/dice-image";
+import { DiceImageConsumer } from "components/shared/templates/dice-image-guard";
 import { DiceInputDialog, DiceInputDialogResult } from "../dice-input-dialog";
 import style from "./dice-input.scss";
 
@@ -47,22 +48,27 @@ class AttributeDiceInputInner extends React.Component<AttributeDiceInputInnerPro
 
 		const display = dices.map((dice, index) => dice.display(faces[index]));
 
-		return <React.Fragment>
-			<div className={style['dice-input']} onClick={this.handleClick}>
-				{
-					display.map((group, groupIndex) =>
-						<div key={groupIndex} className={style['group']}>
-							{
-								group.map((dice, diceIndex) =>
-									<DiceImage key={diceIndex} className={style['dice']} type={dice.type} face={dice.face} />
-								)
-							}
-						</div>
-					)
-				}
-			</div>
-			<DiceInputDialog open={openDialog} dices={dices} value={faces} onClose={this.handleClose} />
-		</React.Fragment>
+		return <DiceImageConsumer>
+			{
+				store => store && <React.Fragment>
+					<div className={style['dice-input']} onClick={this.handleClick}>
+						{
+							display.map((group, groupIndex) =>
+								<div key={groupIndex} className={style['group']}>
+									{
+										group.map((dice, diceIndex) =>
+											<DiceImage key={diceIndex} className={style['dice']} store={store} type={dice.type} face={dice.face} />
+										)
+									}
+								</div>
+							)
+						}
+					</div>
+					<DiceInputDialog open={openDialog} dices={dices} value={faces} onClose={this.handleClose} />
+				</React.Fragment>
+			}
+		</DiceImageConsumer>
+
 	}
 
 	private handleClick(): void {

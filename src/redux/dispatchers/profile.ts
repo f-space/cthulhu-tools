@@ -32,7 +32,6 @@ export default class ProfileDispatcher {
 	}
 
 	public async load(): Promise<void> {
-		await this.loadBuiltins();
 		await DB.transaction("r", DB.profiles, () => {
 			return DB.profiles.toArray();
 		}).then(profiles => {

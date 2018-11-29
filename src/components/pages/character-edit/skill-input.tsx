@@ -16,13 +16,15 @@ export interface SkillInputValue {
 
 export interface SkillInputProps extends React.HTMLAttributes<HTMLElement> {
 	name: string;
+	index: number;
 	skills: ReadonlyArray<Skill>;
 }
 
 export function SkillInput(props: SkillInputProps) {
-	const { name, skills, className, ...rest } = props;
+	const { name, index, skills, className, ...rest } = props;
 
 	return <div {...rest} className={classNames(className, style['skill'])}>
+		<span className={style['index']}>{`${index}.`}</span>
 		<Select field={`${name}.id`} required >
 			<option value="">未選択</option>
 			<SkillGroup skills={skills}>

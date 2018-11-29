@@ -18,7 +18,12 @@ function MenuInner(props: MenuInnerProps) {
 	const { className, muted, dispatcher, ...rest } = props;
 
 	return <div {...rest} className={classNames(className, style['menu'])}>
-		<div className={classNames(style['icon'], { [style['muted']]: muted })} onClick={() => dispatcher.mute(!muted)}>
+		<div
+			className={classNames(style['icon'], { [style['muted']]: muted })}
+			role="button"
+			aria-pressed={muted}
+			aria-label="ミュート"
+			onClick={() => dispatcher.mute(!muted)}>
 			{
 				muted
 					? <FontAwesomeIcon icon="volume-mute" />

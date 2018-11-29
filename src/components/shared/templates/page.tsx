@@ -14,6 +14,7 @@ export interface PageProps extends React.HTMLAttributes<HTMLElement> {
 
 export interface Navigation {
 	to: string;
+	label: string;
 	icon: FontAwesomeIconProps['icon'];
 }
 
@@ -30,8 +31,8 @@ export function Page({ className, heading, pageTitle, navs, flexible, children, 
 			{
 				navs && <nav className={style['navs']}>
 					{
-						navs.map(({ to, icon }) =>
-							<Link key={to} className={style['nav']} to={to}><FontAwesomeIcon icon={icon} /></Link>
+						navs.map(({ to, label, icon }) =>
+							<Link key={to} className={style['nav']} to={to} aria-label={label}><FontAwesomeIcon icon={icon} /></Link>
 						)
 					}
 				</nav>
