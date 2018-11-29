@@ -1,7 +1,11 @@
 .skill {
 	display: grid;
-	grid-template-columns: 2fr minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr);
+	grid-template-columns: 2.5em 2fr minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr);
 	align-items: center;
+}
+
+.index {
+	font-weight: bold;
 }
 
 .base {

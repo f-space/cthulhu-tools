@@ -69,7 +69,7 @@ export class SkillParamsEdit extends React.PureComponent<SkillParamsEditProps> {
 						</div>
 						{
 							fields.map((name, index) =>
-								<SkillInput key={name} name={name} skills={skills || []} />
+								<SkillInput key={name} name={name} index={index + 1} skills={skills || []} />
 							)
 						}
 					</div>
