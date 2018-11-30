@@ -41,11 +41,17 @@
 	align-self: flex-end;
 	justify-content: flex-end;
 	z-index: 1;
+	margin: 0.25em;
 	background: rgba($color-background, 0.5);
-	padding: 0.25em 0.5em;
 }
 
 .nav {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center;
+	width: 1.5em;
+	height: 1.5em;
 	color: $color-main;
 	font-size: 1.5rem;
 }
