@@ -44,7 +44,7 @@ export class StatusGuard extends React.Component<StatusGuardProps> {
 				</>
 			case StatusLoadError.IndexedDB:
 				return <>
-					<p>IndexdDBからのデータ読み込みに失敗しました。</p>
+					<p>IndexedDBからのデータ読み込みに失敗しました。</p>
 					<p>IndexedDB非対応ブラウザ、<br />あるいはプライベートモードの可能性があります。</p>
 				</>
 		}
