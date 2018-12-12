@@ -90,7 +90,7 @@ class FieldWrapper extends React.Component<FieldWrapperProps> {
 
 			const result = validate && validate.apply(this, arguments);
 			return isPromise(result)
-				? result.then(setDomValidity.bind(element))
+				? result.then(setDomValidity.bind(null, element))
 				: setDomValidity(element, result);
 		}
 
