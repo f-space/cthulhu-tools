@@ -15,7 +15,7 @@ import style from "./app.scss";
 
 export class App extends React.Component {
 	public render() {
-		return <Provider store={store as any}>
+		return <Provider store={store}>
 			<DialogProvider>
 				<HashRouter>
 					<div className={style['app']}>

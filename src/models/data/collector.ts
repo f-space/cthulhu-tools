@@ -120,7 +120,7 @@ export class DataCollector {
 	}
 
 	public getList<T>(uuids: ReadonlyArray<string>, getter: (this: DataCollector, uuid: string) => CollectionResult<T>): CollectionResult<ReadonlyArray<T>> {
-		const results = uuids.map(getter.bind(this) as typeof getter);
+		const results = uuids.map(getter.bind(this));
 		if (this.validateList(results)) {
 			return { status: true, value: results.map(result => result.value) };
 		}

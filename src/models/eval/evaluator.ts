@@ -52,7 +52,7 @@ export class AttributeEvaluator implements TerminalEvaluator {
 
 	private evaluateInteger(context: EvaluationContext, attribute: IntegerAttribute): number | undefined {
 		const { property } = context;
-		const evalExpr = this.evaluateExpression.bind(this, context, attribute) as (expr: Expression) => any;
+		const evalExpr = this.evaluateExpression.bind(this, context, attribute);
 		switch (property.type) {
 			case 'attribute': return evalExpr(attribute.expression);
 			case 'attribute:min': return andThen(attribute.min, evalExpr);
@@ -63,7 +63,7 @@ export class AttributeEvaluator implements TerminalEvaluator {
 
 	private evaluateNumber(context: EvaluationContext, attribute: NumberAttribute): number | undefined {
 		const { property } = context;
-		const evalExpr = this.evaluateExpression.bind(this, context, attribute) as (expr: Expression) => any;
+		const evalExpr = this.evaluateExpression.bind(this, context, attribute);
 		switch (property.type) {
 			case 'attribute': return evalExpr(attribute.expression);
 			case 'attribute:min': return andThen(attribute.min, evalExpr);
@@ -74,7 +74,7 @@ export class AttributeEvaluator implements TerminalEvaluator {
 
 	private evaluateText(context: EvaluationContext, attribute: TextAttribute): string | undefined {
 		const { property } = context;
-		const evalExpr = this.evaluateExpression.bind(this, context, attribute) as (expr: Expression) => any;
+		const evalExpr = this.evaluateExpression.bind(this, context, attribute);
 		switch (property.type) {
 			case 'attribute': return evalExpr(attribute.expression);
 			default: return undefined;
