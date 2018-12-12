@@ -88,7 +88,7 @@ class FieldWrapper extends React.Component<FieldWrapperProps> {
 		if (element) {
 			element.setCustomValidity("");
 
-			const result = validate && validate.apply(this, arguments);
+			const result = validate && validate.apply(this, arguments as any);
 			return isPromise(result)
 				? result.then(setDomValidity.bind(null, element))
 				: setDomValidity(element, result);
