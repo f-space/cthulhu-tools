@@ -35,9 +35,6 @@ self.addEventListener('activate', function (event) {
 })
 
 self.addEventListener('fetch', function (event) {
-	// TODO: Remove this line after a Chromium bugfix.
-	if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') return;
-
 	event.respondWith(
 		caches.open(CACHE_NAME).then(cache =>
 			cache.match(event.request, { ignoreSearch: true }).then(response =>
