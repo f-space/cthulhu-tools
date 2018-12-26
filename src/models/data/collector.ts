@@ -18,12 +18,11 @@ export interface ProfileContext {
 }
 
 export interface CollectionResultOK<T> {
-	status: true;
 	value: T;
+	error?: undefined;
 }
 
 export interface CollectionResultError {
-	status: false;
 	error: ReadonlyArray<string>;
 }
 
@@ -34,14 +33,14 @@ export class DataCollector {
 
 	public resolveCharacter(uuid: string): CollectionResult<CharacterContext> {
 		const characterResult = this.getCharacter(uuid);
-		if (characterResult.status) {
+		if (!characterResult.error) {
 			const character = characterResult.value;
 			const profileResult = this.resolveProfile(character.profile);
 			const historyResult = this.getHistory(character.history)
-			if (profileResult.status && historyResult.status) {
+			if (!profileResult.error && !historyResult.error) {
 				const profile = profileResult.value;
 				const history = historyResult.value;
-				return { status: true, value: { character, profile, history } };
+				return { value: { character, profile, history } };
 			}
 			return this.mergeErrors(profileResult, historyResult);
 		}
@@ -50,19 +49,19 @@ export class DataCollector {
 
 	public resolveProfile(uuid: string): CollectionResult<ProfileContext> {
 		const resolve = (uuid: string, seen: Set<string>): CollectionResult<ProfileContext> => {
-			if (seen.has(uuid)) return { status: true, value: { attributes: [], skills: [] } as any };
+			if (seen.has(uuid)) return { value: { attributes: [], skills: [] } as any };
 
 			const result = this.resolveSingleProfile(uuid);
-			if (result.status) {
+			if (!result.error) {
 				const { profile } = result.value;
 				if (profile.base) {
 					const baseResult = resolve(profile.base, seen.add(uuid));
-					if (baseResult.status) {
+					if (!baseResult.error) {
 						const baseValue = baseResult.value;
 						const value = result.value;
 						const attributes = [...baseValue.attributes, ...value.attributes];
 						const skills = [...baseValue.skills, ...value.skills];
-						return { status: true, value: { profile, attributes, skills } };
+						return { value: { profile, attributes, skills } };
 					}
 					return baseResult;
 				}
@@ -75,14 +74,14 @@ export class DataCollector {
 
 	public resolveSingleProfile(uuid: string): CollectionResult<ProfileContext> {
 		const profileResult = this.getProfile(uuid);
-		if (profileResult.status) {
+		if (!profileResult.error) {
 			const profile = profileResult.value;
 			const attributeResult = this.getList(profile.attributes, this.getAttribute);
 			const skillResult = this.getList(profile.skills, this.getSkill);
-			if (attributeResult.status && skillResult.status) {
+			if (!attributeResult.error && !skillResult.error) {
 				const attributes = attributeResult.value;
 				const skills = skillResult.value;
-				return { status: true, value: { profile, attributes, skills } };
+				return { value: { profile, attributes, skills } };
 			}
 			return this.mergeErrors(attributeResult, skillResult);
 		}
@@ -92,54 +91,54 @@ export class DataCollector {
 	public getCharacter(uuid: string): CollectionResult<Character> {
 		const value = this.provider.character.get(uuid);
 
-		return (value !== undefined ? { status: true, value } : { status: false, error: [uuid] });
+		return (value !== undefined ? { value } : { error: [uuid] });
 	}
 
 	public getProfile(uuid: string): CollectionResult<Profile> {
 		const value = this.provider.profile.get(uuid);
 
-		return (value !== undefined ? { status: true, value } : { status: false, error: [uuid] });
+		return (value !== undefined ? { value } : { error: [uuid] });
 	}
 
 	public getAttribute(uuid: string): CollectionResult<Attribute> {
 		const value = this.provider.attribute.get(uuid);
 
-		return (value !== undefined ? { status: true, value } : { status: false, error: [uuid] });
+		return (value !== undefined ? { value } : { error: [uuid] });
 	}
 
 	public getSkill(uuid: string): CollectionResult<Skill> {
 		const value = this.provider.skill.get(uuid);
 
-		return (value !== undefined ? { status: true, value } : { status: false, error: [uuid] });
+		return (value !== undefined ? { value } : { error: [uuid] });
 	}
 
 	public getHistory(uuid: string | null): CollectionResult<History | null> {
 		const value = uuid !== null ? this.provider.history.get(uuid) : null;
 
-		return (value !== undefined ? { status: true, value } : { status: false, error: [uuid!] });
+		return (value !== undefined ? { value } : { error: [uuid!] });
 	}
 
 	public getList<T>(uuids: ReadonlyArray<string>, getter: (this: DataCollector, uuid: string) => CollectionResult<T>): CollectionResult<ReadonlyArray<T>> {
-		const results = uuids.map(getter.bind(this) as typeof getter);
+		const results = uuids.map(getter.bind(this));
 		if (this.validateList(results)) {
-			return { status: true, value: results.map(result => result.value) };
+			return { value: results.map(result => result.value) };
 		}
 		return this.mergeErrors(...results);
 	}
 
 	public validateList<T>(results: CollectionResult<T>[]): results is CollectionResultOK<T>[] {
-		return results.every(result => result.status);
+		return results.every(result => !result.error);
 	}
 
 	public mergeErrors(...results: CollectionResult<any>[]): CollectionResultError {
-		return { status: false, error: Array.prototype.concat.apply([], results.map(result => result.status ? [] : result.error)) };
+		return { error: Array.prototype.concat.apply([], results.map(result => result.error || [])) };
 	}
 
 	public static isOK<T>(result: CollectionResult<T>): result is CollectionResultOK<T> {
-		return result.status;
+		return !result.error;
 	}
 
 	public static isError(result: CollectionResult<any>): result is CollectionResultError {
-		return !result.status;
+		return !!result.error;
 	}
 }

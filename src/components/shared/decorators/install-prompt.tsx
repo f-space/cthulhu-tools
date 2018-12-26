@@ -84,7 +84,7 @@ export class InstallPrompt extends React.Component<InstallPromptProps, InstallPr
 	}
 
 	private getPromptObject(event?: BeforeInstallPromptEvent): Prompt | undefined {
-		return event && this.handlePrompt.bind(this, [event]) as Prompt;
+		return event && this.handlePrompt.bind(this, [event]);
 	}
 }
 

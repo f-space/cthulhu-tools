@@ -29,7 +29,7 @@ export class DiceView extends React.Component<DiceViewProps> {
 
 		return <DiceImageConsumer>
 			{
-				store => store && <FlexibleContainer className={classNames(className, style['view'])} render={size => {
+				store => store && <FlexibleContainer {...rest} className={classNames(className, style['view'])} render={size => {
 					if (dices.length !== 0) {
 						const layout = this.selectLayout(dices);
 						const value = this.getValue(dices, faces);

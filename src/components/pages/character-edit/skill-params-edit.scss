@@ -38,12 +38,19 @@
 	flex-flow: row nowrap;
 	align-items: center;
 	justify-content: flex-end;
+	margin: 0.25em;
 }
 
 .command {
-	margin: 0 0.5em;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center;
+	margin: 0 0.25em;
 	outline: none;
 	cursor: pointer;
+	width: 1.5em;
+	height: 1.5em;
 	color: $color-main-dark;
 	font-size: 1.5rem;
 
@@ -55,7 +62,6 @@
 .skills {
 	display: grid;
 	grid-row-gap: 1em;
-	margin: 1em 0;
 	border-top: solid 1px $color-main;
 	border-bottom: solid 1px $color-main;
 	padding: 1em 0.5em;

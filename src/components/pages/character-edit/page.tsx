@@ -29,7 +29,7 @@ function mapStateToProps(state: State): StateProps {
 	const profile = provider.profile.default;
 	if (profile) {
 		const result = collector.resolveProfile(profile.uuid);
-		if (result.status) {
+		if (!result.error) {
 			const { attributes, skills } = result.value;
 			return { provider, profile, attributes, skills };
 		}
