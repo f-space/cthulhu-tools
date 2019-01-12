@@ -10,12 +10,6 @@ if ('serviceWorker' in navigator) {
 
 buildIconLibrary();
 
-if (document.readyState !== 'loading') {
-	mount();
-} else {
-	document.addEventListener("DOMContentLoaded", mount);
-}
-
-function mount() {
+document.addEventListener("DOMContentLoaded", function () {
 	ReactDOM.render(<App />, document.getElementById("app"));
-}
+});

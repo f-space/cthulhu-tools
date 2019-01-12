@@ -137,7 +137,7 @@ module.exports = function (env, { mode }) {
 				inject: 'head'
 			}),
 			new ScriptExtHtmlWebpackPlugin({
-				defaultAttribute: 'async'
+				defaultAttribute: 'defer'
 			}),
 			...(production ? [] : [new StylelintPlugin({ files: "src/**/*.scss" })])
 		]
