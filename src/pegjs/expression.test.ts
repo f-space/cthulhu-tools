@@ -159,9 +159,9 @@ describe("reference parsing", () => {
 	test("simple", () => {
 		expect(Expression.parse("test")).toEqual({
 			type: "reference",
-			scope: null,
+			scope: "",
 			id: "test",
-			modifier: null,
+			modifier: "",
 		});
 	});
 
@@ -170,7 +170,7 @@ describe("reference parsing", () => {
 			type: "reference",
 			scope: "my",
 			id: "test",
-			modifier: null,
+			modifier: "",
 		});
 	});
 
@@ -202,9 +202,9 @@ describe("reference parsing", () => {
 		expect(() => Expression.parse("camelCaseRef")).toThrow();
 		expect(Expression.parse("kebab-case-ref")).not.toEqual({
 			type: "reference",
-			scope: null,
+			scope: "",
 			id: "kebab-case-ref",
-			modifier: null,
+			modifier: "",
 		});
 	});
 });
