@@ -8,15 +8,15 @@ export function generateUUID(): string {
 
 export function throttle<T extends Function>(interval: number, fn: T): T {
 	let id: any, last = -Infinity;
-	return function (this: any): void {
+	return function (this: any, ...args: any[]): void {
 		const elapsed = Date.now() - last;
 		if (id === undefined && elapsed > interval) {
-			fn.apply(this, arguments);
+			fn.apply(this, args);
 			last = Date.now();
 		} else {
 			clearTimeout(id);
 			id = setTimeout(() => {
-				fn.apply(this, arguments);
+				fn.apply(this, args);
 				last = Date.now();
 				id = undefined;
 			}, interval - elapsed);
@@ -26,10 +26,10 @@ export function throttle<T extends Function>(interval: number, fn: T): T {
 
 export function debounce<T extends Function>(delay: number, fn: T): T {
 	let id: any;
-	return function (this: any): void {
+	return function (this: any, ...args: any[]): void {
 		clearTimeout(id);
 		id = setTimeout(() => {
-			fn.apply(this, arguments);
+			fn.apply(this, args);
 			id = undefined;
 		}, delay);
 	} as any;
