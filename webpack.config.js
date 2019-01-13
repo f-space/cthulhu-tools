@@ -16,7 +16,7 @@ module.exports = function (env, { mode }) {
 
 	const production = (mode === 'production');
 
-	const cssLoader = [
+	const cssLoaders = [
 		MiniCssExtractPlugin.loader,
 		{
 			loader: 'css-loader',
@@ -60,7 +60,7 @@ module.exports = function (env, { mode }) {
 				},
 				{
 					test: /\.jsx\.pug$/,
-					use: require.resolve("./webpack-ext/jsx-pug-loader")
+					loader: "./webpack-ext/jsx-pug-loader"
 				},
 				{
 					test: /\.tsx?$/,
@@ -71,7 +71,7 @@ module.exports = function (env, { mode }) {
 				},
 				{
 					test: /\.scss$/,
-					loader: cssLoader
+					use: cssLoaders
 				},
 				{
 					test: /(?<!\.(?:html|css|js))$/,
