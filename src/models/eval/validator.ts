@@ -50,9 +50,9 @@ export class AttributeValidator implements TerminalValidator {
 			case 'attribute':
 				const min = withDefault(request(ref.set({ modifier: 'min' }), time), Number.MIN_SAFE_INTEGER);
 				const max = withDefault(request(ref.set({ modifier: 'max' }), time), Number.MAX_SAFE_INTEGER);
-				return Math.round(Math.max(Math.min(value, max), min));
-			case 'attribute:min': return Math.round(value);
-			case 'attribute:max': return Math.round(value);
+				return Math.floor(Math.max(Math.min(value, max), min));
+			case 'attribute:min': return Math.floor(value);
+			case 'attribute:max': return Math.floor(value);
 			default: return undefined;
 		}
 	}
@@ -102,9 +102,9 @@ export class SkillValidator implements TerminalValidator {
 			switch (property.type) {
 				case 'skill':
 				case 'skill:base':
-					return Math.round(Math.max(Math.min(value, this.max), this.min));
+					return Math.floor(Math.max(Math.min(value, this.max), this.min));
 				case 'skill:points':
-					return Math.round(value);
+					return Math.floor(value);
 			}
 		}
 		return undefined;
