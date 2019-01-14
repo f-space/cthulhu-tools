@@ -1,4 +1,4 @@
-import * as pegjs from "pegjs/expression";
+import pegjs from "pegjs/expression";
 
 export enum NodeType {
 	BinaryOp = 'binary-op',

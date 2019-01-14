@@ -18,29 +18,23 @@
 	function newText(value) { return { type: TEXT, value }; }
 	function newVariable(name) { return { type: VARIABLE, name, }; }
 	function newReference(id, modifier, scope) { return { type: REFERENCE, id, modifier, scope }; }
-
-	function mergeBinaryOp(first, rest) {
-		return rest.reduce(function(lhs, next) { return newBinaryOp(next.op, lhs, next.rhs); }, first);
-	}
-
-	function identity(x) { return x; }
 }
 
 Expression = _ expr:ExpressionTrim _ { return expr; }
 ExpressionTrim = BinaryOp0
 
 BinaryOp0
-	= lhs:BinaryOp1 rest:BinaryOp0Rest* { return mergeBinaryOp(lhs, rest); }
+	= lhs:BinaryOp1 rest:BinaryOp0Rest* { return rest.reduce((lhs, { op, rhs }) => newBinaryOp(op, lhs, rhs), lhs); }
 BinaryOp0Rest
 	= _ op:("==" / "!=" / ">=" / "<=" / ">" / "<") _ rhs:BinaryOp1 { return { op, rhs }; }
 
 BinaryOp1
-	= lhs:BinaryOp2 rest:BinaryOp1Rest* { return mergeBinaryOp(lhs, rest); }
+	= lhs:BinaryOp2 rest:BinaryOp1Rest* { return rest.reduce((lhs, { op, rhs }) => newBinaryOp(op, lhs, rhs), lhs); }
 BinaryOp1Rest
 	= _ op:("+" / "-") _ rhs:BinaryOp2 { return { op, rhs }; }
 	
 BinaryOp2
-	= lhs:Other rest:BinaryOp2Rest* { return mergeBinaryOp(lhs, rest); }
+	= lhs:Other rest:BinaryOp2Rest* { return rest.reduce((lhs, { op, rhs }) => newBinaryOp(op, lhs, rhs), lhs); }
 BinaryOp2Rest
 	= _ op:("*" / "/" / "%") _ rhs:Other { return { op, rhs }; }
 	
@@ -56,7 +50,7 @@ Other
 Literal = value:$([+-]? [0-9]+ ("." [0-9]+)? ("e" [+-]? [0-9]+)?) { return newLiteral(Number(value)); }
 
 Template
-	=  "\"" first:Text? rest:TemplateRest* "\"" { return newTemplate(Array.prototype.concat.apply([first], rest).filter(identity)); }
+	=  "\"" first:Text? rest:TemplateRest* "\"" { return newTemplate([first].concat(...rest).filter(x => x)); }
 TemplateRest
 	=  substitution:Substitution successor:Text? { return [substitution, successor]; }
 Substitution
@@ -73,7 +67,7 @@ UnaryOp
 FunctionCall
 	= fn:$([a-z]+) _ "(" args:Arguments? ")" { return newFunctionCall(fn, args || []); }
 Arguments
-	= _ first:ExpressionTrim _ rest:ArgumentsRest* { return [first].concat(rest); }
+	= _ first:ExpressionTrim _ rest:ArgumentsRest* { return [first, ...rest]; }
 ArgumentsRest
 	= "," _ expr:ExpressionTrim _ { return expr; }
 

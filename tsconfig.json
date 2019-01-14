@@ -1,15 +1,10 @@
 {
 	"compilerOptions": {
-		"target": "es5",
-		"lib": [
-			"esnext",
-			"dom"
-		],
-		"module": "es2015",
+		"target": "esnext",
+		"module": "esnext",
 		"moduleResolution": "node",
 		"baseUrl": "src",
 		"jsx": "react",
-		"downlevelIteration": true,
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
