@@ -142,7 +142,7 @@ function peg$parse(input, options) {
       peg$startRuleFunction  = peg$parseExpression,
 
       peg$c0 = function(expr) { return expr; },
-      peg$c1 = function(lhs, rest) { return mergeBinaryOp(lhs, rest); },
+      peg$c1 = function(lhs, rest) { return rest.reduce((lhs, { op, rhs }) => newBinaryOp(op, lhs, rhs), lhs); },
       peg$c2 = "==",
       peg$c3 = peg$literalExpectation("==", false),
       peg$c4 = "!=",
@@ -177,7 +177,7 @@ function peg$parse(input, options) {
       peg$c33 = function(value) { return newLiteral(Number(value)); },
       peg$c34 = "\"",
       peg$c35 = peg$literalExpectation("\"", false),
-      peg$c36 = function(first, rest) { return newTemplate(Array.prototype.concat.apply([first], rest).filter(identity)); },
+      peg$c36 = function(first, rest) { return newTemplate([first].concat(...rest).filter(x => x)); },
       peg$c37 = function(substitution, successor) { return [substitution, successor]; },
       peg$c38 = "{",
       peg$c39 = peg$literalExpectation("{", false),
@@ -198,7 +198,7 @@ function peg$parse(input, options) {
       peg$c54 = /^[a-z]/,
       peg$c55 = peg$classExpectation([["a", "z"]], false, false),
       peg$c56 = function(fn, args) { return newFunctionCall(fn, args || []); },
-      peg$c57 = function(first, rest) { return [first].concat(rest); },
+      peg$c57 = function(first, rest) { return [first, ...rest]; },
       peg$c58 = ",",
       peg$c59 = peg$literalExpectation(",", false),
       peg$c60 = "$",
@@ -1661,12 +1661,6 @@ function peg$parse(input, options) {
   	function newText(value) { return { type: TEXT, value }; }
   	function newVariable(name) { return { type: VARIABLE, name, }; }
   	function newReference(id, modifier, scope) { return { type: REFERENCE, id, modifier, scope }; }
-
-  	function mergeBinaryOp(first, rest) {
-  		return rest.reduce(function(lhs, next) { return newBinaryOp(next.op, lhs, next.rhs); }, first);
-  	}
-
-  	function identity(x) { return x; }
 
 
   peg$result = peg$startRuleFunction();
