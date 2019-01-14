@@ -64,10 +64,20 @@ module.exports = function (env, { mode }) {
 				},
 				{
 					test: /\.tsx?$/,
-					loader: "ts-loader",
-					options: {
-						compilerOptions: (production ? {} : { sourceMap: true })
-					}
+					use: [
+						"babel-loader",
+						{
+							loader: "ts-loader",
+							options: {
+								compilerOptions: (production ? {} : { sourceMap: true })
+							}
+						}
+					]
+				},
+				{
+					test: /\.jsx?$/,
+					exclude: /node_modules/,
+					loader: "babel-loader"
 				},
 				{
 					test: /\.scss$/,
