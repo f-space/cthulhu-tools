@@ -1,15 +1,24 @@
 doctype html
 html(lang="ja")
 	head(prefix="og: http://ogp.me/ns#")
-		title クトゥルフTRPG ツール
+		-
+			const title = "クトゥルフTRPG ツール";
+			const description = [
+				"クトゥルフ神話TRPGのためのWebアプリです。",
+				"グラフィカルに素早く振れるダイス機能や、",
+				"キャラクターシートに代わり各種の数値と変更を管理できるステータス機能など。",
+				"スマートフォン対応。",
+			].join("");
+
+		title 🎲#{title}
 		meta(charset="utf-8")
 		if process.env.NODE_ENV === 'production'
 			meta(
 				http-equiv="Content-Security-Policy",
 				content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob:; media-src 'self' blob:")
-		meta(name="application-name", content="クトゥルフTRPG ツール")
+		meta(name="application-name", content=title)
 		meta(name="keywords", content="クトゥルフ,クトゥルフ神話,TRPG,ダイス,ステータス")
-		meta(name="description", content="クトゥルフTRPGのためのWebアプリ。ダイスやステータス管理など。")
+		meta(name="description", content=description)
 		meta(name="author", content="F_")
 		meta(name="theme-color", content="#9a0000")
 		meta(name="viewport", content="width=device-width, initial-scale=1")
@@ -17,8 +26,8 @@ html(lang="ja")
 		meta(name="msvalidate.01", content="AFBF8807ECED0511D0FB21468575BB80")
 		meta(name="twitter:card", content="summary")
 		meta(name="twitter:site", content="@fspace_")
-		meta(property="og:title", content="クトゥルフTRPG ツール")
-		meta(property="og:description", content="クトゥルフTRPGのためのWebアプリ。ダイスやステータス管理など。")
+		meta(property="og:title", content=title)
+		meta(property="og:description", content=description)
 		meta(property="og:type", content="website")
 		meta(property="og:url", content="https://f-space.github.io/cthulhu-tools/")
 		meta(property="og:image", content="https://f-space.github.io/cthulhu-tools/image/promotion.png")
