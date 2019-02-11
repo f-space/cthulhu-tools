@@ -2,31 +2,32 @@ import { Hash } from "./hash";
 import { Expression } from "./expression";
 import { validate } from "./validation";
 
-export enum SkillCategory {
-	Locomotion = 'locomotion',
-	Investigation = 'investigation',
-	Communication = 'communication',
-	Knowledge = 'knowledge',
-	Scholarship = 'scholarship',
-	Language = 'language',
-	Combat = 'combat',
-	Special = 'special',
-	Other = 'other',
-};
+const SKILL_CATEGORIES = [
+	'locomotion' as 'locomotion',
+	'investigation' as 'investigation',
+	'communication' as 'communication',
+	'knowledge' as 'knowledge',
+	'scholarship' as 'scholarship',
+	'language' as 'language',
+	'combat' as 'combat',
+	'special' as 'special',
+	'other' as 'other',
+];
+const SKILL_CATEGORY_ORDER = new Map(SKILL_CATEGORIES.map((v, i) => [v, i] as [SkillCategory, number]));
+const SKILL_CATEGORY_SET = new Set(SKILL_CATEGORIES);
 
-export namespace SkillCategory {
-	export function compare(x: SkillCategory, y: SkillCategory): number {
+export type SkillCategory = typeof SKILL_CATEGORIES extends (infer T)[] ? T : never;
+
+export const SkillCategory = {
+	compare(x: SkillCategory, y: SkillCategory): number {
 		const xorder = SKILL_CATEGORY_ORDER.get(x);
 		const yorder = SKILL_CATEGORY_ORDER.get(y);
 
 		return xorder === undefined
 			? (yorder === undefined ? 0 : -1)
 			: (yorder === undefined ? 1 : xorder - yorder);
-	}
+	},
 }
-
-const SKILL_CATEGORY_ORDER = new Map(Object.values(SkillCategory).map((v, i) => [v, i] as [SkillCategory, number]));
-const SKILL_CATEGORY_SET = new Set(SKILL_CATEGORY_ORDER.keys());
 
 export interface SkillData {
 	readonly uuid: string;

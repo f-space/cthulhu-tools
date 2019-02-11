@@ -1,36 +1,34 @@
 import React from 'react';
 
-namespace Install {
-	type Callback = (event: BeforeInstallPromptEvent) => void;
+type Callback = (event: BeforeInstallPromptEvent) => void;
 
-	let deferred: BeforeInstallPromptEvent | undefined;
-	let callback: Callback | undefined;
+let deferred: BeforeInstallPromptEvent | undefined;
+let callback: Callback | undefined;
 
-	window.addEventListener('beforeinstallprompt', e => {
-		e.preventDefault();
+window.addEventListener('beforeinstallprompt', e => {
+	e.preventDefault();
 
-		if (callback) {
-			callback(e as BeforeInstallPromptEvent);
-		} else {
-			deferred = e as BeforeInstallPromptEvent;
-		}
-	});
-
-	export function fetch(): BeforeInstallPromptEvent | undefined {
-		const result = deferred;
-		deferred = undefined;
-		return result;
+	if (callback) {
+		callback(e as BeforeInstallPromptEvent);
+	} else {
+		deferred = e as BeforeInstallPromptEvent;
 	}
+});
 
-	export function register(cb: Callback): void {
-		if (callback) throw new Error("Callback function already registered.");
-		callback = cb;
-	}
+function fetch(): BeforeInstallPromptEvent | undefined {
+	const result = deferred;
+	deferred = undefined;
+	return result;
+}
 
-	export function unregister(cb: Callback): void {
-		if (callback !== cb) throw new Error("Callback function not registered.");
-		callback = undefined;
-	}
+function register(cb: Callback): void {
+	if (callback) throw new Error("Callback function already registered.");
+	callback = cb;
+}
+
+function unregister(cb: Callback): void {
+	if (callback !== cb) throw new Error("Callback function not registered.");
+	callback = undefined;
 }
 
 export type Prompt = () => Promise<boolean>;
@@ -47,16 +45,16 @@ export class InstallPrompt extends React.Component<InstallPromptProps, InstallPr
 	public constructor(props: InstallPromptProps) {
 		super(props);
 
-		this.state = { prompt: this.getPromptObject(Install.fetch()) }
+		this.state = { prompt: this.getPromptObject(fetch()) }
 		this.handleBeforeInstallPrompt = this.handleBeforeInstallPrompt.bind(this);
 	}
 
 	public componentDidMount(): void {
-		Install.register(this.handleBeforeInstallPrompt);
+		register(this.handleBeforeInstallPrompt);
 	}
 
 	public componentWillUnmount(): void {
-		Install.unregister(this.handleBeforeInstallPrompt);
+		unregister(this.handleBeforeInstallPrompt);
 	}
 
 	public render() {

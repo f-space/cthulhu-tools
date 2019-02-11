@@ -245,17 +245,17 @@ export class TextInputMethod extends InputMethodBase<InputType.Text> implements 
 	}
 }
 
-export namespace InputMethod {
-	export function from(data: InputMethodData): InputMethod {
+export const InputMethod = {
+	from(data: InputMethodData): InputMethod {
 		switch (data.type) {
 			case InputType.Dice: return DiceInputMethod.from(data);
 			case InputType.Number: return NumberInputMethod.from(data);
 			case InputType.Text: return TextInputMethod.from(data);
 			default: throw new Error(`Invalid input type: ${(data as any).type}`);
 		}
-	}
+	},
 
-	export function is(value: unknown): value is InputMethod {
+	is(value: unknown): value is InputMethod {
 		return value instanceof InputMethodBase;
-	}
+	},
 }

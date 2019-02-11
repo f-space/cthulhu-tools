@@ -246,17 +246,17 @@ export class TextAttribute extends AttributeBase<AttributeType.Text> implements 
 	}
 }
 
-export namespace Attribute {
-	export function from(data: AttributeData, readonly?: boolean): Attribute {
+export const Attribute = {
+	from(data: AttributeData, readonly?: boolean): Attribute {
 		switch (data.type) {
 			case AttributeType.Integer: return IntegerAttribute.from(data, readonly);
 			case AttributeType.Number: return NumberAttribute.from(data, readonly);
 			case AttributeType.Text: return TextAttribute.from(data, readonly);
 			default: throw new Error(`Invalid attribute type: ${(data as any).type}`);
 		}
-	}
+	},
 
-	export function is(value: unknown): value is Attribute {
+	is(value: unknown): value is Attribute {
 		return value instanceof AttributeBase;
-	}
+	},
 }

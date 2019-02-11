@@ -2,15 +2,15 @@ import React from 'react';
 import { SkillCategory as Category } from 'models/status';
 
 const CATEGORY_NAME = {
-	[Category.Locomotion]: "移動",
-	[Category.Investigation]: "調査",
-	[Category.Communication]: "対話",
-	[Category.Knowledge]: "知識",
-	[Category.Scholarship]: "学問",
-	[Category.Language]: "言語",
-	[Category.Combat]: "戦闘",
-	[Category.Special]: "特殊",
-	[Category.Other]: "その他",
+	'locomotion': "移動",
+	'investigation': "調査",
+	'communication': "対話",
+	'knowledge': "知識",
+	'scholarship': "学問",
+	'language': "言語",
+	'combat': "戦闘",
+	'special': "特殊",
+	'other': "その他",
 };
 
 export interface SkillCategoryProps {
