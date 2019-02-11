@@ -38,7 +38,7 @@ export namespace Resources {
 		return new Promise((resolve, reject) => {
 			const image = new Image();
 			image.onload = () => resolve(image);
-			image.onerror = (e) => reject(new Error(e.message));
+			image.onerror = (e) => reject(new Error((e as ErrorEvent).message));
 			image.src = src;
 		});
 	}
