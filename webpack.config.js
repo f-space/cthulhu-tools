@@ -63,19 +63,7 @@ module.exports = function (env, { mode }) {
 					loader: "./webpack-ext/jsx-pug-loader"
 				},
 				{
-					test: /\.tsx?$/,
-					use: [
-						"babel-loader",
-						{
-							loader: "ts-loader",
-							options: {
-								compilerOptions: (production ? {} : { sourceMap: true })
-							}
-						}
-					]
-				},
-				{
-					test: /\.jsx?$/,
+					test: /\.[jt]sx?$/,
 					exclude: /node_modules/,
 					loader: "babel-loader"
 				},

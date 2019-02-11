@@ -5,6 +5,8 @@
 		"moduleResolution": "node",
 		"baseUrl": "src",
 		"jsx": "react",
+		"noEmit": true,
+		"isolatedModules": true,
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,

@@ -6,8 +6,6 @@ const SAVE_DELAY_TIME = 1000;
 const MAX_CACHE_SIZE = 10000;
 
 export class StatusCacheDatabase extends Dexie {
-	public readonly entries!: Dexie.Table<CacheEntry, number>;
-
 	public constructor() {
 		super("status-cache");
 
@@ -15,6 +13,10 @@ export class StatusCacheDatabase extends Dexie {
 			entries: "key, date",
 		})
 	}
+}
+
+export interface StatusCacheDatabase {
+	readonly entries: Dexie.Table<CacheEntry, number>;
 }
 
 export class IDBCache implements Cache {
