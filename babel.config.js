@@ -4,7 +4,6 @@ const presets = [
 		{
 			targets: { chrome: "41" },
 			useBuiltIns: "usage",
-			modules: false,
 		}
 	],
 	"@babel/preset-react",
