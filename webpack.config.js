@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const StylelintPlugin = require('stylelint-webpack-plugin');
 const TsConfigPlugin = require("./webpack-ext/tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
@@ -137,7 +136,6 @@ module.exports = function (env, { mode }) {
 			new ScriptExtHtmlWebpackPlugin({
 				defaultAttribute: 'defer'
 			}),
-			...(production ? [] : [new StylelintPlugin({ files: "src/**/*.scss" })])
 		]
 	}
 }
