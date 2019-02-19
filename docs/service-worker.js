@@ -2,6 +2,8 @@ const VERSION = 3;
 
 const CACHE_NAME = `ver.${VERSION}`;
 
+const REDIRECTION_PATTERN = /^\/cthulhu-tools(?:\/[\w-]+)+$/;
+
 const FILE_URLS = [
 	".",
 	"manifest.json",
@@ -37,9 +39,18 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (event) {
 	event.respondWith(
 		caches.open(CACHE_NAME).then(cache =>
-			cache.match(event.request, { ignoreSearch: true }).then(response =>
-				response || fetch(event.request)
-			)
+			cache.match(event.request, { ignoreSearch: true }).then(response => {
+				if (response) {
+					return response;
+				} else {
+					const url = new URL(event.request.url);
+					if (url.origin === location.origin && REDIRECTION_PATTERN.test(url.pathname)) {
+						return cache.match(".");
+					} else {
+						return fetch(event.request);
+					}
+				}
+			})
 		)
 	);
 });

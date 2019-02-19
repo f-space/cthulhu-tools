@@ -106,6 +106,7 @@ module.exports = function (env, { mode }) {
 		devServer: {
 			contentBase: false,
 			publicPath: PUBLIC_PATH,
+			historyApiFallback: { index: `${PUBLIC_PATH}404.html` },
 			https: {
 				key: fs.readFileSync("ssl/server.key"),
 				cert: fs.readFileSync("ssl/server.crt"),
@@ -123,6 +124,7 @@ module.exports = function (env, { mode }) {
 				filename: "[name].css"
 			}),
 			new HtmlWebpackPlugin({
+				filename: "404.html",
 				template: "./src/index.pug",
 				templateParameters: {
 					process: { env: { NODE_ENV: mode } },
