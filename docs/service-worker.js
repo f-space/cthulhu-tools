@@ -34,7 +34,7 @@ self.addEventListener('activate', function (event) {
 				.filter(name => name !== CACHE_NAME)
 				.map(name => caches.delete(name))))
 	);
-})
+});
 
 self.addEventListener('fetch', function (event) {
 	event.respondWith(
