@@ -4,11 +4,11 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const StylelintPlugin = require('stylelint-webpack-plugin');
 const TsConfigPlugin = require("./webpack-ext/tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
 const PACKAGE = require("./package.json");
+const BASE_URL = PACKAGE.homepage;
 const PUBLIC_PATH = `/${PACKAGE.name}/`;
 const CONTENT_PATH = path.resolve(__dirname, "docs");
 
@@ -63,19 +63,7 @@ module.exports = function (env, { mode }) {
 					loader: "./webpack-ext/jsx-pug-loader"
 				},
 				{
-					test: /\.tsx?$/,
-					use: [
-						"babel-loader",
-						{
-							loader: "ts-loader",
-							options: {
-								compilerOptions: (production ? {} : { sourceMap: true })
-							}
-						}
-					]
-				},
-				{
-					test: /\.jsx?$/,
+					test: /\.[jt]sx?$/,
 					exclude: /node_modules/,
 					loader: "babel-loader"
 				},
@@ -116,23 +104,17 @@ module.exports = function (env, { mode }) {
 			]
 		},
 		devServer: {
-			contentBase: CONTENT_PATH,
+			contentBase: false,
 			publicPath: PUBLIC_PATH,
+			historyApiFallback: { index: `${PUBLIC_PATH}404.html` },
 			https: {
 				key: fs.readFileSync("ssl/server.key"),
 				cert: fs.readFileSync("ssl/server.crt"),
 			},
-			before: function (app) {
+			after(app) {
 				const express = require('express');
-				const static = express.static(CONTENT_PATH);
-				app.use(PUBLIC_PATH, function (req, res, next) {
-					const match = req.path.match(/^\/(?:index\.(?:html|css|js)(?:\.map)?)?$/);
-					if (!match) {
-						return static.apply(this, arguments);
-					}
-					next();
-				});
-			}
+				app.use(PUBLIC_PATH, express.static(CONTENT_PATH));
+			},
 		},
 		plugins: [
 			new webpack.DefinePlugin({
@@ -142,14 +124,18 @@ module.exports = function (env, { mode }) {
 				filename: "[name].css"
 			}),
 			new HtmlWebpackPlugin({
+				filename: "404.html",
 				template: "./src/index.pug",
-				templateParameters: { process: { env: { NODE_ENV: mode } } },
+				templateParameters: {
+					process: { env: { NODE_ENV: mode } },
+					baseUrl: BASE_URL,
+					publicPath: PUBLIC_PATH,
+				},
 				inject: 'head'
 			}),
 			new ScriptExtHtmlWebpackPlugin({
 				defaultAttribute: 'defer'
 			}),
-			...(production ? [] : [new StylelintPlugin({ files: "src/**/*.scss" })])
 		]
 	}
 }

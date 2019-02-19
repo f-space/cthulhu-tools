@@ -4,9 +4,15 @@ const presets = [
 		{
 			targets: { chrome: "41" },
 			useBuiltIns: "usage",
-			modules: false,
 		}
 	],
+	"@babel/preset-react",
+	"@babel/preset-typescript",
 ];
 
-module.exports = { presets };
+const plugins = [
+	"@babel/proposal-class-properties",
+	"@babel/proposal-object-rest-spread",
+];
+
+module.exports = { presets, plugins };

@@ -16,7 +16,7 @@ export class DiceSoundPlayer {
 
 		await new Promise<void>((resolve, reject) => {
 			this.element.oncanplaythrough = () => resolve();
-			this.element.onerror = (e) => reject(new Error(e.message));
+			this.element.onerror = (e) => reject(new Error((e as ErrorEvent).message));
 			this.element.preload = 'auto';
 			this.element.src = store.get();
 		});

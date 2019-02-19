@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Header } from "components/frame/header";
 import { Navigation } from "components/frame/navigation";
@@ -17,7 +17,7 @@ export class App extends React.Component {
 	public render() {
 		return <Provider store={store}>
 			<DialogProvider>
-				<HashRouter>
+				<BrowserRouter basename="/cthulhu-tools">
 					<div className={style['app']}>
 						<div className={style['overlay']}>
 							<DialogSlot />
@@ -37,7 +37,7 @@ export class App extends React.Component {
 							<Navigation className={style['navigation']} />
 						</div>
 					</div>
-				</HashRouter>
+				</BrowserRouter>
 			</DialogProvider>
 		</Provider>
 	}

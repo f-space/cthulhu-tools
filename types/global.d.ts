@@ -1,11 +1,3 @@
-interface Element {
-	onerror: ElementErrorEventHandler;
-}
-
-interface ElementErrorEventHandler {
-	(event: ErrorEvent): void;
-}
-
 interface BeforeInstallPromptEvent extends Event {
 	userChoice: Promise<PromptResponseObject>;
 	prompt(): Promise<void>;

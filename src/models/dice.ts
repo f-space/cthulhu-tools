@@ -55,31 +55,36 @@ export class DiceAny extends StandardDice<'any'> {
 	}
 }
 
-export namespace Dice {
-	const DICE_REGEX = /[1-9]\d*D[1-9]\d*/;
+const DICE_REGEX = /[1-9]\d*D[1-9]\d*/;
 
-	export function select(max: number): Dice {
-		if (max <= 6) return new Dice6(max);
-		if (max <= 10) return new Dice10(max);
-		if (max <= 100) return new Dice100(max);
-		return new DiceAny(max);
-	}
-
-	export function create(count: number, max: number): Dice[] {
-		return Array.from(Array(count), () => select(max));
-	}
-
-	export function test(expression: string): boolean {
-		return DICE_REGEX.test(expression);
-	}
-
-	export function parse(expression: string): Dice[] {
-		if (!test(expression)) throw new Error(`Invalid expression: ${expression}`);
-
-		const [first, second] = expression.split("D");
-		const count = parseInt(first, 10);
-		const max = parseInt(second, 10);
-
-		return create(count, max);
-	}
+function select(max: number): Dice {
+	if (max <= 6) return new Dice6(max);
+	if (max <= 10) return new Dice10(max);
+	if (max <= 100) return new Dice100(max);
+	return new DiceAny(max);
 }
+
+function create(count: number, max: number): Dice[] {
+	return Array.from(Array(count), () => select(max));
+}
+
+function test(expression: string): boolean {
+	return DICE_REGEX.test(expression);
+}
+
+function parse(expression: string): Dice[] {
+	if (!test(expression)) throw new Error(`Invalid expression: ${expression}`);
+
+	const [first, second] = expression.split("D");
+	const count = parseInt(first, 10);
+	const max = parseInt(second, 10);
+
+	return create(count, max);
+}
+
+export const Dice = {
+	select,
+	create,
+	test,
+	parse,
+};
