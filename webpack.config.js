@@ -103,23 +103,16 @@ module.exports = function (env, { mode }) {
 			]
 		},
 		devServer: {
-			contentBase: CONTENT_PATH,
+			contentBase: false,
 			publicPath: PUBLIC_PATH,
 			https: {
 				key: fs.readFileSync("ssl/server.key"),
 				cert: fs.readFileSync("ssl/server.crt"),
 			},
-			before: function (app) {
+			after(app) {
 				const express = require('express');
-				const static = express.static(CONTENT_PATH);
-				app.use(PUBLIC_PATH, function (req, res, next) {
-					const match = req.path.match(/^\/(?:index\.(?:html|css|js)(?:\.map)?)?$/);
-					if (!match) {
-						return static.apply(this, arguments);
-					}
-					next();
-				});
-			}
+				app.use(PUBLIC_PATH, express.static(CONTENT_PATH));
+			},
 		},
 		plugins: [
 			new webpack.DefinePlugin({
