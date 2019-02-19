@@ -4,13 +4,13 @@
 	"description": "Useful tools for Call of Cthulhu RPG.",
 	"icons": [
 		{
-			"purpose": "maskable",
+			"purpose": "maskable any",
 			"src": "icon/icon_192x192.png",
 			"type": "image/png",
 			"sizes": "192x192"
 		},
 		{
-			"purpose": "maskable",
+			"purpose": "maskable any",
 			"src": "icon/icon_512x512.png",
 			"type": "image/png",
 			"sizes": "512x512"
