@@ -8,6 +8,7 @@ const TsConfigPlugin = require("./webpack-ext/tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
 const PACKAGE = require("./package.json");
+const BASE_URL = PACKAGE.homepage;
 const PUBLIC_PATH = `/${PACKAGE.name}/`;
 const CONTENT_PATH = path.resolve(__dirname, "docs");
 
@@ -123,7 +124,11 @@ module.exports = function (env, { mode }) {
 			}),
 			new HtmlWebpackPlugin({
 				template: "./src/index.pug",
-				templateParameters: { process: { env: { NODE_ENV: mode } } },
+				templateParameters: {
+					process: { env: { NODE_ENV: mode } },
+					baseUrl: BASE_URL,
+					publicPath: PUBLIC_PATH,
+				},
 				inject: 'head'
 			}),
 			new ScriptExtHtmlWebpackPlugin({
