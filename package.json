@@ -4,8 +4,8 @@
 	"scripts": {
 		"test": "jest",
 		"start": "npm run start:dev",
-		"start:dev": "webpack-dev-server --mode development --debug --devtool source-map",
-		"start:prod": "webpack-dev-server --mode production",
+		"start:dev": "webpack-dev-server --env.serve --mode development --debug --devtool source-map",
+		"start:prod": "webpack-dev-server --env.serve --mode production",
 		"build": "npm run build:prod",
 		"build:dev": "webpack --mode development --debug --devtool source-map",
 		"build:prod": "webpack --mode production",

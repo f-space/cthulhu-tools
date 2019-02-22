@@ -43,7 +43,7 @@ module.exports = function (env, { mode }) {
 		}
 	];
 
-	return {
+	const config = {
 		entry: {
 			index: ["./src/index.tsx"],
 		},
@@ -103,19 +103,6 @@ module.exports = function (env, { mode }) {
 				new SourceMapFixPlugin()
 			]
 		},
-		devServer: {
-			contentBase: false,
-			publicPath: PUBLIC_PATH,
-			historyApiFallback: { index: `${PUBLIC_PATH}index.html` },
-			https: {
-				key: fs.readFileSync("ssl/server.key"),
-				cert: fs.readFileSync("ssl/server.crt"),
-			},
-			after(app) {
-				const express = require('express');
-				app.use(PUBLIC_PATH, express.static(CONTENT_PATH));
-			},
-		},
 		plugins: [
 			new webpack.DefinePlugin({
 				PUBLIC_PATH: JSON.stringify(PUBLIC_PATH)
@@ -137,4 +124,24 @@ module.exports = function (env, { mode }) {
 			}),
 		]
 	}
+
+	if (env && env.serve) {
+		Object.assign(config, {
+			devServer: {
+				contentBase: false,
+				publicPath: PUBLIC_PATH,
+				historyApiFallback: { index: `${PUBLIC_PATH}index.html` },
+				https: {
+					key: fs.readFileSync("ssl/server.key"),
+					cert: fs.readFileSync("ssl/server.crt"),
+				},
+				after(app) {
+					const express = require('express');
+					app.use(PUBLIC_PATH, express.static(CONTENT_PATH));
+				},
+			},
+		});
+	}
+
+	return config;
 }
