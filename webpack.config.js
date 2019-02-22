@@ -9,8 +9,8 @@ const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin"
 
 const PACKAGE = require("./package.json");
 const BASE_URL = PACKAGE.homepage;
-const PUBLIC_PATH = `/${PACKAGE.name}/`;
-const CONTENT_PATH = path.resolve(__dirname, "docs");
+const PUBLIC_PATH = "/";
+const CONTENT_PATH = path.resolve(__dirname, "public");
 
 module.exports = function (env, { mode }) {
 
@@ -106,7 +106,7 @@ module.exports = function (env, { mode }) {
 		devServer: {
 			contentBase: false,
 			publicPath: PUBLIC_PATH,
-			historyApiFallback: { index: `${PUBLIC_PATH}404.html` },
+			historyApiFallback: { index: `${PUBLIC_PATH}index.html` },
 			https: {
 				key: fs.readFileSync("ssl/server.key"),
 				cert: fs.readFileSync("ssl/server.crt"),
@@ -124,7 +124,6 @@ module.exports = function (env, { mode }) {
 				filename: "[name].css"
 			}),
 			new HtmlWebpackPlugin({
-				filename: "404.html",
 				template: "./src/index.pug",
 				templateParameters: {
 					process: { env: { NODE_ENV: mode } },
