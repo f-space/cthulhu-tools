@@ -16,7 +16,7 @@
 	},
 	"author": "F_",
 	"license": "MIT",
-	"homepage": "https://f-space.github.io/cthulhu-tools/",
+	"homepage": "https://coc.f-sp.com/",
 	"dependencies": {
 		"@babel/polyfill": "^7.2.5",
 		"@fortawesome/fontawesome-svg-core": "^1.2.15",
