@@ -1,5 +1,10 @@
 [
 	{
+		"name": "@babel/polyfill",
+		"owner": "Sebastian McKenzie and other contributors",
+		"licenses": "MIT"
+	},
+	{
 		"name": "@babel/runtime",
 		"owner": "Sebastian McKenzie and other contributors",
 		"licenses": "MIT"
