@@ -3,43 +3,16 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TsConfigPlugin = require("./webpack-ext/tsconfig-webpack-plugin");
 const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
 const PACKAGE = require("./package.json");
 const BASE_URL = PACKAGE.homepage;
+const SRC_PATH = path.resolve(__dirname, "src");
 const CONTENT_PATH = path.resolve(__dirname, "public");
 
 module.exports = function (env, { mode }) {
 
 	const production = (mode === 'production');
-
-	const cssLoaders = [
-		MiniCssExtractPlugin.loader,
-		{
-			loader: 'css-loader',
-			options: {
-				modules: true,
-				importLoaders: 2,
-				...(production ? {} : { sourceMap: true })
-			}
-		},
-		{
-			loader: 'postcss-loader',
-			options: {
-				...(production ? {} : { sourceMap: true })
-			}
-		},
-		{
-			loader: 'sass-loader',
-			options: {
-				includePaths: [
-					path.resolve(__dirname, "src/styles")
-				],
-				...(production ? {} : { sourceMap: true })
-			}
-		}
-	];
 
 	const config = {
 		entry: {
@@ -67,7 +40,32 @@ module.exports = function (env, { mode }) {
 				},
 				{
 					test: /\.scss$/,
-					use: cssLoaders
+					use: [
+						MiniCssExtractPlugin.loader,
+						{
+							loader: 'css-loader',
+							options: {
+								modules: true,
+								importLoaders: 2,
+								...(production ? {} : { sourceMap: true })
+							}
+						},
+						{
+							loader: 'postcss-loader',
+							options: {
+								...(production ? {} : { sourceMap: true })
+							}
+						},
+						{
+							loader: 'sass-loader',
+							options: {
+								includePaths: [
+									path.resolve(__dirname, "src/styles")
+								],
+								...(production ? {} : { sourceMap: true })
+							}
+						}
+					]
 				},
 				{
 					include: [CONTENT_PATH],
@@ -86,14 +84,12 @@ module.exports = function (env, { mode }) {
 			]
 		},
 		resolve: {
+			modules: [SRC_PATH, "node_modules"],
 			extensions: [".tsx", ".ts", ".js", ".json"],
 			alias: {
 				"project": __dirname,
 				"assets": CONTENT_PATH
 			},
-			plugins: [
-				new TsConfigPlugin()
-			]
 		},
 		resolveLoader: {
 			plugins: [
