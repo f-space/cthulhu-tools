@@ -15,6 +15,7 @@ module.exports = function (env, { mode }) {
 	const production = (mode === 'production');
 
 	const config = {
+		stats: "minimal",
 		entry: {
 			index: ["./src/index.tsx"],
 		},
