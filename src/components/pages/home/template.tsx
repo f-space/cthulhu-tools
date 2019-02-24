@@ -4,8 +4,6 @@ import { InstallPrompt } from "components/shared/decorators/install-prompt";
 import { Button } from "components/shared/widgets/button";
 import { Page } from "components/shared/templates/page";
 import { author, version, license } from "project/package.json";
-import Summary from "./summary.jsx.pug";
-import Caveat from "./caveat.jsx.pug";
 import style from "./template.scss";
 
 export interface HomeTemplateProps { }
@@ -35,6 +33,31 @@ function Section({ heading, sub, children }: SectionProps) {
 		</h3>
 		{children}
 	</section>
+}
+
+function Summary() {
+	return <>
+		<p>クトゥルフTRPG用のWebアプリです。</p>
+		<p>現在の機能は次の通り。</p>
+		<ul>
+			<li>ダイスロール</li>
+			<li>ステータス管理</li>
+		</ul>
+		<p>ページ下部のアイコンより各機能にアクセスできます。</p>
+	</>
+}
+
+function Caveat() {
+	return <>
+		<p>
+			<span>本アプリに入力したデータは IndexedDB API により、アクセスした端末内部にのみ保存されます。</span>
+			<span>端末あるいはブラウザの、設定または操作により、これらのデータが削除されると復元はできません。</span>
+		</p>
+		<p>
+			<span>また現在ベータ版につき、データの永続性は保証しません。</span>
+			<span>アプリのアップデートに伴い、データが破棄あるいは読み込めなくなる可能性があります。</span>
+		</p>
+	</>
 }
 
 function AppInfo() {

@@ -26,12 +26,8 @@ module.exports = function (env, { mode }) {
 		module: {
 			rules: [
 				{
-					test: /(?<!\.jsx)\.pug$/,
+					test: /\.pug$/,
 					loader: "pug-loader"
-				},
-				{
-					test: /\.jsx\.pug$/,
-					loader: "./webpack-ext/jsx-pug-loader"
 				},
 				{
 					test: /\.[jt]sx?$/,
