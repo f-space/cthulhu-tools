@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -9,7 +8,6 @@ const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin"
 
 const PACKAGE = require("./package.json");
 const BASE_URL = PACKAGE.homepage;
-const PUBLIC_PATH = "/";
 const CONTENT_PATH = path.resolve(__dirname, "public");
 
 module.exports = function (env, { mode }) {
@@ -50,7 +48,7 @@ module.exports = function (env, { mode }) {
 		output: {
 			path: CONTENT_PATH,
 			filename: "[name].js",
-			publicPath: PUBLIC_PATH
+			publicPath: "/",
 		},
 		module: {
 			rules: [
@@ -72,7 +70,6 @@ module.exports = function (env, { mode }) {
 					use: cssLoaders
 				},
 				{
-					test: /(?<!\.(?:html|css|js))$/,
 					include: [CONTENT_PATH],
 					type: 'javascript/auto',
 					loader: "file-loader",
@@ -104,9 +101,6 @@ module.exports = function (env, { mode }) {
 			]
 		},
 		plugins: [
-			new webpack.DefinePlugin({
-				PUBLIC_PATH: JSON.stringify(PUBLIC_PATH)
-			}),
 			new MiniCssExtractPlugin({
 				filename: "[name].css"
 			}),
@@ -115,7 +109,6 @@ module.exports = function (env, { mode }) {
 				templateParameters: {
 					process: { env: { NODE_ENV: mode } },
 					baseUrl: BASE_URL,
-					publicPath: PUBLIC_PATH,
 				},
 				inject: 'head'
 			}),
@@ -128,16 +121,11 @@ module.exports = function (env, { mode }) {
 	if (env && env.serve) {
 		Object.assign(config, {
 			devServer: {
-				contentBase: false,
-				publicPath: PUBLIC_PATH,
-				historyApiFallback: { index: `${PUBLIC_PATH}index.html` },
+				contentBase: CONTENT_PATH,
+				historyApiFallback: true,
 				https: {
 					key: fs.readFileSync("ssl/server.key"),
 					cert: fs.readFileSync("ssl/server.crt"),
-				},
-				after(app) {
-					const express = require('express');
-					app.use(PUBLIC_PATH, express.static(CONTENT_PATH));
 				},
 			},
 		});
