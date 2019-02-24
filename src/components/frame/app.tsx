@@ -17,7 +17,7 @@ export class App extends React.Component {
 	public render() {
 		return <Provider store={store}>
 			<DialogProvider>
-				<BrowserRouter basename="/cthulhu-tools">
+				<BrowserRouter>
 					<div className={style['app']}>
 						<div className={style['overlay']}>
 							<DialogSlot />

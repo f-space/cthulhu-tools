@@ -1,0 +1,282 @@
+﻿[
+	{
+		"uuid": "a29e11a0-f7fa-4287-a54d-28d258cec5cb",
+		"id": "name",
+		"name": "名前",
+		"type": "text",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "text"
+			}
+		],
+		"expression": "$_"
+	},
+	{
+		"uuid": "44da26db-7c69-4016-a362-107b473313a7",
+		"id": "age",
+		"name": "年齢",
+		"type": "text",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "text"
+			}
+		],
+		"expression": "$_"
+	},
+	{
+		"uuid": "c96c7286-083f-438b-acab-bd0e6c2de1ea",
+		"id": "occupation",
+		"name": "職業",
+		"type": "text",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "text"
+			}
+		],
+		"expression": "$_"
+	},
+	{
+		"uuid": "7e36889c-381c-446b-b35a-faddd79a3f6d",
+		"id": "hp",
+		"name": "HP",
+		"type": "integer",
+		"inputs": [],
+		"expression": "hp:max",
+		"min": "-99",
+		"max": "ceil((con + siz) / 2)"
+	},
+	{
+		"uuid": "d2e68455-679c-4cd7-9695-465c16ab8f45",
+		"id": "mp",
+		"name": "MP",
+		"type": "integer",
+		"inputs": [],
+		"expression": "mp:max",
+		"min": "0",
+		"max": "pow"
+	},
+	{
+		"uuid": "1bfd5735-a71f-46e8-94b0-a12aee44a7f7",
+		"id": "sp",
+		"name": "SP",
+		"type": "integer",
+		"inputs": [],
+		"expression": "san",
+		"min": "0",
+		"max": "99 - @skill:cthulhu_mythos"
+	},
+	{
+		"uuid": "b9b840a7-9366-4a29-9d06-42a5263ab609",
+		"id": "str",
+		"name": "STR",
+		"type": "integer",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "dice",
+				"count": 3,
+				"max": 6
+			}
+		],
+		"expression": "$_",
+		"min": "0",
+		"max": "99"
+	},
+	{
+		"uuid": "8ffe4014-5576-48eb-9e06-d48daaec53a1",
+		"id": "con",
+		"name": "CON",
+		"type": "integer",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "dice",
+				"count": 3,
+				"max": 6
+			}
+		],
+		"expression": "$_",
+		"min": "0",
+		"max": "99"
+	},
+	{
+		"uuid": "0b094762-a053-4f45-8681-1922c31fa593",
+		"id": "pow",
+		"name": "POW",
+		"type": "integer",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "dice",
+				"count": 3,
+				"max": 6
+			}
+		],
+		"expression": "$_",
+		"min": "0",
+		"max": "99"
+	},
+	{
+		"uuid": "a3a412d7-5bbf-40e0-bd97-48314904cd7d",
+		"id": "dex",
+		"name": "DEX",
+		"type": "integer",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "dice",
+				"count": 3,
+				"max": 6
+			}
+		],
+		"expression": "$_",
+		"min": "0",
+		"max": "99"
+	},
+	{
+		"uuid": "8ff10bfe-5799-4de0-a968-ec95720195ec",
+		"id": "app",
+		"name": "APP",
+		"type": "integer",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "dice",
+				"count": 3,
+				"max": 6
+			}
+		],
+		"expression": "$_",
+		"min": "0",
+		"max": "99"
+	},
+	{
+		"uuid": "32037bf0-0cef-458a-b89c-47427b6d9923",
+		"id": "siz",
+		"name": "SIZ",
+		"type": "integer",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "dice",
+				"count": 2,
+				"max": 6
+			}
+		],
+		"expression": "$_ + 6",
+		"min": "0",
+		"max": "99"
+	},
+	{
+		"uuid": "0db6cd21-b768-49d9-bdcd-36ac3192efae",
+		"id": "int",
+		"name": "INT",
+		"type": "integer",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "dice",
+				"count": 2,
+				"max": 6
+			}
+		],
+		"expression": "$_ + 6",
+		"min": "0",
+		"max": "99"
+	},
+	{
+		"uuid": "e6a65b8c-90aa-4d55-80d1-7215a637dd20",
+		"id": "edu",
+		"name": "EDU",
+		"type": "integer",
+		"inputs": [
+			{
+				"name": "_",
+				"type": "dice",
+				"count": 3,
+				"max": 6
+			}
+		],
+		"expression": "$_ + 3",
+		"min": "0",
+		"max": "99"
+	},
+	{
+		"uuid": "9592d16e-fb0b-4e01-88fb-10a7f3d60dde",
+		"id": "san",
+		"name": "SAN",
+		"type": "integer",
+		"inputs": [],
+		"expression": "pow * 5",
+		"min": "0",
+		"max": "99",
+		"view": true
+	},
+	{
+		"uuid": "1b019781-7587-4c29-89a0-178905d1d4fb",
+		"id": "idea",
+		"name": "アイデア",
+		"type": "integer",
+		"inputs": [],
+		"expression": "int * 5",
+		"min": "0",
+		"max": "99",
+		"view": true
+	},
+	{
+		"uuid": "17a74eab-616a-4b28-8bd2-ff90a403a26a",
+		"id": "luck",
+		"name": "幸運",
+		"type": "integer",
+		"inputs": [],
+		"expression": "pow * 5",
+		"min": "0",
+		"max": "99",
+		"view": true
+	},
+	{
+		"uuid": "4cccd989-c6b5-41ab-a99b-f7331985e5bf",
+		"id": "knowledge",
+		"name": "知識",
+		"type": "integer",
+		"inputs": [],
+		"expression": "edu * 5",
+		"min": "0",
+		"max": "99",
+		"view": true
+	},
+	{
+		"uuid": "eb2ec402-fbe2-46bc-9dcc-9b171bc7d080",
+		"id": "db",
+		"name": "ダメージボーナス",
+		"type": "text",
+		"inputs": [],
+		"expression": "db(str + siz)",
+		"view": true
+	},
+	{
+		"uuid": "01e9829a-6353-4278-bbde-bd572a852dd5",
+		"id": "oskp",
+		"name": "職業技能ポイント",
+		"type": "integer",
+		"inputs": [],
+		"expression": "edu * 20",
+		"min": "0",
+		"max": "999",
+		"view": true
+	},
+	{
+		"uuid": "61d7fbac-01e2-4b6e-acad-d676402bfdf3",
+		"id": "hskp",
+		"name": "趣味技能ポイント",
+		"type": "integer",
+		"inputs": [],
+		"expression": "int * 10",
+		"min": "0",
+		"max": "999",
+		"view": true
+	}
+]

@@ -46,5 +46,3 @@ interface Library {
 	owner: string;
 	licenses: string;
 }
-
-declare const PUBLIC_PATH: string;
