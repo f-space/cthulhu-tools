@@ -52,6 +52,14 @@
 		const button = document.getElementById("invoke");
 		const result = document.getElementById("result");
 
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.getRegistrations().then(registrations => {
+				for (const registration of registrations) {
+					registration.unregister()
+				}
+			});
+		}
+
 		const db = new Dexie("status");
 		db.version(1).stores({
 			views: "target",
