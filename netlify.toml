@@ -3,6 +3,12 @@ publish = "public"
 command = "npm run build"
 
 [[redirects]]
+from = "https://cthulhu-tools.netlify.com/*"
+to = "https://coc.f-sp.com/:splat"
+status = 301
+force = true
+
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
