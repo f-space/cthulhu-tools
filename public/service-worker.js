@@ -2,7 +2,7 @@ const VERSION = 5;
 
 const CACHE_NAME = `ver.${VERSION}`;
 
-const REDIRECTION_PATTERN = /^\/cthulhu-tools(?:\/[\w-]+)+$/;
+const REDIRECTION_PATTERN = /^(?:\/[\w-]+)+$/;
 
 const FILE_URLS = [
 	".",
