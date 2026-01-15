@@ -9,6 +9,7 @@
 	cursor: pointer;
 	padding: 0.25em 0.5em;
 	min-width: 0;
+	color: inherit;
 
 	&:invalid {
 		background: rgba($color-main, 0.25);
