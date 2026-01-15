@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router';
 import { DataProvider, DataCollector, Status } from "models/status";
 import IDBCache from "models/idb-cache";
 import { State, Dispatch } from "redux/store";
@@ -18,7 +18,9 @@ interface DispatchProps {
 	dispatcher: StatusDispatcher;
 }
 
-interface OwnProps extends RouteComponentProps { }
+interface OwnProps {
+	navigate: NavigateFunction;
+}
 
 function mapStateToProps(state: State): StateProps {
 	const provider = getDataProvider(state);
@@ -39,14 +41,16 @@ function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
 };
 
 function mergeProps(stateProps: StateProps, dispatchProps: DispatchProps, ownProps: OwnProps): CharacterManagementTemplateProps {
-	const { history } = ownProps;
-	return { ...stateProps, ...dispatchProps, history };
+	const { navigate } = ownProps;
+	return { ...stateProps, ...dispatchProps, navigate };
 }
 
 const Connected = connect(mapStateToProps, mapDispatchToProps, mergeProps)(CharacterManagementTemplate);
 
-export function CharacterManagementPage(props: RouteComponentProps) {
+export function CharacterManagementPage() {
+	const navigate = useNavigate();
+
 	return <StatusGuard>
-		{() => <Connected {...props} />}
+		{() => <Connected navigate={navigate} />}
 	</StatusGuard>
 };

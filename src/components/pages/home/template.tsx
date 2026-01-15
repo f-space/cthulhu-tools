@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { InstallPrompt } from "components/shared/decorators/install-prompt";
 import { Button } from "components/shared/widgets/button";
 import { Page } from "components/shared/templates/page";

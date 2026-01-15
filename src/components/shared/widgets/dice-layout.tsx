@@ -16,7 +16,7 @@ interface ImageRect extends DiceRect {
 }
 
 export class DiceLayout extends React.Component<DiceLayoutProps>{
-	private ref: React.RefObject<HTMLCanvasElement> = React.createRef();
+	private ref: React.RefObject<HTMLCanvasElement | null> = React.createRef();
 	private cache: Map<string, Promise<HTMLImageElement>> = new Map();
 
 	public componentDidMount() {

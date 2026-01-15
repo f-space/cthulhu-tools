@@ -10,10 +10,7 @@ import { SkillReducer } from "redux/reducers/skill";
 import { ItemReducer } from "redux/reducers/item";
 import { HistoryReducer } from "redux/reducers/history";
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-type PartialStatusState = Omit<StatusState, 'loadState' | 'loadError'>;
-
-const PartialStatusReducer = combineReducers<PartialStatusState, Action>({
+const PartialStatusReducer = combineReducers({
 	view: ViewReducer,
 	character: CharacterReducer,
 	profile: ProfileReducer,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { Header } from "components/frame/header";
 import { Navigation } from "components/frame/navigation";
@@ -25,14 +25,14 @@ export class App extends React.Component {
 						<div className={style['container']}>
 							<Header className={style['header']} />
 							<main className={style['content']}>
-								<Switch>
-									<Route exact path="/" component={HomePage} />
-									<Route exact path="/license" component={LicensePage} />
-									<Route exact path="/dice" component={DicePage} />
-									<Route exact path="/status" component={StatusPage} />
-									<Route exact path="/status/character-management" component={CharacterManagementPage} />
-									<Route exact path="/status/character-edit/:uuid?" component={CharacterEditPage} />
-								</Switch>
+								<Routes>
+									<Route path="/" element={<HomePage />} />
+									<Route path="/license" element={<LicensePage />} />
+									<Route path="/dice" element={<DicePage />} />
+									<Route path="/status" element={<StatusPage />} />
+									<Route path="/status/character-management" element={<CharacterManagementPage />} />
+									<Route path="/status/character-edit/:uuid?" element={<CharacterEditPage />} />
+								</Routes>
 							</main>
 							<Navigation className={style['navigation']} />
 						</div>

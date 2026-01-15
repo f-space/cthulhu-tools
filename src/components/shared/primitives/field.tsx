@@ -65,7 +65,7 @@ interface FieldWrapperProps extends FieldProps {
 }
 
 class FieldWrapper extends React.Component<FieldWrapperProps> {
-	private ref: React.RefObject<FieldElement> = React.createRef();
+	private ref: React.RefObject<FieldElement | null> = React.createRef();
 
 	public constructor(props: FieldWrapperProps) {
 		super(props);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { History } from 'history';
+import { NavigateFunction } from 'react-router';
 import { FormApi } from 'final-form';
 import { Form, FormSpy } from 'react-final-form';
 import { DataProvider, Status } from "models/status";
@@ -15,7 +15,7 @@ export interface CharacterManagementTemplateProps {
 	provider: DataProvider;
 	statusList: Status[];
 	dispatcher: StatusDispatcher;
-	history: History;
+	navigate: NavigateFunction;
 }
 
 interface CharacterManagementTemplateState {
@@ -73,7 +73,8 @@ export class CharacterManagementTemplate extends React.Component<CharacterManage
 	}
 
 	private renderCommands() {
-		return <FormSpy subscription={{ values: true }} render={({ values: { selection } }) => {
+		return <FormSpy<FormValues> subscription={{ values: true }} render={({ values }) => {
+			const { selection } = values!;
 			const some = (selection.length > 0);
 			const single = (selection.length === 1);
 
@@ -137,11 +138,11 @@ export class CharacterManagementTemplate extends React.Component<CharacterManage
 	}
 
 	private editCommand(selection: string[]): boolean {
-		const { history } = this.props;
+		const { navigate } = this.props;
 
 		const target = selection[0];
 		if (target !== undefined) {
-			history.push(`/status/character-edit/${target}`);
+			navigate(`/status/character-edit/${target}`);
 		}
 
 		return false;

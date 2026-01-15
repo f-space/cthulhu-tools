@@ -13,7 +13,7 @@ export const getStatusState = (state: State) => state.status;
 export const getLoadState = createSelector(getStatusState, state => state.loadState);
 export const getLoadError = createSelector(getStatusState, state => state.loadError);
 
-export const getDataProvider = createStructuredSelector<State, DataProvider>({
+export const getDataProvider = createStructuredSelector({
 	character: getCharacterProvider,
 	profile: getProfileProvider,
 	attribute: getAttributeProvider,

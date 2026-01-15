@@ -10,7 +10,7 @@ interface FlexibleContainerState {
 }
 
 export class FlexibleContainer extends React.Component<FlexibleContainerProps, FlexibleContainerState> {
-	private ref: React.RefObject<HTMLDivElement> = React.createRef();
+	private ref: React.RefObject<HTMLDivElement | null> = React.createRef();
 
 	public constructor(props: FlexibleContainerProps) {
 		super(props);
