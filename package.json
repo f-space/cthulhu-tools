@@ -23,7 +23,6 @@
 		"@fortawesome/fontawesome-svg-core": "^1.2.15",
 		"@fortawesome/free-solid-svg-icons": "^5.7.2",
 		"@fortawesome/react-fontawesome": "^0.1.4",
-		"blueimp-canvas-to-blob": "^3.14.0",
 		"classnames": "^2.5.1",
 		"dexie": "^2.0.4",
 		"final-form": "^4.11.1",
