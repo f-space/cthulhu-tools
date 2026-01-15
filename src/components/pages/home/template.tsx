@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { InstallPrompt } from "components/shared/decorators/install-prompt";
 import { Button } from "components/shared/widgets/button";
 import { Page } from "components/shared/templates/page";
-import { author, version, license } from "project/package.json";
+import packageData from "project/package.json";
 import style from "./template.scss";
+
+const { author, version, license } = packageData;
 
 export interface HomeTemplateProps { }
 
