@@ -20,13 +20,11 @@
 		"defaults"
 	],
 	"dependencies": {
-		"@babel/polyfill": "^7.2.5",
 		"@fortawesome/fontawesome-svg-core": "^1.2.15",
 		"@fortawesome/free-solid-svg-icons": "^5.7.2",
 		"@fortawesome/react-fontawesome": "^0.1.4",
 		"blueimp-canvas-to-blob": "^3.14.0",
 		"classnames": "^2.2.6",
-		"core-js": "^2.6.5",
 		"dexie": "^2.0.4",
 		"final-form": "^4.11.1",
 		"final-form-arrays": "^1.1.2",
@@ -44,12 +42,10 @@
 		"ress": "^1.2.2"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.3.3",
-		"@babel/plugin-proposal-class-properties": "^7.3.3",
-		"@babel/plugin-proposal-object-rest-spread": "^7.3.2",
-		"@babel/preset-env": "^7.3.1",
-		"@babel/preset-react": "^7.0.0",
-		"@babel/preset-typescript": "^7.3.3",
+		"@babel/core": "^7.28.6",
+		"@babel/preset-env": "^7.28.6",
+		"@babel/preset-react": "^7.28.5",
+		"@babel/preset-typescript": "^7.28.5",
 		"@types/classnames": "^2.2.7",
 		"@types/jest": "^30.0.0",
 		"@types/react": "^16.8.4",
