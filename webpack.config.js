@@ -1,7 +1,5 @@
-const fs = require('fs');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SourceMapFixPlugin = require("./webpack-ext/source-map-fix-webpack-plugin");
 
@@ -10,7 +8,7 @@ const BASE_URL = PACKAGE.homepage;
 const SRC_PATH = path.resolve(__dirname, "src");
 const CONTENT_PATH = path.resolve(__dirname, "public");
 
-module.exports = function (env, { mode }) {
+module.exports = function (_env, { mode }) {
 
 	const production = (mode === 'production');
 
@@ -42,7 +40,10 @@ module.exports = function (env, { mode }) {
 						{
 							loader: 'css-loader',
 							options: {
-								modules: true,
+								modules: {
+									namedExport: false,
+									exportLocalsConvention: 'as-is',
+								},
 								importLoaders: 2,
 								...(production ? {} : { sourceMap: true })
 							}
@@ -56,9 +57,10 @@ module.exports = function (env, { mode }) {
 						{
 							loader: 'sass-loader',
 							options: {
-								includePaths: [
-									path.resolve(__dirname, "src/styles")
-								],
+								sassOptions: {
+									loadPaths: [path.resolve(__dirname, "src/styles")],
+									silenceDeprecations: ["slash-div", "color-functions", "import", "global-builtin"],
+								},
 								...(production ? {} : { sourceMap: true })
 							}
 						}
@@ -71,7 +73,8 @@ module.exports = function (env, { mode }) {
 					options: {
 						name: "[path][name].[ext]",
 						outputPath: url => path.relative(CONTENT_PATH, url).replace(/\\/g, "/"),
-						emitFile: false
+						emitFile: false,
+						esModule: false,
 					}
 				},
 				{
@@ -105,24 +108,12 @@ module.exports = function (env, { mode }) {
 				},
 				inject: 'head'
 			}),
-			new ScriptExtHtmlWebpackPlugin({
-				defaultAttribute: 'defer'
-			}),
-		]
-	}
-
-	if (env && env.serve) {
-		Object.assign(config, {
-			devServer: {
-				contentBase: CONTENT_PATH,
-				historyApiFallback: true,
-				https: {
-					key: fs.readFileSync("ssl/server.key"),
-					cert: fs.readFileSync("ssl/server.crt"),
-				},
-			},
-		});
-	}
+		],
+		devServer: {
+			static: CONTENT_PATH,
+			historyApiFallback: true,
+		},
+	};
 
 	return config;
-}
+};

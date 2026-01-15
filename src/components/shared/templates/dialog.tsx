@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import DialogComponents from "components/frame/dialog";
 import style from "./dialog.scss";
 
-export interface DialogProps extends React.HTMLAttributes<HTMLElement> {
+export interface DialogProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
 	open: boolean;
 	header: React.ReactNode;
 	children: () => React.ReactNode;

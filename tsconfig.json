@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "esnext",
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"baseUrl": "src",
 		"jsx": "react",
 		"noEmit": true,
@@ -10,6 +10,7 @@
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
-		"noImplicitReturns": true
+		"noImplicitReturns": true,
+		"skipLibCheck": true
 	}
 }

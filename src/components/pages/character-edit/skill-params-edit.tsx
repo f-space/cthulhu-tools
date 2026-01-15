@@ -37,7 +37,9 @@ export class SkillParamsEdit extends React.PureComponent<SkillParamsEditProps> {
 							result => <Field name={name} subscription={{ value: true }} render={({ input: { value } }) => {
 								const skills = value as SkillInputValue[];
 								const available = result && result[0];
-								const consumed = available !== undefined ? skills.reduce((sum, skill) => sum + skill.points, 0) : undefined;
+								const consumed = available !== undefined
+									? skills.reduce((sum, { points }) => Number.isNaN(points) ? sum : sum + points, 0)
+									: undefined;
 								const full = available !== undefined && consumed !== undefined && consumed === available;
 								const over = available !== undefined && consumed !== undefined && consumed > available;
 

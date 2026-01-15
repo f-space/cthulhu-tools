@@ -1,4 +1,3 @@
-import 'blueimp-canvas-to-blob';
 import * as Resources from "./resource";
 import { OwnedDiceImageStore, DiceImageStore } from "./dice-image-store";
 import DICE_IMAGE_URL from "assets/image/dice.png";

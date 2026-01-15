@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link, useMatch } from 'react-router';
 import classNames from 'classnames';
 import { Menu } from "./menu";
 import style from "./header.scss";
@@ -10,11 +10,15 @@ export function Header(props: HeaderProps) {
 	const { className, ...rest } = props;
 	const HOME_PATH = "/";
 
+	const match = useMatch({
+		path: HOME_PATH,
+		caseSensitive: true,
+		end: true,
+	});
+
 	return <header {...rest} className={classNames(className, style['header'])}>
 		<h1 className={style['title']}>
-			<Route path={HOME_PATH} children={({ match }) =>
-				<Link className={style['title-text']} to={HOME_PATH} replace={match && match.isExact}>Cthulhu Tools</Link>
-			} />
+			<Link className={style['title-text']} to={HOME_PATH} replace={match !== null}>Cthulhu Tools</Link>
 		</h1>
 		<Menu className={style['menu']} />
 	</header>

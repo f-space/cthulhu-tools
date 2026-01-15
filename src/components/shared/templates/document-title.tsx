@@ -4,6 +4,7 @@ const DEFAULT_TITLE = document.title;
 
 export interface DocumentTitleProps {
 	title: string | null;
+	children: React.ReactNode;
 }
 
 export class DocumentTitle extends React.Component<DocumentTitleProps> {

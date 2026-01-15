@@ -8,7 +8,7 @@ const COPYRIGHT_NOTICE = /^\s*Copyright\s*(.+)\s*$/m;
 const COPYRIGHT_SYMBOL = /(?:©|\(c\)),?/;
 const COPYRIGHT_YEARS = /(?:\d{4}(?:.(?:\d{4}|present))?,?\s*)+/;
 const COPYRIGHT_EMAIL = /(?:[\s<(]|&lt;|^)[\w\.]+@[\w\.]+(?:[\s>)]|&gt;|$)/;
-const COPYRIGHT_URL = /[<(]?(?:https?:\/\/)[\w\.]+[>)]?|[<(][\w\.]+\.(?:com|net)[>)]/;
+const COPYRIGHT_URL = /[<(]?(?:https?:\/\/)[\w\.\/]+[>)]?|[<(][\w\.]+\.(?:com|net)[>)]/;
 const COPYRIGHT_NOTE = /All\s+rights\s+reserved\.?/i;
 const COPYRIGHT_EXTRAS = [
 	COPYRIGHT_SYMBOL,
@@ -21,44 +21,17 @@ const COPYRIGHT_EXTRAS = [
 const MARKDOWN_LINK = () => /\[(.+?)\]\(.+?\)|<(.+?)>/g;
 
 const KNOWN_PACKAGES = {
-	"@fortawesome/fontawesome-common-types": {
-		owner: "Fonticons, Inc.",
-	},
-	"@fortawesome/fontawesome-svg-core": {
-		owner: "Fonticons, Inc.",
-	},
-	"@fortawesome/free-solid-svg-icons": {
-		owner: "Fonticons, Inc.",
-	},
-	"array-buffer-from-string": {
+	"encode-utf8": {
 		owner: "Linus Unnebäck",
 	},
 	"dexie": {
 		owner: "David Fahlander",
 	},
-	"fmix": {
-		owner: "Linus Unnebäck",
-	},
-	"humps": {
-		owner: "Dom Christie",
-	},
 	"murmur-128": {
 		owner: "Linus Unnebäck",
 	},
-	"react-router-dom": {
-		owner: "React Training",
-	},
 	"react-router": {
-		owner: "React Training",
-	},
-	"regenerator-runtime": {
-		owner: "Facebook, Inc.",
-	},
-	"resolve-pathname": {
-		owner: "Michael Jackson",
-	},
-	"value-equal": {
-		owner: "Michael Jackson",
+		owner: "React Training LLC, Remix Software Inc., Shopify Inc.",
 	},
 };
 

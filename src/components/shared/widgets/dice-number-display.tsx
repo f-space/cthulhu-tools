@@ -23,7 +23,7 @@ export class DiceNumberDisplay extends React.Component<DiceNumberDisplayProps, D
 		scaleY: 0.75,
 	};
 
-	private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
+	private canvasRef: React.RefObject<HTMLCanvasElement | null> = React.createRef();
 
 	public constructor(props: DiceNumberDisplayProps) {
 		super(props);

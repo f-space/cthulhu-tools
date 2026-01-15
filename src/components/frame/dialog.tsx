@@ -16,7 +16,9 @@ const Context = React.createContext<DialogHub>({
 	close() { },
 });
 
-export interface DialogProviderProps { }
+export interface DialogProviderProps {
+	children: React.ReactNode;
+}
 
 export class DialogProvider extends React.Component<DialogProviderProps, DialogHub> {
 	public state = {
@@ -55,7 +57,7 @@ export interface DialogPortalProps {
 export class DialogPortal extends React.Component<DialogPortalProps> {
 	public static contextType = Context;
 
-	public context!: DialogHub;
+	public declare context: DialogHub;
 
 	public componentDidMount(): void {
 		this.context.open(this.props.children);

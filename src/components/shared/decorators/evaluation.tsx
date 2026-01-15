@@ -104,6 +104,7 @@ export const Evaluation = EvaluationContext.Consumer;
 export interface EvaluationProviderProps {
 	chain: EvaluationChain;
 	limit: number;
+	children: React.ReactNode;
 }
 
 interface EvaluationProviderState {

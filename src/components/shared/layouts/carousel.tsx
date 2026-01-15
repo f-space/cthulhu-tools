@@ -179,7 +179,7 @@ export class CarouselView<T> extends React.Component<CarouselViewProps<T>> {
 		flick: {},
 	};
 
-	private frame: React.RefObject<HTMLDivElement> = React.createRef();
+	private frame: React.RefObject<HTMLDivElement | null> = React.createRef();
 
 	public constructor(props: CarouselViewProps<T>) {
 		super(props);

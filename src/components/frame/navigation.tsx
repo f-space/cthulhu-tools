@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link, RouteComponentProps, matchPath, withRouter } from 'react-router-dom';
-import { FontAwesomeIcon, Props as FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
+import { Link, useMatch } from 'react-router';
+import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import style from "./navigation.scss";
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLElement> { }
 
-interface NavItemInnerProps extends RouteComponentProps {
+interface NavItemProps {
 	to: string;
 	label: string;
 	children?: React.ReactNode;
@@ -25,16 +25,20 @@ export function Navigation(props: NavigationProps) {
 	</nav>
 }
 
-function NavItemInner({ to, label, location, children }: NavItemInnerProps) {
-	const match = Boolean(matchPath(location.pathname, { path: to, exact: true }));
+function NavItem({ to, label, children }: NavItemProps) {
+	const match = useMatch({
+		path: to,
+		caseSensitive: true,
+		end: true,
+	});
+	const active = match !== null;
 
-	const className = classNames(style['item'], { [style['active']]: match });
-	const item = <div className={className}>{children}</div>
+	const inner = <div className={classNames(style['item'], { [style['active']]: active })}>
+		{children}
+	</div>
 
-	return match ? item : <Link to={to} aria-label={label}>{item}</Link>;
+	return active ? inner : <Link to={to} aria-label={label}>{inner}</Link>;
 }
-
-const NavItem = withRouter(NavItemInner);
 
 function NavIcon({ icon }: NavIconProps) {
 	return <FontAwesomeIcon className={style['icon']} icon={icon} size="xs" />
