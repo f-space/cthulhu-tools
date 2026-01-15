@@ -65,9 +65,9 @@ export class InstallPrompt extends React.Component<InstallPromptProps, InstallPr
 		this.setState({ prompt: this.getPromptObject(event) })
 	}
 
-	private handlePrompt(key: [BeforeInstallPromptEvent]): Promise<boolean> {
+	private handlePrompt(key: [BeforeInstallPromptEvent | null]): Promise<boolean> {
 		const [event] = key;
-		delete key[0];
+		key[0] = null;
 
 		if (event) {
 			return new Promise((resolve, reject) => {
