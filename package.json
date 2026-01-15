@@ -29,7 +29,7 @@
 		"final-form-arrays": "^1.1.2",
 		"immutable": "^5.1.4",
 		"memoize-one": "^6.0.0",
-		"murmur-128": "^0.1.1",
+		"murmur-128": "^1.0.0",
 		"react": "^16.8.3",
 		"react-dom": "^16.8.3",
 		"react-final-form": "^4.0.2",
