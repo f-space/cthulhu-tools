@@ -27,7 +27,7 @@
 		"dexie": "^4.2.1",
 		"final-form": "^5.0.0",
 		"final-form-arrays": "^4.0.0",
-		"immutable": "^5.1.4",
+		"immutable": "^5.1.5",
 		"memoize-one": "^6.0.0",
 		"murmur-128": "^1.0.0",
 		"react": "^19.2.3",
